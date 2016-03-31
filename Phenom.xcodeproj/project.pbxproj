@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		45926ED78AC076A816D0CBF3 /* Pods_Phenom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */; };
 		5709538D1CA9992D0007B537 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709538C1CA9992D0007B537 /* CommentsViewController.swift */; };
 		570AC4FB1CA4C38E00441F4A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E71CA4C38E00441F4A /* AVFoundation.framework */; };
 		570AC4FC1CA4C38F00441F4A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E81CA4C38E00441F4A /* CFNetwork.framework */; };
@@ -71,7 +72,6 @@
 		57C6DD131CA4807900B939DF /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD121CA4807900B939DF /* TimelineCell.swift */; };
 		57C6DD151CA4861800B939DF /* NewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD141CA4861800B939DF /* NewViewController.swift */; };
 		57C6DD1C1CA4BF7700B939DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6DD1B1CA4BF7700B939DF /* UIKit.framework */; };
-		E9E4F4E2C0E8ECD372E9215A /* libPods-Phenom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60A58348DFB17D022E9E87EF /* libPods-Phenom.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,7 +164,7 @@
 		57C6DD141CA4861800B939DF /* NewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewViewController.swift; sourceTree = "<group>"; };
 		57C6DD171CA4BE6100B939DF /* Phenom-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Phenom-Bridging-Header.h"; sourceTree = "<group>"; };
 		57C6DD1B1CA4BF7700B939DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		60A58348DFB17D022E9E87EF /* libPods-Phenom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Phenom.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Phenom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F102D4B6AD0980225AA1C48 /* Pods-Phenom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.release.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,7 +194,7 @@
 				570AC50D1CA4C38F00441F4A /* VideoToolbox.framework in Frameworks */,
 				570AC50E1CA4C38F00441F4A /* WebKit.framework in Frameworks */,
 				57C6DD1C1CA4BF7700B939DF /* UIKit.framework in Frameworks */,
-				E9E4F4E2C0E8ECD372E9215A /* libPods-Phenom.a in Frameworks */,
+				45926ED78AC076A816D0CBF3 /* Pods_Phenom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +314,6 @@
 				57C6DD061CA46E6300B939DF /* ActivityViewController.swift */,
 				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
 				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
-				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 				57C6DD021CA46E4700B939DF /* TimelineViewController.swift */,
 				57C6DD001CA46E3000B939DF /* TabBarViewController.swift */,
 			);
@@ -328,6 +327,7 @@
 				570AC5171CA5DA5600441F4A /* ExploreCell.swift */,
 				570AC5131CA5CD8300441F4A /* ActivityCell.swift */,
 				57C6DD121CA4807900B939DF /* TimelineCell.swift */,
+				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -391,7 +391,7 @@
 				570AC4F91CA4C38E00441F4A /* VideoToolbox.framework */,
 				570AC4FA1CA4C38E00441F4A /* WebKit.framework */,
 				57C6DD1B1CA4BF7700B939DF /* UIKit.framework */,
-				60A58348DFB17D022E9E87EF /* libPods-Phenom.a */,
+				61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

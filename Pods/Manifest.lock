@@ -25,6 +25,7 @@ PODS:
   - FBSDKShareKit (4.6.0):
     - FBSDKCoreKit
   - Reachability (3.1.1)
+  - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - AsyncDisplayKit (= 1.2.3)
@@ -35,6 +36,16 @@ DEPENDENCIES:
   - FBSDKLoginKit (= 4.6.0)
   - FBSDKShareKit (= 4.6.0)
   - Reachability (= 3.1.1)
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 2a5b70f06001316d4fb54501edc70b4084705da0
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
   AsyncDisplayKit: 5c8f38225f7478e39c48196cec0dd0d2ac3455ed
@@ -45,5 +56,6 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 3d07febbfa884b9878cacba54f705bb41f07d4b6
   FBSDKShareKit: f474f1123791e215d0299b98b3ee92ddd9187d86
   Reachability: dd9aa4fb6667b9f787690a74f53cb7634ce99893
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

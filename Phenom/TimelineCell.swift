@@ -94,9 +94,9 @@ class TimelineCell: UITableViewCell {
         self.contentView.addSubview(self.heartImgViewSmall)
         self.heartImgViewSmall.layer.masksToBounds = true
         
-        self.likesLbl.backgroundColor = UIColor.orangeColor()
+        self.likesLbl.backgroundColor = UIColor.clearColor()
         self.likesLbl.font = UIFont.systemFontOfSize(12)
-        self.likesLbl.textColor = UIColor.lightGrayColor()
+        self.likesLbl.textColor = UIColor.whiteColor()
         self.likesLbl.textAlignment = NSTextAlignment.Left
         self.likesLbl.numberOfLines = 1
         self.likesLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
@@ -106,15 +106,15 @@ class TimelineCell: UITableViewCell {
         self.headerLbl.font = UIFont.systemFontOfSize(17)
         self.headerLbl.textColor = UIColor.lightGrayColor()
         self.headerLbl.textAlignment = NSTextAlignment.Left
-        self.headerLbl.numberOfLines = 1
+        self.headerLbl.numberOfLines = 0
         self.headerLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
         self.contentView.addSubview(self.headerLbl)
         
         //
         
-        self.commentLbl.backgroundColor = UIColor.grayColor()
+        self.commentLbl.backgroundColor = UIColor.clearColor()
         self.commentLbl.font = UIFont.systemFontOfSize(12)
-        self.commentLbl.textColor = UIColor.lightGrayColor()
+        self.commentLbl.textColor = UIColor.whiteColor()
         self.commentLbl.textAlignment = NSTextAlignment.Left
         self.commentLbl.numberOfLines = 1
         self.commentLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
