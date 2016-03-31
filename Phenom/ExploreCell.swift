@@ -2,48 +2,68 @@
 //  ExploreCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/25/16.
+//  Created by Clay Zug on 3/30/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
 import UIKit
 
-class ExploreCell: UICollectionViewCell {
+class ExploreCell: UITableViewCell {
+
+    var cellWidth = CGFloat()
     
-    var textLbl: UILabel!
-    var bgImgView: UIImageView!
-    var userImgView: UIImageView!
+    var theScrollView = UIScrollView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    var userImgView = UIImageView()
+    var nameLbl = UILabel()
+    var usernameLbl = UILabel()
+    var followBtn = UIButton(type: UIButtonType.Custom)
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        let imgHeight = frame.size.height*2/3
+        self.userImgView.backgroundColor = UIColor.lightGrayColor()
+        self.userImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        self.userImgView.userInteractionEnabled = true
+        self.contentView.addSubview(self.userImgView)
+        self.userImgView.layer.masksToBounds = true
         
-        bgImgView = UIImageView()
-        bgImgView.frame = CGRect(x: (frame.size.width/2)-(imgHeight/2)-3, y: -3, width: imgHeight+6, height: imgHeight+6)
-        bgImgView.backgroundColor = UINavigationBar.appearance().tintColor
-        bgImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        bgImgView.image = UIImage(named: "purple200.png")
-        contentView.addSubview(bgImgView)
-        bgImgView.layer.cornerRadius = (imgHeight+6)/2
-        bgImgView.layer.masksToBounds = true
-        bgImgView.hidden = true
+        self.nameLbl.backgroundColor = UIColor.yellowColor()
+        self.nameLbl.font = UIFont.boldSystemFontOfSize(17)
+        self.nameLbl.textColor = UIColor.lightGrayColor()
+        self.nameLbl.textAlignment = NSTextAlignment.Left
+        self.nameLbl.numberOfLines = 1
+        self.nameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        self.contentView.addSubview(self.nameLbl)
         
-        userImgView = UIImageView()
-        userImgView.frame = CGRect(x: (frame.size.width/2)-(imgHeight/2), y: 0, width: imgHeight, height: imgHeight)
-        userImgView.backgroundColor = UIColor.init(white: 0.75, alpha: 1.0)
-        userImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        contentView.addSubview(userImgView)
-        userImgView.layer.cornerRadius = imgHeight/2
-        userImgView.layer.masksToBounds = true
-        userImgView.alpha = 0.0
-        userImgView.image = UIImage(named: "placeholder.png")
+        self.usernameLbl.backgroundColor = UIColor.greenColor()
+        self.usernameLbl.font = UIFont.boldSystemFontOfSize(14)
+        self.usernameLbl.textColor = UIColor.lightGrayColor()
+        self.usernameLbl.textAlignment = NSTextAlignment.Left
+        self.usernameLbl.numberOfLines = 1
+        self.usernameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        self.contentView.addSubview(self.usernameLbl)
         
-        textLbl = UILabel(frame: CGRect(x: 0, y: userImgView.frame.size.height, width: frame.size.width, height: frame.size.height/3-10))
-        textLbl.font = UIFont.systemFontOfSize(12)
-        textLbl.textColor = UIColor.init(white: 0.1, alpha: 1.0)
-        textLbl.textAlignment = .Center
-        contentView.addSubview(textLbl)
+        self.followBtn.backgroundColor = UIColor.blueColor()
+        //self.followBtn.addTarget(self, action:#selector(CameraViewController.self.followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.contentView.addSubview(self.followBtn)
+        
+        //
+        //
+        
+        self.theScrollView.backgroundColor = UIColor.orangeColor() // UIColor(red:20/255, green:20/255, blue:25/255, alpha:1)
+        //self.theScrollView.delegate = self
+        self.theScrollView.pagingEnabled = false
+        self.theScrollView.showsHorizontalScrollIndicator = true
+        self.theScrollView.showsVerticalScrollIndicator = false
+        self.theScrollView.scrollsToTop = false
+        self.theScrollView.scrollEnabled = true
+        self.theScrollView.bounces = true
+        self.theScrollView.alwaysBounceVertical = false
+        self.theScrollView.alwaysBounceHorizontal = true
+        self.theScrollView.userInteractionEnabled = true
+        self.contentView.addSubview(self.theScrollView)
+        
         
     }
     
@@ -51,4 +71,25 @@ class ExploreCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        self.userImgView.frame = CGRectMake(15, 15, 50, 50)
+        self.nameLbl.frame = CGRectMake(15+50+10, 15, self.cellWidth-15-50-15-50-15, 25)
+        self.usernameLbl.frame = CGRectMake(15+50+10, 15+25, self.cellWidth-15-50-15-50-15, 25)
+        self.followBtn.frame = CGRectMake(self.cellWidth-15-40, 20, 40, 40)
+        
+        //self.followBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        //self.followBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        
+        self.theScrollView.frame = CGRectMake(0, 0, self.cellWidth, 150)
+        self.theScrollView.contentSize = CGSize(width: self.cellWidth*3, height: 150)
+        self.theScrollView.contentOffset = CGPoint(x: 0, y: 0)
+        
+        
+    }
+    
+    
+
 }

@@ -32,7 +32,6 @@
 		570AC5121CA5CA3600441F4A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC5111CA5CA3600441F4A /* SettingsViewController.swift */; };
 		570AC5141CA5CD8300441F4A /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC5131CA5CD8300441F4A /* ActivityCell.swift */; };
 		570AC5161CA5CF7800441F4A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC5151CA5CF7800441F4A /* SearchViewController.swift */; };
-		570AC5181CA5DA5600441F4A /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC5171CA5DA5600441F4A /* ExploreCell.swift */; };
 		570AC51E1CA5E2A100441F4A /* MyActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */; };
 		570AC5201CA5E2B500441F4A /* FollowingActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC51F1CA5E2B500441F4A /* FollowingActivityViewController.swift */; };
 		570AC5271CA86DD700441F4A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570AC5261CA86DD700441F4A /* DetailViewController.swift */; };
@@ -58,6 +57,7 @@
 		5768B8E51CAC4E8D002E9664 /* GearViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E41CAC4E8D002E9664 /* GearViewController.swift */; };
 		5768B8E71CAC51B9002E9664 /* GearCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E61CAC51B9002E9664 /* GearCell.swift */; };
 		5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */; };
+		5768B8EB1CAC9921002E9664 /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8EA1CAC9921002E9664 /* ExploreCell.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -69,7 +69,6 @@
 		57C6DD101CA47EFC00B939DF /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD0E1CA47EFC00B939DF /* Person.swift */; };
 		57C6DD111CA47EFC00B939DF /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD0F1CA47EFC00B939DF /* ProgressView.swift */; };
 		57C6DD131CA4807900B939DF /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD121CA4807900B939DF /* TimelineCell.swift */; };
-		57C6DD151CA4861800B939DF /* NewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD141CA4861800B939DF /* NewViewController.swift */; };
 		57C6DD1C1CA4BF7700B939DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6DD1B1CA4BF7700B939DF /* UIKit.framework */; };
 		E9E4F4E2C0E8ECD372E9215A /* libPods-Phenom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 60A58348DFB17D022E9E87EF /* libPods-Phenom.a */; };
 /* End PBXBuildFile section */
@@ -118,7 +117,6 @@
 		570AC5111CA5CA3600441F4A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		570AC5131CA5CD8300441F4A /* ActivityCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		570AC5151CA5CF7800441F4A /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		570AC5171CA5DA5600441F4A /* ExploreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
 		570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyActivityViewController.swift; sourceTree = "<group>"; };
 		570AC51F1CA5E2B500441F4A /* FollowingActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingActivityViewController.swift; sourceTree = "<group>"; };
 		570AC5261CA86DD700441F4A /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +148,7 @@
 		5768B8E41CAC4E8D002E9664 /* GearViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearViewController.swift; sourceTree = "<group>"; };
 		5768B8E61CAC51B9002E9664 /* GearCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearCell.swift; sourceTree = "<group>"; };
 		5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineHeaderView.swift; sourceTree = "<group>"; };
+		5768B8EA1CAC9921002E9664 /* ExploreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -161,7 +160,6 @@
 		57C6DD0E1CA47EFC00B939DF /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		57C6DD0F1CA47EFC00B939DF /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		57C6DD121CA4807900B939DF /* TimelineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
-		57C6DD141CA4861800B939DF /* NewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewViewController.swift; sourceTree = "<group>"; };
 		57C6DD171CA4BE6100B939DF /* Phenom-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Phenom-Bridging-Header.h"; sourceTree = "<group>"; };
 		57C6DD1B1CA4BF7700B939DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		60A58348DFB17D022E9E87EF /* libPods-Phenom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Phenom.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -314,7 +312,6 @@
 				57C6DD061CA46E6300B939DF /* ActivityViewController.swift */,
 				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
 				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
-				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 				57C6DD021CA46E4700B939DF /* TimelineViewController.swift */,
 				57C6DD001CA46E3000B939DF /* TabBarViewController.swift */,
 			);
@@ -325,9 +322,10 @@
 			isa = PBXGroup;
 			children = (
 				5768B8E61CAC51B9002E9664 /* GearCell.swift */,
-				570AC5171CA5DA5600441F4A /* ExploreCell.swift */,
+				5768B8EA1CAC9921002E9664 /* ExploreCell.swift */,
 				570AC5131CA5CD8300441F4A /* ActivityCell.swift */,
 				57C6DD121CA4807900B939DF /* TimelineCell.swift */,
+				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -402,7 +400,6 @@
 				571CC52B1CAB321100A42997 /* Fusuma */,
 				57242DEE1CAB457600A71A7F /* ComposeViewController.swift */,
 				571CC4FA1CAB149D00A42997 /* CameraViewController.swift */,
-				57C6DD141CA4861800B939DF /* NewViewController.swift */,
 			);
 			name = Creation;
 			sourceTree = "<group>";
@@ -613,6 +610,7 @@
 				571CC5381CAB324600A42997 /* FSAlbumView.swift in Sources */,
 				5768B8E71CAC51B9002E9664 /* GearCell.swift in Sources */,
 				5768B8E51CAC4E8D002E9664 /* GearViewController.swift in Sources */,
+				5768B8EB1CAC9921002E9664 /* ExploreCell.swift in Sources */,
 				57C6DD131CA4807900B939DF /* TimelineCell.swift in Sources */,
 				57C6DD101CA47EFC00B939DF /* Person.swift in Sources */,
 				57C6DD111CA47EFC00B939DF /* ProgressView.swift in Sources */,
@@ -621,13 +619,11 @@
 				570AC5121CA5CA3600441F4A /* SettingsViewController.swift in Sources */,
 				57C6DD071CA46E6300B939DF /* ActivityViewController.swift in Sources */,
 				570AC5141CA5CD8300441F4A /* ActivityCell.swift in Sources */,
-				57C6DD151CA4861800B939DF /* NewViewController.swift in Sources */,
 				570AC51E1CA5E2A100441F4A /* MyActivityViewController.swift in Sources */,
 				57C6DD0B1CA47A6900B939DF /* SignInViewController.swift in Sources */,
 				571500511CA3136800AA8744 /* AppDelegate.swift in Sources */,
 				57C6DD091CA46F2A00B939DF /* ProfileViewController.swift in Sources */,
 				57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */,
-				570AC5181CA5DA5600441F4A /* ExploreCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

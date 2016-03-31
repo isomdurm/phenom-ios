@@ -45,7 +45,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         self.navBarView.addSubview(titleLbl)
         
         let shareBtn = UIButton()
-        shareBtn.frame = CGRectMake(self.view.frame.size.width-70, 20, 70, 44)
+        shareBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
         shareBtn.backgroundColor = UIColor.blueColor()
         shareBtn.addTarget(self, action:#selector(ComposeViewController.shareBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         shareBtn.titleLabel?.font = UIFont.systemFontOfSize(16)

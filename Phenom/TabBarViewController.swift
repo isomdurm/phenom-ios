@@ -41,13 +41,14 @@ class TabBarViewController: UITabBarController {
         centerBtn.setTitle("+", forState: UIControlState.Normal)
         self.tabBar.addSubview(centerBtn)
         centerBtn.titleEdgeInsets = UIEdgeInsets(top: -3, left: 0, bottom: 3, right: 0)
+        
     }
     
     func centerBtnAction() {
         
-        UIView.animateWithDuration(0.35, delay:0.0, options: .CurveEaseInOut, animations: {
+        UIView.animateWithDuration(0.38, delay:0.0, options: .CurveEaseOut, animations: {
             
-            (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.95, 0.95)
+            (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.92, 0.92)
             
             }, completion: { finished in
                 if (finished) {
