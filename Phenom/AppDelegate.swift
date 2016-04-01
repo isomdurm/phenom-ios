@@ -291,6 +291,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         let dict = [
             "viewedPostIds" : [],
             "likedPostIds" : [],
+            "savedSearchGear" : [],
+            "savedSearchNames" : [],
+            "followingIds" : [],
             "rateAlertShown" : false
         ]
         

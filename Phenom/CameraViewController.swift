@@ -16,6 +16,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     var albumViewerContainer: UIView!
     var cameraViewerContainer: UIView!
+    var statusViewerContainer: UIView!
     
     var albumView  = FSAlbumView.instance()
     var cameraView = FSCameraView.instance()
@@ -24,6 +25,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     var albumBtn = UIButton()
     var cameraBtn = UIButton()
+    var statusBtn = UIButton()
     
     var imgToPass = UIImage()
     
@@ -47,29 +49,20 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         cameraViewerContainer.backgroundColor = UIColor.greenColor() // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         self.view.addSubview(cameraViewerContainer)
         
-        
-        //let fusuma = FusumaViewController()
-        //fusuma.delegate = self
-        //self.presentViewController(fusuma, animated: true, completion: nil)
-        
+        statusViewerContainer = UIView(frame: CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64-50))
+        statusViewerContainer.backgroundColor = UIColor.yellowColor() // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        self.view.addSubview(statusViewerContainer)
         
         albumView.delegate  = self
         cameraView.delegate = self
-
-        
-//        let bundle = NSBundle(forClass: self.classForCoder)
-//        
-//        let albumImage = UIImage(named: "ic_insert_photo", inBundle: bundle, compatibleWithTraitCollection: nil)
-//        let cameraImage = UIImage(named: "ic_photo_camera", inBundle: bundle, compatibleWithTraitCollection: nil)
-//        let checkImage = UIImage(named: "ic_check", inBundle: bundle, compatibleWithTraitCollection: nil)
-
-        
-        //changeMode(defaultMode ?? FusumaMode.Library)
         
         albumViewerContainer.addSubview(albumView)
         cameraViewerContainer.addSubview(cameraView)
-        cameraViewerContainer.hidden = true
         
+        //
+        
+        cameraViewerContainer.hidden = true
+        statusViewerContainer.hidden = true
         
         
         //
@@ -112,7 +105,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         //
         
         albumBtn = UIButton(type: UIButtonType.Custom)
-        albumBtn.frame = CGRectMake(0, self.view.frame.size.height-50, self.view.frame.size.width, 50)
+        albumBtn.frame = CGRectMake(self.view.frame.size.width/3*0, self.view.frame.size.height-50, self.view.frame.size.width/3, 50)
         albumBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //albumBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         albumBtn.backgroundColor = UIColor.blueColor()
@@ -120,12 +113,20 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         self.view.addSubview(albumBtn)
         
         cameraBtn = UIButton(type: UIButtonType.Custom)
-        cameraBtn.frame = CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height-50, self.view.frame.size.width, 50)
+        cameraBtn.frame = CGRectMake(self.view.frame.size.width/3*1, self.view.frame.size.height-50, self.view.frame.size.width/3, 50)
         cameraBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //cameraBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         cameraBtn.backgroundColor = UIColor.redColor()
         cameraBtn.addTarget(self, action:#selector(CameraViewController.cameraBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.view.addSubview(cameraBtn)
+        
+        statusBtn = UIButton(type: UIButtonType.Custom)
+        statusBtn.frame = CGRectMake(self.view.frame.size.width/3*2, self.view.frame.size.height-50, self.view.frame.size.width/3, 50)
+        statusBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        //statusBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        statusBtn.backgroundColor = UIColor.orangeColor()
+        statusBtn.addTarget(self, action:#selector(CameraViewController.statusBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.view.addSubview(statusBtn)
         
         
         
@@ -150,16 +151,25 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func albumBtnAction() {
-        cameraViewerContainer.hidden = true
         albumViewerContainer.hidden = false
+        cameraViewerContainer.hidden = true
+        statusViewerContainer.hidden = true
         titleLbl.text = "CAMERA ROLL"
 
     }
     
     func cameraBtnAction() {
-        cameraViewerContainer.hidden = false
         albumViewerContainer.hidden = true
+        cameraViewerContainer.hidden = false
+        statusViewerContainer.hidden = true
         titleLbl.text = "CAMERA"
+    }
+    
+    func statusBtnAction() {
+        albumViewerContainer.hidden = true
+        cameraViewerContainer.hidden = true
+        statusViewerContainer.hidden = false
+        titleLbl.text = "STATUS"
     }
     
     func xBtnAction() {
