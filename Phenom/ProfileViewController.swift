@@ -73,12 +73,87 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(self.theTableView)
         
-        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, self.theTableView.frame.size.width+64))
+        let headerViewWidth = self.view.frame.size.width
+        let headerViewHeight = self.view.frame.size.width+64
+        
+        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, headerViewWidth, headerViewHeight))
         self.theTableView.tableHeaderView?.backgroundColor = UIColor(red:43/255, green:43/255, blue:43/255, alpha:1)
+        
+        // profile pic
+        // name
+        // SPORT IN HOMETOWN
+        // BIO
+        // number of fans
+        // "fans"
+        // number of following
+        // "following"
+        // invite button
+        
+        // frames based off phone's width
+        
+        //let containerHeight = // measure all height
+        //let containerView = UIView(frame: CGRectMake(0, 0, 80, 80))
+        
+        let profileWidth = headerViewWidth/3
+        
+        let profileImgView = UIImageView(frame: CGRectMake(profileWidth, headerViewWidth/2-profileWidth, profileWidth, profileWidth))
+        profileImgView.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(profileImgView)
+        
+        let nameLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height, headerViewWidth, 40))
+        nameLbl.backgroundColor = UIColor.whiteColor()
+        self.theTableView.tableHeaderView?.addSubview(nameLbl)
+        
+        let sportHometownLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height, headerViewWidth, 20))
+        sportHometownLbl.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(sportHometownLbl)
+        
+        let bioLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, headerViewWidth, 40))
+        bioLbl.backgroundColor = UIColor.blueColor()
+        self.theTableView.tableHeaderView?.addSubview(bioLbl)
+        
+        //
+        
+        let fansNumLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height+sportHometownLbl.frame.size.height+bioLbl.frame.size.height, headerViewWidth, 40))
+        fansNumLbl.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(fansNumLbl)
+        
+        let fansLbl = UILabel(frame: CGRectMake(0, 0, 80, 80))
+        fansLbl.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(fansLbl)
+        
+        let followingNumLbl = UILabel(frame: CGRectMake(0, 0, 80, 80))
+        followingNumLbl.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(followingNumLbl)
+        
+        let followingLbl = UILabel(frame: CGRectMake(0, 0, 80, 80))
+        followingLbl.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(followingLbl)
+        
+        let inviteBtn = UIButton.init(type: UIButtonType.Custom)
+        inviteBtn.frame = CGRectMake(headerViewWidth/2, 0, 80, 80)
+        inviteBtn.backgroundColor = UIColor.yellowColor()
+        self.theTableView.tableHeaderView?.addSubview(inviteBtn)
+        
+        
+        
+        // number of moments
+        // "moments"
+        // number of gear
+        // "gear"
+        
+        // slider/indicator
+        
+        
         
         let headerNavView = UIView(frame: CGRectMake(0, self.theTableView.frame.size.width, self.theTableView.frame.size.width, 64))
         headerNavView.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
         self.theTableView.tableHeaderView?.addSubview(headerNavView)
+        
+        
+        
+        
+        
         
         let line:UIView = UIView()
         line.frame = CGRectMake(0, self.theTableView.frame.size.width+64-0.5, self.theTableView.frame.size.width, 0.5)

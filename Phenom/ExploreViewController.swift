@@ -14,7 +14,6 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var theTableView: UITableView = UITableView()
     
-    
     var isSearching: Bool = false
     
     override func viewDidLoad() {
@@ -127,8 +126,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch (section) {
         case 0: return 1
-        case 1: return 5
-        default: return 0}
+        case 1: return 10
+        default: return 0
+        }
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -160,19 +160,43 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //let rowHeight = self.view.frame.size.width/3.5
-        return 150
+        //return 150
+        if (indexPath.section == 0) {
+            return 150
+        } else {
+            return 80
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+        //let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
-        //let cell:TimelineCell = TimelineCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        //cell.cellWidth = self.view.frame.size.width
+        let cell:ExploreCell = ExploreCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        cell.cellWidth = self.view.frame.size.width
         
+        if (indexPath.section == 0) {
         
+            cell.theScrollView.hidden = false
+            
+            cell.nameLbl.text = ""
+            cell.nameLbl.hidden = true
+            cell.usernameLbl.text = ""
+            cell.usernameLbl.hidden = true
+            cell.followBtn.hidden = true
+            
+        } else {
+            
+            cell.theScrollView.hidden = true
+            
+            cell.nameLbl.text = "FIRST LAST"
+            cell.usernameLbl.text = "USERNAME"
+            cell.followBtn.hidden = false
+            
+        }
         
         return cell
+        
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {

@@ -12,6 +12,8 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
 
     var navBarView = UIView()
     
+    let titleLbl = UILabel()
+    
     var albumViewerContainer: UIView!
     var cameraViewerContainer: UIView!
     
@@ -86,7 +88,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         xBtn.addTarget(self, action:#selector(CameraViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        titleLbl.frame = CGRectMake(0, 20, self.navBarView.frame.size.width, 44)
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "CAMERA ROLL"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
@@ -150,11 +152,14 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     func albumBtnAction() {
         cameraViewerContainer.hidden = true
         albumViewerContainer.hidden = false
+        titleLbl.text = "CAMERA ROLL"
+
     }
     
     func cameraBtnAction() {
         cameraViewerContainer.hidden = false
         albumViewerContainer.hidden = true
+        titleLbl.text = "CAMERA"
     }
     
     func xBtnAction() {
