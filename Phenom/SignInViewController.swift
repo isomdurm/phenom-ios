@@ -42,6 +42,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         titleLbl.textColor = UIColor.whiteColor()
         self.navBarView.addSubview(titleLbl)
         
+        let signInBtn = UIButton(type: UIButtonType.Custom)
+        signInBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        signInBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        //signInBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        signInBtn.backgroundColor = UIColor.blueColor()
+        signInBtn.addTarget(self, action:#selector(SignInViewController.signInBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.navBarView.addSubview(signInBtn)
+        
         usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
@@ -98,6 +106,19 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     func xBtnAction() {
         self.view.endEditing(true)
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func signInBtnAction() {
+        
+        // if logged in correctly
+        
+        //
+        
+        self.view.endEditing(true)
+        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).presentTabBarViewController()
+        
+        
     }
 
 

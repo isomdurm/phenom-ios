@@ -112,6 +112,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         let cell:ActivityCell = ActivityCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         cell.cellWidth = self.view.frame.size.width
         
+//        let timeAgo = (UIApplication.sharedApplication().delegate as! AppDelegate).timeAgoSinceDate(NSDate(), numericDates: NSDate())
         
         return cell
     }
@@ -141,5 +142,41 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
         
     }
+    
+//    func findMomentsFeed() {
+//        
+//        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+//        
+//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+//        
+//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+//        
+//        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/feed?date=1459203919289&amount=5") else {return}
+//        let request = NSMutableURLRequest(URL: URL)
+//        request.HTTPMethod = "GET"
+//        
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+//        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+//        
+//        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+//            if (error == nil) {
+//                
+//                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//                
+//                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+//                    
+//                    self.momentsData = dataFromString
+//                    
+//                    self.theTableView.reloadData()
+//                    
+//                } else {
+//                    print("URL Session Task Failed: %@", error!.localizedDescription);
+//                }
+//            }
+//            
+//        })
+//        task.resume()
+//    }
 
 }

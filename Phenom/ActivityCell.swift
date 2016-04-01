@@ -55,7 +55,7 @@ class ActivityCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
         self.userImgView.frame = CGRectMake(15, 10, 44, 44)
-        self.activityLbl.frame = CGRectMake(15+44+10, 10, self.cellWidth-15-40-15-44-15-15, 44) // x = 15+44+10 is on purpose
+        self.activityLbl.frame = CGRectMake(15+44+10, 10, self.cellWidth-15-40-15-44-15-10, 44) // x = 15+44+10 is on purpose
         
         self.momentImgView.frame = CGRectMake(self.cellWidth-15-44, 10, 44, 44)
         self.followBtn.frame = CGRectMake(self.cellWidth-15-44, 10, 44, 44)

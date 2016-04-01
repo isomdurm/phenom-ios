@@ -22,7 +22,7 @@ pod 'Fabric',                 '1.6.3'
 pod 'Crashlytics',            '3.7.0'
 pod 'Reachability',           '3.1.1'
 pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
-
+pod 'HanekeSwift'
 
 end
 

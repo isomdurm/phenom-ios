@@ -42,17 +42,17 @@ class TimelineCell: UITableViewCell {
         self.contentView.addSubview(self.momentImgView)
         self.momentImgView.layer.masksToBounds = true
         
-        self.musicLbl.backgroundColor = UIColor.yellowColor()
+        self.musicLbl.backgroundColor = UIColor.clearColor()
         self.musicLbl.font = UIFont.systemFontOfSize(12)
-        self.musicLbl.textColor = UIColor.yellowColor()
+        self.musicLbl.textColor = UIColor.whiteColor()
         self.musicLbl.textAlignment = NSTextAlignment.Left
         self.musicLbl.numberOfLines = 1
         self.musicLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         self.contentView.addSubview(self.musicLbl)
         
-        self.typeLbl.backgroundColor = UIColor.blueColor()
+        self.typeLbl.backgroundColor = UIColor.clearColor()
         self.typeLbl.font = UIFont.systemFontOfSize(12)
-        self.typeLbl.textColor = UIColor.blueColor()
+        self.typeLbl.textColor = UIColor.whiteColor()
         self.typeLbl.textAlignment = NSTextAlignment.Center
         self.typeLbl.numberOfLines = 1
         self.typeLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -102,7 +102,7 @@ class TimelineCell: UITableViewCell {
         self.likesLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         self.contentView.addSubview(self.likesLbl)
         
-        self.headerLbl.backgroundColor = UIColor.blueColor()
+        self.headerLbl.backgroundColor = UIColor.clearColor()
         self.headerLbl.font = UIFont.systemFontOfSize(17)
         self.headerLbl.textColor = UIColor.lightGrayColor()
         self.headerLbl.textAlignment = NSTextAlignment.Left

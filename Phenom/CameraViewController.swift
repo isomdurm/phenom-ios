@@ -12,6 +12,8 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
 
     var navBarView = UIView()
     
+    let titleLbl = UILabel()
+    
     var albumViewerContainer: UIView!
     var cameraViewerContainer: UIView!
     
@@ -86,7 +88,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         xBtn.addTarget(self, action:#selector(CameraViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        titleLbl.frame = CGRectMake(0, 20, self.navBarView.frame.size.width, 44)
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "CAMERA ROLL"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
@@ -150,11 +152,14 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     func albumBtnAction() {
         cameraViewerContainer.hidden = true
         albumViewerContainer.hidden = false
+        titleLbl.text = "CAMERA ROLL"
+
     }
     
     func cameraBtnAction() {
         cameraViewerContainer.hidden = false
         albumViewerContainer.hidden = true
+        titleLbl.text = "CAMERA"
     }
     
     func xBtnAction() {
@@ -228,7 +233,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     // MARK: FusumaDelegate Protocol
     func fusumaImageSelected(image: UIImage) {
         
-        print("Image selected")
+//        print("Image selected")
         //imageView.image = image
         
         self.imgToPass = image
@@ -236,12 +241,12 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func fusumaDismissedWithImage(image: UIImage) {
-        print("Called just after dismissed FusumaViewController")
+//        print("Called just after dismissed FusumaViewController")
     }
     
     func fusumaCameraRollUnauthorized() {
         
-        print("Camera roll unauthorized")
+//        print("Camera roll unauthorized")
         let alert = UIAlertController(title: "Access Requested", message: "Saving image needs to access your photo album", preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: "Settings", style: .Default, handler: { (action) -> Void in
             
@@ -258,7 +263,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func fusumaClosed() {
-        print("Called when the close button is pressed")
+//        print("Called when the close button is pressed")
     }
     
 

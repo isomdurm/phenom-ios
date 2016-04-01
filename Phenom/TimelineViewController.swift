@@ -8,12 +8,15 @@
 
 import UIKit
 import SwiftyJSON
+import Haneke
 //import AFNetworking
 
 
 class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var momentsData = NSData()
+    
+    var momentsArray = NSArray()
     
     var access_token = ""
     
@@ -25,6 +28,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     let activityIndicator = UIActivityIndicatorView()
     var theTableView: UITableView = UITableView()
+    var refreshControl:UIRefreshControl!
     
     var timelineArray = NSMutableArray()
     
@@ -66,6 +70,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         self.view.addSubview(self.activityIndicator)
         self.activityIndicator.startAnimating()
     
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.addTarget(self, action: #selector(TimelineViewController.queryForTimeline), forControlEvents: UIControlEvents.ValueChanged)
+        self.theTableView.addSubview(self.refreshControl)
         //
         
         let statusBarView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 20))
@@ -94,10 +101,52 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // get bearer token
         
+        let date = NSDate().timeIntervalSince1970 * 1000
         
-//        sendRequest()
+        print(date)
         
-        findMomentsFeed()
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/feed?date=\(date)&amount=20") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    self.momentsData = dataFromString
+                    
+                    self.theTableView.reloadData()
+                    
+                    self.refreshControl.endRefreshing()
+                    
+                } else {
+                    //                print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
+                    self.refreshControl.endRefreshing()
+                }
+            } else {
+                
+                self.refreshControl.endRefreshing()
+                
+            }
+            
+        })
+        task.resume()
+        
         
         // get moments
         
@@ -120,54 +169,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
         })
         
-    }
-    
-    
-    // TableViewDelegate
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 5
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 64
-    }
-    
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerView = TimelineHeaderView(frame: CGRectMake(0, 0, view.frame.size.width, 64))
-        
-        let cell:TimelineCell = TimelineCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        cell.cellWidth = self.view.frame.size.width
-        
-        let moments = JSON(data: self.momentsData)
-        
-        print(moments)
-        
-        let test = moments["results"]
-        
-        if let id = test[section]["user"]["firstName"].string {
-            headerView.userLbl!.text = "\(id) \(test[section]["user"]["lastName"])"
-        }
-
         
         
-//        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
-//        aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-//        
-//        aView.addSubview(aLbl)
-        headerView.timeLbl?.text = "TIME LBL HERE"
-        
-        return headerView
-        
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return self.view.frame.size.width+164 // probably 150 by default then raise to second line of text if necessary
     }
     
     func loadImageFromUrl(url: String, view: UIImageView){
@@ -187,6 +190,70 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         task.resume()
     }
     
+    
+    // TableViewDelegate
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        let moments = JSON(data: self.momentsData)
+        
+        return moments["results"].count
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 64
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let headerView = TimelineHeaderView(frame: CGRectMake(0, 0, view.frame.size.width, 64))
+        
+        let cell:TimelineCell = TimelineCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        cell.cellWidth = self.view.frame.size.width
+        
+        let moments = JSON(data: self.momentsData)
+        
+//        print(moments)
+        
+        let test = moments["results"]
+        
+        if let id = test[section]["user"]["firstName"].string {
+            headerView.userLbl!.text = "\(id) \(test[section]["user"]["lastName"])"
+        }
+        
+        if let id = test[section]["createdAt"].string {
+            headerView.timeLbl!.text = id
+        }
+        
+        if let id = test[section]["user"]["imageUrl"].string {
+            
+            let fileUrl = NSURL(string: id)
+//            loadImageFromUrl(id, view: headerView.userImgView!)
+            headerView.userImgView!.frame = CGRectMake(15, 10, 44, 44)
+            headerView.userImgView!.setNeedsLayout()
+            
+            headerView.userImgView!.hnk_setImageFromURL(fileUrl!)
+        }
+
+        
+        
+//        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
+//        aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+//        
+//        aView.addSubview(aLbl)
+//        headerView.timeLbl?.text = "TIME LBL HERE"
+        
+        return headerView
+        
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return self.view.frame.size.width+164 // probably 150 by default then raise to second line of text if necessary
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell:TimelineCell = TimelineCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
@@ -196,8 +263,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let test = moments["results"]
         
+        
         if let id = test[indexPath.section]["imageUrl"].string {
-            loadImageFromUrl(id, view: cell.momentImgView)
+            let fileUrl = NSURL(string: id)
+            
+            cell.momentImgView.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
+            cell.momentImgView.setNeedsLayout()
+            cell.momentImgView.hnk_setImageFromURL(fileUrl!)
         }
         
         if let id = test[indexPath.section]["likesCount"].number {
@@ -213,6 +285,21 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             let countStr = "\(id) comments"
             cell.commentLbl.text = countStr
         }
+        
+        if let id = test[indexPath.section]["mode"].number {
+            if (id == 0) {
+                cell.typeLbl.text = "TRAINING"
+            } else if (id == 1) {
+                cell.typeLbl.text = "GAMING"
+            } else {
+                cell.typeLbl.text = "STYLING"
+            }
+        }
+        
+        if let id = test[indexPath.section]["song"]["artistName"].string {
+            cell.musicLbl.text = "\(id) \(test[indexPath.section]["song"]["trackName"])"
+        }
+        
         
         return cell
     }
@@ -311,7 +398,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-        print("scrollViewShouldScrollToTop hit")
+//        print("scrollViewShouldScrollToTop hit")
 //        scrollView.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20-49)
 //        scrollView.contentOffset = CGPoint(x: 0, y: 44)
 //        var navBarViewFrame = self.navBarView.frame
@@ -321,7 +408,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func scrollViewDidScrollToTop(scrollView: UIScrollView) {
-        print("scrollViewDidScrollToTop hit")
+//        print("scrollViewDidScrollToTop hit")
 //        scrollView.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20-49)
 //        scrollView.contentOffset = CGPoint(x: 0, y: 44)
 //        var navBarViewFrame = self.navBarView.frame
@@ -361,52 +448,17 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                 if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     let json = JSON(data: dataFromString)
                     self.access_token = json["access_token"].string!
-                    print(self.access_token);
+//                    print(self.access_token);
                 }
                 
             }
             else {
                 
-                print("URL Session Task Failed: %@", error!.localizedDescription);
+//                print("URL Session Task Failed: %@", error!.localizedDescription);
             }
         })
         task.resume()
     }
-    
-    func findMomentsFeed() {
-        
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
-        
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/feed?date=1459203919289&amount=5") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    
-                    self.momentsData = dataFromString
-                    
-                    self.theTableView.reloadData()
-                    
-            } else {
-                print("URL Session Task Failed: %@", error!.localizedDescription);
-            }
-        }
-        
-        })
-        task.resume()
-    }
 
 }
