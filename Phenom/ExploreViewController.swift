@@ -6,9 +6,13 @@
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
+import SwiftyJSON
 import UIKit
+import Haneke
 
 class ExploreViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    var discoverPeople = NSData()
 
     var navBarView = UIView()
     
@@ -76,7 +80,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         self.theTableView.delegate = self
         self.theTableView.dataSource = self
         self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.theTableView.registerClass(ExploreCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(self.theTableView)
         
         //
@@ -87,7 +91,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
         
+        //
         
+        self.findSuggestedFollowers()
         
     }
 
@@ -106,9 +112,47 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         self.isSearching = false
     }
+    
+    func findSuggestedFollowers() {
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/discover/people?pageNumber=1") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    self.discoverPeople = dataFromString
+                    //print("self.discoverPeople: \(self.discoverPeople)")
+                    
+                    self.theTableView.reloadData()
+                    
+                } else {
+                    //                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                }
+            }
+            
+        })
+        task.resume()
+    }
+    
 
     func navBtnAction() {
-        print("navBtnAction hit")
+//        print("navBtnAction hit")
         
         self.navigationController?.pushViewController(SearchViewController(), animated: false)
         
@@ -126,7 +170,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch (section) {
         case 0: return 1
-        case 1: return 10
+        case 1: return 50
         default: return 0
         }
     }
@@ -148,7 +192,6 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         aLbl.font = UIFont.boldSystemFontOfSize(12)
         aLbl.textColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //
 
-        
         let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
         aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
@@ -175,23 +218,37 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell:ExploreCell = ExploreCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         cell.cellWidth = self.view.frame.size.width
         
-        if (indexPath.section == 0) {
         
-            cell.theScrollView.hidden = false
-            
+        if (indexPath.section == 0) {
+            // gear section
             cell.nameLbl.text = ""
-            cell.nameLbl.hidden = true
-            cell.usernameLbl.text = ""
-            cell.usernameLbl.hidden = true
-            cell.followBtn.hidden = true
+            
+        } else if (indexPath.section == 1) {
+            // people section
+            
+            let people = JSON(data: self.discoverPeople)
+            
+            let haha = people["results"]
+            
+            if let person = haha[indexPath.row]["username"].string {
+                cell.usernameLbl.text = person
+            }
+            
+            if let name = haha[indexPath.row]["firstName"].string {
+                cell.nameLbl.text = ("\(name) \(haha[indexPath.row]["lastName"])")
+            }
+            
+            if let id = haha[indexPath.row]["imageUrl"].string {
+                let fileUrl = NSURL(string: id)
+                
+                cell.userImgView.frame = CGRectMake(15, 10, 44, 44)
+                cell.userImgView.setNeedsLayout()
+                cell.userImgView.hnk_setImageFromURL(fileUrl!)
+            }
             
         } else {
             
-            cell.theScrollView.hidden = true
-            
-            cell.nameLbl.text = "FIRST LAST"
-            cell.usernameLbl.text = "USERNAME"
-            cell.followBtn.hidden = false
+            cell.nameLbl.text = ""
             
         }
         
@@ -223,7 +280,22 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-   
+    func loadImageFromUrl(url: String, view: UIImageView){
+        
+        let url = NSURL(string: url)!
+        
+        let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (responseData, responseUrl, error) -> Void in
+            
+            if let data = responseData {
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    view.image = UIImage(data: data)
+                })
+            }
+        }
+        
+        task.resume()
+    }
     
-
+    
 }

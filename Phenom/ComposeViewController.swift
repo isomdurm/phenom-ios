@@ -239,7 +239,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
     
     
     func shareBtnAction() {
-        print("shareBtnAction hit")
+//        print("shareBtnAction hit")
         
         
     }

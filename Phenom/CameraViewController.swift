@@ -233,7 +233,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     // MARK: FusumaDelegate Protocol
     func fusumaImageSelected(image: UIImage) {
         
-        print("Image selected")
+//        print("Image selected")
         //imageView.image = image
         
         self.imgToPass = image
@@ -241,12 +241,12 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func fusumaDismissedWithImage(image: UIImage) {
-        print("Called just after dismissed FusumaViewController")
+//        print("Called just after dismissed FusumaViewController")
     }
     
     func fusumaCameraRollUnauthorized() {
         
-        print("Camera roll unauthorized")
+//        print("Camera roll unauthorized")
         let alert = UIAlertController(title: "Access Requested", message: "Saving image needs to access your photo album", preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: "Settings", style: .Default, handler: { (action) -> Void in
             
@@ -263,7 +263,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func fusumaClosed() {
-        print("Called when the close button is pressed")
+//        print("Called when the close button is pressed")
     }
     
 

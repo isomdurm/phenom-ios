@@ -36,9 +36,9 @@ class ExploreCell: UITableViewCell {
         self.nameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         self.contentView.addSubview(self.nameLbl)
         
-        self.usernameLbl.backgroundColor = UIColor.greenColor()
+        self.usernameLbl.backgroundColor = UIColor.clearColor()
         self.usernameLbl.font = UIFont.boldSystemFontOfSize(14)
-        self.usernameLbl.textColor = UIColor.lightGrayColor()
+        self.usernameLbl.textColor = UIColor.redColor()
         self.usernameLbl.textAlignment = NSTextAlignment.Left
         self.usernameLbl.numberOfLines = 1
         self.usernameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
@@ -51,7 +51,7 @@ class ExploreCell: UITableViewCell {
         //
         //
         
-        self.theScrollView.backgroundColor = UIColor.orangeColor() // UIColor(red:20/255, green:20/255, blue:25/255, alpha:1)
+//        self.theScrollView.backgroundColor = UIColor.orangeColor() // UIColor(red:20/255, green:20/255, blue:25/255, alpha:1)
         //self.theScrollView.delegate = self
         self.theScrollView.pagingEnabled = false
         self.theScrollView.showsHorizontalScrollIndicator = true

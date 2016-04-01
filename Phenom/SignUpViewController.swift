@@ -32,15 +32,23 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(SignInViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.addTarget(self, action:#selector(SignUpViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(xBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 64))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "SIGN IN"
+        titleLbl.text = "SIGN UP"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
         titleLbl.textColor = UIColor.whiteColor()
         self.navBarView.addSubview(titleLbl)
+        
+        let signUpBtn = UIButton(type: UIButtonType.Custom)
+        signUpBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        signUpBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        //signUpBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        signUpBtn.backgroundColor = UIColor.blueColor()
+        signUpBtn.addTarget(self, action:#selector(SignUpViewController.signUpBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.navBarView.addSubview(signUpBtn)
         
         usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
         usernameField.backgroundColor = UIColor.clearColor()
@@ -82,6 +90,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(lineview2)
         
         
+        
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -99,6 +109,23 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    func signUpBtnAction() {
+        
+        
+        
+        
+        // if logged in correctly
+        
+        //
+        
+        self.view.endEditing(true)
+        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).presentTabBarViewController()
+        
+        
+    }
+    
     
 
 }
