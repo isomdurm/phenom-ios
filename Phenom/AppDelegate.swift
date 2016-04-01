@@ -235,6 +235,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             "bearerToken" : "",
             "viewedPostIds" : [],
             "likedPostIds" : [],
+            "savedSearchGear" : [],
+            "savedSearchNames" : [],
+            "followingIds" : [],
             "rateAlertShown" : false
         ]
         

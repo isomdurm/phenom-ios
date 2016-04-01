@@ -22,9 +22,6 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var peopleArray = NSMutableArray()
     var savedSearchNames = NSMutableArray()
     
-    var gearArray = NSMutableArray()
-    var savedSearchGear = NSMutableArray()
-    
     var tabBtn1 = UIButton(type: UIButtonType.Custom)
     var tabBtn2 = UIButton(type: UIButtonType.Custom)
     
@@ -148,8 +145,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         self.theTableView.registerClass(SearchCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(self.theTableView)
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
-        
-        //
+        self.theTableView.hidden = true
         
         NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(SearchViewController.keyboardWillShow(_:)),name: UIKeyboardWillShowNotification,object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(SearchViewController.keyboardDidShow(_:)),name: UIKeyboardDidShowNotification,object: nil)
@@ -176,16 +172,12 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn1.selected = true
         tabBtn2.selected = false
         
-        // load people array
-        self.theTableView.reloadData()
     }
     
     func tabBtn2Action() {
         tabBtn1.selected = false
         tabBtn2.selected = true
         
-        // load gear array
-        self.theTableView.reloadData()
     }
     
     func showErrorAlert(notification: NSNotification){
@@ -214,8 +206,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     func cancelBtnAction() {
         
         self.theTextField.text = ""
-        self.peopleArray.removeAllObjects()
-        self.gearArray.removeAllObjects()
+        self.theTableView.hidden = true
         self.theTextField.resignFirstResponder()
         
         self.navigationController?.popViewControllerAnimated(false)
@@ -262,72 +253,37 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func textFieldDidChange(textField: UITextField) {
         
-        if (self.tabBtn1.selected) {
-            self.peopleArray.removeAllObjects()
+        self.peopleArray.removeAllObjects()
+        
+        
+        let nothing = ""
+        if (self.theTextField.text == nothing) {
             
-            let nothing = ""
-            if (self.theTextField.text == nothing) {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let array = defaults.arrayForKey("savedSearchNames")
+            let ma = NSMutableArray(array: array!)
+            
+            let arr = ma.sort { $0.localizedCaseInsensitiveCompare($1 as! String) == NSComparisonResult.OrderedAscending}
+            
+            for name in arr {
                 
-                let defaults = NSUserDefaults.standardUserDefaults()
-                let array = defaults.arrayForKey("savedSearchNames")
-                let ma = NSMutableArray(array: array!)
+                let n = name as! String
                 
-                let arr = ma.sort { $0.localizedCaseInsensitiveCompare($1 as! String) == NSComparisonResult.OrderedAscending}
-                
-                for name in arr {
-                    
-                    let n = name as! String
-                    
-                    if (n.lowercaseString).hasPrefix(self.theTextField.text!.lowercaseString) {
-                        self.peopleArray.addObject(n)
-                    }
+                if (n.lowercaseString).hasPrefix(self.theTextField.text!.lowercaseString) {
+                    self.peopleArray.addObject(n)
                 }
-                
-                self.theTableView.reloadData()
-                
-            } else {
-                
-                //self.peopleArray.addObject(n)
-                
-                
-                self.peopleArray.addObject("\(self.theTextField.text!)")
-                
-                self.theTableView.reloadData()
             }
             
-        } else if (self.tabBtn2.selected) {
-            
-            self.gearArray.removeAllObjects()
-            
-            let nothing = ""
-            if (self.theTextField.text == nothing) {
-                
-                let defaults = NSUserDefaults.standardUserDefaults()
-                let array = defaults.arrayForKey("savedSearchNames")
-                let ma = NSMutableArray(array: array!)
-                
-                let arr = ma.sort { $0.localizedCaseInsensitiveCompare($1 as! String) == NSComparisonResult.OrderedAscending}
-                
-                for name in arr {
-                    
-                    let n = name as! String
-                    
-                    if (n.lowercaseString).hasPrefix(self.theTextField.text!.lowercaseString) {
-                        self.gearArray.addObject(n)
-                    }
-                }
-                
-                self.theTableView.reloadData()
-                
-            } else {
-                
-                self.gearArray.addObject("\(self.theTextField.text!)")
-                
-                self.theTableView.reloadData()
-            }
+            self.theTableView.reloadData()
             
         } else {
-            // error
+            
+            //self.peopleArray.addObject(n)
+            
+            self.peopleArray.addObject("\(self.theTextField.text)")
+            
+            self.theTableView.reloadData()
+            
         }
         
     }
@@ -372,14 +328,8 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if (self.tabBtn1.selected) {
-           return self.peopleArray.count
-        } else if (self.tabBtn2.selected) {
-            return self.gearArray.count
-        } else {
-            // error
-            return 0
-        }
+        return self.peopleArray.count
+        
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -402,6 +352,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         let name = self.peopleArray.objectAtIndex(indexPath.row) as! String
         cell.textLabel?.text = name
+        
         
         
         return cell

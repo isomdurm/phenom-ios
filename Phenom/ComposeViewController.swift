@@ -16,6 +16,13 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
     
     var passedImage = UIImage()
     
+    var tabBtn1 = UIButton(type: UIButtonType.Custom)
+    var tabBtn2 = UIButton(type: UIButtonType.Custom)
+    var tabBtn3 = UIButton(type: UIButtonType.Custom)
+    
+    var theTextView = KMPlaceholderTextView()
+    var textFieldAtTop: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,7 +101,6 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         let tabWidth = self.view.frame.width/3
-        let tabBtn1 = UIButton(type: UIButtonType.Custom)
         tabBtn1.frame = CGRectMake(0, 0, tabWidth, 44)
         tabBtn1.backgroundColor = UIColor.clearColor()
         tabBtn1.titleLabel?.numberOfLines = 1
@@ -110,7 +116,6 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         
         tabBtn1.selected = true
         
-        let tabBtn2 = UIButton(type: UIButtonType.Custom)
         tabBtn2.frame = CGRectMake(tabWidth*1, 0, tabWidth, 44)
         tabBtn2.backgroundColor = UIColor.clearColor()
         tabBtn2.titleLabel?.numberOfLines = 1
@@ -124,7 +129,6 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn2.addTarget(self, action:#selector(ComposeViewController.tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn2)
         
-        let tabBtn3 = UIButton(type: UIButtonType.Custom)
         tabBtn3.frame = CGRectMake(tabWidth*2, 0, tabWidth, 44)
         tabBtn3.backgroundColor = UIColor.clearColor()
         tabBtn3.titleLabel?.numberOfLines = 1
@@ -149,7 +153,6 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         
         // add caption
         
-        let theTextView = KMPlaceholderTextView()
         theTextView.frame = CGRectMake(0, 44, self.view.frame.width, 150)
         theTextView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTextView.delegate = self
@@ -176,7 +179,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         // add gear - show 3 and a + button
         
         let gearView = UIView()
-        gearView.frame = CGRectMake(0, 44+150, self.view.frame.size.width, 150)
+        gearView.frame = CGRectMake(0, 44+100, self.view.frame.size.width, 100)
         gearView.backgroundColor = UIColor.blueColor()
         self.theScrollView.addSubview(gearView)
         
@@ -184,9 +187,22 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         // add music - show 3 and a + button
         
         let musicView = UIView()
-        musicView.frame = CGRectMake(0, 44+150+150, self.view.frame.size.width, 150)
+        musicView.frame = CGRectMake(0, 44+100+100, self.view.frame.size.width, 100)
         musicView.backgroundColor = UIColor.greenColor()
         self.theScrollView.addSubview(musicView)
+        
+        //
+        // to hide clear background
+        let fakeView = UIView()
+        fakeView.frame = CGRectMake(0, 44+100+100+100, self.view.frame.size.width, 100*10)
+        fakeView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        self.theScrollView.addSubview(fakeView)
+        
+        //
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ComposeViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ComposeViewController.keyboardDidShow(_:)), name:UIKeyboardDidShowNotification ,object: nil)
+        
         
         
     }
@@ -196,50 +212,157 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.view.endEditing(true)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        
+    }
+
+    
     func backAction() {        
         self.navigationController?.popViewControllerAnimated(true)
     }
     
     func tabBtn1Action() {
+        tabBtn1.selected = true
+        tabBtn2.selected = false
+        tabBtn3.selected = false
         
     }
     
     func tabBtn2Action() {
+        tabBtn1.selected = false
+        tabBtn2.selected = true
+        tabBtn3.selected = false
         
     }
     
     func tabBtn3Action() {
+        tabBtn1.selected = false
+        tabBtn2.selected = false
+        tabBtn3.selected = true
         
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        self.view.endEditing(true)
+        if (textFieldAtTop && self.theTextView.isFirstResponder()) {
+            self.view.endEditing(true)
+        }
+        
+        if (self.theScrollView.contentOffset.y != 0) {
+            textFieldAtTop = false
+        }
+        
         
     }
     
     func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
         
         //print("scrollViewWillBeginDecelerating at x: \(scrollView.contentOffset.x)")
-        
+
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
         //print("scrollViewDidEndDecelerating at x: \(scrollView.contentOffset.x)")
         
-        if (scrollView == self.theScrollView) {
-            
-            
+        if (self.theScrollView.contentOffset.y == 0) {
+            print("scrollViewDidEndDecelerating hit")
+            textFieldAtTop = true
         }
+        
     }
     
     
+    func keyboardWillShow(notification: NSNotification) {
+        
+        print("keyboardWillShow hit")
+        self.theScrollView.setContentOffset(CGPoint(x: 0, y: 0) , animated: true)
+        
+    }
     
+    func keyboardDidShow(notification: NSNotification) {
+        
+        print("keyboardDidShow hit")
+        textFieldAtTop = true
+        
+    }
+    
+    // UITextViewDelegate
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        
+        if (self.theTextView.text == "") {
+            if (text == " ") {
+                return false;
+            }
+        }
+        if (text == "\n")
+        {
+            //return false;
+        }
+        
+        //
+        
+        let maxLength = 200
+        let currentString: NSString = textView.text!
+        let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: text)
+        
+        return newString.length <= maxLength
+        
+    }
+    
+    func textViewDidChange(textView: UITextView) {
+        
+        //        // adjust height
+        //
+        //        let maxFloat = CGFloat(MAXFLOAT)
+        //        let newSize = textView.sizeThatFits(CGSizeMake(self.view.frame.size.width-40, maxFloat))
+        //
+        //        var newFrame = textView.frame
+        //        newFrame.size = CGSizeMake(self.view.frame.size.width-40, newSize.height)
+        //
+        //        textView.frame = newFrame
+        
+    }
     
     
     func shareBtnAction() {
 //        print("shareBtnAction hit")
+        
+        self.view.endEditing(true)
+        
+        //
+        
+        print("passedImage: \(passedImage)")
+        print("passedImage.size: \(passedImage.size)")
+        
+        //
+        
+        var mode = NSString()
+        
+        if (tabBtn1.selected) {
+            mode = (tabBtn1.titleLabel?.text)!
+        } else if (tabBtn2.selected) {
+            mode = (tabBtn2.titleLabel?.text)!
+        } else if (tabBtn3.selected) {
+            mode = (tabBtn3.titleLabel?.text)!
+        } else {
+            // error
+            return
+        }
+        
+        print("mode: \(mode)")
+        
+        //
+        
+        print("theTextField: \(theTextView.text)")
+        
+        //
         
         
     }

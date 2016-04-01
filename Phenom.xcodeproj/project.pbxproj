@@ -59,6 +59,7 @@
 		5768B8E71CAC51B9002E9664 /* GearCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E61CAC51B9002E9664 /* GearCell.swift */; };
 		5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */; };
 		5768B8EB1CAC9921002E9664 /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8EA1CAC9921002E9664 /* ExploreCell.swift */; };
+		5768B8ED1CADEC99002E9664 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8EC1CADEC99002E9664 /* SearchCell.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -149,6 +150,7 @@
 		5768B8E61CAC51B9002E9664 /* GearCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearCell.swift; sourceTree = "<group>"; };
 		5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineHeaderView.swift; sourceTree = "<group>"; };
 		5768B8EA1CAC9921002E9664 /* ExploreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
+		5768B8EC1CADEC99002E9664 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 		572DF4B81CA37A15002184E2 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				5768B8EC1CADEC99002E9664 /* SearchCell.swift */,
 				5768B8E61CAC51B9002E9664 /* GearCell.swift */,
 				5768B8EA1CAC9921002E9664 /* ExploreCell.swift */,
 				570AC5131CA5CD8300441F4A /* ActivityCell.swift */,
@@ -606,6 +609,7 @@
 				571500591CA3136800AA8744 /* Phenom.xcdatamodeld in Sources */,
 				57242DEF1CAB457600A71A7F /* ComposeViewController.swift in Sources */,
 				570AC5201CA5E2B500441F4A /* FollowingActivityViewController.swift in Sources */,
+				5768B8ED1CADEC99002E9664 /* SearchCell.swift in Sources */,
 				571CC5401CAB324600A42997 /* FusumaViewController.swift in Sources */,
 				571CC5381CAB324600A42997 /* FSAlbumView.swift in Sources */,
 				5768B8E71CAC51B9002E9664 /* GearCell.swift in Sources */,

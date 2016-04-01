@@ -70,83 +70,161 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.theTableView.delegate = self
         self.theTableView.dataSource = self
         self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.theTableView.registerClass(TimelineCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(self.theTableView)
         
         let headerViewWidth = self.view.frame.size.width
-        let headerViewHeight = self.view.frame.size.width+64
+        let headerViewHeight = self.view.frame.size.width+20+64
         
         self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, headerViewWidth, headerViewHeight))
         self.theTableView.tableHeaderView?.backgroundColor = UIColor(red:43/255, green:43/255, blue:43/255, alpha:1)
         
-        // profile pic
-        // name
-        // SPORT IN HOMETOWN
-        // BIO
         // number of fans
         // "fans"
         // number of following
         // "following"
         // invite button
+
+        let fansWidth = (headerViewWidth/2)/2
+        let fansHeight = CGFloat(50)
         
-        // frames based off phone's width
+        // 
         
-        //let containerHeight = // measure all height
-        //let containerView = UIView(frame: CGRectMake(0, 0, 80, 80))
+        let fansFollowingInviteContainerView = UIView(frame: CGRectMake(0, headerViewHeight-64-30-fansHeight,  headerViewWidth, fansHeight))
         
-        let profileWidth = headerViewWidth/3
+        let fansNumBtn = UIButton.init(type: UIButtonType.Custom)
+        fansNumBtn.frame = CGRectMake(0, 0, fansWidth, 30)
+        fansNumBtn.backgroundColor = UIColor.lightGrayColor()
+        //fansNumBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        fansNumBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        fansNumBtn.titleLabel?.numberOfLines = 1
+        fansNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        fansNumBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        fansNumBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        fansNumBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        fansNumBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        fansNumBtn.setTitle("11", forState: UIControlState.Normal)
+        fansFollowingInviteContainerView.addSubview(fansNumBtn)
         
-        let profileImgView = UIImageView(frame: CGRectMake(profileWidth, headerViewWidth/2-profileWidth, profileWidth, profileWidth))
+        let fansBtn = UIButton.init(type: UIButtonType.Custom)
+        fansBtn.frame = CGRectMake(0, 30, fansWidth, 20)
+        fansBtn.backgroundColor = UIColor.grayColor()
+        //fansBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        fansBtn.titleLabel?.font = UIFont.systemFontOfSize(11)
+        fansBtn.titleLabel?.numberOfLines = 1
+        fansBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        fansBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        fansBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        fansBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        fansBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        fansBtn.setTitle("FANS", forState: UIControlState.Normal)
+        fansFollowingInviteContainerView.addSubview(fansBtn)
+        
+        let followingNumBtn = UIButton.init(type: UIButtonType.Custom)
+        followingNumBtn.frame = CGRectMake(fansWidth, 0, fansWidth, 30)
+        followingNumBtn.backgroundColor = UIColor.orangeColor()
+        //followingNumBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        followingNumBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        followingNumBtn.titleLabel?.numberOfLines = 1
+        followingNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        followingNumBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        followingNumBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        followingNumBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        followingNumBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        followingNumBtn.setTitle("12", forState: UIControlState.Normal)
+        fansFollowingInviteContainerView.addSubview(followingNumBtn)
+        
+        let followingBtn = UIButton.init(type: UIButtonType.Custom)
+        followingBtn.frame = CGRectMake(fansWidth, 30, fansWidth, 20)
+        followingBtn.backgroundColor = UIColor.blueColor()
+        //followingBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        followingBtn.titleLabel?.font = UIFont.systemFontOfSize(11)
+        followingBtn.titleLabel?.numberOfLines = 1
+        followingBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        followingBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        followingBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        followingBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        followingBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        followingBtn.setTitle("FOLLOWING", forState: UIControlState.Normal)
+        fansFollowingInviteContainerView.addSubview(followingBtn)
+
+        let inviteBtn = UIButton.init(type: UIButtonType.Custom)
+        inviteBtn.frame = CGRectMake(headerViewWidth/2, 0, ((headerViewWidth/2)/4)*3, fansHeight)
+        inviteBtn.backgroundColor = UIColor.yellowColor()
+        //inviteBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        inviteBtn.titleLabel?.font = UIFont.systemFontOfSize(20)
+        inviteBtn.titleLabel?.numberOfLines = 1
+        inviteBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        inviteBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        inviteBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        inviteBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        inviteBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        inviteBtn.setTitle("INVITE", forState: UIControlState.Normal)
+        fansFollowingInviteContainerView.addSubview(inviteBtn)
+        
+        self.theTableView.tableHeaderView?.addSubview(fansFollowingInviteContainerView)
+        
+        // profileContainerView - height =
+        // profile pic = 1/3 width
+        // name height = 40
+        // hometown height = 20
+        // bio height = size of text in rect
+        //
+        // this gets placed directly above fans/following/invite
+        
+        
+        let profilePicWidth = headerViewWidth/3
+        let nameHeight = CGFloat(30)
+        let sportHomeTownHeight = CGFloat(30)
+        
+        let bio = "This is a test of the american broadcasting system of america americana this is a test of the american broadcasting system of americaaaaaa" //"Just getting warmed up!"
+        
+        let bioWidth = self.view.frame.size.width-50
+        let bioHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(bio, font: UIFont.boldSystemFontOfSize(13), width: bioWidth)+10
+        
+        let containerViewHeight = profilePicWidth+nameHeight+sportHomeTownHeight+bioHeight
+        let containerView = UIView(frame: CGRectMake(0, fansFollowingInviteContainerView.frame.origin.y-containerViewHeight-10, headerViewWidth, containerViewHeight))
+        
+        
+        
+        let profileImgView = UIImageView(frame: CGRectMake(profilePicWidth, 0, profilePicWidth, profilePicWidth))
         profileImgView.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(profileImgView)
+        containerView.addSubview(profileImgView)
         
-        let nameLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height, headerViewWidth, 40))
-        nameLbl.backgroundColor = UIColor.whiteColor()
-        self.theTableView.tableHeaderView?.addSubview(nameLbl)
+        let nameLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+5, headerViewWidth, nameHeight))
+        nameLbl.backgroundColor = UIColor.clearColor()
+        nameLbl.textAlignment = .Center
+        nameLbl.font = UIFont.boldSystemFontOfSize(24)
+        nameLbl.textColor = UIColor.whiteColor()
+        nameLbl.text = "FIRST LAST"
+        containerView.addSubview(nameLbl)
         
-        let sportHometownLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height, headerViewWidth, 20))
-        sportHometownLbl.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(sportHometownLbl)
+        let sportHometownLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height, headerViewWidth, sportHomeTownHeight))
+        sportHometownLbl.backgroundColor = UIColor.clearColor()
+        sportHometownLbl.textAlignment = .Center
+        sportHometownLbl.font = UIFont.boldSystemFontOfSize(13)
+        sportHometownLbl.textColor = UIColor.whiteColor()
+        sportHometownLbl.text = "SPORT IN HOMETOWN, CA"
+        containerView.addSubview(sportHometownLbl)
         
-        let bioLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, headerViewWidth, 40))
-        bioLbl.backgroundColor = UIColor.blueColor()
-        self.theTableView.tableHeaderView?.addSubview(bioLbl)
+        let bioLbl = UILabel(frame: CGRectMake((headerViewWidth/2)-(bioWidth/2), profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, bioWidth, bioHeight))
+        bioLbl.backgroundColor = UIColor.clearColor()
+        bioLbl.numberOfLines = 0
+        bioLbl.font = UIFont.boldSystemFontOfSize(13)
+        bioLbl.textColor = UIColor.init(white: 0.35, alpha: 1.0)
+        bioLbl.text = bio
+        bioLbl.textAlignment = NSTextAlignment.Center
+        containerView.addSubview(bioLbl)
+        
+        self.theTableView.tableHeaderView?.addSubview(containerView)
+        
         
         //
-        
-        let fansNumLbl = UILabel(frame: CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height+sportHometownLbl.frame.size.height+bioLbl.frame.size.height, headerViewWidth, 40))
-        fansNumLbl.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(fansNumLbl)
-        
-        let fansLbl = UILabel(frame: CGRectMake(0, 0, 80, 80))
-        fansLbl.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(fansLbl)
-        
-        let followingNumLbl = UILabel(frame: CGRectMake(0, 0, 80, 80))
-        followingNumLbl.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(followingNumLbl)
-        
-        let followingLbl = UILabel(frame: CGRectMake(0, 0, 80, 80))
-        followingLbl.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(followingLbl)
-        
-        let inviteBtn = UIButton.init(type: UIButtonType.Custom)
-        inviteBtn.frame = CGRectMake(headerViewWidth/2, 0, 80, 80)
-        inviteBtn.backgroundColor = UIColor.yellowColor()
-        self.theTableView.tableHeaderView?.addSubview(inviteBtn)
+        //
+        //
         
         
-        
-        // number of moments
-        // "moments"
-        // number of gear
-        // "gear"
-        
-        // slider/indicator
-        
-        
-        
-        let headerNavView = UIView(frame: CGRectMake(0, self.theTableView.frame.size.width, self.theTableView.frame.size.width, 64))
+        let headerNavView = UIView(frame: CGRectMake(0, headerViewHeight-64, headerViewWidth, 64))
         headerNavView.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
         self.theTableView.tableHeaderView?.addSubview(headerNavView)
         
@@ -156,7 +234,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         let line:UIView = UIView()
-        line.frame = CGRectMake(0, self.theTableView.frame.size.width+64-0.5, self.theTableView.frame.size.width, 0.5)
+        line.frame = CGRectMake(0, headerViewHeight+64-0.5, headerViewWidth, 0.5)
         line.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
         self.theTableView.tableHeaderView?.addSubview(line)
         
