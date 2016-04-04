@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class SignInViewController: UIViewController, UITextFieldDelegate {
 
@@ -47,7 +48,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         signInBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //signInBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signInBtn.backgroundColor = UIColor.blueColor()
-        signInBtn.addTarget(self, action:#selector(SignInViewController.signInBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signInBtn.addTarget(self, action:#selector(SignInViewController.processFields), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(signInBtn)
         
         usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
@@ -108,16 +109,231 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func signInBtnAction() {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        if (textField == usernameField) {
+            passwordField.becomeFirstResponder()
+        } else if (textField == passwordField) {
+            if (passwordField.text == "" || usernameField.text == "") {
+                // missing creds
+            } else {
+                self.processFields()
+            }
+        }
+        return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        let space = " "
+        if (string == space) {
+            return false
+        }
+        
+        if (textField == self.usernameField) {
+            let maxLength = 20
+            let currentString: NSString = textField.text!
+            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            return newString.length <= maxLength
+        } else {
+            let maxLength = 35
+            let currentString: NSString = textField.text!
+            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            return newString.length <= maxLength
+        }
+        
+    }
+    
+    
+    func processFields() {
         
         // if logged in correctly
         
+        if (self.usernameField.text != "" && self.passwordField.text != "") {
+            
+            // get bearerToken
+            
+            let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+            
+            let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+            
+            guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
+            let request = NSMutableURLRequest(URL: URL)
+            request.HTTPMethod = "POST"
+            
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+            
+            let utf8str: NSData = self.passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)!
+            //let utf8str = self.passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)
+            
+            let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            //let base64Encoded = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.fromRaw(0)!)
+
+            print("base64Encoded: \(base64Encoded)")
+            
+            let bodyObject = [
+                "username": self.usernameField.text!,
+                "password": base64Encoded,
+                "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
+                "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+                "grant_type": "password"
+            ]
+            
+            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        let json = JSON(data: dataFromString)
+                        //self.access_token = json["access_token"].string!
+                        //print(self.access_token);
+                        
+                        print("json: \(json)")
+                        // success, save defaults
+                        
+                        
+                        // if 404 error
+                        
+                        if json["errorCode"].number == 404  {
+                            print("error: \(json["errorCode"].number)")
+                            
+                            
+                            
+                            return
+                        }
+                        
+                        // add to likedPostIds
+                        let defaults = NSUserDefaults.standardUserDefaults()
+                        
+                        let newBearerToken = json["access_token"].string!
+                        let refreshToken = json["refresh_token"].string!
+                        
+                        defaults.setObject(newBearerToken, forKey: "bearerToken")
+                        defaults.setObject(refreshToken, forKey: "refreshToken")
+                        defaults.setObject(base64Encoded, forKey: "password")
+                        defaults.synchronize()
+                        
+                        //
+                        
+                        self.signIn()
+                        
+                        //
+                    }
+                }
+                else {
+                    
+                    //                print("URL Session Task Failed: %@", error!.localizedDescription);
+                }
+            })
+            task.resume()
+            
+            
+            
+        }
+        
+    }
+    
+    
+    func signIn() {
+        
         //
         
-        self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
-        (UIApplication.sharedApplication().delegate as! AppDelegate).presentTabBarViewController()
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.stringForKey("bearerToken")! as NSString
         
+        if (bearerToken == "") {
+            // something is wrong
+            print("something is wrong")
+            return
+        }
+        
+        //
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    
+                    print("userJSON: \(json)")
+                    
+                    // success, save user defaults
+                    
+                    let defaults = NSUserDefaults.standardUserDefaults()
+                    
+                    let userId = json["id"].string!
+                    let username = json["username"].string!
+                    let hometown = json["hometown"].string!
+                    let imageUrl = json["imageUrl"].string!
+                    let description = json["description"].string!
+                    let firstName = json["firstName"].string!
+                    let lastName = json["lastName"].string!
+                    
+                    let followersCount = json["followersCount"].number!
+                    let followingCount = json["followingCount"].number!
+                    
+                    let momentCount = json["momentCount"].number!
+                    let lockerProductCount = json["lockerProductCount"].number!
+                    
+                    let sport = json["sport"].string! // make an arrray
+                    let sportsArray = [sport]
+                    
+                    //
+                    
+                    defaults.setObject(userId, forKey: "userId")
+                    defaults.setObject(username, forKey: "username")
+                    defaults.setObject(hometown, forKey: "hometown")
+                    defaults.setObject(imageUrl, forKey: "imageUrl")
+                    defaults.setObject(description, forKey: "description")
+                    defaults.setObject(firstName, forKey: "firstName")
+                    defaults.setObject(lastName, forKey: "lastName")
+                    defaults.setObject(followersCount, forKey: "followersCount")
+                    defaults.setObject(followingCount, forKey: "followingCount")
+                    
+                    defaults.setObject(momentCount, forKey: "momentCount")
+                    defaults.setObject(lockerProductCount, forKey: "lockerProductCount")
+                    
+                    defaults.setObject(sportsArray, forKey: "sports")
+                    
+                    defaults.synchronize()
+                    
+                    //
+                    
+                    dispatch_async(dispatch_get_main_queue(),{
+                        
+                        self.view.endEditing(true)
+                        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
+                        (UIApplication.sharedApplication().delegate as! AppDelegate).presentTabBarViewController()
+                        
+                    })
+                    
+                }
+                
+            }
+            else {
+                
+                //                print("URL Session Task Failed: %@", error!.localizedDescription);
+            }
+        })
+        task.resume()
         
     }
 

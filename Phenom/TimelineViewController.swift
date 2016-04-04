@@ -83,6 +83,17 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         self.queryForTimeline()
         
+        //
+        
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        let username = defaults.stringForKey("username")
+//        let password = defaults.stringForKey("password")
+//        let bt = defaults.stringForKey("bearerToken")
+//        let rt = defaults.stringForKey("refreshToken")
+//        let id = defaults.stringForKey("userId")
+//        print("defaults: \(username), \(password), \(id), \(bt), \(rt),")
+    
+        
         
     }
 
@@ -103,49 +114,64 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let date = NSDate().timeIntervalSince1970 * 1000
         
-        print(date)
-        
-        
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/feed?date=\(date)&amount=20") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed?date=\(date)&amount=20") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
-                
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+        //
+
+//        let qualityOfServiceClass = QOS_CLASS_BACKGROUND //QOS_CLASS_USER_INTERACTIVE, QOS_CLASS_USER_INITIATED, QOS_CLASS_UTILITY
+//        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+//        dispatch_async(backgroundQueue, {
+//            print("This is run on the background queue")
+//            
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                print("This is run on the main queue, after the previous code in outer block")
+//            })
+//        })
+        
+        //
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+ 
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
                     
-                    self.momentsData = dataFromString
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
                     
-                    self.theTableView.reloadData()
-                    
-                    self.refreshControl.endRefreshing()
-                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        self.momentsData = dataFromString
+                        
+                        self.refreshControl.endRefreshing()
+                        
+                        self.theTableView.reloadData()
+                        
+                    } else {
+                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                        self.refreshControl.endRefreshing()
+                    }
                 } else {
-                    //                print("URL Session Task Failed: %@", error!.localizedDescription);
-                    
                     self.refreshControl.endRefreshing()
                 }
-            } else {
-                
-                self.refreshControl.endRefreshing()
-                
-            }
-            
+            })
+            task.resume()
+            //
         })
-        task.resume()
+
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.removeFromSuperview()
         
         
         // get moments
@@ -155,39 +181,39 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //self.timelineArray = result
         
-        UIView.animateWithDuration(0.40, delay:2.0, options: .CurveEaseInOut, animations: {
-            
-            //var tableFrame = self.theTableView.frame
-            //tableFrame.origin.y = 64
-            //self.theTableView.frame = tableFrame
-            
-            }, completion: { finished in
-                if (finished) {
-                    
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicator.removeFromSuperview()
-                }
-        })
-        
-        
+//        UIView.animateWithDuration(0.40, delay:2.0, options: .CurveEaseInOut, animations: {
+//            
+//            //var tableFrame = self.theTableView.frame
+//            //tableFrame.origin.y = 64
+//            //self.theTableView.frame = tableFrame
+//            
+//            }, completion: { finished in
+//                if (finished) {
+//                    
+//                    self.activityIndicator.stopAnimating()
+//                    self.activityIndicator.removeFromSuperview()
+//                }
+//        })
         
     }
     
-    func loadImageFromUrl(url: String, view: UIImageView){
+    
+    func doubleTapAction(sender: UITapGestureRecognizer) {
         
-        let url = NSURL(string: url)!
-        
-        let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (responseData, responseUrl, error) -> Void in
-            
-            if let data = responseData {
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    view.image = UIImage(data: data)
-                })
+        if sender.state == UIGestureRecognizerState.Ended {
+            let tappedLocation = sender.locationInView(self.theTableView)
+            if let tappedIndexPath = self.theTableView.indexPathForRowAtPoint(tappedLocation) {
+                if let tappedCell = self.theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+                    // Swipe happened. Do stuff!
+                    
+                    print("tapped section: \(tappedIndexPath.section), \(tappedCell)")
+                    
+                    
+                    
+                }
             }
         }
         
-        task.resume()
     }
     
     
@@ -231,7 +257,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if let id = test[section]["user"]["imageUrl"].string {
             
             let fileUrl = NSURL(string: id)
-//            loadImageFromUrl(id, view: headerView.userImgView!)
             headerView.userImgView!.frame = CGRectMake(15, 10, 44, 44)
             headerView.userImgView!.setNeedsLayout()
             
@@ -262,7 +287,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         let moments = JSON(data: self.momentsData)
         
         let test = moments["results"]
-        
         
         if let id = test[indexPath.section]["imageUrl"].string {
             let fileUrl = NSURL(string: id)
@@ -300,6 +324,12 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.musicLbl.text = "\(id) \(test[indexPath.section]["song"]["trackName"])"
         }
         
+        // handle double tap
+        
+        cell.doubleTapRecognizer.addTarget(self, action: #selector(TimelineViewController.doubleTapAction(_:)))
+        cell.doubleTapRecognizer.numberOfTapsRequired = 2
+        
+        //
         
         return cell
     }
@@ -314,13 +344,11 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        self.isPushed = false
+        //self.isPushed = false
         
-        //
-        
-        let vc  = DetailViewController()
-        vc.isGear = false
-        self.navigationController?.pushViewController(vc, animated: true)
+        //let vc  = DetailViewController()
+        //vc.isGear = false
+        //self.navigationController?.pushViewController(vc, animated: true)
         
     }
     

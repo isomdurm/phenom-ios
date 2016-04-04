@@ -205,6 +205,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
         
+        if (indexPath.section == 4 && indexPath.row == 0) {
+            
+            self.logout()
+        }
     }
     
     
@@ -246,6 +250,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    func logout() {
+        
+        // are you sure?
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).logoutAction()
+        
     }
  
 

@@ -132,9 +132,9 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
         (UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.isPushed = true
         
-        let vc = DetailViewController()
-        vc.isGear = true
-        (UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.navigationController?.pushViewController(vc, animated: true)
+        //let vc = DetailViewController()
+        //vc.isGear = true
+        //(UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.navigationController?.pushViewController(vc, animated: true)
         
     }
     

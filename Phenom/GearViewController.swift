@@ -145,6 +145,7 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     
     // MARK: UICollectionViewDelegateFlowLayout
+    
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let cellWidth = self.view.frame.size.width/2
         

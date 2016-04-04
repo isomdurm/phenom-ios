@@ -32,12 +32,13 @@ class TimelineCell: UITableViewCell {
     var lineView2 = UIView()
     var lineView3 = UIView()
     
+    var doubleTapRecognizer = UITapGestureRecognizer()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.momentImgView.backgroundColor = UIColor.lightGrayColor()
-        self.momentImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        self.momentImgView.contentMode = UIViewContentMode.ScaleAspectFit //ScaleAspectFill
         self.momentImgView.userInteractionEnabled = true
         self.contentView.addSubview(self.momentImgView)
         self.momentImgView.layer.masksToBounds = true
@@ -131,6 +132,10 @@ class TimelineCell: UITableViewCell {
         self.lineView3.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
         self.contentView.addSubview(self.lineView3)
         
+        //
+        
+        self.doubleTapRecognizer.numberOfTapsRequired = 2
+        self.momentImgView.addGestureRecognizer(self.doubleTapRecognizer)
         
     }
     

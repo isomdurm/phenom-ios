@@ -142,7 +142,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.theTableView.reloadData()
                     
                 } else {
-                    //                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             
@@ -228,17 +228,17 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             
             let people = JSON(data: self.discoverPeople)
             
-            let haha = people["results"]
+            let results = people["results"]
             
-            if let person = haha[indexPath.row]["username"].string {
+            if let person = results[indexPath.row]["username"].string {
                 cell.usernameLbl.text = person
             }
             
-            if let name = haha[indexPath.row]["firstName"].string {
-                cell.nameLbl.text = ("\(name) \(haha[indexPath.row]["lastName"])")
+            if let name = results[indexPath.row]["firstName"].string {
+                cell.nameLbl.text = ("\(name) \(results[indexPath.row]["lastName"])")
             }
             
-            if let id = haha[indexPath.row]["imageUrl"].string {
+            if let id = results[indexPath.row]["imageUrl"].string {
                 let fileUrl = NSURL(string: id)
                 
                 cell.userImgView.frame = CGRectMake(15, 10, 44, 44)
@@ -278,23 +278,6 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }
         
-    }
-    
-    func loadImageFromUrl(url: String, view: UIImageView){
-        
-        let url = NSURL(string: url)!
-        
-        let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (responseData, responseUrl, error) -> Void in
-            
-            if let data = responseData {
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    view.image = UIImage(data: data)
-                })
-            }
-        }
-        
-        task.resume()
     }
     
     

@@ -13,6 +13,12 @@ import SwiftyJSON
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegate {
 
+    var clientId = "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO"
+    var clientSecret = "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko="
+    var apiVersion = "1.2.3"
+    var phenomApiUrl = "https://api1.phenomapp.com:8081"
+    
+    
     var window: UIWindow?
 
     var tabbarvc:TabBarViewController?
@@ -46,25 +52,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             UINavigationBar.appearance().tintColor = UIColor.blackColor() // UIColor(red:165/255, green:95/255, blue:170/255, alpha:1) //purple
             UITabBar.appearance().tintColor = UINavigationBar.appearance().tintColor
             
-            
-            //self.presentWelcomeViewController()
-            self.presentTabBarViewController()
-            
             self.setupDefaults()
-            
+
             //
             
-//            let defaults = NSUserDefaults.standardUserDefaults()
-//            let bearToken = defaults.stringForKey("bearerToken")!
-//            if (bearToken == "") {
-//                // log in
-//                self.presentWelcomeViewController()
-//            } else {
-//                // we have a user
-//                self.presentTabBarViewController()
-//                
-//            }
-//            
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let bearerToken = defaults.stringForKey("bearerToken")! as NSString
+            let username = defaults.stringForKey("username")! as NSString
+            
+            if (bearerToken == "" || username == "") {
+                // log in
+                self.presentWelcomeViewController()
+            } else {
+                // we have a user
+                self.presentTabBarViewController()
+                
+            }
+//
             
 //            let oldPushHandlerOnly = !self.respondsToSelector(Selector("application:didReceiveRemoteNotification:fetchCompletionHandler:"))
 //            let noPushPayload: AnyObject? = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey]
@@ -233,6 +237,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         
         let dict = [
             "bearerToken" : "",
+            "refreshToken" : "",
+            "userId" : "",
+            "username" : "",
+            "password" : "",
+            "hometown" : "",
+            "sports" : [],
+            "imageUrl" : "",
+            "description" : "",
+            "firstName" : "",
+            "lastName" : "",
+            "followersCount" : 0,
+            "followingCount" : 0,
+            "momentCount" : 0,
+            "lockerProductCount" : 0,
+            
             "viewedPostIds" : [],
             "likedPostIds" : [],
             "savedSearchGear" : [],
@@ -352,8 +371,69 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
        
-        let e = error.code
+//        let e = error.code
 //        print("error: \(e)")
+        
+    }
+    
+    
+    func logoutAction() {
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as NSString
+        let password = defaults.stringForKey("password")! as NSString
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "DELETE"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")        
+        
+        let bodyObject = [
+            "username": username,
+            "password": password,
+            "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
+            "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+            "grant_type": "password"
+        ]
+        
+        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                if (error == 404) {
+                    
+                }
+                
+                print("error: \(error)")
+                
+                
+                // logged out
+                
+                dispatch_async(dispatch_get_main_queue(),{
+                    
+                    let appDomain = NSBundle.mainBundle().bundleIdentifier!
+                    NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain)
+                    
+                    self.setupDefaults()
+                    
+                    self.nav?.popToRootViewControllerAnimated(false)
+                    
+                    self.presentWelcomeViewController()
+                    
+                })
+                
+            } else {
+                print("URL Session Task Failed: %@", error!.localizedDescription);
+                
+            }
+        })
+        task.resume()
         
     }
     
