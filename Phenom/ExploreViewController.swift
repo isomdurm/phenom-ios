@@ -129,25 +129,31 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
         request.addValue(bearer, forHTTPHeaderField: "Authorization")
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    self.discoverPeople = dataFromString
-                    //print("self.discoverPeople: \(self.discoverPeople)")
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
+                            self.discoverPeople = dataFromString
                     
-                    self.theTableView.reloadData()
+                            self.theTableView.reloadData()
+                        
+                        })
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    } else {
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
                 }
-            }
             
+            })
+            task.resume()
         })
-        task.resume()
     }
     
 

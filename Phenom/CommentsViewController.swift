@@ -10,6 +10,10 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
+    var comments = NSData()
+    
+    var passedMomentId = NSString()
+    
     var navBarView = UIView()
     
     let activityIndicator = UIActivityIndicatorView()
@@ -167,6 +171,45 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
     func userBtnAction(sender: UIButton!){
         
         
+    }
+    
+    func findComments() {
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/comments") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        self.comments = dataFromString
+                        
+                        self.theTableView.reloadData()
+                        
+                    } else {
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                }
+                
+            })
+            task.resume()
+        })
     }
     
 

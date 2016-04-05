@@ -11,6 +11,9 @@ import QuartzCore
 
 class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     
+    var people = NSData()
+    var gear = NSData()
+    
     var bg: UIView = UIView()
     var cancelBtn = UIButton()
     var icon = UIImageView()
@@ -423,6 +426,84 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         if (self.theTextField.editing) {
             self.theTextField.resignFirstResponder()
         }
+    }
+    
+    func findDefaultDiscoverPeople() {
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/discover/people") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        self.people = dataFromString
+                        
+                        self.theTableView.reloadData()
+                        
+                    } else {
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                }
+                
+            })
+            task.resume()
+        })
+    }
+    
+    func findDefaultDiscoverGear() {
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/discover/gear") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        self.gear = dataFromString
+                        
+                        self.theTableView.reloadData()
+                        
+                    } else {
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                }
+                
+            })
+            task.resume()
+        })
     }
 
 }

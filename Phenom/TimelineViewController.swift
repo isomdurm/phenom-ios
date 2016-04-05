@@ -16,6 +16,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var momentsData = NSData()
     
+    var passedMomentId = NSString()
+    
     var momentsArray = NSArray()
     
     var access_token = ""
@@ -154,9 +156,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         self.momentsData = dataFromString
                         
-                        self.refreshControl.endRefreshing()
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                        self.theTableView.reloadData()
+                            self.refreshControl.endRefreshing()
+                        
+                            self.theTableView.reloadData()
+                            
+                        })
                         
                     } else {
                         // print("URL Session Task Failed: %@", error!.localizedDescription);
@@ -204,7 +210,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             let tappedLocation = sender.locationInView(self.theTableView)
             if let tappedIndexPath = self.theTableView.indexPathForRowAtPoint(tappedLocation) {
                 if let tappedCell = self.theTableView.cellForRowAtIndexPath(tappedIndexPath) {
-                    // Swipe happened. Do stuff!
+                    
+                    likeMoment()
                     
                     print("tapped section: \(tappedIndexPath.section), \(tappedCell)")
                     
@@ -293,7 +300,19 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             
             cell.momentImgView.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
             cell.momentImgView.setNeedsLayout()
+
             cell.momentImgView.hnk_setImageFromURL(fileUrl!)
+            
+//            if ((cell.momentImgView.image) != nil) {
+//                cell.momentImgView.hnk_setImageFromURL(fileUrl!)
+//            } else {
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    
+//                })
+//            }
+            
+            
+            
         }
         
         if let id = test[indexPath.section]["likesCount"].number {
@@ -487,6 +506,65 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         })
         task.resume()
     }
+    
+    func likeMoment() {
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/like") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "POST"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                        
+                    self.theTableView.reloadData()
 
-
+                }
+                
+            })
+            task.resume()
+        })
+    }
+    
+    func unlikeMoment() {
+        
+        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/unlike") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "DELETE"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    self.theTableView.reloadData()
+                    
+                }
+                
+            })
+            task.resume()
+        })
+    }
+    
 }
