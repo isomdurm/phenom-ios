@@ -37,7 +37,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(SignUpViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(xBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 64))
@@ -52,7 +52,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         signUpBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //signUpBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signUpBtn.backgroundColor = UIColor.blueColor()
-        signUpBtn.addTarget(self, action:#selector(EditProfileViewController.updateProfileAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signUpBtn.addTarget(self, action:#selector(self.updateProfileAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(signUpBtn)
         
         usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)

@@ -12,7 +12,7 @@ import Haneke
 
 class ExploreViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var discoverPeople = NSData()
+    var peopleData = NSData()
 
     var navBarView = UIView()
     
@@ -58,7 +58,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let navBtn = UIButton(type: UIButtonType.Custom)
         navBtn.frame = CGRectMake(0, 0, bg.frame.size.width, bg.frame.size.height)
         navBtn.backgroundColor = UIColor.clearColor()
-        navBtn.addTarget(self, action:#selector(ExploreViewController.navBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBtn.addTarget(self, action:#selector(self.navBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         bg.addSubview(navBtn)
         
         let line:UIView = UIView()
@@ -93,7 +93,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //
         
-        self.findSuggestedFollowers()
+        self.queryForSuggestedPeople()
         
     }
 
@@ -113,7 +113,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         self.isSearching = false
     }
     
-    func findSuggestedFollowers() {
+    func queryForSuggestedPeople() {
         
         let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
         
@@ -138,6 +138,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
+<<<<<<< HEAD
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
 
                             self.discoverPeople = dataFromString
@@ -145,6 +146,16 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                             self.theTableView.reloadData()
                         
                         })
+=======
+                    self.peopleData = dataFromString
+                    //print("self.discoverPeople: \(self.discoverPeople)")
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.theTableView.reloadData()
+                        
+                    })
+>>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                     
                     } else {
                         print("URL Session Task Failed: %@", error!.localizedDescription);
@@ -158,7 +169,6 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
 
     func navBtnAction() {
-//        print("navBtnAction hit")
         
         self.navigationController?.pushViewController(SearchViewController(), animated: false)
         
@@ -174,9 +184,12 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        let people = JSON(data: self.peopleData)
+        
         switch (section) {
         case 0: return 1
-        case 1: return 50
+        case 1: return people["results"].count
         default: return 0
         }
     }
@@ -189,19 +202,26 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let aLbl = UILabel(frame: CGRectMake(20, 0, self.view.frame.size.width, 35))
         aLbl.textAlignment = NSTextAlignment.Left
-        
         switch (section) {
         case 0: aLbl.text = "EXPLORE GEAR"
         case 1: aLbl.text = "EXPLORE PEOPLE"
         default: aLbl.text = ""}
-        
         aLbl.font = UIFont.boldSystemFontOfSize(12)
         aLbl.textColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //
 
+        
+        let moreBtn = UIButton.init(type: UIButtonType.Custom)
+        moreBtn.frame = CGRectMake(self.view.frame.size.width-100, 0, 100, 35)
+        moreBtn.backgroundColor = UIColor.greenColor()
+        moreBtn.tag = section
+        moreBtn.addTarget(self, action:#selector(self.moreBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        
         let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
         aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         aView.addSubview(aLbl)
+        
+        aView.addSubview(moreBtn)
         
         return aView;
         
@@ -228,11 +248,20 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         if (indexPath.section == 0) {
             // gear section
             cell.nameLbl.text = ""
+            cell.userImgView.hidden = true
+            cell.nameLbl.hidden = true
+            cell.usernameLbl.hidden = true
+            cell.followBtn.hidden = true
             
         } else if (indexPath.section == 1) {
             // people section
             
-            let people = JSON(data: self.discoverPeople)
+            cell.userImgView.hidden = false
+            cell.nameLbl.hidden = false
+            cell.usernameLbl.hidden = false
+            cell.followBtn.hidden = false
+            
+            let people = JSON(data: self.peopleData)
             
             let results = people["results"]
             
@@ -255,6 +284,12 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             
             cell.nameLbl.text = ""
+            
+            cell.nameLbl.text = ""
+            cell.userImgView.hidden = true
+            cell.nameLbl.hidden = true
+            cell.usernameLbl.hidden = true
+            cell.followBtn.hidden = true
             
         }
         
@@ -283,6 +318,21 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             
         }
+        
+    }
+    
+    
+    func moreBtnAction(sender: UIButton) {
+        print(sender.tag)
+        
+        if (sender.tag == 0) {
+            self.navigationController?.pushViewController(ExploreGearViewController(), animated: true)
+        } else if (sender.tag == 1) {
+            self.navigationController?.pushViewController(ExplorePeopleViewController(), animated: true)
+        } else {
+            print("something is wrong")
+        }
+
         
     }
     

@@ -55,13 +55,13 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         fbBtn.setImage(UIImage(named: "fb-signin.png"), forState: UIControlState.Normal)
         //addBtn.setBackgroundImage(UIImage(named: "plus60.png"), forState: UIControlState.Normal)
         fbBtn.backgroundColor = UIColor.blueColor()
-        fbBtn.addTarget(self, action:#selector(WelcomeViewController.fbBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        fbBtn.addTarget(self, action:#selector(self.fbBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         containerView.addSubview(fbBtn)
         
         let signinBtn = UIButton(type: UIButtonType.Custom)
         signinBtn.backgroundColor = UIColor.blueColor()
         signinBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11, 100, 52)
-        signinBtn.addTarget(self, action:#selector(WelcomeViewController.signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signinBtn.addTarget(self, action:#selector(self.signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signinBtn.titleLabel?.numberOfLines = 1
         signinBtn.titleLabel?.font = UIFont.systemFontOfSize(22)
         signinBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -75,7 +75,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         let signupBtn = UIButton(type: UIButtonType.Custom)
         signupBtn.backgroundColor = UIColor.blueColor()
         signupBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11+52+11, 100, 52)
-        signupBtn.addTarget(self, action:#selector(WelcomeViewController.signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signupBtn.addTarget(self, action:#selector(self.signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signupBtn.titleLabel?.numberOfLines = 1
         signupBtn.titleLabel?.font = UIFont.systemFontOfSize(22)
         signupBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -122,7 +122,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func signupBtnAction() {
-        let newnav = UINavigationController(rootViewController: SignUpViewController())
+        let newnav = UINavigationController(rootViewController: SignUpEmailViewController())
         self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
         
     }

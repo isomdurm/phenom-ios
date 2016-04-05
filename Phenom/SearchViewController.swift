@@ -28,6 +28,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var gearArray = NSMutableArray()
     var savedSearchGear = NSMutableArray()
     
+    var selectedTab = NSString()
     var tabBtn1 = UIButton(type: UIButtonType.Custom)
     var tabBtn2 = UIButton(type: UIButtonType.Custom)
     
@@ -44,7 +45,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         self.cancelBtn.frame = CGRectMake(searchView.frame.size.width-70, 20, 70, 44)
         self.cancelBtn.backgroundColor = UIColor.clearColor()
-        self.cancelBtn.addTarget(self, action:#selector(SearchViewController.cancelBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.cancelBtn.addTarget(self, action:#selector(self.cancelBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         self.cancelBtn.titleLabel?.numberOfLines = 1
         self.cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -66,7 +67,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         let btn = UIButton(type: UIButtonType.Custom)
         btn.frame = CGRectMake(0, 0, bg.frame.size.width, bg.frame.size.height)
         btn.backgroundColor = UIColor.clearColor()
-        btn.addTarget(self, action:#selector(SearchViewController.btnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        btn.addTarget(self, action:#selector(self.btnAction), forControlEvents:UIControlEvents.TouchUpInside)
         bg.addSubview(btn)
         
         let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
@@ -91,7 +92,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         self.theTextField.autocorrectionType = UITextAutocorrectionType.No
         searchView.addSubview(self.theTextField)
         //self.theTextField.addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-        self.theTextField.addTarget(self, action: #selector(SearchViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        self.theTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         
         let line:UIView = UIView()
         line.frame = CGRectMake(0, searchView.frame.size.height-0.5, searchView.frame.size.width, 0.5)
@@ -116,10 +117,8 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn1.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn1.setTitle("PEOPLE", forState: UIControlState.Normal)
-        tabBtn1.addTarget(self, action:#selector(SearchViewController.tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn1.addTarget(self, action:#selector(self.tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn1)
-        
-        tabBtn1.selected = true
         
         tabBtn2.frame = CGRectMake(tabView.frame.size.width/2*1, 0, tabView.frame.size.width/2, 44)
         tabBtn2.backgroundColor = UIColor.clearColor()
@@ -131,7 +130,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn2.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn2.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn2.setTitle("GEAR", forState: UIControlState.Normal)
-        tabBtn2.addTarget(self, action:#selector(SearchViewController.tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn2.addTarget(self, action:#selector(self.tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn2)
         
         let line2:UIView = UIView()
@@ -140,6 +139,12 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabView.addSubview(line2)
         
         self.view.addSubview(tabView)
+        
+        if (selectedTab == "gear") {
+            tabBtn2.selected = true
+        } else {
+            tabBtn1.selected = true
+        }
         
         //
         
@@ -154,13 +159,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         //
         
-        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(SearchViewController.keyboardWillShow(_:)),name: UIKeyboardWillShowNotification,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(SearchViewController.keyboardDidShow(_:)),name: UIKeyboardDidShowNotification,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(SearchViewController.keyboardWillHide(_:)),name: UIKeyboardWillHideNotification,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(self.keyboardWillShow(_:)),name: UIKeyboardWillShowNotification,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(self.keyboardDidShow(_:)),name: UIKeyboardDidShowNotification,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(self.keyboardWillHide(_:)),name: UIKeyboardWillHideNotification,object: nil)
         //NSNotificationCenter.defaultCenter().addObserver(self,selector: "textDidChange:", name: UITextFieldTextDidChangeNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SearchViewController.showErrorAlert(_:)), name:"ShowErrorAlertNotification" ,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SearchViewController.reachedLimitErrorAlert(_:)), name:"ReachedLimitErrorAlertNotification" ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showErrorAlert(_:)), name:"ShowErrorAlertNotification" ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reachedLimitErrorAlert(_:)), name:"ReachedLimitErrorAlertNotification" ,object: nil)
         
         self.theTextField.becomeFirstResponder()
         

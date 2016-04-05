@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         settingsBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
         //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
         settingsBtn.backgroundColor = UIColor.blueColor()
-        settingsBtn.addTarget(self, action:#selector(ProfileViewController.settingsBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        settingsBtn.addTarget(self, action:#selector(self.settingsBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(settingsBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 44))
@@ -56,10 +56,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             backBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             backBtn.backgroundColor = UIColor.redColor()
-            backBtn.addTarget(self, action:#selector(ProfileViewController.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
             self.navBarView.addSubview(backBtn)
             
-            let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(ProfileViewController.backBtnAction))
+            let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.backBtnAction))
             rightSwipe.direction = .Right
             self.view.addGestureRecognizer(rightSwipe)
         }
@@ -149,7 +149,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let fansNumBtn = UIButton.init(type: UIButtonType.Custom)
         fansNumBtn.frame = CGRectMake(0, 0, fansWidth, 30)
         fansNumBtn.backgroundColor = UIColor.clearColor()
-        //fansNumBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        //fansNumBtn.addTarget(self, action:#selector(self.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         fansNumBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
         fansNumBtn.titleLabel?.numberOfLines = 1
         fansNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -163,7 +163,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let fansBtn = UIButton.init(type: UIButtonType.Custom)
         fansBtn.frame = CGRectMake(0, 30, fansWidth, 20)
         fansBtn.backgroundColor = UIColor.clearColor()
-        //fansBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        //fansBtn.addTarget(self, action:#selector(self.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         fansBtn.titleLabel?.font = UIFont.systemFontOfSize(10)
         fansBtn.titleLabel?.numberOfLines = 1
         fansBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -177,7 +177,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let followingNumBtn = UIButton.init(type: UIButtonType.Custom)
         followingNumBtn.frame = CGRectMake(fansWidth, 0, fansWidth, 30)
         followingNumBtn.backgroundColor = UIColor.clearColor()
-        //followingNumBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        //followingNumBtn.addTarget(self, action:#selector(self.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         followingNumBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
         followingNumBtn.titleLabel?.numberOfLines = 1
         followingNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -191,7 +191,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let followingBtn = UIButton.init(type: UIButtonType.Custom)
         followingBtn.frame = CGRectMake(fansWidth, 30, fansWidth, 20)
         followingBtn.backgroundColor = UIColor.clearColor()
-        //followingBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        //followingBtn.addTarget(self, action:#selector(self.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         followingBtn.titleLabel?.font = UIFont.systemFontOfSize(10)
         followingBtn.titleLabel?.numberOfLines = 1
         followingBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -209,7 +209,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let inviteBtn = UIButton.init(type: UIButtonType.Custom)
         inviteBtn.frame = CGRectMake(headerViewWidth/2+(dif/2), 0, inviteBtnWidth, fansHeight)
         inviteBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
-        //inviteBtn.addTarget(self, action:#selector(CameraViewController.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        //inviteBtn.addTarget(self, action:#selector(self.fansNumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         inviteBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(20)
         inviteBtn.titleLabel?.numberOfLines = 1
         inviteBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -260,7 +260,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.activityIndicator.startAnimating()
         
         self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: #selector(ProfileViewController.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
         self.theTableView.addSubview(refreshControl)
         
         querySkip = 0

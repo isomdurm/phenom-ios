@@ -25,7 +25,7 @@ class SearchCell: UITableViewCell {
         addBtn.backgroundColor = UIColor.clearColor()
         addBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
         addBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
-        addBtn.addTarget(self, action:#selector(SearchCell.addBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        addBtn.addTarget(self, action:#selector(self.addBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         contentView.addSubview(addBtn)
         addBtn.selected = false
         

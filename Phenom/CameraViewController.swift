@@ -78,7 +78,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(CameraViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(xBtn)
         
         titleLbl.frame = CGRectMake(0, 20, self.navBarView.frame.size.width, 44)
@@ -91,41 +91,41 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         let nextBtn = UIButton()
         nextBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
         nextBtn.backgroundColor = UIColor.blueColor()
-        nextBtn.addTarget(self, action:#selector(CameraViewController.nextBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        nextBtn.addTarget(self, action:#selector(self.nextBtnAction), forControlEvents:.TouchUpInside)
         nextBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         nextBtn.titleLabel?.numberOfLines = 1
-        nextBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        nextBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        nextBtn.titleLabel?.textAlignment = NSTextAlignment.Center
-        nextBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        nextBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
-        nextBtn.setTitle("Next", forState: UIControlState.Normal)
+        nextBtn.contentHorizontalAlignment = .Center
+        nextBtn.contentVerticalAlignment = .Center
+        nextBtn.titleLabel?.textAlignment = .Center
+        nextBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        nextBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        nextBtn.setTitle("Next", forState: .Normal)
         self.navBarView.addSubview(nextBtn)
         
         //
         
         albumBtn = UIButton(type: UIButtonType.Custom)
         albumBtn.frame = CGRectMake(self.view.frame.size.width/3*0, self.view.frame.size.height-50, self.view.frame.size.width/3, 50)
-        albumBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        //albumBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        albumBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
+        //albumBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
         albumBtn.backgroundColor = UIColor.blueColor()
-        albumBtn.addTarget(self, action:#selector(CameraViewController.albumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        albumBtn.addTarget(self, action:#selector(self.albumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.view.addSubview(albumBtn)
         
         cameraBtn = UIButton(type: UIButtonType.Custom)
         cameraBtn.frame = CGRectMake(self.view.frame.size.width/3*1, self.view.frame.size.height-50, self.view.frame.size.width/3, 50)
-        cameraBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        //cameraBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        cameraBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
+        //cameraBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
         cameraBtn.backgroundColor = UIColor.redColor()
-        cameraBtn.addTarget(self, action:#selector(CameraViewController.cameraBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        cameraBtn.addTarget(self, action:#selector(self.cameraBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.view.addSubview(cameraBtn)
         
         statusBtn = UIButton(type: UIButtonType.Custom)
         statusBtn.frame = CGRectMake(self.view.frame.size.width/3*2, self.view.frame.size.height-50, self.view.frame.size.width/3, 50)
-        statusBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        //statusBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        statusBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
+        //statusBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
         statusBtn.backgroundColor = UIColor.orangeColor()
-        statusBtn.addTarget(self, action:#selector(CameraViewController.statusBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        statusBtn.addTarget(self, action:#selector(self.statusBtnAction), forControlEvents:.TouchUpInside)
         self.view.addSubview(statusBtn)
         
         

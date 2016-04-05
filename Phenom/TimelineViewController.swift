@@ -73,7 +73,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         self.activityIndicator.startAnimating()
     
         self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: #selector(TimelineViewController.queryForTimeline), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: #selector(self.queryForTimeline), forControlEvents: UIControlEvents.ValueChanged)
         self.theTableView.addSubview(self.refreshControl)
         //
         
@@ -156,10 +156,23 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         self.momentsData = dataFromString
                         
+<<<<<<< HEAD
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                             self.refreshControl.endRefreshing()
                         
+=======
+                        // done, reload tableView
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+//                            for (index, element) in JSON(data: self.momentsData).enumerate() {
+//                                
+//                            }
+//                            //let count = JSON(data: self.momentsData).count
+                            
+                            self.refreshControl.endRefreshing()
+                            
+>>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                             self.theTableView.reloadData()
                             
                         })
@@ -228,7 +241,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         let moments = JSON(data: self.momentsData)
-        
         return moments["results"].count
     }
     
@@ -293,9 +305,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let moments = JSON(data: self.momentsData)
         
-        let test = moments["results"]
+        let results = moments["results"]
         
-        if let id = test[indexPath.section]["imageUrl"].string {
+        if let id = results[indexPath.section]["imageUrl"].string {
             let fileUrl = NSURL(string: id)
             
             cell.momentImgView.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
@@ -315,22 +327,23 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             
         }
         
-        if let id = test[indexPath.section]["likesCount"].number {
+        if let id = results[indexPath.section]["likesCount"].number {
             let countStr = "\(id) likes" 
             cell.likesLbl.text = countStr
         }
         
-        if let id = test[indexPath.section]["headline"].string {
+        if let id = results[indexPath.section]["headline"].string {
             cell.headerLbl.text = id
         }
         
-        if let id = test[indexPath.section]["commentCount"].number {
+        if let id = results[indexPath.section]["commentCount"].number {
             let countStr = "\(id) comments"
             cell.commentLbl.text = countStr
         }
         
-        if let id = test[indexPath.section]["mode"].number {
+        if let id = results[indexPath.section]["mode"].number {
             if (id == 0) {
+                
                 cell.typeLbl.text = "TRAINING"
             } else if (id == 1) {
                 cell.typeLbl.text = "GAMING"
@@ -339,13 +352,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
-        if let id = test[indexPath.section]["song"]["artistName"].string {
-            cell.musicLbl.text = "\(id) \(test[indexPath.section]["song"]["trackName"])"
+        if let id = results[indexPath.section]["song"]["artistName"].string {
+            cell.musicLbl.text = "\(id) \(results[indexPath.section]["song"]["trackName"])"
         }
         
         // handle double tap
         
-        cell.doubleTapRecognizer.addTarget(self, action: #selector(TimelineViewController.doubleTapAction(_:)))
+        cell.doubleTapRecognizer.addTarget(self, action: #selector(self.doubleTapAction(_:)))
         cell.doubleTapRecognizer.numberOfTapsRequired = 2
         
         //

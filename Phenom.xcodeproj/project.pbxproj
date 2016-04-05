@@ -68,6 +68,7 @@
 		5768B93E1CB2193F002E9664 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B93D1CB2193F002E9664 /* EditProfileViewController.swift */; };
 		5768B9401CB2197C002E9664 /* AddTeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */; };
 		5768B9421CB2247A002E9664 /* GearDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B9411CB2247A002E9664 /* GearDetailViewController.swift */; };
+		5768B9441CB32033002E9664 /* SignUpEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B9431CB32033002E9664 /* SignUpEmailViewController.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -167,6 +168,7 @@
 		5768B93D1CB2193F002E9664 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTeamViewController.swift; sourceTree = "<group>"; };
 		5768B9411CB2247A002E9664 /* GearDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearDetailViewController.swift; sourceTree = "<group>"; };
+		5768B9431CB32033002E9664 /* SignUpEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpEmailViewController.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				5768B9311CB2172F002E9664 /* InviteFriendsViewController.swift */,
 				5768B93B1CB218F4002E9664 /* SignUpDetailViewController.swift */,
 				57C6DD0C1CA47BFE00B939DF /* SignUpViewController.swift */,
+				5768B9431CB32033002E9664 /* SignUpEmailViewController.swift */,
 				57C6DD0A1CA47A6900B939DF /* SignInViewController.swift */,
 				57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */,
 			);
@@ -633,6 +636,7 @@
 				57242DEF1CAB457600A71A7F /* ComposeViewController.swift in Sources */,
 				5768B93E1CB2193F002E9664 /* EditProfileViewController.swift in Sources */,
 				570AC5201CA5E2B500441F4A /* FollowingActivityViewController.swift in Sources */,
+				5768B9441CB32033002E9664 /* SignUpEmailViewController.swift in Sources */,
 				5768B8ED1CADEC99002E9664 /* SearchCell.swift in Sources */,
 				571CC5401CAB324600A42997 /* FusumaViewController.swift in Sources */,
 				571CC5381CAB324600A42997 /* FSAlbumView.swift in Sources */,
