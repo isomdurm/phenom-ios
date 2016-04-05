@@ -143,10 +143,13 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
 
                             self.discoverPeople = dataFromString
                     
+<<<<<<< HEAD
                             self.theTableView.reloadData()
                         
                         })
 =======
+=======
+>>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                     self.peopleData = dataFromString
                     //print("self.discoverPeople: \(self.discoverPeople)")
                     
@@ -155,6 +158,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                         self.theTableView.reloadData()
                         
                     })
+<<<<<<< HEAD
+>>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
+=======
 >>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                     
                     } else {

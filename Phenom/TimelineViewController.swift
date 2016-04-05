@@ -157,11 +157,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         self.momentsData = dataFromString
                         
 <<<<<<< HEAD
+<<<<<<< HEAD
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                             self.refreshControl.endRefreshing()
                         
 =======
+=======
+>>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                         // done, reload tableView
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
@@ -172,6 +175,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                             
                             self.refreshControl.endRefreshing()
                             
+<<<<<<< HEAD
+>>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
+=======
 >>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                             self.theTableView.reloadData()
                             
