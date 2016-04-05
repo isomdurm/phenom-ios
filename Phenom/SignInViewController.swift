@@ -33,10 +33,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(SignInViewController.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 64))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SIGN IN"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
@@ -48,13 +48,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         signInBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //signInBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signInBtn.backgroundColor = UIColor.blueColor()
-        signInBtn.addTarget(self, action:#selector(SignInViewController.processFields), forControlEvents:UIControlEvents.TouchUpInside)
+        signInBtn.addTarget(self, action:#selector(self.processFields), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(signInBtn)
         
         usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
-        usernameField.textColor = UIColor(red:51/255, green:51/255, blue:51/255, alpha:1)
+        usernameField.textColor = UIColor.whiteColor()
+        usernameField.attributedPlaceholder = NSAttributedString(string:"your username",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
         usernameField.keyboardType = UIKeyboardType.Default
         usernameField.returnKeyType = UIReturnKeyType.Next
         usernameField.enablesReturnKeyAutomatically = true
@@ -68,7 +69,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         passwordField.frame = CGRectMake(20, 64+64, self.view.frame.size.width-40, 64)
         passwordField.backgroundColor = UIColor.clearColor()
         passwordField.delegate = self
-        passwordField.textColor = UIColor(red:51/255, green:51/255, blue:51/255, alpha:1)
+        passwordField.textColor = UIColor.whiteColor()
+        passwordField.attributedPlaceholder = NSAttributedString(string:"your password",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
         passwordField.keyboardType = UIKeyboardType.Default
         passwordField.returnKeyType = UIReturnKeyType.Go
         passwordField.enablesReturnKeyAutomatically = true

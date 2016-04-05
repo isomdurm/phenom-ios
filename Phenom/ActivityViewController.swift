@@ -44,7 +44,7 @@ class ActivityViewController: UIViewController, UIScrollViewDelegate {
 //        self.theSegmentedControl = UISegmentedControl (items: ["Following","Me"])
 //        self.theSegmentedControl.frame = CGRectMake(self.view.frame.size.width/2-100, 27, 200, 30)
 //        self.theSegmentedControl.selectedSegmentIndex = 1
-//        self.theSegmentedControl.addTarget(self, action: #selector(ActivityViewController.segmentedControlAction(_:)), forControlEvents: .ValueChanged)
+//        self.theSegmentedControl.addTarget(self, action: #selector(self.segmentedControlAction(_:)), forControlEvents: .ValueChanged)
 //        self.theSegmentedControl.tintColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) // UIColor.yellowColor()
 //        //self.navigationItem.titleView = self.theSegmentedControl
 //        self.navBarView.addSubview(self.theSegmentedControl)

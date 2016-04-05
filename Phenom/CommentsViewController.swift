@@ -38,7 +38,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(CommentsViewController.backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 44))
@@ -64,10 +64,10 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.activityIndicator.startAnimating()
         
         self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: #selector(MyActivityViewController.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
         self.theTableView.addSubview(refreshControl)
         
-        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(CommentsViewController.backAction))
+        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
         swipeBack.direction = .Right
         self.view.addGestureRecognizer(swipeBack)
         

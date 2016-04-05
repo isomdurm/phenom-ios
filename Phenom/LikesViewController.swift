@@ -33,7 +33,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(SettingsViewController.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
@@ -55,7 +55,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(LikesViewController.backBtnAction))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backBtnAction))
         swipeRight.direction = .Right
         self.view.addGestureRecognizer(swipeRight)
         
@@ -114,7 +114,6 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
 
     }
-
 
 
 }

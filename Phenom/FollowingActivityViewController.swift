@@ -42,7 +42,7 @@ class FollowingActivityViewController: UIViewController, UITableViewDataSource, 
         self.activityIndicator.startAnimating()
         
         self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: #selector(FollowingActivityViewController.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
         self.theTableView.addSubview(refreshControl)
         
         querySkip = 0

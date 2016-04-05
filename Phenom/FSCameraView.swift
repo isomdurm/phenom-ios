@@ -104,7 +104,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
         flashConfiguration()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FSCameraView.willEnterForegroundNotification(_:)), name: UIApplicationWillEnterForegroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.willEnterForegroundNotification(_:)), name: UIApplicationWillEnterForegroundNotification, object: nil)
     }
     
     deinit {

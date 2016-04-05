@@ -41,7 +41,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(ComposeViewController.backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
@@ -54,7 +54,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         let shareBtn = UIButton()
         shareBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
         shareBtn.backgroundColor = UIColor.blueColor()
-        shareBtn.addTarget(self, action:#selector(ComposeViewController.shareBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        shareBtn.addTarget(self, action:#selector(self.shareBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         shareBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         shareBtn.titleLabel?.numberOfLines = 1
         shareBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -111,7 +111,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn1.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn1.setTitle("TRAINING", forState: UIControlState.Normal)
-        tabBtn1.addTarget(self, action:#selector(ComposeViewController.tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn1.addTarget(self, action:#selector(self.tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn1)
         
         tabBtn1.selected = true
@@ -126,7 +126,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn2.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn2.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn2.setTitle("GAMING", forState: UIControlState.Normal)
-        tabBtn2.addTarget(self, action:#selector(ComposeViewController.tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn2.addTarget(self, action:#selector(self.tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn2)
         
         tabBtn3.frame = CGRectMake(tabWidth*2, 0, tabWidth, 44)
@@ -139,7 +139,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn3.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn3.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn3.setTitle("STYLING", forState: UIControlState.Normal)
-        tabBtn3.addTarget(self, action:#selector(ComposeViewController.tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn3.addTarget(self, action:#selector(self.tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn3)
         
         let line2:UIView = UIView()
@@ -200,8 +200,8 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         
         //
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ComposeViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ComposeViewController.keyboardDidShow(_:)), name:UIKeyboardDidShowNotification ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow(_:)), name:UIKeyboardDidShowNotification ,object: nil)
         
         
         

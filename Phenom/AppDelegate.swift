@@ -16,8 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var clientId = "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO"
     var clientSecret = "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko="
     var apiVersion = "1.2.3"
-    var phenomApiUrl = "https://api1.phenomapp.com:8081"
-    
+    var phenomApiUrl = "https://api1.phenomapp.com:8081" //https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081
     
     var window: UIWindow?
 

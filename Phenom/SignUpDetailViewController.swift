@@ -36,10 +36,10 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.blueColor()
-        backBtn.addTarget(self, action:#selector(SignUpDetailViewController.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 64))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "PROFILE"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
@@ -51,13 +51,23 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         signUpBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //signUpBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signUpBtn.backgroundColor = UIColor.blueColor()
-        signUpBtn.addTarget(self, action:#selector(SignUpDetailViewController.signUpBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signUpBtn.addTarget(self, action:#selector(self.signUpBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(signUpBtn)
         
-        locationField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
+        
+        let profileWidth = self.view.frame.size.width/3
+        let profileY = 64+(profileWidth/3)
+        
+        self.profileImgView.frame = CGRectMake(self.view.frame.size.width/2-(profileWidth/2), profileY, profileWidth, profileWidth)
+        self.profileImgView.backgroundColor = UIColor.blueColor()
+        self.view.addSubview(self.profileImgView)
+        
+        let locationY = profileY+profileWidth+30
+        locationField.frame = CGRectMake(20, locationY, self.view.frame.size.width-40, 64)
         locationField.backgroundColor = UIColor.clearColor()
         locationField.delegate = self
-        locationField.textColor = UIColor(red:51/255, green:51/255, blue:51/255, alpha:1)
+        locationField.textColor = UIColor.whiteColor()
+        locationField.attributedPlaceholder = NSAttributedString(string:"your location",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
         locationField.keyboardType = UIKeyboardType.Default
         locationField.returnKeyType = UIReturnKeyType.Next
         locationField.enablesReturnKeyAutomatically = true
@@ -69,7 +79,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         locationField.text = ""
         
         self.sportsArray = NSMutableArray(array: ["Baseball", "Basketball", "Football", "Soccer", "Lacrosse", "Ice Hockey", "Softball", "Tennis", "Track & Field", "Volleyball", "Wrestling", "Swimming", "Cross Country", "Field Hockey", "Golf", "Rugby", "Cross Fit", "Skiing", "Snowboading", "Skateboarding", "Figure Skating", "Gymnastics"])
-        self.sportsScrollView.frame = CGRectMake(0, 64+64, self.view.frame.size.width, 120)
+        self.sportsScrollView.frame = CGRectMake(0, locationY+64+30, self.view.frame.size.width, 120)
         self.sportsScrollView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         self.sportsScrollView.delegate = self
         self.sportsScrollView.pagingEnabled = false
@@ -124,7 +134,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             sportBtn.setBackgroundImage(UIImage(named: "goldTabBar.png"), forState: .Selected)
             
             sportBtn.backgroundColor = UIColor.blueColor()
-            sportBtn.addTarget(self, action:#selector(SignUpDetailViewController.sportBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            sportBtn.addTarget(self, action:#selector(self.sportBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
             
             sportBtn.tag = NSInteger(i)
             

@@ -45,7 +45,7 @@ class ExploreCell: UITableViewCell {
         self.contentView.addSubview(self.usernameLbl)
         
         self.followBtn.backgroundColor = UIColor.blueColor()
-        //self.followBtn.addTarget(self, action:#selector(CameraViewController.self.followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        //self.followBtn.addTarget(self, action:#selector(self.followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.contentView.addSubview(self.followBtn)
         
         //
