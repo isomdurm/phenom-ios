@@ -10,6 +10,8 @@ import UIKit
 
 class GearDetailViewController: UIViewController {
 
+    var passedGearId = NSString()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

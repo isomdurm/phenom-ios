@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Haneke
 
 class LikesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var likes = NSData()
+    var likesData = NSData()
     var passedMomentId = NSString()
     
     var theTableView: UITableView = UITableView()
@@ -120,19 +122,20 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func findLikes() {
         
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/likes") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/likes") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
@@ -143,9 +146,21 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
                     
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                         
-                        self.likes = dataFromString
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
                         
-                        self.theTableView.reloadData()
+                        self.likesData = dataFromString
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.theTableView.reloadData()
+                            
+                        })
                         
                     } else {
                         print("URL Session Task Failed: %@", error!.localizedDescription);

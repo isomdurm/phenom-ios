@@ -9,8 +9,6 @@
 import UIKit
 import SwiftyJSON
 import Haneke
-//import AFNetworking
-
 
 class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -128,7 +126,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         request.HTTPMethod = "GET"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         //
@@ -154,31 +152,21 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                         
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
                         self.momentsData = dataFromString
                         
-<<<<<<< HEAD
-<<<<<<< HEAD
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                            self.refreshControl.endRefreshing()
-                        
-=======
-=======
->>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                         // done, reload tableView
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-//                            for (index, element) in JSON(data: self.momentsData).enumerate() {
-//                                
-//                            }
-//                            //let count = JSON(data: self.momentsData).count
-                            
                             self.refreshControl.endRefreshing()
                             
-<<<<<<< HEAD
->>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
-=======
->>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
                             self.theTableView.reloadData()
                             
                         })
@@ -222,6 +210,24 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
+    func singleTapAction(sender: UITapGestureRecognizer) {
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            let tappedLocation = sender.locationInView(self.theTableView)
+            if let tappedIndexPath = self.theTableView.indexPathForRowAtPoint(tappedLocation) {
+                if let tappedCell = self.theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+                    
+                    print("single tapped section: \(tappedIndexPath.section), \(tappedCell)")
+                    
+                    // play video or music !!!
+                    
+                    
+                    
+                }
+            }
+        }
+    }
+    
     
     func doubleTapAction(sender: UITapGestureRecognizer) {
         
@@ -230,16 +236,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             if let tappedIndexPath = self.theTableView.indexPathForRowAtPoint(tappedLocation) {
                 if let tappedCell = self.theTableView.cellForRowAtIndexPath(tappedIndexPath) {
                     
-                    likeMoment()
+                    //self.likeMoment()
                     
-                    print("tapped section: \(tappedIndexPath.section), \(tappedCell)")
-                    
+                    print("double tapped section: \(tappedIndexPath.section), \(tappedCell)")
                     
                     
                 }
             }
         }
-        
     }
     
     
@@ -261,9 +265,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let headerView = TimelineHeaderView(frame: CGRectMake(0, 0, view.frame.size.width, 64))
-        
-        let cell:TimelineCell = TimelineCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        cell.cellWidth = self.view.frame.size.width
         
         let moments = JSON(data: self.momentsData)
         
@@ -288,6 +289,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             headerView.userImgView!.hnk_setImageFromURL(fileUrl!)
         }
 
+        headerView.userBtn!.tag = section
+        headerView.userBtn!.addTarget(self, action:#selector(self.userBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         
         
 //        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
@@ -348,26 +351,45 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         if let id = results[indexPath.section]["mode"].number {
+            var str = ""
             if (id == 0) {
-                
-                cell.typeLbl.text = "TRAINING"
+                str = "TRAINING"
             } else if (id == 1) {
-                cell.typeLbl.text = "GAMING"
+                str = "GAMING"
             } else {
-                cell.typeLbl.text = "STYLING"
+                str = "STYLING"
             }
+            let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.modeLbl.font, height: cell.modeLbl.frame.size.height)
+            cell.modeLbl.frame = CGRectMake(15, cell.cellWidth-10-20, width+20, 20)
+            cell.modeLbl.text = str
         }
         
         if let id = results[indexPath.section]["song"]["artistName"].string {
-            cell.musicLbl.text = "\(id) \(results[indexPath.section]["song"]["trackName"])"
+            cell.musicLbl.hidden = false
+            let str = "\(id) | \(results[indexPath.section]["song"]["trackName"])"
+            let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.musicLbl.font, height: cell.musicLbl.frame.size.height)
+            cell.musicLbl.frame = CGRectMake(15, cell.cellWidth-10-20-10-20, width+20, 20)
+            cell.musicLbl.text = str
+        } else {
+            cell.musicLbl.hidden = true
         }
         
-        // handle double tap
+        // button actions
         
+        cell.commentBtn.tag = indexPath.section
+        cell.gearBtn.tag = indexPath.section
+        cell.headerBtn.tag = indexPath.section
+        
+        cell.commentBtn.addTarget(self, action:#selector(self.commentBtnAction), forControlEvents: .TouchUpInside)
+        cell.gearBtn.addTarget(self, action:#selector(self.gearBtnAction), forControlEvents: .TouchUpInside)
+        cell.headerBtn.addTarget(self, action:#selector(self.commentBtnAction), forControlEvents: .TouchUpInside)
+        
+        // handle taps
+        
+        cell.singleTapRecognizer.addTarget(self, action: #selector(self.singleTapAction(_:)))
         cell.doubleTapRecognizer.addTarget(self, action: #selector(self.doubleTapAction(_:)))
-        cell.doubleTapRecognizer.numberOfTapsRequired = 2
         
-        //
+        
         
         return cell
     }
@@ -391,10 +413,56 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func userBtnAction(sender: UIButton!){
+        print(sender.tag)
         
+        let moments = JSON(data: self.momentsData)
         
+        //        print(moments)
+        
+        let test = moments["results"]
+        
+        if let id = test[sender.tag]["user"]["id"].string {
+
+            // push to user
+            let vc = ProfileViewController()
+            vc.passedUserId = id
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+        }
         
     }
+    
+    func commentBtnAction(sender: UIButton!){
+        print(sender.tag)
+        
+        let moments = JSON(data: self.momentsData)
+        let results = moments["results"]
+        
+        if let id = results[sender.tag]["id"].string {
+            print("id: \(id)")
+            let vc = CommentsViewController()
+            vc.passedMomentId = id
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+    }
+    
+    func gearBtnAction(sender: UIButton!){
+        print(sender.tag)
+        
+        let moments = JSON(data: self.momentsData)
+        let moment = moments["results"]
+        
+        if let id = moment[sender.tag]["id"].string {
+            let vc = GearDetailViewController()
+            vc.passedGearId = id
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+    }
+    
+    
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
@@ -483,64 +551,24 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    func sendRequest() {
-        
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/oauth/token") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer 6B3P/uVDXfSk7dSDK4DAyI1VfcgJNOceO5DhPYp5GnY=", forHTTPHeaderField: "Authorization")
-        
-        let bodyObject = [
-            "username": "isomisom",
-            "password": "R2lkODY3NTMwOSE=",
-            "client_id": "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO",
-            "client_secret": "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko=",
-            "grant_type": "password"
-        ]
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
-                
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    let json = JSON(data: dataFromString)
-                    self.access_token = json["access_token"].string!
-//                    print(self.access_token);
-                }
-                
-            }
-            else {
-                
-//                print("URL Session Task Failed: %@", error!.localizedDescription);
-            }
-        })
-        task.resume()
-    }
+    
     
     func likeMoment() {
         
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/like") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/like") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "POST"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
@@ -558,19 +586,20 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func unlikeMoment() {
         
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/unlike") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/unlike") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "DELETE"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             

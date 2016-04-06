@@ -53,6 +53,7 @@ class ExploreCell: UITableViewCell {
         
 //        self.theScrollView.backgroundColor = UIColor.orangeColor() // UIColor(red:20/255, green:20/255, blue:25/255, alpha:1)
         //self.theScrollView.delegate = self
+        self.theScrollView.backgroundColor = UIColor.orangeColor()
         self.theScrollView.pagingEnabled = false
         self.theScrollView.showsHorizontalScrollIndicator = true
         self.theScrollView.showsVerticalScrollIndicator = false
@@ -63,6 +64,7 @@ class ExploreCell: UITableViewCell {
         self.theScrollView.alwaysBounceHorizontal = true
         self.theScrollView.userInteractionEnabled = true
         self.contentView.addSubview(self.theScrollView)
+        self.theScrollView.hidden = true
         
         
     }

@@ -6,17 +6,20 @@
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
-import SwiftyJSON
+
 import UIKit
+import SwiftyJSON
 import Haneke
 
 class ExploreViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var peopleData = NSData()
-
     var navBarView = UIView()
     
     var theTableView: UITableView = UITableView()
+    var peopleData = NSData()
+    
+    var gearScrollView = UIScrollView()
+    var gearData = NSData()
     
     var isSearching: Bool = false
     
@@ -40,15 +43,15 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         bg.layer.cornerRadius = 7
         bg.layer.masksToBounds = true
         
-        let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
+        let searchWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
         
         let icon = UIImageView()
-        icon.frame = CGRectMake((self.view.frame.size.width/2)-(width/2)-7, 20+7+10, 12, 12)
+        icon.frame = CGRectMake((self.view.frame.size.width/2)-(searchWidth/2)-7, 20+7+10, 12, 12)
         icon.backgroundColor = UIColor.clearColor()
         icon.image = UIImage(named:"miniSearchImg.png")
         self.navBarView.addSubview(icon)
         
-        let lbl = UILabel(frame: CGRectMake(icon.frame.origin.x+icon.frame.size.width+6, 28, width, 30))
+        let lbl = UILabel(frame: CGRectMake(icon.frame.origin.x+icon.frame.size.width+6, 28, searchWidth, 30))
         lbl.textAlignment = NSTextAlignment.Center
         lbl.text = "Search"
         lbl.font = UIFont.systemFontOfSize(15)
@@ -85,15 +88,79 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //
         
-        let headerHeight = self.theTableView.frame.size.width/2
+        let heroHeight = self.theTableView.frame.size.width/2
+        
+        let gearContainerHeight = CGFloat(35+150+35)
+        
+        let headerHeight = heroHeight+gearContainerHeight
+        
         self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, headerHeight))
         self.theTableView.tableHeaderView?.backgroundColor = UIColor.lightGrayColor()
+        
+        let heroView = UIView(frame: CGRectMake(0, 0, (self.theTableView.tableHeaderView?.frame.size.width)!, heroHeight))
+        heroView.backgroundColor = UIColor.lightGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(heroView)
+        
+        let gearContainerView = UIView(frame: CGRectMake(0, heroHeight, self.view.frame.size.width, gearContainerHeight))
+        gearContainerView.backgroundColor = UIColor.darkGrayColor()
+        self.theTableView.tableHeaderView?.addSubview(gearContainerView)
+        
+        self.gearScrollView.frame = CGRectMake(0, 35, gearContainerView.frame.size.width, 150)
+        self.gearScrollView.backgroundColor = UIColor.redColor()
+        self.gearScrollView.delegate = self
+        self.gearScrollView.pagingEnabled = false
+        self.gearScrollView.showsHorizontalScrollIndicator = true
+        self.gearScrollView.showsVerticalScrollIndicator = false
+        self.gearScrollView.scrollsToTop = true
+        self.gearScrollView.scrollEnabled = true
+        self.gearScrollView.bounces = true
+        self.gearScrollView.alwaysBounceVertical = false
+        self.gearScrollView.alwaysBounceHorizontal = true
+        self.gearScrollView.userInteractionEnabled = true
+        gearContainerView.addSubview(self.gearScrollView)
+        
+        let padding = CGFloat(2*10) //self.sportsArray.count
+        let width = CGFloat(140*10) //self.sportsArray.count
+        let totalWidth = CGFloat(width+padding+20+20)
+        self.gearScrollView.contentSize = CGSize(width: totalWidth, height: self.gearScrollView.frame.size.height)
+        
+        //
+        
+        let exploreGearBtn = UIButton.init(type: UIButtonType.Custom)
+        exploreGearBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 0, 100, 35)
+        exploreGearBtn.backgroundColor = UIColor.greenColor()
+        exploreGearBtn.addTarget(self, action:#selector(self.exploreGearBtnAction), forControlEvents:.TouchUpInside)
+        exploreGearBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        exploreGearBtn.titleLabel?.numberOfLines = 1
+        exploreGearBtn.contentHorizontalAlignment = .Center
+        exploreGearBtn.contentVerticalAlignment = .Center
+        exploreGearBtn.titleLabel?.textAlignment = .Center
+        exploreGearBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        exploreGearBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        exploreGearBtn.setTitle("EXPLORE GEAR", forState: .Normal)
+        gearContainerView.addSubview(exploreGearBtn)
+        
+        let explorePeopleBtn = UIButton.init(type: UIButtonType.Custom)
+        explorePeopleBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 35+self.gearScrollView.frame.size.height, 100, 35)
+        explorePeopleBtn.backgroundColor = UIColor.greenColor()
+        explorePeopleBtn.addTarget(self, action:#selector(self.explorePeopleBtnAction), forControlEvents:.TouchUpInside)
+        explorePeopleBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        explorePeopleBtn.titleLabel?.numberOfLines = 1
+        explorePeopleBtn.contentHorizontalAlignment = .Center
+        explorePeopleBtn.contentVerticalAlignment = .Center
+        explorePeopleBtn.titleLabel?.textAlignment = .Center
+        explorePeopleBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        explorePeopleBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        explorePeopleBtn.setTitle("EXPLORE PEOPLE", forState: .Normal)
+        gearContainerView.addSubview(explorePeopleBtn)
+        
+        //
         
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
         
         //
         
-        self.queryForSuggestedPeople()
+        self.queryForGear()
         
     }
 
@@ -113,59 +180,162 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         self.isSearching = false
     }
     
-    func queryForSuggestedPeople() {
+    
+    func queryForGear() {
         
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/discover/people?pageNumber=1") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear/featured") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
+                        self.gearData = dataFromString                        
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.buildGearScrollView()
+                            
+                        })
+                        
+                    } else {
+                        print("URL Session Task Failed: %@", error!.localizedDescription)
+                        
+                    }
+                    
+                }
+                
+            })
+            task.resume()
+        })
+    }
+    
+    func buildGearScrollView() {
+        
+        print("buildGearScrollView hit")
+        
+        let gearArray = JSON(data: self.gearData)
+        //let results = gearArray["results"]
+        
+        print("results: \(gearArray["results"])")
+        
+        for (index, element) in gearArray["results"].enumerate() {
+            
+            print("Item \(index): \(element)")
+            
+            //let sport = element as! String
+            let i = CGFloat(index)
+            let x = 20+(100*i)
+            let pad = 2*i
+            let f = CGRectMake(x+pad, 0, 140, 140)
+            
+            let gearBtn = UIButton(type: UIButtonType.Custom)
+            gearBtn.frame = f
+            gearBtn.setImage(UIImage(named: "gearBtn-sport.png"), forState: .Normal)
+            gearBtn.setImage(UIImage(named: "gearBtn-sport.png"), forState: .Highlighted)
+            gearBtn.setImage(UIImage(named: "gearBtn-sport.png"), forState: .Selected)
+            
+            gearBtn.setBackgroundImage(UIImage(named: ""), forState: .Normal)
+            gearBtn.setBackgroundImage(UIImage(named: "goldTabBar.png"), forState: .Selected)
+            
+            gearBtn.backgroundColor = UIColor.blueColor()
+            gearBtn.addTarget(self, action:#selector(self.gearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            gearBtn.titleLabel?.numberOfLines = 1
+            gearBtn.titleLabel?.font = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
+            gearBtn.contentHorizontalAlignment = .Center
+            gearBtn.contentVerticalAlignment = .Bottom
+            gearBtn.titleLabel?.textAlignment = .Center
+            gearBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            gearBtn.setTitleColor(UIColor.whiteColor(), forState: .Selected)
+            gearBtn.setTitle("hmmm", forState: UIControlState.Normal)
+            
+            gearBtn.tag = NSInteger(i)
+            
+            self.gearScrollView.addSubview(gearBtn)
+            
+        }
+        
+        
+        // 
+        
+        // now load people ??? on main thread
+        
+        //
+        
+    }
+    
+    func queryForPeople() {
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/people?pageNumber=1") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
         
             let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 if (error == nil) {
-                
+                    
                     let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
+                    
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    
-<<<<<<< HEAD
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
+                        self.peopleData = dataFromString
+                        
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-
-                            self.discoverPeople = dataFromString
-                    
-<<<<<<< HEAD
+                            
                             self.theTableView.reloadData()
-                        
+                            
                         })
-=======
-=======
->>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
-                    self.peopleData = dataFromString
-                    //print("self.discoverPeople: \(self.discoverPeople)")
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                        self.theTableView.reloadData()
-                        
-                    })
-<<<<<<< HEAD
->>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
-=======
->>>>>>> 1785adddd7eefefbb6af8a7cf43e20e270a6eb90
-                    
                     } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        print("URL Session Task Failed: %@", error!.localizedDescription)
+                        
                     }
+                  
                 }
             
             })
@@ -186,61 +356,17 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     // TableViewDelegate
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let people = JSON(data: self.peopleData)
-        
-        switch (section) {
-        case 0: return 1
-        case 1: return people["results"].count
-        default: return 0
-        }
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 35
-    }
-    
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let aLbl = UILabel(frame: CGRectMake(20, 0, self.view.frame.size.width, 35))
-        aLbl.textAlignment = NSTextAlignment.Left
-        switch (section) {
-        case 0: aLbl.text = "EXPLORE GEAR"
-        case 1: aLbl.text = "EXPLORE PEOPLE"
-        default: aLbl.text = ""}
-        aLbl.font = UIFont.boldSystemFontOfSize(12)
-        aLbl.textColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //
-
-        
-        let moreBtn = UIButton.init(type: UIButtonType.Custom)
-        moreBtn.frame = CGRectMake(self.view.frame.size.width-100, 0, 100, 35)
-        moreBtn.backgroundColor = UIColor.greenColor()
-        moreBtn.tag = section
-        moreBtn.addTarget(self, action:#selector(self.moreBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        
-        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
-        aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        
-        aView.addSubview(aLbl)
-        
-        aView.addSubview(moreBtn)
-        
-        return aView;
-        
+        return people["results"].count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        //let rowHeight = self.view.frame.size.width/3.5
-        //return 150
-        if (indexPath.section == 0) {
-            return 150
-        } else {
-            return 80
-        }
+        return 80
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -251,53 +377,34 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.cellWidth = self.view.frame.size.width
         
         
-        if (indexPath.section == 0) {
-            // gear section
-            cell.nameLbl.text = ""
-            cell.userImgView.hidden = true
-            cell.nameLbl.hidden = true
-            cell.usernameLbl.hidden = true
-            cell.followBtn.hidden = true
-            
-        } else if (indexPath.section == 1) {
-            // people section
-            
-            cell.userImgView.hidden = false
-            cell.nameLbl.hidden = false
-            cell.usernameLbl.hidden = false
-            cell.followBtn.hidden = false
-            
-            let people = JSON(data: self.peopleData)
-            
-            let results = people["results"]
-            
-            if let person = results[indexPath.row]["username"].string {
-                cell.usernameLbl.text = person
-            }
-            
-            if let name = results[indexPath.row]["firstName"].string {
-                cell.nameLbl.text = ("\(name) \(results[indexPath.row]["lastName"])")
-            }
-            
-            if let id = results[indexPath.row]["imageUrl"].string {
-                let fileUrl = NSURL(string: id)
-                
-                cell.userImgView.frame = CGRectMake(15, 10, 44, 44)
-                cell.userImgView.setNeedsLayout()
-                cell.userImgView.hnk_setImageFromURL(fileUrl!)
-            }
-            
-        } else {
-            
-            cell.nameLbl.text = ""
-            
-            cell.nameLbl.text = ""
-            cell.userImgView.hidden = true
-            cell.nameLbl.hidden = true
-            cell.usernameLbl.hidden = true
-            cell.followBtn.hidden = true
-            
+        // people section
+        
+        cell.userImgView.hidden = false
+        cell.nameLbl.hidden = false
+        cell.usernameLbl.hidden = false
+        cell.followBtn.hidden = false
+        
+        let people = JSON(data: self.peopleData)
+        
+        let results = people["results"]
+        
+        if let person = results[indexPath.row]["username"].string {
+            cell.usernameLbl.text = person
         }
+        
+        if let name = results[indexPath.row]["firstName"].string {
+            cell.nameLbl.text = ("\(name) \(results[indexPath.row]["lastName"])")
+        }
+        
+        if let id = results[indexPath.row]["imageUrl"].string {
+            let fileUrl = NSURL(string: id)
+            
+            cell.userImgView.frame = CGRectMake(15, 10, 44, 44)
+            cell.userImgView.setNeedsLayout()
+            cell.userImgView.hnk_setImageFromURL(fileUrl!)
+        }
+        
+        cell.theScrollView.hidden = true
         
         return cell
         
@@ -313,34 +420,22 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        if (indexPath.section == 0) {
-            
-            self.navigationController?.pushViewController(GearViewController(), animated: true)
-            
-        } else if (indexPath.section == 1) {
-            
-            
         
-        } else {
-            
-        }
         
     }
     
-    
-    func moreBtnAction(sender: UIButton) {
-        print(sender.tag)
-        
-        if (sender.tag == 0) {
-            self.navigationController?.pushViewController(ExploreGearViewController(), animated: true)
-        } else if (sender.tag == 1) {
-            self.navigationController?.pushViewController(ExplorePeopleViewController(), animated: true)
-        } else {
-            print("something is wrong")
-        }
+    func exploreGearBtnAction() {
+        self.navigationController?.pushViewController(ExploreGearViewController(), animated: true)
+    }
 
+    func explorePeopleBtnAction() {
+        self.navigationController?.pushViewController(ExplorePeopleViewController(), animated: true)
+    }
+    
+    func gearBtnAction(sender: UIButton) {
         
     }
+
     
     
 }

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Haneke
 
 class CommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
@@ -52,7 +54,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         titleLbl.textColor = UIColor.whiteColor()
         self.navBarView.addSubview(titleLbl)
         
-        self.theTableView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height-64-49)
+        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
         self.theTableView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
         self.theTableView.delegate = self
@@ -169,25 +171,27 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func userBtnAction(sender: UIButton!){
-        
+        print(sender.tag)
+       
         
     }
     
     func findComments() {
         
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)/comments") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/comments") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
@@ -197,6 +201,14 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
                     let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
                     
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
                         
                         self.comments = dataFromString
                         

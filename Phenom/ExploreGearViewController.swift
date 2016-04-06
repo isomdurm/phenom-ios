@@ -20,6 +20,9 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     
     var isSearching: Bool = false
     
+    var sportObj = "ALL"
+    var categoryObj = "ALL"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,36 +75,17 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         self.theCollectionView.bounces = true
         self.theCollectionView.scrollEnabled = true
         self.theCollectionView.alwaysBounceVertical = true
-        
-        //
-        
-//        let headerHeight = self.theCollectionView.frame.size.width/2+70
-//        
-//        //self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, headerHeight))
-//        self.theTableView.tableHeaderView?.backgroundColor = UIColor.whiteColor()
-//        
-//        let heroView = UIView(frame: CGRectMake(0, 0, (self.theTableView.tableHeaderView?.frame.size.width)!, self.theTableView.frame.size.width/2))
-//        heroView.backgroundColor = UIColor.lightGrayColor()
-//        self.theTableView.tableHeaderView?.addSubview(heroView)
-//        
-//        let sportBtn = UIButton.init(type: UIButtonType.Custom)
-//        sportBtn.frame = CGRectMake(10, (self.theTableView.tableHeaderView?.frame.size.width)!/2+10, (self.theTableView.tableHeaderView?.frame.size.width)!/2-15, 50)
-//        sportBtn.backgroundColor = UIColor.greenColor()
-//        self.theTableView.tableHeaderView?.addSubview(sportBtn)
-//        
-//        let categoryBtn = UIButton.init(type: UIButtonType.Custom)
-//        categoryBtn.frame = CGRectMake((self.theTableView.tableHeaderView?.frame.size.width)!/2+5, (self.theTableView.tableHeaderView?.frame.size.width)!/2+10, (self.theTableView.tableHeaderView?.frame.size.width)!/2-15, 50)
-//        categoryBtn.backgroundColor = UIColor.greenColor()
-//        self.theTableView.tableHeaderView?.addSubview(categoryBtn)
-//        
-//        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
-        
+
         //
         
         let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
         swipeBack.direction = .Right
         self.view.addGestureRecognizer(swipeBack)
         self.theCollectionView.addGestureRecognizer(swipeBack)
+        
+        //
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadExploreGear(_:)), name:"ReloadExploreGearNotification" ,object: nil)
         
         //
         
@@ -138,6 +122,54 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         self.navigationController?.pushViewController(vc, animated: false)
         
         self.isSearching = true
+        
+    }
+    
+    func reloadExploreGear(notification: NSNotification){
+        
+        let dict = notification.userInfo! as NSDictionary
+        print("hmm: \(dict)")
+        
+        let type = dict.objectForKey("type") as! String
+        let obj = dict.objectForKey("obj") as! String
+
+        // update obj
+        // update filter btn
+        // scroll to top
+        // reload collectionView
+        
+        if (type == "SPORT") {
+            
+            self.sportObj = obj
+            
+            if (obj == "ALL") {
+                // set btn as "SPORT"
+            } else {
+             
+                
+            }
+        } else {
+            
+            self.categoryObj = obj
+            
+            if (obj == "ALL") {
+                // set btn as "CATEGORY"
+                
+            } else {
+
+                
+            }
+        }
+        
+        //
+        
+        self.theCollectionView.setContentOffset(CGPoint.zero, animated: true)
+        
+        //
+        
+        self.queryForGear()
+        
+        //
         
     }
     
@@ -210,7 +242,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             let sportBtn = UIButton.init(type: UIButtonType.Custom)
             sportBtn.frame = CGRectMake(10, headerView.frame.size.width/2+10, headerView.frame.size.width/2-15, 50)
             sportBtn.backgroundColor = UIColor.greenColor()
-            //sportBtn.addTarget(self, action:#selector(self.sportBtnAction), forControlEvents:.TouchUpInside)
+            sportBtn.addTarget(self, action:#selector(self.sportBtnAction), forControlEvents:.TouchUpInside)
             sportBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
             sportBtn.titleLabel?.numberOfLines = 1
             sportBtn.contentHorizontalAlignment = .Center
@@ -224,7 +256,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             let categoryBtn = UIButton.init(type: UIButtonType.Custom)
             categoryBtn.frame = CGRectMake(headerView.frame.size.width/2+5, headerView.frame.size.width/2+10, headerView.frame.size.width/2-15, 50)
             categoryBtn.backgroundColor = UIColor.greenColor()
-            //categoryBtn.addTarget(self, action:#selector(self.categoryBtnAction), forControlEvents:.TouchUpInside)
+            categoryBtn.addTarget(self, action:#selector(self.categoryBtnAction), forControlEvents:.TouchUpInside)
             categoryBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
             categoryBtn.titleLabel?.numberOfLines = 1
             categoryBtn.contentHorizontalAlignment = .Center
@@ -275,5 +307,27 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     //    }
 
     
+    
+    // 
+    
+    
+    func sportBtnAction() {
+        
+        // present drop down just below this button
+        
+        let vc = FilterViewController()
+        vc.passedType = "SPORT"
+        let newnav = UINavigationController(rootViewController: vc)
+        self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        
+    }
 
+    func categoryBtnAction() {
+        
+        let vc = FilterViewController()
+        vc.passedType = "CATEGORY"
+        let newnav = UINavigationController(rootViewController: vc)
+        self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        
+    }
 }

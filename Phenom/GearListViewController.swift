@@ -1,17 +1,19 @@
 //
-//  GearViewController.swift
+//  GearListViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/30/16.
+//  Created by Clay Zug on 4/5/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
 import UIKit
 import QuartzCore
+import SwiftyJSON
+import Haneke
 
-class GearViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
+class GearListViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
     
-    var gear = NSData()
+    var gearData = NSData()
     var passedMomentId = NSString()
     
     let activityIndicator = UIActivityIndicatorView()
@@ -90,7 +92,7 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-       
+        
         
     }
     
@@ -121,7 +123,7 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         cell.backgroundColor = UIColor.greenColor()
         
-
+        
         
         
         return cell
@@ -179,7 +181,7 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-
+        
         return true
     }
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -189,19 +191,20 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func findGear() {
         
-        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/\(passedMomentId)") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue(bearer, forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
@@ -212,9 +215,21 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
                     
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                         
-                        self.gear = dataFromString
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
                         
-//                        self.theTableView.reloadData()
+                        self.gearData = dataFromString
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.theCollectionView.reloadData() 
+                            
+                        })
                         
                     } else {
                         print("URL Session Task Failed: %@", error!.localizedDescription);
@@ -225,5 +240,6 @@ class GearViewController: UIViewController, UICollectionViewDataSource, UICollec
             task.resume()
         })
     }
+    
 
 }

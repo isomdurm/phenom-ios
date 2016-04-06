@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var tabbarvc:TabBarViewController?
     var timelinevc:TimelineViewController?
     var explorevc:ExploreViewController?
-    var activityvc:ActivityViewController?
+    var myactivityvc:MyActivityViewController?
     var profilevc:ProfileViewController?
     
     var previousController = UIViewController()
@@ -120,17 +120,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         
         self.timelinevc = TimelineViewController()
         self.explorevc = ExploreViewController()
-        self.activityvc = ActivityViewController()
+        self.myactivityvc = MyActivityViewController()
+        
         
         self.profilevc = ProfileViewController()
-        //self.profilevc!.passedUser = PFUser.currentUser()
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let userId = defaults.stringForKey("userId")! as NSString
+        self.profilevc!.passedUserId = userId
         //self.profilevc!.showingTabbar = true
-
         
         let nav1 = UINavigationController(rootViewController: self.timelinevc!)
         let nav2 = UINavigationController(rootViewController: self.explorevc!)
         let nav3 = UINavigationController(rootViewController: UIViewController())
-        let nav4 = UINavigationController(rootViewController: self.activityvc!)
+        let nav4 = UINavigationController(rootViewController: self.myactivityvc!)
         let nav5 = UINavigationController(rootViewController: self.profilevc!)
         
         self.previousController = nav1
@@ -222,11 +224,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             } else if (tabBarController.selectedIndex == 2) {
                 // empty
             } else if (tabBarController.selectedIndex == 3) {
-                if (!self.activityvc!.isPushed) {
-                    self.activityvc!.myactivityvc.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                if (!self.myactivityvc!.isPushed) {
+                    self.myactivityvc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
             } else if (tabBarController.selectedIndex == 4) {
-                self.profilevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true) 
+                if (!self.profilevc!.isPushed) {
+                    self.profilevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                }
+                
             }
         }
         self.previousController = viewController

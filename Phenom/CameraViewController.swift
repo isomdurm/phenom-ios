@@ -176,7 +176,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         
         (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
         
-        cameraView.session?.stopRunning()
+        self.cameraView.session?.stopRunning()
         
         self.view.endEditing(true)
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
@@ -185,13 +185,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     func nextBtnAction() {
         
-        if (self.albumViewerContainer.hidden) {
-            
-            let vc = ComposeViewController()
-            vc.passedImage = self.imgToPass
-            self.navigationController?.pushViewController(vc, animated: true)
-            
-        } else {
+        if (self.albumViewerContainer.hidden == false) {
             
             let view = albumView.imageCropView
             
@@ -209,6 +203,34 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
             let vc = ComposeViewController()
             vc.passedImage = self.imgToPass
             self.navigationController?.pushViewController(vc, animated: true)
+            
+        } else if (self.cameraViewerContainer.hidden == false) {
+            
+            let vc = ComposeViewController()
+            vc.passedImage = self.imgToPass
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+        } else if (self.statusViewerContainer.hidden == false) {
+            
+            let vc = ComposeViewController()
+            vc.statusOnly = true
+            vc.passedHeader = "this is a test"
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+        } else {
+            
+        }
+        
+        
+        
+        
+        if (self.albumViewerContainer.hidden) {
+            
+            
+            
+        } else {
+            
+            
         }
         
         

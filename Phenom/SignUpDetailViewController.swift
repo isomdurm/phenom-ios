@@ -99,7 +99,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         self.sportsScrollView.contentSize = CGSize(width: totalWidth, height: self.sportsScrollView.frame.size.height)
         self.sportsScrollView.contentOffset = CGPoint(x: 0, y: 0)
         
-        self.createSportsScrollView()
+        self.buildSportsScrollView()
         
     }
 
@@ -113,7 +113,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
     }
     
-    func createSportsScrollView() {
+    func buildSportsScrollView() {
         
         for (index, element) in self.sportsArray.enumerate() {
             print("Item \(index): \(element)")

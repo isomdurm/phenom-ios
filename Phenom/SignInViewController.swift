@@ -190,20 +190,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
                     
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
                         let json = JSON(data: dataFromString)
-                        //self.access_token = json["access_token"].string!
-                        //print(self.access_token);
-                        
-                        print("json: \(json)")
-                        // success, save defaults
-                        
-                        
-                        // if 404 error
-                        
-                        if json["errorCode"].number == 404  {
+                        if json["errorCode"].number != nil  {
                             print("error: \(json["errorCode"].number)")
-                            
-                            
                             
                             return
                         }
@@ -273,9 +263,15 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    let json = JSON(data: dataFromString)
                     
-                    print("userJSON: \(json)")
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        
+                        return
+                    }
+
                     
                     // success, save user defaults
                     

@@ -10,6 +10,8 @@ import UIKit
 
 class MyActivityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
+    var navBarView = UIView()
+    
     let activityIndicator = UIActivityIndicatorView()
     var theTableView: UITableView = UITableView()
     var refreshControl:UIRefreshControl!
@@ -18,14 +20,31 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     var querySkip = Int()
     
+    var isPushed: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
+        self.navigationController?.navigationBarHidden = true
+        self.edgesForExtendedLayout = UIRectEdge.None
+        
+        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
         self.view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         
-        self.theTableView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height-64-49)
+        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
+        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        self.view.addSubview(self.navBarView)
+        
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        titleLbl.textAlignment = NSTextAlignment.Center
+        titleLbl.text = "NOTIFICATIONS"
+        titleLbl.font = UIFont.boldSystemFontOfSize(17)
+        titleLbl.textColor = UIColor.whiteColor()
+        self.navBarView.addSubview(titleLbl)
+        
+        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
         self.theTableView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
         self.theTableView.delegate = self
@@ -55,7 +74,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        
+        self.isPushed = false
     }
     
     func refreshControlAction() {
@@ -130,7 +149,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.isPushed = true
+        self.isPushed = true
         
         //let vc = DetailViewController()
         //vc.isGear = true
@@ -143,40 +162,5 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
-//    func findMomentsFeed() {
-//        
-//        let bearer = "Bearer O31VCYHpKrCvoqJ+3iN7MeH7b/Dvok6394eR+LZoKhI="
-//        
-//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        
-//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-//        
-//        guard let URL = NSURL(string: "https://api1.phenomapp.com:8081/moment/feed?date=1459203919289&amount=5") else {return}
-//        let request = NSMutableURLRequest(URL: URL)
-//        request.HTTPMethod = "GET"
-//        
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-//        request.addValue(bearer, forHTTPHeaderField: "Authorization")
-//        
-//        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-//            if (error == nil) {
-//                
-//                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//                
-//                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-//                    
-//                    self.momentsData = dataFromString
-//                    
-//                    self.theTableView.reloadData()
-//                    
-//                } else {
-//                    print("URL Session Task Failed: %@", error!.localizedDescription);
-//                }
-//            }
-//            
-//        })
-//        task.resume()
-//    }
 
 }

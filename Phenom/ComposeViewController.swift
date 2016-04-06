@@ -23,6 +23,9 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
     var theTextView = KMPlaceholderTextView()
     var textFieldAtTop: Bool = false
     
+    var statusOnly: Bool = false
+    var passedHeader = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -168,7 +171,12 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         theTextView.scrollsToTop = false
         self.theScrollView.addSubview(theTextView)
         
-        theTextView.text = ""
+        if (self.passedHeader == "") {
+            theTextView.text = ""
+        } else {
+            theTextView.text = self.passedHeader
+        }
+        //theTextView.text = ""
         theTextView.placeholder = "Add a caption..."
         
         theTextView.placeholderColor = UIColor.init(white: 1.0, alpha: 0.8)
@@ -203,6 +211,15 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardDidShow(_:)), name:UIKeyboardDidShowNotification ,object: nil)
         
+        //
+        
+        if (self.statusOnly) {
+            
+            self.theScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            self.theScrollView.scrollEnabled = false
+            self.theScrollView.bounces = false
+            
+        }
         
         
     }

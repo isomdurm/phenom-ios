@@ -14,17 +14,21 @@ class TimelineCell: UITableViewCell {
 
     var momentImgView = UIImageView()
     var musicLbl = UILabel()
-    var typeLbl = UILabel()
+    var modeLbl = UILabel()
     
     var heartImgView = UIImageView()
-    var commentImgView = UIImageView()
+    var commentBtn = UIButton()
+    
     var gearImgView = UIImageView()
     var gearLbl = UILabel()
+    var gearBtn = UIButton()
     
     var heartImgViewSmall = UIImageView()
     var likesLbl = UILabel()
+    var likesBtn = UIButton()
     
     var headerLbl = UILabel()
+    var headerBtn = UIButton()
 
     var commentLbl = UILabel()
     
@@ -32,49 +36,50 @@ class TimelineCell: UITableViewCell {
     var lineView2 = UIView()
     var lineView3 = UIView()
     
+    var singleTapRecognizer = UITapGestureRecognizer()
     var doubleTapRecognizer = UITapGestureRecognizer()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.momentImgView.backgroundColor = UIColor.lightGrayColor()
-        self.momentImgView.contentMode = UIViewContentMode.ScaleAspectFit //ScaleAspectFill
+        self.momentImgView.contentMode = .ScaleAspectFit //ScaleAspectFill
         self.momentImgView.userInteractionEnabled = true
         self.contentView.addSubview(self.momentImgView)
         self.momentImgView.layer.masksToBounds = true
         
-        self.musicLbl.backgroundColor = UIColor.clearColor()
+        self.musicLbl.backgroundColor = UIColor.blueColor()
         self.musicLbl.font = UIFont.systemFontOfSize(12)
         self.musicLbl.textColor = UIColor.whiteColor()
-        self.musicLbl.textAlignment = NSTextAlignment.Left
+        self.musicLbl.textAlignment = .Center
         self.musicLbl.numberOfLines = 1
-        self.musicLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        self.musicLbl.lineBreakMode = .ByTruncatingTail
         self.contentView.addSubview(self.musicLbl)
         
-        self.typeLbl.backgroundColor = UIColor.clearColor()
-        self.typeLbl.font = UIFont.systemFontOfSize(12)
-        self.typeLbl.textColor = UIColor.whiteColor()
-        self.typeLbl.textAlignment = NSTextAlignment.Center
-        self.typeLbl.numberOfLines = 1
-        self.typeLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        self.contentView.addSubview(self.typeLbl)
+        self.modeLbl.backgroundColor = UIColor.grayColor()
+        self.modeLbl.font = UIFont.systemFontOfSize(12)
+        self.modeLbl.textColor = UIColor.whiteColor()
+        self.modeLbl.textAlignment = .Center
+        self.modeLbl.numberOfLines = 1
+        self.modeLbl.lineBreakMode = .ByWordWrapping
+        self.contentView.addSubview(self.modeLbl)
         
         //
         
         self.heartImgView.backgroundColor = UIColor.redColor()
-        self.heartImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        self.heartImgView.contentMode = .ScaleAspectFill
         self.heartImgView.userInteractionEnabled = true
         self.contentView.addSubview(self.heartImgView)
         self.heartImgView.layer.masksToBounds = true
         
-        self.commentImgView.backgroundColor = UIColor.lightGrayColor()
-        self.commentImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        self.commentImgView.userInteractionEnabled = true
-        self.contentView.addSubview(self.commentImgView)
-        self.commentImgView.layer.masksToBounds = true
+        self.commentBtn = UIButton(type: .Custom)
+        self.commentBtn.backgroundColor = .whiteColor()
+        self.contentView.addSubview(self.commentBtn)
+        
+        //
         
         self.gearImgView.backgroundColor = UIColor.lightGrayColor()
-        self.gearImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        self.gearImgView.contentMode = .ScaleAspectFill
         self.gearImgView.userInteractionEnabled = true
         self.contentView.addSubview(self.gearImgView)
         self.gearImgView.layer.masksToBounds = true
@@ -82,15 +87,19 @@ class TimelineCell: UITableViewCell {
         self.gearLbl.backgroundColor = UIColor.whiteColor()
         self.gearLbl.font = UIFont.systemFontOfSize(12)
         self.gearLbl.textColor = UIColor.lightGrayColor()
-        self.gearLbl.textAlignment = NSTextAlignment.Left
+        self.gearLbl.textAlignment = .Left
         self.gearLbl.numberOfLines = 1
-        self.gearLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        self.gearLbl.lineBreakMode = .ByTruncatingTail
         self.contentView.addSubview(self.gearLbl)
+        
+        self.gearBtn = UIButton(type: .Custom)
+        self.gearBtn.backgroundColor = .clearColor()
+        self.contentView.addSubview(self.gearBtn)
         
         //
         
         self.heartImgViewSmall.backgroundColor = UIColor.lightGrayColor()
-        self.heartImgViewSmall.contentMode = UIViewContentMode.ScaleAspectFill
+        self.heartImgViewSmall.contentMode = .ScaleAspectFill
         self.heartImgViewSmall.userInteractionEnabled = true
         self.contentView.addSubview(self.heartImgViewSmall)
         self.heartImgViewSmall.layer.masksToBounds = true
@@ -98,28 +107,38 @@ class TimelineCell: UITableViewCell {
         self.likesLbl.backgroundColor = UIColor.clearColor()
         self.likesLbl.font = UIFont.systemFontOfSize(12)
         self.likesLbl.textColor = UIColor.whiteColor()
-        self.likesLbl.textAlignment = NSTextAlignment.Left
+        self.likesLbl.textAlignment = .Left
         self.likesLbl.numberOfLines = 1
-        self.likesLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        self.likesLbl.lineBreakMode = .ByTruncatingTail
         self.contentView.addSubview(self.likesLbl)
+        
+        self.likesBtn = UIButton(type: .Custom)
+        self.likesBtn.backgroundColor = UIColor.clearColor()
+        self.contentView.addSubview(self.likesBtn)
+        
+        //
         
         self.headerLbl.backgroundColor = UIColor.clearColor()
         self.headerLbl.font = UIFont.systemFontOfSize(17)
         self.headerLbl.textColor = UIColor.lightGrayColor()
-        self.headerLbl.textAlignment = NSTextAlignment.Left
+        self.headerLbl.textAlignment = .Left
         self.headerLbl.numberOfLines = 0
-        self.headerLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        self.headerLbl.lineBreakMode = .ByWordWrapping
         self.contentView.addSubview(self.headerLbl)
+        
+        self.headerBtn = UIButton(type: .Custom)
+        self.headerBtn.backgroundColor = .clearColor()
+        self.contentView.addSubview(self.headerBtn)
         
         //
         
-        self.commentLbl.backgroundColor = UIColor.clearColor()
-        self.commentLbl.font = UIFont.systemFontOfSize(12)
-        self.commentLbl.textColor = UIColor.whiteColor()
-        self.commentLbl.textAlignment = NSTextAlignment.Left
-        self.commentLbl.numberOfLines = 1
-        self.commentLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        self.contentView.addSubview(self.commentLbl)
+//        self.commentLbl.backgroundColor = UIColor.clearColor()
+//        self.commentLbl.font = UIFont.systemFontOfSize(12)
+//        self.commentLbl.textColor = UIColor.whiteColor()
+//        self.commentLbl.textAlignment = NSTextAlignment.Left
+//        self.commentLbl.numberOfLines = 1
+//        self.commentLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+//        self.contentView.addSubview(self.commentLbl)
         
         //
         
@@ -134,8 +153,13 @@ class TimelineCell: UITableViewCell {
         
         //
         
+        self.singleTapRecognizer.numberOfTapsRequired = 1
+        self.momentImgView.addGestureRecognizer(self.singleTapRecognizer)
+        
         self.doubleTapRecognizer.numberOfTapsRequired = 2
         self.momentImgView.addGestureRecognizer(self.doubleTapRecognizer)
+        
+        self.singleTapRecognizer.requireGestureRecognizerToFail(self.doubleTapRecognizer)
         
     }
     
@@ -148,13 +172,15 @@ class TimelineCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
         self.momentImgView.frame = CGRectMake(0, 0, self.cellWidth, self.cellWidth)
-        self.musicLbl.frame = CGRectMake(15, self.cellWidth-10-20-10-20, 200, 20)
-        self.typeLbl.frame = CGRectMake(15, self.cellWidth-10-20, 200, 20)
+        //self.musicLbl.frame = CGRectMake(15, self.cellWidth-10-20-10-20, 200, 20)
+        //self.modeLbl.frame = CGRectMake(15, self.cellWidth-10-20, 200, 20)
         
         //
         
         self.heartImgView.frame = CGRectMake(15, self.cellWidth+3, 44, 44)
-        self.commentImgView.frame = CGRectMake(15+44+15, self.cellWidth+3, 44, 44)
+        self.commentBtn.frame = CGRectMake(15+44+15, self.cellWidth+3, 44, 44)
+        
+        
         self.gearImgView.frame = CGRectMake(self.cellWidth/2+15, self.cellWidth+3, 44, 44)
         self.gearLbl.frame = CGRectMake(self.cellWidth/2+15+44+5, self.cellWidth+3, 44, 44)
         
@@ -162,14 +188,16 @@ class TimelineCell: UITableViewCell {
         
         self.heartImgViewSmall.frame = CGRectMake(15, self.cellWidth+50+3, 22, 22)
         self.likesLbl.frame = CGRectMake(15+22+5, self.cellWidth+50+3, 200, 22)
+        self.likesBtn.frame = CGRectMake(15+22+5, self.cellWidth+50+3, 200, 22)
         
         //
         
         self.headerLbl.frame = CGRectMake(15, self.cellWidth+50+3+22+3, self.cellWidth-15-15, 50)
+        self.headerBtn.frame = CGRectMake(15, self.cellWidth+50+3+22+3, self.cellWidth-15-15, 50)
         
         //
         
-        self.commentLbl.frame = CGRectMake(15, self.cellWidth+50+80+3, self.cellWidth-20-20, 28)
+        //self.commentLbl.frame = CGRectMake(15, self.cellWidth+50+80+3, self.cellWidth-20-20, 28)
         
         //
         

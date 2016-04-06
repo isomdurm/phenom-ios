@@ -1,6 +1,6 @@
 //
 //  Person.swift
-//  Breakfast
+//  Phenom
 //
 //  Created by Clay Zug on 10/20/15.
 //  Copyright © 2015 Clay Zug. All rights reserved.

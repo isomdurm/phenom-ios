@@ -19,6 +19,7 @@ class TimelineHeaderView: UIView {
     */
     
     var userImgView: UIImageView?
+    var userBtn: UIButton?
     var userLbl: UILabel?
     var timeImgView: UIImageView?
     var timeLbl: UILabel?
@@ -38,6 +39,11 @@ class TimelineHeaderView: UIView {
         self.userImgView = UIImageView()
         self.userImgView!.backgroundColor = UIColor.lightGrayColor()
         self.addSubview(self.userImgView!)
+        
+        self.userBtn = UIButton(type: UIButtonType.Custom)
+        self.userBtn!.backgroundColor = UIColor.clearColor()
+        self.addSubview(self.userBtn!)
+
         
         self.userLbl = UILabel()
         self.userLbl!.backgroundColor = UIColor.clearColor()
@@ -77,6 +83,7 @@ class TimelineHeaderView: UIView {
         self.bg!.frame = CGRectMake(0, 0, self.frame.size.width, 64)
         
         self.userImgView!.frame = CGRectMake(15, 10, 44, 44)
+        self.userBtn!.frame = CGRectMake(15, 10, self.frame.size.width/2, 44)
         self.userLbl!.frame = CGRectMake(15+44+10, 10, self.frame.size.width-20-44-20-20, 22)
         self.timeImgView!.frame = CGRectMake(15+44+10, 10+22+4, 14, 14)
         self.timeLbl!.frame = CGRectMake(15+44+10+14+8, 10+22, self.frame.size.width-20-44-20-20, 22)

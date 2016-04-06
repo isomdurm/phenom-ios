@@ -1,6 +1,6 @@
 //
 //  ProgressView.swift
-//  Breakfast
+//  Phenom
 //
 //  Created by Clay Zug on 11/9/15.
 //  Copyright © 2015 Clay Zug. All rights reserved.
