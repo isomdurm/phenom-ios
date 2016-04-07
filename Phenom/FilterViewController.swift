@@ -137,7 +137,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         // post nsnotification
         
         let dict = NSDictionary(dictionary:["type": self.passedType, "obj":self.selectedObj])
-        print("dict: \(dict)")
         
         NSNotificationCenter.defaultCenter().postNotificationName("ReloadExploreGearNotification", object: nil, userInfo: dict as [NSObject : AnyObject])
         
@@ -201,5 +200,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         
     }
+    
+    
 
 }

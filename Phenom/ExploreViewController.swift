@@ -190,7 +190,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear/featured") else {return}
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear?pageNumber=1") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "GET"
         
@@ -242,7 +242,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let gearArray = JSON(data: self.gearData)
         //let results = gearArray["results"]
         
-        print("results: \(gearArray["results"])")
+        //print("results: \(gearArray["results"])")
         
         for (index, element) in gearArray["results"].enumerate() {
             

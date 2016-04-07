@@ -78,7 +78,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.view.addGestureRecognizer(swipeBack)
         
         querySkip = 0
-        self.queryForActivity(querySkip)
+        self.queryForComments()
     }
     
     override func didReceiveMemoryWarning() {
@@ -105,10 +105,10 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         //newme!.saveInBackground()
         
         self.querySkip = 0
-        self.queryForActivity(self.querySkip)
+        self.queryForComments()
         
     }
-    func queryForActivity(skip:Int) {
+    func queryForComments() {
         
         
         // either way
@@ -123,7 +123,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func loadmoreAction() {
         self.querySkip = self.querySkip+10
-        self.queryForActivity(self.querySkip)
+        self.queryForComments()
     }
     
     func emptyTimelineBtnAction() {

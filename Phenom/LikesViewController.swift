@@ -64,6 +64,11 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         swipeRight.direction = .Right
         self.view.addGestureRecognizer(swipeRight)
         
+        //
+        
+        self.queryForLikes()
+        
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -120,7 +125,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     }
     
-    func findLikes() {
+    func queryForLikes() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let bearerToken = defaults.objectForKey("bearerToken") as! NSString

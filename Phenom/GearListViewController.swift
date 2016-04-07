@@ -101,13 +101,6 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         
     }
     
-    func queryForGear() {
-        
-        
-        
-        
-    }
-    
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -189,7 +182,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         return true
     }
     
-    func findGear() {
+    func queryForGear() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let bearerToken = defaults.objectForKey("bearerToken") as! NSString

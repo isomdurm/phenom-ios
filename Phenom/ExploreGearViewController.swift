@@ -11,8 +11,9 @@ import SwiftyJSON
 import Haneke
 
 class ExploreGearViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    var exploreGear = NSData()
+
+    var collectionsData = NSData()
+    var gearData = NSData()
     
     var navBarView = UIView()
     
@@ -22,6 +23,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     
     var sportObj = "ALL"
     var categoryObj = "ALL"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +70,6 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         self.theCollectionView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         self.theCollectionView.dataSource = self
         self.theCollectionView.delegate = self
-        //self.theCollectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         self.theCollectionView!.registerClass(GearCell.self, forCellWithReuseIdentifier: "Cell")
         self.theCollectionView.registerClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView")
         self.view.addSubview(self.theCollectionView)
@@ -128,7 +129,6 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     func reloadExploreGear(notification: NSNotification){
         
         let dict = notification.userInfo! as NSDictionary
-        print("hmm: \(dict)")
         
         let type = dict.objectForKey("type") as! String
         let obj = dict.objectForKey("obj") as! String
@@ -163,7 +163,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         //
         
-        self.theCollectionView.setContentOffset(CGPoint.zero, animated: true)
+        self.theCollectionView.setContentOffset(CGPoint.zero, animated: false)
         
         //
         
@@ -175,7 +175,19 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     
     func queryForGear() {
         
+        // blank collectionView
+        
+        self.gearData = NSData()
+        self.theCollectionView.reloadData()
        
+        // query with new params
+        
+        
+        
+        
+        // reload collectionView
+        
+        self.theCollectionView.reloadData()
         
     }
     
@@ -217,6 +229,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         
         
+        self.navigationController?.pushViewController(GearDetailViewController(), animated: true)
+        
     }
     
     
@@ -227,7 +241,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         // Create header
         if (kind == UICollectionElementKindSectionHeader) {
             // Create Header
-            let headerView : UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView", forIndexPath: indexPath) as UICollectionReusableView
+            let headerView : UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView", forIndexPath: indexPath)
             
             let headerHeight = self.theCollectionView.frame.size.width/2+70
             headerView.frame = CGRectMake(0, 0, self.theCollectionView.frame.size.width, headerHeight)
@@ -250,7 +264,6 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             sportBtn.titleLabel?.textAlignment = .Center
             sportBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sportBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-            sportBtn.setTitle("SPORT", forState: .Normal)
             headerView.addSubview(sportBtn)
             
             let categoryBtn = UIButton.init(type: UIButtonType.Custom)
@@ -264,8 +277,20 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             categoryBtn.titleLabel?.textAlignment = .Center
             categoryBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             categoryBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-            categoryBtn.setTitle("CATEGORY", forState: .Normal)
             headerView.addSubview(categoryBtn)
+            
+            
+            if (self.sportObj == "ALL") {
+                sportBtn.setTitle("SPORT", forState: .Normal)
+            } else {
+                sportBtn.setTitle(self.sportObj, forState: .Normal)
+            }
+            
+            if (self.categoryObj == "ALL") {
+                categoryBtn.setTitle("CATEGORY", forState: .Normal)
+            } else {
+                categoryBtn.setTitle(self.categoryObj, forState: .Normal)
+            }
             
             
             reusableView = headerView
@@ -317,6 +342,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         let vc = FilterViewController()
         vc.passedType = "SPORT"
+        vc.selectedObj = self.sportObj
         let newnav = UINavigationController(rootViewController: vc)
         self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
         
@@ -326,6 +352,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         let vc = FilterViewController()
         vc.passedType = "CATEGORY"
+        vc.selectedObj = self.categoryObj
         let newnav = UINavigationController(rootViewController: vc)
         self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
         
