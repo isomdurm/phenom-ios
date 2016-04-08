@@ -34,7 +34,7 @@ class TimelineCell: UITableViewCell {
     
     var lineView1 = UIView()
     var lineView2 = UIView()
-    var lineView3 = UIView()
+    var footerView = UIView()
     
     var singleTapRecognizer = UITapGestureRecognizer()
     var doubleTapRecognizer = UITapGestureRecognizer()
@@ -61,7 +61,7 @@ class TimelineCell: UITableViewCell {
         self.modeLbl.textColor = UIColor.whiteColor()
         self.modeLbl.textAlignment = .Center
         self.modeLbl.numberOfLines = 1
-        self.modeLbl.lineBreakMode = .ByWordWrapping
+        self.modeLbl.lineBreakMode = .ByTruncatingTail
         self.contentView.addSubview(self.modeLbl)
         
         //
@@ -93,7 +93,7 @@ class TimelineCell: UITableViewCell {
         self.contentView.addSubview(self.gearLbl)
         
         self.gearBtn = UIButton(type: .Custom)
-        self.gearBtn.backgroundColor = .clearColor()
+        self.gearBtn.backgroundColor = UIColor.clearColor()
         self.contentView.addSubview(self.gearBtn)
         
         //
@@ -148,8 +148,8 @@ class TimelineCell: UITableViewCell {
         self.lineView2.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
         self.contentView.addSubview(self.lineView2)
         
-        self.lineView3.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
-        self.contentView.addSubview(self.lineView3)
+        self.footerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        self.contentView.addSubview(self.footerView)
         
         //
         
@@ -183,12 +183,13 @@ class TimelineCell: UITableViewCell {
         
         self.gearImgView.frame = CGRectMake(self.cellWidth/2+15, self.cellWidth+3, 44, 44)
         self.gearLbl.frame = CGRectMake(self.cellWidth/2+15+44+5, self.cellWidth+3, 44, 44)
+        self.gearBtn.frame = CGRectMake(self.cellWidth/2+15, self.cellWidth+3, 88+5, 44)
         
         //
         
         self.heartImgViewSmall.frame = CGRectMake(15, self.cellWidth+50+3, 22, 22)
         self.likesLbl.frame = CGRectMake(15+22+5, self.cellWidth+50+3, 200, 22)
-        self.likesBtn.frame = CGRectMake(15+22+5, self.cellWidth+50+3, 200, 22)
+        self.likesBtn.frame = CGRectMake(15, self.cellWidth+50+3, 100, 22)
         
         //
         
@@ -205,7 +206,7 @@ class TimelineCell: UITableViewCell {
         
         self.lineView2.frame = CGRectMake(0, self.cellWidth+50, self.cellWidth, 0.5)
         
-        self.lineView3.frame = CGRectMake(0, self.cellWidth+50+80, self.cellWidth, 0.5)
+        self.footerView.frame = CGRectMake(0, self.cellWidth+50+80, self.cellWidth, 35)
         
         
 //        let font = UIFont.boldSystemFontOfSize(17)

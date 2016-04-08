@@ -38,7 +38,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
@@ -60,7 +60,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backBtnAction))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
         swipeRight.direction = .Right
         self.view.addGestureRecognizer(swipeRight)
         
@@ -75,55 +75,11 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         super.didReceiveMemoryWarning()
     }
     
-    func backBtnAction() {
+    func backAction() {
         self.navigationController?.popViewControllerAnimated(true)
         
     }
     
-    // TableViewDelegate
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
-        
-        //cell.detailTextLabel?.textColor = UIColor.init(white: 0.6, alpha: 1.0)
-        //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
-        
-        //cell.textLabel?.text = "text"
-     
-        return cell
-        
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        
-        let bgView = UIView()
-        bgView.backgroundColor = UIColor(red:39/255, green:39/255, blue:42/255, alpha:1)
-        cell.selectedBackgroundView = bgView
-        
-        
-    }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
-        
-        
-
-    }
     
     func queryForLikes() {
         
@@ -176,5 +132,55 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
             task.resume()
         })
     }
+    
+    
+    
+    // TableViewDelegate
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let moments = JSON(data: self.likesData)
+        return moments["results"].count
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 64
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+        
+        //cell.detailTextLabel?.textColor = UIColor.init(white: 0.6, alpha: 1.0)
+        //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
+        
+        //cell.textLabel?.text = "text"
+     
+        return cell
+        
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.selectionStyle = UITableViewCellSelectionStyle.Default
+        
+        let bgView = UIView()
+        bgView.backgroundColor = UIColor(red:39/255, green:39/255, blue:42/255, alpha:1)
+        cell.selectedBackgroundView = bgView
+        
+        
+    }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+        
+        
+
+    }
+    
+    
 
 }

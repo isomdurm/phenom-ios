@@ -7,18 +7,18 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Haneke
 
 class MyActivityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     var navBarView = UIView()
+
+    var myActivityData = NSData()
     
     let activityIndicator = UIActivityIndicatorView()
     var theTableView: UITableView = UITableView()
     var refreshControl:UIRefreshControl!
-    
-    var timelineArray = NSArray()
-    
-    var querySkip = Int()
     
     var isPushed: Bool = false
     
@@ -63,8 +63,12 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
         self.theTableView.addSubview(refreshControl)
         
-        querySkip = 0
-        self.queryForActivity(querySkip)
+        //
+        
+        self.queryForMyActivity()
+        
+        //
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -85,27 +89,82 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         //newme!.setObject(NSDate(), forKey: "lastvisiteddate")
         //newme!.saveInBackground()
         
-        self.querySkip = 0
-        self.queryForActivity(self.querySkip)
+        
+        self.queryForMyActivity()
         
     }
-    func queryForActivity(skip:Int) {
+    
+    func queryForMyActivity() {
+        
+        // https://api1.phenomapp.com:8081/notification?since=DATE&limit=INT
+        
+        let date = NSDate().timeIntervalSince1970 * 1000
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/notification?since=\(date)&limit=30") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+    
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
+                        self.myActivityData = dataFromString
+                        
+                        // done, reload tableView
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.refreshControl.endRefreshing()
+                            
+                            self.theTableView.reloadData()
+                            
+                        })
+                        
+                    } else {
+                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                        self.refreshControl.endRefreshing()
+                    }
+                } else {
+                    self.refreshControl.endRefreshing()
+                }
+            })
+            task.resume()
+            //
+        })
+        
         
         
         // either way
         self.activityIndicator.stopAnimating()
         self.activityIndicator.removeFromSuperview()
         
-        self.theTableView.reloadData()
-        
-        self.refreshControl.endRefreshing()
         
     }
     
-    func loadmoreAction() {
-        self.querySkip = self.querySkip+10
-        self.queryForActivity(self.querySkip)
-    }
     
     func emptyTimelineBtnAction() {
         
@@ -119,7 +178,8 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 25 // self.timelineArray.count
+        let moments = JSON(data: self.myActivityData)
+        return moments["results"].count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -131,7 +191,32 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         let cell:ActivityCell = ActivityCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         cell.cellWidth = self.view.frame.size.width
         
+        let moments = JSON(data: self.myActivityData)
+        
+        let results = moments["results"]
+        
+        if let id = results[indexPath.row]["source"]["imageUrl"].string {
+            let fileUrl = NSURL(string: id)
+            
+            cell.userImgView.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
+            cell.userImgView.setNeedsLayout()
+            
+            cell.userImgView.hnk_setImageFromURL(fileUrl!)
+        }
+        
+        if let id = results[indexPath.row]["message"].string {
+            
+            //cell.activityLbl.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
+            //cell.userImgView.setNeedsLayout()
+            
+            cell.activityLbl.text = id
+        }
+        
+        
+        
 //        let timeAgo = (UIApplication.sharedApplication().delegate as! AppDelegate).timeAgoSinceDate(NSDate(), numericDates: NSDate())
+        
+        
         
         return cell
     }

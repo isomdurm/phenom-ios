@@ -10,7 +10,26 @@ import UIKit
 
 class GearDetailViewController: UIViewController, UIScrollViewDelegate {
 
-    var passedGearId = NSString()
+    var id = ""
+    var sku = ""
+    var sourceId = ""
+    var sourceProductId = ""
+    
+    var name = ""
+    var brand = ""
+    var brandLogoImageUrl = ""
+    var productDescription = ""
+    var productUrl = ""
+    var imageUrl = ""
+
+    var lockerCount = NSNumber()
+    var trainingMomentCount = NSNumber()
+    var gamingMomentCount = NSNumber() 
+    var stylingMomentCount = NSNumber()
+    
+    var existsInLocker: Bool = false
+    
+    //
     
     var navBarView = UIView()
     
@@ -43,7 +62,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
-        titleLbl.text = "BRAND NAME"
+        titleLbl.text = brand.uppercaseString
         self.navBarView.addSubview(titleLbl)
         
         
@@ -71,10 +90,10 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         let padding = CGFloat(20)
         let textWidth = self.view.frame.size.width-30
         
-        let productName = NSString(string: "Junior supreme 170 ice hockey elbow pads").uppercaseString
-        let productDescription = NSString(string: "this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. ").uppercaseString
+//        let productName = NSString(string: "Junior supreme 170 ice hockey elbow pads").uppercaseString
+//        let productDescription = NSString(string: "this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. this is a test of the american broadcasting system. ").uppercaseString
         
-        let productNameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(productName, font: UIFont.boldSystemFontOfSize(20), width: textWidth)
+        let productNameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(name, font: UIFont.boldSystemFontOfSize(20), width: textWidth)
         let productDescriptionHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(productDescription, font: UIFont.boldSystemFontOfSize(14), width: textWidth)
         
         let totalHeight = squareHeight+buyHeight+brandHeight+statsHeight+padding+productNameHeight+padding+productDescriptionHeight+padding
@@ -99,18 +118,27 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         
         let brandImgView = UIImageView(frame: CGRectMake(0, gearScrollView.frame.size.height+70, gearScrollView.frame.size.width/2, 70))
         brandImgView.backgroundColor = UIColor.redColor()
+        
+        // IF brandLogoImageUrl than get it
+        
         self.theScrollView.addSubview(brandImgView)
         
         //
+        
         self.lockerBtn.frame = CGRectMake(gearScrollView.frame.size.width-10-50, gearScrollView.frame.size.height+70+10, 50, 50)
         self.lockerBtn.backgroundColor = UIColor.darkGrayColor()
         self.lockerBtn.addTarget(self, action:#selector(self.lockerBtnAction), forControlEvents: .TouchUpInside)
         self.theScrollView.addSubview(self.lockerBtn)
-        self.lockerBtn.selected = false
+        if (existsInLocker) {
+            self.lockerBtn.selected = true
+        } else {
+            self.lockerBtn.selected = false
+        }
+        
         //
         
         let lockerNumLbl = UILabel(frame: CGRectMake(gearScrollView.frame.size.width/2+10, gearScrollView.frame.size.height+70+10, (gearScrollView.frame.size.width/2)/2, 40))
-        lockerNumLbl.text = "3"
+        lockerNumLbl.text = String(lockerCount)
         lockerNumLbl.textColor = UIColor.whiteColor()
         lockerNumLbl.textAlignment = .Left
         lockerNumLbl.font = UIFont.boldSystemFontOfSize(30)
@@ -124,7 +152,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         self.theScrollView.addSubview(lockerLbl)
         
         let trainingNumLbl = UILabel(frame: CGRectMake(gearScrollView.frame.size.width/2-40-80, gearScrollView.frame.size.height+70+70+10, 80, 40))
-        trainingNumLbl.text = "1"
+        trainingNumLbl.text = String(trainingMomentCount)
         trainingNumLbl.textColor = UIColor.whiteColor()
         trainingNumLbl.textAlignment = .Center
         trainingNumLbl.font = UIFont.boldSystemFontOfSize(30)
@@ -138,7 +166,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         self.theScrollView.addSubview(trainingLbl)
         
         let gamingNumLbl = UILabel(frame: CGRectMake(gearScrollView.frame.size.width/2-40, gearScrollView.frame.size.height+70+70+10, 80, 40))
-        gamingNumLbl.text = "2"
+        gamingNumLbl.text = String(gamingMomentCount)
         gamingNumLbl.textColor = UIColor.whiteColor()
         gamingNumLbl.textAlignment = .Center
         gamingNumLbl.font = UIFont.boldSystemFontOfSize(30)
@@ -152,7 +180,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         self.theScrollView.addSubview(gamingLbl)
         
         let stylingNumLbl = UILabel(frame: CGRectMake(gearScrollView.frame.size.width/2+40, gearScrollView.frame.size.height+70+70+10, 80, 40))
-        stylingNumLbl.text = "3"
+        stylingNumLbl.text = String(stylingMomentCount)
         stylingNumLbl.textColor = UIColor.whiteColor()
         stylingNumLbl.textAlignment = .Center
         stylingNumLbl.font = UIFont.boldSystemFontOfSize(30)
@@ -167,7 +195,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         
         
         let productNameLbl = UILabel(frame: CGRectMake(15, gearScrollView.frame.size.height+70+70+70+padding, textWidth, productNameHeight))
-        productNameLbl.text = productName
+        productNameLbl.text = name
         productNameLbl.textColor = UIColor.whiteColor()
         productNameLbl.font = UIFont.boldSystemFontOfSize(20)
         productNameLbl.lineBreakMode = .ByWordWrapping

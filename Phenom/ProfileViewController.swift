@@ -14,10 +14,23 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var navBarView = UIView()
     
-    var userData = NSData()
     var momentsData = NSData()
+    var gearData = NSData()
     
-    var passedUserId = NSString()
+    var userId = ""
+    var username = ""
+    var imageUrl = ""
+    var firstName = ""
+    var lastName = ""
+    var sports = []
+    var hometown = ""
+    var bio = ""
+    var userFollows: Bool = false
+    var lockerProductCount = NSNumber()
+    var followingCount = NSNumber()
+    var followersCount = NSNumber()
+    var momentCount = NSNumber()
+    
     
     var theTableView: UITableView = UITableView()
     var refreshControl:UIRefreshControl!
@@ -30,6 +43,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var descriptionLbl = UILabel()
     var fansNumBtn = UIButton.init(type: UIButtonType.Custom)
     var followingNumBtn = UIButton.init(type: UIButtonType.Custom)
+    
+    let inviteBtn = UIButton.init(type: UIButtonType.Custom)
     
     var isPushed: Bool = false
     
@@ -56,7 +71,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "USERNAME"
+        titleLbl.text = username.uppercaseString
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
         self.navBarView.addSubview(titleLbl)
@@ -90,7 +105,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let sportHomeTownHeight = CGFloat(30)
         
         //let bio = "This is a test of the american broadcasting system of america americana this is a test of the american broadcasting system of americaaaaaa" //"Just getting warmed up!"
-        let bio = "this is a test of the american broadcasting system of american americana"
+        //let bio = "this is a test of the american broadcasting system of american americana"
         
         let bioWidth = self.view.frame.size.width-50
         let bioHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(bio, font: UIFont.boldSystemFontOfSize(14), width: bioWidth)+10
@@ -116,7 +131,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         nameLbl.textAlignment = .Center
         nameLbl.font = UIFont.boldSystemFontOfSize(24)
         nameLbl.textColor = UIColor.whiteColor()
-        nameLbl.text = "FIRST LAST"
+        nameLbl.text = ""//"FIRST LAST"
         profileContainerView.addSubview(nameLbl)
         
         sportHometownLbl.frame = CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height, headerViewWidth, sportHomeTownHeight)
@@ -124,7 +139,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         sportHometownLbl.textAlignment = .Center
         sportHometownLbl.font = UIFont.boldSystemFontOfSize(13)
         sportHometownLbl.textColor = UIColor.whiteColor()
-        sportHometownLbl.text = "SPORT IN HOMETOWN, CA"
+        sportHometownLbl.text = ""//"SPORT IN HOMETOWN, CA"
         profileContainerView.addSubview(sportHometownLbl)
         
         descriptionLbl.frame = CGRectMake((headerViewWidth/2)-(bioWidth/2), profileImgView.frame.origin.y+profileImgView.frame.size.height+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, bioWidth, bioHeight)
@@ -154,7 +169,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         fansNumBtn.titleLabel?.textAlignment = .Center
         fansNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         fansNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        fansNumBtn.setTitle("11", forState: UIControlState.Normal)
+        fansNumBtn.setTitle("0", forState: UIControlState.Normal)
         fansFollowingInviteContainerView.addSubview(fansNumBtn)
         
         let fansBtn = UIButton.init(type: UIButtonType.Custom)
@@ -181,7 +196,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         followingNumBtn.titleLabel?.textAlignment = .Center
         followingNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         followingNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        followingNumBtn.setTitle("12", forState: .Normal)
+        followingNumBtn.setTitle("0", forState: .Normal)
         fansFollowingInviteContainerView.addSubview(followingNumBtn)
         
         let followingBtn = UIButton.init(type: UIButtonType.Custom)
@@ -202,7 +217,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let half = headerViewWidth/2
         let dif = half - inviteBtnWidth
         
-        let inviteBtn = UIButton.init(type: UIButtonType.Custom)
         inviteBtn.frame = CGRectMake(headerViewWidth/2+(dif/2), 0, inviteBtnWidth, fansHeight)
         inviteBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
         inviteBtn.addTarget(self, action:#selector(self.inviteBtnAction), forControlEvents:.TouchUpInside)
@@ -213,7 +227,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         inviteBtn.titleLabel?.textAlignment = .Center
         inviteBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         inviteBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        inviteBtn.setTitle("INVITE", forState: .Normal)
         fansFollowingInviteContainerView.addSubview(inviteBtn)
         
         headerContainerView.addSubview(fansFollowingInviteContainerView)
@@ -240,9 +253,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         
-        
-        
-        
         let line:UIView = UIView()
         line.frame = CGRectMake(0, headerViewHeight+64-0.5, headerViewWidth, 0.5)
         line.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
@@ -254,9 +264,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
         self.theTableView.addSubview(refreshControl)
         
-        print("passedUserId: \(passedUserId)")
+        //
         
-        self.getUser()
+        print("userId: \(userId)")
+        
+        self.queryForUser()
+        
+        //
         
     }
     
@@ -271,63 +285,19 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.isPushed = false
     }
     
-    func getUser() {
+    func queryForUser() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let userId = defaults.stringForKey("userId")! as NSString
+        let uid = defaults.stringForKey("userId")! as NSString
         
-        if (self.passedUserId == userId) {
+        if (userId == uid) {
             
             // set user base on defaults
             
             print("currentUser")
             
-            // profileImgView
-            // nameLbl
-            // sportHometownLbl
-            // descriptionLbl
-            // fansNumBtn
-            // followingNumBtn
+            inviteBtn.setTitle("INVITE", forState: .Normal)
             
-//            defaults.setObject(userId, forKey: "userId")
-//            defaults.setObject(username, forKey: "username")
-//            defaults.setObject(hometown, forKey: "hometown")
-//            defaults.setObject(imageUrl, forKey: "imageUrl")
-//            defaults.setObject(description, forKey: "description")
-//            defaults.setObject(firstName, forKey: "firstName")
-//            defaults.setObject(lastName, forKey: "lastName")
-//            defaults.setObject(followersCount, forKey: "followersCount")
-//            defaults.setObject(followingCount, forKey: "followingCount")
-//            
-//            defaults.setObject(momentCount, forKey: "momentCount")
-//            defaults.setObject(lockerProductCount, forKey: "lockerProductCount")
-//            
-//            defaults.setObject(sportsArray, forKey: "sports")
-            
-            //let imageUrl = defaults.objectForKey("imageUrl") as! String
-            //let username = defaults.objectForKey("username") as! String
-            let firstName = defaults.objectForKey("firstName") as! String
-            let lastName = defaults.objectForKey("lastName") as! String
-            let sports = defaults.objectForKey("sports") as! NSArray
-            let hometown = defaults.objectForKey("hometown") as! String
-            let description = defaults.objectForKey("description") as! String
-            let followersNum = defaults.objectForKey("followersCount") as! NSNumber
-            let followingNum = defaults.objectForKey("followingCount") as! NSNumber
-            
-            
-            print("sports: \(sports)")
-            let sportsStr = sports.componentsJoinedByString(", ")
-            //let sportsStr = sports.description
-            //let momentNum = defaults.objectForKey("momentCount") as! NSNumber
-            //let gearNum = defaults.objectForKey("lockerProductCount") as! NSNumber
-            
-            self.nameLbl.text = String("\(firstName) \(lastName)").uppercaseString
-            self.sportHometownLbl.text = String("\(sportsStr) IN \(hometown)").uppercaseString
-            self.descriptionLbl.text = "\(description)"
-            self.fansNumBtn.setTitle(String("\(followersNum)").uppercaseString, forState: .Normal)
-            self.followingNumBtn.setTitle(String("\(followingNum)").uppercaseString, forState: .Normal)
-            
-            self.queryForTimeline()
             
         } else {
             
@@ -338,71 +308,43 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             backBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             backBtn.backgroundColor = UIColor.redColor()
-            backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
             self.navBarView.addSubview(backBtn)
             
-            let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.backBtnAction))
+            let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
             rightSwipe.direction = .Right
             self.view.addGestureRecognizer(rightSwipe)
             
             //
-            // query for user?
-            // or query for moments and use a single user dictionary from moment data?
             
-            let defaults = NSUserDefaults.standardUserDefaults()
-            let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+            inviteBtn.setTitle("FOLLOW", forState: .Normal)
             
-            let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
             
-            let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-            
-            guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/:id?\(self.passedUserId)") else {return}
-            let request = NSMutableURLRequest(URL: URL)
-            request.HTTPMethod = "GET"
-            
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-            request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                    if (error == nil) {
-                        
-                        let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                        
-                        if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                            
-                            let json = JSON(data: dataFromString)
-                            if json["errorCode"].number != 200  {
-                                print("json: \(json)")
-                                print("error: \(json["errorCode"].number)")
-                                
-                                return
-                            }
-                            
-                            self.userData = dataFromString
-                            let user = JSON(data: self.userData)
-                            print("user: \(user)")
-                                                        
-                            // populate headerView and stats tab
-                            
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                
-                            })
-                            
-                        } else {
-                            // print("URL Session Task Failed: %@", error!.localizedDescription);
-                            self.refreshControl.endRefreshing()
-                        }
-                    } else {
-                        self.refreshControl.endRefreshing()
-                    }
-                })
-                task.resume()
-                //
-            })
         }
+        
+        
+        
+        //
+        
+        self.nameLbl.text = String("\(firstName) \(lastName)").uppercaseString
+        
+        let sportsStr = sports.componentsJoinedByString(", ")
+        self.sportHometownLbl.text = String("\(sportsStr) IN \(hometown)").uppercaseString
+        
+        if (bio == "") {
+            self.descriptionLbl.text = "Just getting warmed up!"
+        } else {
+            self.descriptionLbl.text = "\(bio)"
+        }
+        
+        self.fansNumBtn.setTitle(String("\(followersCount)").uppercaseString, forState: .Normal)
+        self.followingNumBtn.setTitle(String("\(followingCount)").uppercaseString, forState: .Normal)
+        
+        //
+        
+        self.queryForTimeline()
+        
+        
         
     }
     
@@ -462,7 +404,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //(UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.inviteFriends()
     }
     
-    func backBtnAction() {
+    func backAction() {
         self.navigationController?.popViewControllerAnimated(true)
     }
     

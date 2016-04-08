@@ -35,7 +35,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
@@ -57,7 +57,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backBtnAction))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
         swipeRight.direction = .Right
         self.view.addGestureRecognizer(swipeRight)
         
@@ -67,7 +67,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         super.didReceiveMemoryWarning()
     }
     
-    func backBtnAction() {
+    func backAction() {
         self.navigationController?.popViewControllerAnimated(true)
         
     }
@@ -106,7 +106,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch (section) {
-        case 0: return 1
+        case 0: return 9
         case 1: return 2
         case 2: return 4
         case 3: return 2
@@ -114,7 +114,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default: return 0}
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64
+        return 50
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -124,13 +124,72 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
         
         //cell.textLabel?.text = "text"
-        cell.textLabel?.font = UIFont.systemFontOfSize(17)
+        cell.textLabel?.font = UIFont.systemFontOfSize(15)
         cell.textLabel?.textColor = UIColor.init(white: 1.0, alpha: 1.0)
+        cell.detailTextLabel?.font = UIFont.systemFontOfSize(15)
+        
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as String
+        let firstName = defaults.objectForKey("firstName") as! String
+        let lastName = defaults.objectForKey("lastName") as! String
+        let sports = defaults.objectForKey("sports") as! NSArray
+        let hometown = defaults.objectForKey("hometown") as! String
         
         if (indexPath.section==0 && indexPath.row==0) {
             
-            cell.textLabel!.text = "Edit Profile"
+            cell.textLabel!.text = "Name"
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = "\(firstName) \(lastName)"
+            
+        } else if (indexPath.section==0 && indexPath.row==1) {
+            
+            cell.textLabel!.text = "Username"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = "\(username)"
+            
+        } else if (indexPath.section==0 && indexPath.row==2) {
+            
+            cell.textLabel!.text = "Birthday"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = "testing"
+            
+        } else if (indexPath.section==0 && indexPath.row==3) {
+            
+            cell.textLabel!.text = "Hometown"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = "\(hometown)"
+            
+        } else if (indexPath.section==0 && indexPath.row==4) {
+            
+            cell.textLabel!.text = "Sports"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            let sportsStr = sports.componentsJoinedByString(", ")
+            cell.detailTextLabel?.text = "\(sportsStr)"
+            
+        } else if (indexPath.section==0 && indexPath.row==5) {
+            
+            cell.textLabel!.text = "Bio"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = ""
+            
+        } else if (indexPath.section==0 && indexPath.row==6) {
+            
+            cell.textLabel!.text = "Email"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = "testing"
+            
+        } else if (indexPath.section==0 && indexPath.row==7) {
+            
+            cell.textLabel!.text = "Password"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = ""
+            
+        } else if (indexPath.section==0 && indexPath.row==8) {
+            
+            cell.textLabel!.text = "Notifications"
+            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.detailTextLabel?.text = ""
             
         } else if (indexPath.section==1 && indexPath.row==0) {
             
@@ -207,7 +266,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if (indexPath.section == 4 && indexPath.row == 0) {
             
-            self.logout()
+            self.areyousureyouwanttologout()
         }
     }
     
@@ -216,7 +275,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
         let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))")
         vc.setInitialText(textToShare)
-        vc.addURL(NSURL(string: "http://Phenombeta.com"))
+        vc.addURL(NSURL(string: "http://phenom.co"))
         presentViewController(vc, animated: true, completion: nil)
     }
     
@@ -224,14 +283,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
         let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))")
         vc.setInitialText(textToShare)
-        vc.addURL(NSURL(string: "http://phenomapp.com"))
+        vc.addURL(NSURL(string: "http://phenom.co"))
         presentViewController(vc, animated: true, completion: nil)
     }
     
     func inviteViaMessages() {
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username") / http://phenomapp.com)")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username") / http://phenom.co)")
         messageComposeVC.body = textToShare
     }
     
@@ -240,7 +299,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         mailComposerVC.mailComposeDelegate = self
         mailComposerVC.setToRecipients([])
         mailComposerVC.setSubject("Invite to Phenom")
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))\n\nhttp://phenomapp.com")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))\n\nhttp://phenom.co")
         mailComposerVC.setMessageBody(textToShare, isHTML: false)
     }
     
@@ -253,12 +312,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     
-    func logout() {
-        
-        // are you sure?
-        
-        (UIApplication.sharedApplication().delegate as! AppDelegate).logoutAction()
-        
+    func areyousureyouwanttologout() {
+        let alertController = UIAlertController(title:"Are you sure?", message:nil, preferredStyle:.Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        }
+        let logoutAction = UIAlertAction(title: "Log Out", style: .Default) { (action) in
+            
+            (UIApplication.sharedApplication().delegate as! AppDelegate).logoutAction()
+        }
+        alertController.addAction(logoutAction)
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
  
 

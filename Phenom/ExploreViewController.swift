@@ -97,9 +97,19 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, headerHeight))
         self.theTableView.tableHeaderView?.backgroundColor = UIColor.lightGrayColor()
         
-        let heroView = UIView(frame: CGRectMake(0, 0, (self.theTableView.tableHeaderView?.frame.size.width)!, heroHeight))
-        heroView.backgroundColor = UIColor.lightGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(heroView)
+        let heroBtn = UIButton.init(type: UIButtonType.Custom)
+        heroBtn.frame = CGRectMake(0, 0, (self.theTableView.tableHeaderView?.frame.size.width)!, heroHeight)
+        heroBtn.backgroundColor = UIColor.lightGrayColor()
+        heroBtn.addTarget(self, action:#selector(self.heroBtnAction), forControlEvents:.TouchUpInside)
+        heroBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(30)
+        heroBtn.titleLabel?.numberOfLines = 1
+        heroBtn.contentHorizontalAlignment = .Center
+        heroBtn.contentVerticalAlignment = .Center
+        heroBtn.titleLabel?.textAlignment = .Center
+        heroBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        heroBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        heroBtn.setTitle("POPULAR TODAY", forState: .Normal)
+        self.theTableView.tableHeaderView?.addSubview(heroBtn)
         
         let gearContainerView = UIView(frame: CGRectMake(0, heroHeight, self.view.frame.size.width, gearContainerHeight))
         gearContainerView.backgroundColor = UIColor.darkGrayColor()
@@ -246,11 +256,11 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         for (index, element) in gearArray["results"].enumerate() {
             
-            print("Item \(index): \(element)")
+            //print("Item \(index): \(element)")
             
             //let sport = element as! String
             let i = CGFloat(index)
-            let x = 20+(100*i)
+            let x = 20+(140*i)
             let pad = 2*i
             let f = CGRectMake(x+pad, 0, 140, 140)
             
@@ -278,6 +288,10 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             
             self.gearScrollView.addSubview(gearBtn)
             
+            if (index == 9) {
+                break
+            }
+            
         }
         
         
@@ -285,7 +299,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // now load people ??? on main thread
         
-        //
+        self.queryForPeople()
         
     }
     
@@ -424,6 +438,10 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    func heroBtnAction() {
+        self.navigationController?.pushViewController(PopularMomentsViewController(), animated: true)
+    }
+    
     func exploreGearBtnAction() {
         self.navigationController?.pushViewController(ExploreGearViewController(), animated: true)
     }
@@ -433,6 +451,60 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func gearBtnAction(sender: UIButton) {
+        print("sender.tag: \(sender.tag)")
+        
+        // get specific gear obj
+        
+        let gearArray = JSON(data: self.gearData)
+        let results = gearArray["results"]
+        
+        
+        
+        let vc = GearDetailViewController()
+        
+        
+        let id = results[sender.tag]["id"].number
+        let sku = results[sender.tag]["sku"].string
+        let sourceId = results[sender.tag]["sourceId"].number
+        let sourceProductId = results[sender.tag]["sourceProductId"].string
+        
+        let name = results[sender.tag]["name"].string
+        let brand = results[sender.tag]["brand"].string
+
+        let productDescription = results[sender.tag]["description"].string
+        let productUrl = results[sender.tag]["productUrl"].string
+        let imageUrl = results[sender.tag]["imageUrl"].string
+        
+        let lockerCount = results[sender.tag]["lockerCount"].number
+        let trainingMomentCount = results[sender.tag]["trainingMomentCount"].number
+        let gamingMomentCount = results[sender.tag]["gamingMomentCount"].number
+        let stylingMomentCount = results[sender.tag]["stylingMomentCount"].number
+        
+        let existsInLocker = results[sender.tag]["existsInLocker"].bool
+        
+        
+        vc.id = "\(id!)"
+        vc.sku = sku!
+        vc.sourceId = "\(sourceId!)"
+        vc.sourceProductId = sourceProductId!
+        vc.name = name!
+        vc.brand = brand!
+        
+        if let brandLogoImageUrl = results[sender.tag]["brandLogoImageUrl"].string {
+            vc.brandLogoImageUrl = brandLogoImageUrl
+        }
+        
+        vc.productDescription = productDescription!
+        vc.productUrl = productUrl!
+        vc.imageUrl = imageUrl!
+        vc.lockerCount = lockerCount!
+        vc.trainingMomentCount = trainingMomentCount!
+        vc.gamingMomentCount = gamingMomentCount!
+        vc.stylingMomentCount = stylingMomentCount!
+        vc.existsInLocker = existsInLocker!
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+        
         
     }
 

@@ -37,7 +37,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.blueColor()
-        backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
@@ -190,7 +190,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         usernameField.becomeFirstResponder()
     }
     
-    func backBtnAction() {
+    func backAction() {
         self.view.endEditing(true)
         self.navigationController?.popViewControllerAnimated(true)
     }

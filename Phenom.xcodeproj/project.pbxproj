@@ -69,6 +69,8 @@
 		5768B9441CB32033002E9664 /* SignUpEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B9431CB32033002E9664 /* SignUpEmailViewController.swift */; };
 		5768B9461CB43BE9002E9664 /* GearListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B9451CB43BE9002E9664 /* GearListViewController.swift */; };
 		5768B9481CB58127002E9664 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B9471CB58127002E9664 /* FilterViewController.swift */; };
+		5768B94C1CB6CA48002E9664 /* PopularMomentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */; };
+		5768B94E1CB715C9002E9664 /* PeopleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -168,6 +170,8 @@
 		5768B9431CB32033002E9664 /* SignUpEmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpEmailViewController.swift; sourceTree = "<group>"; };
 		5768B9451CB43BE9002E9664 /* GearListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearListViewController.swift; sourceTree = "<group>"; };
 		5768B9471CB58127002E9664 /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopularMomentsViewController.swift; sourceTree = "<group>"; };
+		5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleListViewController.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -329,10 +333,12 @@
 				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
 				57C6DD081CA46F2A00B939DF /* ProfileViewController.swift */,
 				570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */,
+				5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */,
 				5768B9391CB217F1002E9664 /* ExplorePeopleViewController.swift */,
 				5768B9411CB2247A002E9664 /* GearDetailViewController.swift */,
 				5768B9451CB43BE9002E9664 /* GearListViewController.swift */,
 				5768B9371CB217DA002E9664 /* ExploreGearViewController.swift */,
+				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
 				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
 				57C6DD021CA46E4700B939DF /* TimelineViewController.swift */,
 				57C6DD001CA46E3000B939DF /* TabBarViewController.swift */,
@@ -659,6 +665,8 @@
 				5768B9421CB2247A002E9664 /* GearDetailViewController.swift in Sources */,
 				57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */,
 				5768B93C1CB218F4002E9664 /* SignUpDetailViewController.swift in Sources */,
+				5768B94E1CB715C9002E9664 /* PeopleListViewController.swift in Sources */,
+				5768B94C1CB6CA48002E9664 /* PopularMomentsViewController.swift in Sources */,
 				5768B9341CB21753002E9664 /* LikesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -36,7 +36,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.blueColor()
-        backBtn.addTarget(self, action:#selector(self.backBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
@@ -108,7 +108,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         // Dispose of any resources that can be recreated.
     }
     
-    func backBtnAction() {
+    func backAction() {
         self.navigationController?.popViewControllerAnimated(true)
         
     }

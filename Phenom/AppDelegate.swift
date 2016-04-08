@@ -125,8 +125,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         
         self.profilevc = ProfileViewController()
         let defaults = NSUserDefaults.standardUserDefaults()
-        let userId = defaults.stringForKey("userId")! as NSString
-        self.profilevc!.passedUserId = userId
+        let userId = defaults.stringForKey("userId")! as String
+        let username = defaults.stringForKey("username")! as String
+        self.profilevc!.userId = userId
+        self.profilevc!.username = username
+        self.profilevc!.firstName = defaults.objectForKey("firstName") as! String
+        self.profilevc!.lastName = defaults.objectForKey("lastName") as! String
+        self.profilevc!.sports = defaults.objectForKey("sports") as! NSArray
+        self.profilevc!.hometown = defaults.objectForKey("hometown") as! String
+        self.profilevc!.bio = defaults.objectForKey("description") as! String
+        self.profilevc!.followersCount = defaults.objectForKey("followersCount") as! NSNumber
+        self.profilevc!.followingCount = defaults.objectForKey("followingCount") as! NSNumber
         //self.profilevc!.showingTabbar = true
         
         let nav1 = UINavigationController(rootViewController: self.timelinevc!)

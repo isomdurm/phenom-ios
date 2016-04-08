@@ -12,19 +12,15 @@ import Haneke
 
 class CommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
-    var comments = NSData()
+    var commentsData = NSData()
     
     var passedMomentId = NSString()
     
     var navBarView = UIView()
     
-    let activityIndicator = UIActivityIndicatorView()
     var theTableView: UITableView = UITableView()
     var refreshControl:UIRefreshControl!
     
-    var timelineArray = NSArray()
-    
-    var querySkip = Int()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +43,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 0, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "COMMENTS"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
@@ -63,11 +59,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(self.theTableView)
         self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
-        
-        self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        self.activityIndicator.center = CGPoint(x: self.view.frame.size.width/2, y: 30)
-        self.view.addSubview(self.activityIndicator)
-        self.activityIndicator.startAnimating()
+
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
@@ -77,7 +69,6 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         swipeBack.direction = .Right
         self.view.addGestureRecognizer(swipeBack)
         
-        querySkip = 0
         self.queryForComments()
     }
     
@@ -104,27 +95,10 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         //newme!.setObject(NSDate(), forKey: "lastvisiteddate")
         //newme!.saveInBackground()
         
-        self.querySkip = 0
         self.queryForComments()
-        
-    }
-    func queryForComments() {
-        
-        
-        // either way
-        self.activityIndicator.stopAnimating()
-        self.activityIndicator.removeFromSuperview()
-        
-        self.theTableView.reloadData()
-        
-        self.refreshControl.endRefreshing()
         
     }
     
-    func loadmoreAction() {
-        self.querySkip = self.querySkip+10
-        self.queryForComments()
-    }
     
     func emptyTimelineBtnAction() {
         
@@ -138,7 +112,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15 // self.timelineArray.count
+        return 15 
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -176,7 +150,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    func findComments() {
+    func queryForComments() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let bearerToken = defaults.objectForKey("bearerToken") as! NSString
@@ -202,7 +176,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                         
-                        let json = JSON(data: dataFromString)
+                        let json = JSON(data: dataFromString) 
                         if json["errorCode"].number != 200  {
                             print("json: \(json)")
                             print("error: \(json["errorCode"].number)")
@@ -210,9 +184,15 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
                             return
                         }
                         
-                        self.comments = dataFromString
+                        self.commentsData = dataFromString
                         
-                        self.theTableView.reloadData()
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.theTableView.reloadData()
+                            
+                            self.refreshControl.endRefreshing()
+                            
+                        })
                         
                     } else {
                         print("URL Session Task Failed: %@", error!.localizedDescription);
