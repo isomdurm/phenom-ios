@@ -29,43 +29,43 @@ class TimelineHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.frame = frame
-        self.backgroundColor = UIColor.blackColor()
+        self.frame = frame 
+        backgroundColor = UIColor.blackColor()
         
-        self.bg = UIView()
-        self.bg!.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.addSubview(self.bg!)
+        bg = UIView()
+        bg!.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        addSubview(bg!)
         
-        self.userImgView = UIImageView()
-        self.userImgView!.backgroundColor = UIColor.lightGrayColor()
-        self.addSubview(self.userImgView!)
+        userImgView = UIImageView()
+        userImgView!.backgroundColor = UIColor.lightGrayColor()
+        addSubview(userImgView!)
         
-        self.userBtn = UIButton(type: UIButtonType.Custom)
-        self.userBtn!.backgroundColor = UIColor.clearColor()
-        self.addSubview(self.userBtn!)
+        userBtn = UIButton(type: UIButtonType.Custom)
+        userBtn!.backgroundColor = UIColor.clearColor()
+        addSubview(userBtn!)
 
         
-        self.userLbl = UILabel()
-        self.userLbl!.backgroundColor = UIColor.clearColor()
-        self.userLbl!.font = UIFont.boldSystemFontOfSize(18)
-        self.userLbl!.textColor = UIColor.whiteColor()
-        self.userLbl!.textAlignment = NSTextAlignment.Left
-        self.userLbl!.numberOfLines = 1
-        self.userLbl!.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-        self.addSubview(self.userLbl!)
+        userLbl = UILabel()
+        userLbl!.backgroundColor = UIColor.clearColor()
+        userLbl!.font = UIFont.boldSystemFontOfSize(18)
+        userLbl!.textColor = UIColor.whiteColor()
+        userLbl!.textAlignment = NSTextAlignment.Left
+        userLbl!.numberOfLines = 1
+        userLbl!.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        addSubview(userLbl!)
         
-        self.timeImgView = UIImageView()
-        self.timeImgView!.backgroundColor = UIColor.lightGrayColor()
-        self.addSubview(self.timeImgView!)
+        timeImgView = UIImageView()
+        timeImgView!.backgroundColor = UIColor.lightGrayColor()
+        addSubview(timeImgView!)
         
-        self.timeLbl = UILabel()
-        self.timeLbl!.backgroundColor = UIColor.clearColor()
-        self.timeLbl!.font = UIFont.boldSystemFontOfSize(12)
-        self.timeLbl!.textColor = UIColor.lightGrayColor()
-        self.timeLbl!.textAlignment = NSTextAlignment.Left
-        self.timeLbl!.numberOfLines = 1
-        self.timeLbl!.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-        self.addSubview(self.timeLbl!)
+        timeLbl = UILabel()
+        timeLbl!.backgroundColor = UIColor.clearColor()
+        timeLbl!.font = UIFont.boldSystemFontOfSize(12)
+        timeLbl!.textColor = UIColor.lightGrayColor()
+        timeLbl!.textAlignment = NSTextAlignment.Left
+        timeLbl!.numberOfLines = 1
+        timeLbl!.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        addSubview(timeLbl!)
         
     }
     
@@ -80,13 +80,13 @@ class TimelineHeaderView: UIView {
     
     override func layoutSubviews() {
         
-        self.bg!.frame = CGRectMake(0, 0, self.frame.size.width, 64)
+        bg!.frame = CGRectMake(0, 0, frame.size.width, 64)
         
-        self.userImgView!.frame = CGRectMake(15, 10, 44, 44)
-        self.userBtn!.frame = CGRectMake(15, 10, self.frame.size.width/2, 44)
-        self.userLbl!.frame = CGRectMake(15+44+10, 10, self.frame.size.width-20-44-20-20, 22)
-        self.timeImgView!.frame = CGRectMake(15+44+10, 10+22+4, 14, 14)
-        self.timeLbl!.frame = CGRectMake(15+44+10+14+8, 10+22, self.frame.size.width-20-44-20-20, 22)
+        userImgView!.frame = CGRectMake(15, 10, 44, 44)
+        userBtn!.frame = CGRectMake(15, 10, frame.size.width/2, 44)
+        userLbl!.frame = CGRectMake(15+44+10, 10, frame.size.width-20-44-20-20, 22)
+        timeImgView!.frame = CGRectMake(15+44+10, 10+22+4, 14, 14)
+        timeLbl!.frame = CGRectMake(15+44+10+14+8, 10+22, frame.size.width-20-44-20-20, 22)
         
         
     }

@@ -14,7 +14,7 @@ extension NSFileManager {
 
         let directoryURL = NSURL(fileURLWithPath: path)
         do {
-            let contents = try self.contentsOfDirectoryAtURL(directoryURL, includingPropertiesForKeys: [property], options: NSDirectoryEnumerationOptions())
+            let contents = try contentsOfDirectoryAtURL(directoryURL, includingPropertiesForKeys: [property], options: NSDirectoryEnumerationOptions())
             let sortedContents = contents.sort({(URL1: NSURL, URL2: NSURL) -> Bool in
                 
                 // Maybe there's a better way to do this. See: http://stackoverflow.com/questions/25502914/comparing-anyobject-in-swift

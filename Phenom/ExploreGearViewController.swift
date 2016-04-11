@@ -28,69 +28,69 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
 
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "EXPLORE GEAR"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         let searchBtn = UIButton(type: .Custom)
-        searchBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        searchBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
         searchBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //searchBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         searchBtn.backgroundColor = UIColor.blueColor()
-        searchBtn.addTarget(self, action:#selector(self.searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(searchBtn)
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(searchBtn)
         
-        let cellWidth = self.view.frame.size.width/2
+        let cellWidth = view.frame.size.width/2
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth+20)
         
-        self.theCollectionView = UICollectionView(frame: CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64-49), collectionViewLayout: layout)
-        self.theCollectionView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.theCollectionView.dataSource = self
-        self.theCollectionView.delegate = self
-        self.theCollectionView!.registerClass(GearCell.self, forCellWithReuseIdentifier: "Cell")
-        self.theCollectionView.registerClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView")
-        self.view.addSubview(self.theCollectionView)
-        self.theCollectionView.bounces = true
-        self.theCollectionView.scrollEnabled = true
-        self.theCollectionView.alwaysBounceVertical = true
+        theCollectionView = UICollectionView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49), collectionViewLayout: layout)
+        theCollectionView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theCollectionView.dataSource = self
+        theCollectionView.delegate = self
+        theCollectionView!.registerClass(GearCell.self, forCellWithReuseIdentifier: "Cell")
+        theCollectionView.registerClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView")
+        view.addSubview(theCollectionView)
+        theCollectionView.bounces = true
+        theCollectionView.scrollEnabled = true
+        theCollectionView.alwaysBounceVertical = true
 
         //
         
-        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
+        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeBack.direction = .Right
-        self.view.addGestureRecognizer(swipeBack)
-        self.theCollectionView.addGestureRecognizer(swipeBack)
+        view.addGestureRecognizer(swipeBack)
+        theCollectionView.addGestureRecognizer(swipeBack)
         
         //
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reloadExploreGear(_:)), name:"ReloadExploreGearNotification" ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(reloadExploreGear(_:)), name:"ReloadExploreGearNotification" ,object: nil)
         
         //
         
-        self.queryForGear()
+        queryForGear()
         
     }
     
@@ -104,14 +104,14 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         if ((UIApplication.sharedApplication().delegate as! AppDelegate).reloadExplore) {
             (UIApplication.sharedApplication().delegate as! AppDelegate).reloadExplore = false
-            //self.queryForFeatured()
+            //queryForFeatured()
         }
         
-        self.isSearching = false
+        isSearching = false
     }
     
     func backAction() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func searchBtnAction() {
@@ -120,9 +120,9 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         let vc = SearchViewController()
         vc.selectedTab = "gear"
-        self.navigationController?.pushViewController(vc, animated: false)
+        navigationController?.pushViewController(vc, animated: false)
         
-        self.isSearching = true
+        isSearching = true
         
     }
     
@@ -140,7 +140,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         if (type == "SPORT") {
             
-            self.sportObj = obj
+            sportObj = obj
             
             if (obj == "ALL") {
                 // set btn as "SPORT"
@@ -150,7 +150,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             }
         } else {
             
-            self.categoryObj = obj
+            categoryObj = obj
             
             if (obj == "ALL") {
                 // set btn as "CATEGORY"
@@ -163,11 +163,11 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         //
         
-        self.theCollectionView.setContentOffset(CGPoint.zero, animated: false)
+        theCollectionView.setContentOffset(CGPoint.zero, animated: false)
         
         //
         
-        self.queryForGear()
+        queryForGear()
         
         //
         
@@ -177,8 +177,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         // blank collectionView
         
-        self.gearData = NSData()
-        self.theCollectionView.reloadData()
+        gearData = NSData()
+        theCollectionView.reloadData()
        
         // query with new params
         
@@ -187,7 +187,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         // reload collectionView
         
-        self.theCollectionView.reloadData()
+        theCollectionView.reloadData()
         
     }
     
@@ -195,9 +195,9 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     func navBtnAction() {
         //        print("navBtnAction hit")
         
-        self.navigationController?.pushViewController(SearchViewController(), animated: false)
+        navigationController?.pushViewController(SearchViewController(), animated: false)
         
-        self.isSearching = true
+        isSearching = true
         
     }
     
@@ -209,7 +209,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 11 // self.objArray.count
+        return 11 // objArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -229,7 +229,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         
         
-        self.navigationController?.pushViewController(GearDetailViewController(), animated: true)
+        navigationController?.pushViewController(GearDetailViewController(), animated: true)
         
     }
     
@@ -243,10 +243,10 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             // Create Header
             let headerView : UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView", forIndexPath: indexPath)
             
-            let headerHeight = self.theCollectionView.frame.size.width/2+70
-            headerView.frame = CGRectMake(0, 0, self.theCollectionView.frame.size.width, headerHeight)
+            let headerHeight = theCollectionView.frame.size.width/2+70
+            headerView.frame = CGRectMake(0, 0, theCollectionView.frame.size.width, headerHeight)
             
-            //self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, headerHeight))
+            //theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, headerHeight))
             headerView.backgroundColor = UIColor.whiteColor()
             
             let heroView = UIView(frame: CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.width/2))
@@ -256,8 +256,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             let sportBtn = UIButton.init(type: UIButtonType.Custom)
             sportBtn.frame = CGRectMake(10, headerView.frame.size.width/2+10, headerView.frame.size.width/2-15, 50)
             sportBtn.backgroundColor = UIColor.greenColor()
-            sportBtn.addTarget(self, action:#selector(self.sportBtnAction), forControlEvents:.TouchUpInside)
-            sportBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+            sportBtn.addTarget(self, action:#selector(sportBtnAction), forControlEvents:.TouchUpInside)
+            sportBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
             sportBtn.titleLabel?.numberOfLines = 1
             sportBtn.contentHorizontalAlignment = .Center
             sportBtn.contentVerticalAlignment = .Center
@@ -269,8 +269,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             let categoryBtn = UIButton.init(type: UIButtonType.Custom)
             categoryBtn.frame = CGRectMake(headerView.frame.size.width/2+5, headerView.frame.size.width/2+10, headerView.frame.size.width/2-15, 50)
             categoryBtn.backgroundColor = UIColor.greenColor()
-            categoryBtn.addTarget(self, action:#selector(self.categoryBtnAction), forControlEvents:.TouchUpInside)
-            categoryBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+            categoryBtn.addTarget(self, action:#selector(categoryBtnAction), forControlEvents:.TouchUpInside)
+            categoryBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
             categoryBtn.titleLabel?.numberOfLines = 1
             categoryBtn.contentHorizontalAlignment = .Center
             categoryBtn.contentVerticalAlignment = .Center
@@ -280,16 +280,16 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             headerView.addSubview(categoryBtn)
             
             
-            if (self.sportObj == "ALL") {
+            if (sportObj == "ALL") {
                 sportBtn.setTitle("SPORT", forState: .Normal)
             } else {
-                sportBtn.setTitle(self.sportObj, forState: .Normal)
+                sportBtn.setTitle(sportObj, forState: .Normal)
             }
             
-            if (self.categoryObj == "ALL") {
+            if (categoryObj == "ALL") {
                 categoryBtn.setTitle("CATEGORY", forState: .Normal)
             } else {
-                categoryBtn.setTitle(self.categoryObj, forState: .Normal)
+                categoryBtn.setTitle(categoryObj, forState: .Normal)
             }
             
             
@@ -303,7 +303,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let cellWidth = self.view.frame.size.width/2
+        let cellWidth = view.frame.size.width/2
         
         return CGSize(width: cellWidth, height: cellWidth) // The size of one cell
     }
@@ -323,8 +323,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         
-        let headerHeight = self.theCollectionView.frame.size.width/2+70
-        return CGSizeMake(self.view.frame.width, headerHeight)  // Header size
+        let headerHeight = theCollectionView.frame.size.width/2+70
+        return CGSizeMake(view.frame.width, headerHeight)  // Header size
     }
     
     //    func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
@@ -342,9 +342,9 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         let vc = FilterViewController()
         vc.passedType = "SPORT"
-        vc.selectedObj = self.sportObj
+        vc.selectedObj = sportObj
         let newnav = UINavigationController(rootViewController: vc)
-        self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        navigationController?.presentViewController(newnav, animated: true, completion: nil)
         
     }
 
@@ -352,9 +352,9 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         
         let vc = FilterViewController()
         vc.passedType = "CATEGORY"
-        vc.selectedObj = self.categoryObj
+        vc.selectedObj = categoryObj
         let newnav = UINavigationController(rootViewController: vc)
-        self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        navigationController?.presentViewController(newnav, animated: true, completion: nil)
         
     }
 }

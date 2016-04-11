@@ -37,76 +37,76 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
-        self.view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         let searchView:UIView = UIView()
-        searchView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
+        searchView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
         searchView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.cancelBtn.frame = CGRectMake(searchView.frame.size.width-70, 20, 70, 44)
-        self.cancelBtn.backgroundColor = UIColor.clearColor()
-        self.cancelBtn.addTarget(self, action:#selector(self.cancelBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
-        self.cancelBtn.titleLabel?.numberOfLines = 1
-        self.cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        self.cancelBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        self.cancelBtn.titleLabel?.textAlignment = NSTextAlignment.Center
-        self.cancelBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        self.cancelBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
-        self.cancelBtn.setTitle("Cancel", forState: UIControlState.Normal)
-        searchView.addSubview(self.cancelBtn)
-        self.cancelBtn.enabled = false
-        self.cancelBtn.alpha = 0.0
+        cancelBtn.frame = CGRectMake(searchView.frame.size.width-70, 20, 70, 44)
+        cancelBtn.backgroundColor = UIColor.clearColor()
+        cancelBtn.addTarget(self, action:#selector(cancelBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        cancelBtn.titleLabel?.numberOfLines = 1
+        cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        cancelBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        cancelBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        cancelBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        cancelBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+        cancelBtn.setTitle("Cancel", forState: UIControlState.Normal)
+        searchView.addSubview(cancelBtn)
+        cancelBtn.enabled = false
+        cancelBtn.alpha = 0.0
         
-        self.bg.frame = CGRectMake(14, 20+7, self.view.frame.size.width-28, 30)
-        self.bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0) //UIColor.init(white: 0.94, alpha: 1.0)
-        searchView.addSubview(self.bg)
-        self.bg.layer.cornerRadius = 7
-        self.bg.layer.masksToBounds = true
+        bg.frame = CGRectMake(14, 20+7, view.frame.size.width-28, 30)
+        bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0) //UIColor.init(white: 0.94, alpha: 1.0)
+        searchView.addSubview(bg)
+        bg.layer.cornerRadius = 7
+        bg.layer.masksToBounds = true
         
         let btn = UIButton(type: UIButtonType.Custom)
         btn.frame = CGRectMake(0, 0, bg.frame.size.width, bg.frame.size.height)
         btn.backgroundColor = UIColor.clearColor()
-        btn.addTarget(self, action:#selector(self.btnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        btn.addTarget(self, action:#selector(btnAction), forControlEvents:UIControlEvents.TouchUpInside)
         bg.addSubview(btn)
         
         let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
         
-        //self.icon.frame = CGRectMake(14+10, 20+7+10, 12, 12)
-        self.icon.frame = CGRectMake((self.view.frame.size.width/2)-(width/2)-7, 20+7+10, 12, 12)
-        self.icon.backgroundColor = UIColor.clearColor()
-        self.icon.image = UIImage(named:"miniSearchImg.png")
-        searchView.addSubview(self.icon)
+        //icon.frame = CGRectMake(14+10, 20+7+10, 12, 12)
+        icon.frame = CGRectMake((view.frame.size.width/2)-(width/2)-7, 20+7+10, 12, 12)
+        icon.backgroundColor = UIColor.clearColor()
+        icon.image = UIImage(named:"miniSearchImg.png")
+        searchView.addSubview(icon)
         
-        //self.theTextField.frame = CGRectMake(44, 28, self.view.frame.size.width-44-14, 30)
-        self.theTextField.frame = CGRectMake(self.icon.frame.origin.x+self.icon.frame.size.width+6, 28, width, 30)
-        self.theTextField.backgroundColor = UIColor.clearColor()
-        self.theTextField.delegate = self
-        self.theTextField.textColor = UIColor.whiteColor() // UIColor(red:42/255, green:42/255, blue:42/255, alpha:1)
-        self.theTextField.keyboardType = UIKeyboardType.Default
-        self.theTextField.returnKeyType = UIReturnKeyType.Done
-        self.theTextField.enablesReturnKeyAutomatically = true
-        self.theTextField.font = UIFont.systemFontOfSize(15)
-        self.theTextField.placeholder = "Search"
-        self.theTextField.autocapitalizationType = UITextAutocapitalizationType.None
-        self.theTextField.autocorrectionType = UITextAutocorrectionType.No
-        searchView.addSubview(self.theTextField)
-        //self.theTextField.addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-        self.theTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        //theTextField.frame = CGRectMake(44, 28, view.frame.size.width-44-14, 30)
+        theTextField.frame = CGRectMake(icon.frame.origin.x+icon.frame.size.width+6, 28, width, 30)
+        theTextField.backgroundColor = UIColor.clearColor()
+        theTextField.delegate = self
+        theTextField.textColor = UIColor.whiteColor() // UIColor(red:42/255, green:42/255, blue:42/255, alpha:1)
+        theTextField.keyboardType = UIKeyboardType.Default
+        theTextField.returnKeyType = UIReturnKeyType.Done
+        theTextField.enablesReturnKeyAutomatically = true
+        theTextField.font = UIFont.systemFontOfSize(15)
+        theTextField.placeholder = "Search"
+        theTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        theTextField.autocorrectionType = UITextAutocorrectionType.No
+        searchView.addSubview(theTextField)
+        //theTextField.addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        theTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         
         let line:UIView = UIView()
         line.frame = CGRectMake(0, searchView.frame.size.height-0.5, searchView.frame.size.width, 0.5)
         line.backgroundColor = UIColor.init(white: 0.30, alpha: 1.0)
         searchView.addSubview(line)
         
-        self.view.addSubview(searchView)
+        view.addSubview(searchView)
         
         //
         
         let tabView:UIView = UIView()
-        tabView.frame = CGRectMake(0, 64, self.view.frame.size.width, 44)
+        tabView.frame = CGRectMake(0, 64, view.frame.size.width, 44)
         tabView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         tabBtn1.frame = CGRectMake(0, 0, tabView.frame.size.width/2, 44)
@@ -119,7 +119,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn1.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn1.setTitle("PEOPLE", forState: UIControlState.Normal)
-        tabBtn1.addTarget(self, action:#selector(self.tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn1)
         
         tabBtn2.frame = CGRectMake(tabView.frame.size.width/2*1, 0, tabView.frame.size.width/2, 44)
@@ -132,7 +132,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn2.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         tabBtn2.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn2.setTitle("GEAR", forState: UIControlState.Normal)
-        tabBtn2.addTarget(self, action:#selector(self.tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn2)
         
         let line2:UIView = UIView()
@@ -140,7 +140,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         line2.backgroundColor = UIColor.init(white: 0.30, alpha: 1.0)
         tabView.addSubview(line2)
         
-        self.view.addSubview(tabView)
+        view.addSubview(tabView)
         
         if (selectedTab == "gear") {
             tabBtn2.selected = true
@@ -150,26 +150,26 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         //
         
-        self.theTableView.frame = CGRectMake(0, 64+44, view.frame.size.width, view.frame.size.height-64-44-49)
-        self.theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.registerClass(SearchCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
+        theTableView.frame = CGRectMake(0, 64+44, view.frame.size.width, view.frame.size.height-64-44-49)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.registerClass(SearchCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         //
         
-        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(self.keyboardWillShow(_:)),name: UIKeyboardWillShowNotification,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(self.keyboardDidShow(_:)),name: UIKeyboardDidShowNotification,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(self.keyboardWillHide(_:)),name: UIKeyboardWillHideNotification,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(keyboardWillShow(_:)),name: UIKeyboardWillShowNotification,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(keyboardDidShow(_:)),name: UIKeyboardDidShowNotification,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,selector: #selector(keyboardWillHide(_:)),name: UIKeyboardWillHideNotification,object: nil)
         //NSNotificationCenter.defaultCenter().addObserver(self,selector: "textDidChange:", name: UITextFieldTextDidChangeNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showErrorAlert(_:)), name:"ShowErrorAlertNotification" ,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.reachedLimitErrorAlert(_:)), name:"ReachedLimitErrorAlertNotification" ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showErrorAlert(_:)), name:"ShowErrorAlertNotification" ,object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(reachedLimitErrorAlert(_:)), name:"ReachedLimitErrorAlertNotification" ,object: nil)
         
-        self.theTextField.becomeFirstResponder()
+        theTextField.becomeFirstResponder()
         
         //
     }
@@ -187,7 +187,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn2.selected = false
         
         // load people array
-        self.theTableView.reloadData()
+        theTableView.reloadData()
     }
     
     func tabBtn2Action() {
@@ -195,40 +195,40 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn2.selected = true
         
         // load gear array
-        self.theTableView.reloadData()
+        theTableView.reloadData()
     }
     
     func showErrorAlert(notification: NSNotification){
-        //self.theTextField.resignFirstResponder()
+        //theTextField.resignFirstResponder()
         
         let alertController = UIAlertController(title: "There is no one with that username.", message:"", preferredStyle:.Alert)
         let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
         }
         alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true) {
+        presentViewController(alertController, animated: true) {
         }
     }
     
     func reachedLimitErrorAlert(notification: NSNotification){
-        //self.theTextField.resignFirstResponder()
+        //theTextField.resignFirstResponder()
         
         let alertController = UIAlertController(title: "You have reached the following limit: 500.", message:"", preferredStyle:.Alert)
         let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
         }
         alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true) {
+        presentViewController(alertController, animated: true) {
         }
         
     }
     
     func cancelBtnAction() {
         
-        self.theTextField.text = ""
-        self.peopleArray.removeAllObjects()
-        self.gearArray.removeAllObjects()
-        self.theTextField.resignFirstResponder()
+        theTextField.text = ""
+        peopleArray.removeAllObjects()
+        gearArray.removeAllObjects()
+        theTextField.resignFirstResponder()
         
-        self.navigationController?.popViewControllerAnimated(false)
+        navigationController?.popViewControllerAnimated(false)
     }
     
     func keyboardWillShow(notification: NSNotification){
@@ -272,11 +272,11 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func textFieldDidChange(textField: UITextField) {
         
-        if (self.tabBtn1.selected) {
-            self.peopleArray.removeAllObjects()
+        if (tabBtn1.selected) {
+            peopleArray.removeAllObjects()
             
             let nothing = ""
-            if (self.theTextField.text == nothing) {
+            if (theTextField.text == nothing) {
                 
                 let defaults = NSUserDefaults.standardUserDefaults()
                 let array = defaults.arrayForKey("savedSearchNames")
@@ -288,29 +288,29 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                     
                     let n = name as! String
                     
-                    if (n.lowercaseString).hasPrefix(self.theTextField.text!.lowercaseString) {
-                        self.peopleArray.addObject(n)
+                    if (n.lowercaseString).hasPrefix(theTextField.text!.lowercaseString) {
+                        peopleArray.addObject(n)
                     }
                 }
                 
-                self.theTableView.reloadData()
+                theTableView.reloadData()
                 
             } else {
                 
-                //self.peopleArray.addObject(n)
+                //peopleArray.addObject(n)
                 
                 
-                self.peopleArray.addObject("\(self.theTextField.text!)")
+                peopleArray.addObject("\(theTextField.text!)")
                 
-                self.theTableView.reloadData()
+                theTableView.reloadData()
             }
             
-        } else if (self.tabBtn2.selected) {
+        } else if (tabBtn2.selected) {
             
-            self.gearArray.removeAllObjects()
+            gearArray.removeAllObjects()
             
             let nothing = ""
-            if (self.theTextField.text == nothing) {
+            if (theTextField.text == nothing) {
                 
                 let defaults = NSUserDefaults.standardUserDefaults()
                 let array = defaults.arrayForKey("savedSearchNames")
@@ -322,18 +322,18 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                     
                     let n = name as! String
                     
-                    if (n.lowercaseString).hasPrefix(self.theTextField.text!.lowercaseString) {
-                        self.gearArray.addObject(n)
+                    if (n.lowercaseString).hasPrefix(theTextField.text!.lowercaseString) {
+                        gearArray.addObject(n)
                     }
                 }
                 
-                self.theTableView.reloadData()
+                theTableView.reloadData()
                 
             } else {
                 
-                self.gearArray.addObject("\(self.theTextField.text!)")
+                gearArray.addObject("\(theTextField.text!)")
                 
-                self.theTableView.reloadData()
+                theTableView.reloadData()
             }
             
         } else {
@@ -344,7 +344,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        if (textField == self.theTextField) {
+        if (textField == theTextField) {
             let space = " "
             if (string == space) {
                 return false
@@ -365,7 +365,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
-        if (textField == self.theTextField) {
+        if (textField == theTextField) {
             textField.resignFirstResponder()
             return false
         } else {
@@ -502,10 +502,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if (self.tabBtn1.selected) {
-           return self.peopleArray.count
-        } else if (self.tabBtn2.selected) {
-            return self.gearArray.count
+        if (tabBtn1.selected) {
+           return peopleArray.count
+        } else if (tabBtn2.selected) {
+            return gearArray.count
         } else {
             // error
             return 0
@@ -521,16 +521,16 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         //let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
         let cell:SearchCell = SearchCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        cell.cellWidth = self.view.frame.size.width
+        cell.cellWidth = view.frame.size.width
         cell.cellString = (theTextField.text)!
         
-        cell.textLabel?.frame = CGRectMake(20, 0, self.view.frame.size.width-20-20-80, 64)
+        cell.textLabel?.frame = CGRectMake(20, 0, view.frame.size.width-20-20-80, 64)
         cell.textLabel?.font = UIFont.systemFontOfSize(17)
         cell.textLabel?.textColor = UIColor.whiteColor()
         
         cell.addBtn.hidden = true
         
-        let name = self.peopleArray.objectAtIndex(indexPath.row) as! String
+        let name = peopleArray.objectAtIndex(indexPath.row) as! String
         cell.textLabel?.text = name
         
         
@@ -550,8 +550,8 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        if (self.theTextField.editing) {
-            self.theTextField.resignFirstResponder()
+        if (theTextField.editing) {
+            theTextField.resignFirstResponder()
         }
     }
 

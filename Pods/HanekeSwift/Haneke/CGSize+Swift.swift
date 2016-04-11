@@ -11,17 +11,17 @@ import UIKit
 extension CGSize {
 
     func hnk_aspectFillSize(size: CGSize) -> CGSize {
-        let scaleWidth = size.width / self.width
-        let scaleHeight = size.height / self.height
+        let scaleWidth = size.width / width
+        let scaleHeight = size.height / height
         let scale = max(scaleWidth, scaleHeight)
 
-        let resultSize = CGSizeMake(self.width * scale, self.height * scale)
+        let resultSize = CGSizeMake(width * scale, height * scale)
         return CGSizeMake(ceil(resultSize.width), ceil(resultSize.height))
     }
 
     func hnk_aspectFitSize(size: CGSize) -> CGSize {
         let targetAspect = size.width / size.height
-        let sourceAspect = self.width / self.height
+        let sourceAspect = width / height
         var resultSize = size
 
         if (targetAspect > sourceAspect) {

@@ -12,10 +12,10 @@ class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.blackColor()
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.tabBar.tintColor = UINavigationBar.appearance().tintColor
-        self.tabBar.backgroundImage = UIImage(named: "goldTabBar.png")
+        view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        tabBar.tintColor = UINavigationBar.appearance().tintColor
+        tabBar.backgroundImage = UIImage(named: "blackTabBar.png") //goldTabBar.png
     }
     
     override func didReceiveMemoryWarning() {
@@ -26,11 +26,11 @@ class TabBarViewController: UITabBarController {
         super.setViewControllers(viewControllers, animated: animated)
         
         let centerBtn = UIButton(type: UIButtonType.Custom)
-        centerBtn.frame = CGRectMake(self.tabBar.bounds.size.width/5*2, -10, self.tabBar.bounds.size.width/5, self.tabBar.bounds.size.height+10)
+        centerBtn.frame = CGRectMake(tabBar.bounds.size.width/5*2, -10, tabBar.bounds.size.width/5, tabBar.bounds.size.height+10)
         centerBtn.backgroundColor = UIColor.blackColor()
         //centerBtn.setBackgroundImage(UIImage.init(named: "blueNav.png") , forState: UIControlState.Normal)
         //centerBtn.setBackgroundImage(UIImage.init(named: "blueNavHighlighted.png") , forState: UIControlState.Highlighted)
-        centerBtn.addTarget(self, action:#selector(self.centerBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        centerBtn.addTarget(self, action:#selector(centerBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         centerBtn.titleLabel?.numberOfLines = 1
         centerBtn.titleLabel?.font = UIFont.systemFontOfSize(40, weight: UIFontWeightBold)
         centerBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -39,7 +39,7 @@ class TabBarViewController: UITabBarController {
         centerBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         //centerBtn.setTitleColor(UIColor(red:195/255, green:125/255, blue:200/255, alpha:1), forState: UIControlState.Highlighted)
         centerBtn.setTitle("+", forState: UIControlState.Normal)
-        self.tabBar.addSubview(centerBtn)
+        tabBar.addSubview(centerBtn)
         centerBtn.titleEdgeInsets = UIEdgeInsets(top: -3, left: 0, bottom: 3, right: 0)
         
     }

@@ -40,7 +40,7 @@ extension UIImage : DataConvertible, DataRepresentable {
     }
     
     public func asData() -> NSData! {
-        return self.hnk_data()
+        return hnk_data()
     }
     
 }
@@ -55,7 +55,7 @@ extension String : DataConvertible, DataRepresentable {
     }
     
     public func asData() -> NSData! {
-        return self.dataUsingEncoding(NSUTF8StringEncoding)
+        return dataUsingEncoding(NSUTF8StringEncoding)
     }
     
 }

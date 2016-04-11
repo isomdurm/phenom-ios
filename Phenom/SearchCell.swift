@@ -25,7 +25,7 @@ class SearchCell: UITableViewCell {
         addBtn.backgroundColor = UIColor.clearColor()
         addBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
         addBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
-        addBtn.addTarget(self, action:#selector(self.addBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        addBtn.addTarget(self, action:#selector(addBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         contentView.addSubview(addBtn)
         addBtn.selected = false
         
@@ -38,21 +38,21 @@ class SearchCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        addBtn.frame = CGRectMake(self.cellWidth-46-16, 64/2-16, 46, 32)
+        addBtn.frame = CGRectMake(cellWidth-46-16, 64/2-16, 46, 32)
         
     }
     
     func  addBtnAction() {
         
-        if (self.addBtn.selected) {
-            self.addBtn.selected = false
+        if (addBtn.selected) {
+            addBtn.selected = false
             
         } else {
-            self.addBtn.selected = true
+            addBtn.selected = true
             
         }
         
-        self.checkForUserWithName(self.cellString)
+        checkForUserWithName(cellString)
     }
     
     

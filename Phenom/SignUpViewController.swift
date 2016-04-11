@@ -22,40 +22,40 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor.blackColor()
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.blueColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SIGN UP"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         let nextBtn = UIButton(type: .Custom)
-        nextBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        nextBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
         nextBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //nextBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         nextBtn.backgroundColor = UIColor.blueColor()
-        nextBtn.addTarget(self, action:#selector(self.nextBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(nextBtn)
+        nextBtn.addTarget(self, action:#selector(nextBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(nextBtn)
         
-        usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
+        usernameField.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
         usernameField.textColor = UIColor.whiteColor()
@@ -68,10 +68,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         usernameField.autocapitalizationType = UITextAutocapitalizationType.None
         usernameField.autocorrectionType = UITextAutocorrectionType.No
         usernameField.tag = 0
-        self.view.addSubview(usernameField)
+        view.addSubview(usernameField)
         usernameField.text = ""
         
-        passwordField.frame = CGRectMake(20, 64+64, self.view.frame.size.width-40, 64)
+        passwordField.frame = CGRectMake(20, 64+64, view.frame.size.width-40, 64)
         passwordField.backgroundColor = UIColor.clearColor()
         passwordField.delegate = self
         passwordField.textColor = UIColor.whiteColor()
@@ -85,10 +85,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         passwordField.autocorrectionType = UITextAutocorrectionType.No
         passwordField.secureTextEntry = true
         passwordField.tag = 1
-        self.view.addSubview(passwordField)
+        view.addSubview(passwordField)
         passwordField.text = ""
         
-        firstNameField.frame = CGRectMake(20, 64+64+64, self.view.frame.size.width/2-40, 64)
+        firstNameField.frame = CGRectMake(20, 64+64+64, view.frame.size.width/2-40, 64)
         firstNameField.backgroundColor = UIColor.clearColor()
         firstNameField.delegate = self
         firstNameField.textColor = UIColor.whiteColor()
@@ -99,10 +99,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         firstNameField.font = UIFont.systemFontOfSize(17)
         firstNameField.placeholder = "first name"
         firstNameField.tag = 2
-        self.view.addSubview(firstNameField)
+        view.addSubview(firstNameField)
         firstNameField.text = ""
         
-        lastNameField.frame = CGRectMake(self.view.frame.size.width/2+20, 64+64+64, self.view.frame.size.width/2-40, 64)
+        lastNameField.frame = CGRectMake(view.frame.size.width/2+20, 64+64+64, view.frame.size.width/2-40, 64)
         lastNameField.backgroundColor = UIColor.clearColor()
         lastNameField.delegate = self
         lastNameField.textColor = UIColor.whiteColor()
@@ -115,65 +115,65 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         lastNameField.autocapitalizationType = UITextAutocapitalizationType.None
         lastNameField.autocorrectionType = UITextAutocorrectionType.No
         lastNameField.tag = 3
-        self.view.addSubview(lastNameField)
+        view.addSubview(lastNameField)
         lastNameField.text = ""
         
-        birthdayField.frame = CGRectMake(20, 64+64+64+64, self.view.frame.size.width-40, 64)
+        birthdayField.frame = CGRectMake(20, 64+64+64+64, view.frame.size.width-40, 64)
         birthdayField.backgroundColor = UIColor.clearColor()
         birthdayField.delegate = self
         birthdayField.textColor = UIColor.whiteColor()
         birthdayField.font = UIFont.systemFontOfSize(17)
         birthdayField.placeholder = "birthday"
-        birthdayField.addTarget(self, action: #selector(self.birthdayFieldEditing), forControlEvents: .EditingDidBegin)
+        birthdayField.addTarget(self, action: #selector(birthdayFieldEditing), forControlEvents: .EditingDidBegin)
         birthdayField.tag = 5
-        self.view.addSubview(birthdayField)
+        view.addSubview(birthdayField)
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .MediumStyle
         dateFormatter.timeStyle = .NoStyle
-        self.birthdayField.text = "" //dateFormatter.stringFromDate(NSDate())
+        birthdayField.text = "" //dateFormatter.stringFromDate(NSDate())
         birthdayField.attributedPlaceholder = NSAttributedString(string:"birthday",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
         
-        genderField.frame = CGRectMake(20, 64+64+64+64+64, self.view.frame.size.width-40, 64)
+        genderField.frame = CGRectMake(20, 64+64+64+64+64, view.frame.size.width-40, 64)
         genderField.backgroundColor = UIColor.clearColor()
         genderField.delegate = self
         genderField.textColor = UIColor.whiteColor()
         genderField.attributedPlaceholder = NSAttributedString(string:"gender",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
         genderField.font = UIFont.systemFontOfSize(17)
         genderField.placeholder = "gender"
-        genderField.addTarget(self, action: #selector(self.genderFieldEditing), forControlEvents: .EditingDidBegin)
+        genderField.addTarget(self, action: #selector(genderFieldEditing), forControlEvents: .EditingDidBegin)
         genderField.tag = 5
-        self.view.addSubview(genderField)
+        view.addSubview(genderField)
         genderField.text = ""
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 64+63.5, self.view.frame.size.width, 0.5)
-        lineview.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview)
+        lineview.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview)
         
         let lineview2 = UIView()
-        lineview2.frame = CGRectMake(0, 64+64+63.5, self.view.frame.size.width, 0.5)
-        lineview2.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview2)
+        lineview2.frame = CGRectMake(0, 64+64+63.5, view.frame.size.width, 0.5)
+        lineview2.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview2)
         
         let lineview2a = UIView()
-        lineview2a.frame = CGRectMake(self.view.frame.size.width/2-0.25, 64+64+63.5, 0.5, 64)
-        lineview2a.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview2a)
+        lineview2a.frame = CGRectMake(view.frame.size.width/2-0.25, 64+64+63.5, 0.5, 64)
+        lineview2a.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview2a)
         
         let lineview3 = UIView()
-        lineview3.frame = CGRectMake(0, 64+64+64+63.5, self.view.frame.size.width, 0.5)
-        lineview3.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview3)
+        lineview3.frame = CGRectMake(0, 64+64+64+63.5, view.frame.size.width, 0.5)
+        lineview3.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview3)
         
         let lineview4 = UIView()
-        lineview4.frame = CGRectMake(0, 64+64+64+64+63.5, self.view.frame.size.width, 0.5)
-        lineview4.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview4)
+        lineview4.frame = CGRectMake(0, 64+64+64+64+63.5, view.frame.size.width, 0.5)
+        lineview4.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview4)
         
         let lineview5 = UIView()
-        lineview5.frame = CGRectMake(0, 64+64+64+64+64+63.5, self.view.frame.size.width, 0.5)
-        lineview5.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview5)
+        lineview5.frame = CGRectMake(0, 64+64+64+64+64+63.5, view.frame.size.width, 0.5)
+        lineview5.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview5)
 
         
         
@@ -191,8 +191,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     }
     
     func backAction() {
-        self.view.endEditing(true)
-        self.navigationController?.popViewControllerAnimated(true)
+        view.endEditing(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     
@@ -201,14 +201,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         datePickerView.datePickerMode = UIDatePickerMode.Date
         datePickerView.maximumDate = NSDate()
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: #selector(self.birthdayPickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
+        datePickerView.addTarget(self, action: #selector(birthdayPickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
     }
     
     func birthdayPickerValueChanged(sender:UIDatePicker) {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-        self.birthdayField.text = dateFormatter.stringFromDate(sender.date)
+        birthdayField.text = dateFormatter.stringFromDate(sender.date)
     }
     
     
@@ -231,7 +231,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.genderField.text = genderData[row]
+        genderField.text = genderData[row]
     }
     
     
@@ -252,7 +252,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
             if (passwordField.text == "" || usernameField.text == "" || firstNameField.text == "" || lastNameField.text == "" || birthdayField.text == "" ) {
                 // missing creds
             } else {
-                self.nextBtnAction()
+                nextBtnAction()
             }
             
         } else if (textField == passwordField) {
@@ -268,7 +268,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
             return false
         }
         
-        if (textField == self.usernameField) {
+        if (textField == usernameField) {
             let maxLength = 20
             let currentString: NSString = textField.text!
             let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
@@ -284,8 +284,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     
     func nextBtnAction() {
         
-        self.view.endEditing(true)
-        self.navigationController?.pushViewController(SignUpDetailViewController(), animated: true)
+        view.endEditing(true)
+        navigationController?.pushViewController(SignUpDetailViewController(), animated: true)
         
     }
     

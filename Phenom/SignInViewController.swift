@@ -18,40 +18,40 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor.blackColor()
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
         xBtn.frame = CGRectMake(20, 20, 70, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(xBtn)
+        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SIGN IN"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         let signInBtn = UIButton(type: UIButtonType.Custom)
-        signInBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        signInBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
         signInBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //signInBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signInBtn.backgroundColor = UIColor.blueColor()
-        signInBtn.addTarget(self, action:#selector(self.processFields), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(signInBtn)
+        signInBtn.addTarget(self, action:#selector(processFields), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(signInBtn)
         
-        usernameField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
+        usernameField.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
         usernameField.textColor = UIColor.whiteColor()
@@ -63,10 +63,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         usernameField.placeholder = "your username"
         usernameField.autocapitalizationType = UITextAutocapitalizationType.None
         usernameField.autocorrectionType = UITextAutocorrectionType.No
-        self.view.addSubview(usernameField)
+        view.addSubview(usernameField)
         usernameField.text = ""
         
-        passwordField.frame = CGRectMake(20, 64+64, self.view.frame.size.width-40, 64)
+        passwordField.frame = CGRectMake(20, 64+64, view.frame.size.width-40, 64)
         passwordField.backgroundColor = UIColor.clearColor()
         passwordField.delegate = self
         passwordField.textColor = UIColor.whiteColor()
@@ -79,18 +79,18 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         passwordField.autocapitalizationType = UITextAutocapitalizationType.None
         passwordField.autocorrectionType = UITextAutocorrectionType.No
         passwordField.secureTextEntry = true
-        self.view.addSubview(passwordField)
+        view.addSubview(passwordField)
         passwordField.text = ""
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 64+63.5, self.view.frame.size.width, 0.5)
-        lineview.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview)
+        lineview.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview)
         
         let lineview2 = UIView()
-        lineview2.frame = CGRectMake(0, 64+64+63.5, self.view.frame.size.width, 0.5)
-        lineview2.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview2)
+        lineview2.frame = CGRectMake(0, 64+64+63.5, view.frame.size.width, 0.5)
+        lineview2.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview2)
         
         
     }
@@ -107,8 +107,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     }
     
     func xBtnAction() {
-        self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        view.endEditing(true)
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -119,7 +119,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             if (passwordField.text == "" || usernameField.text == "") {
                 // missing creds
             } else {
-                self.processFields()
+                processFields()
             }
         }
         return true
@@ -132,7 +132,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             return false
         }
         
-        if (textField == self.usernameField) {
+        if (textField == usernameField) {
             let maxLength = 20
             let currentString: NSString = textField.text!
             let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
@@ -151,7 +151,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         // if logged in correctly
         
-        if (self.usernameField.text != "" && self.passwordField.text != "") {
+        if (usernameField.text != "" && passwordField.text != "") {
             
             // get bearerToken
             
@@ -166,8 +166,8 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
             
-            let utf8str: NSData = self.passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)!
-            //let utf8str = self.passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)
+            let utf8str: NSData = passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)!
+            //let utf8str = passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)
             
             let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
             //let base64Encoded = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.fromRaw(0)!)
@@ -175,7 +175,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             print("base64Encoded: \(base64Encoded)")
             
             let bodyObject = [
-                "username": self.usernameField.text!,
+                "username": usernameField.text!,
                 "password": base64Encoded,
                 "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
                 "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,

@@ -15,53 +15,53 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
     
-        self.theScrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-200)
-        self.theScrollView.backgroundColor = UIColor.yellowColor()
-        self.theScrollView.delegate = self
-        self.theScrollView.pagingEnabled = true
-        self.theScrollView.showsHorizontalScrollIndicator = false
-        self.theScrollView.showsVerticalScrollIndicator = false
-        self.theScrollView.scrollsToTop = false //true
-        self.theScrollView.scrollEnabled = false //true
-        self.theScrollView.bounces = false //true
-        self.theScrollView.alwaysBounceHorizontal = false // true
-        self.theScrollView.userInteractionEnabled = true
-        self.view.addSubview(self.theScrollView)
-        self.theScrollView.contentSize = CGSize(width: self.theScrollView.frame.size.width, height: self.theScrollView.frame.size.height)
-        self.theScrollView.contentOffset = CGPoint(x: 0, y: 0)
+        theScrollView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height-200)
+        theScrollView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theScrollView.delegate = self
+        theScrollView.pagingEnabled = true
+        theScrollView.showsHorizontalScrollIndicator = false
+        theScrollView.showsVerticalScrollIndicator = false
+        theScrollView.scrollsToTop = false //true
+        theScrollView.scrollEnabled = false //true
+        theScrollView.bounces = false //true
+        theScrollView.alwaysBounceHorizontal = false // true
+        theScrollView.userInteractionEnabled = true
+        view.addSubview(theScrollView)
+        theScrollView.contentSize = CGSize(width: theScrollView.frame.size.width, height: theScrollView.frame.size.height)
+        theScrollView.contentOffset = CGPoint(x: 0, y: 0)
         
-        self.theScrollView.alpha = 0.0
+        theScrollView.alpha = 0.0
 
         let imgView1 = UIImageView()
-        imgView1.frame = CGRectMake(0, 0, self.theScrollView.frame.size.width, self.theScrollView.frame.size.height)
+        imgView1.frame = CGRectMake(0, 0, theScrollView.frame.size.width, theScrollView.frame.size.height)
         imgView1.backgroundColor = UIColor.greenColor()
-        self.theScrollView.addSubview(imgView1)
+        theScrollView.addSubview(imgView1)
         
         
         //
         
-        let containerView = UIView(frame: CGRectMake(0, self.view.frame.size.height-200, self.view.frame.size.width, 200))
+        let containerView = UIView(frame: CGRectMake(0, view.frame.size.height-200, view.frame.size.width, 200))
         containerView.backgroundColor = UIColor.grayColor()
-        self.view.addSubview(containerView)
+        view.addSubview(containerView)
         
         let fbBtn = UIButton(type: UIButtonType.Custom)
         fbBtn.frame = CGRectMake(containerView.frame.width/2-50, 11, 100, 52)
         fbBtn.setImage(UIImage(named: "fb-signin.png"), forState: UIControlState.Normal)
         //addBtn.setBackgroundImage(UIImage(named: "plus60.png"), forState: UIControlState.Normal)
         fbBtn.backgroundColor = UIColor.blueColor()
-        fbBtn.addTarget(self, action:#selector(self.fbBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        fbBtn.addTarget(self, action:#selector(fbBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         containerView.addSubview(fbBtn)
         
         let signinBtn = UIButton(type: UIButtonType.Custom)
         signinBtn.backgroundColor = UIColor.blueColor()
         signinBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11, 100, 52)
-        signinBtn.addTarget(self, action:#selector(self.signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signinBtn.addTarget(self, action:#selector(signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signinBtn.titleLabel?.numberOfLines = 1
         signinBtn.titleLabel?.font = UIFont.systemFontOfSize(22)
         signinBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -75,7 +75,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         let signupBtn = UIButton(type: UIButtonType.Custom)
         signupBtn.backgroundColor = UIColor.blueColor()
         signupBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11+52+11, 100, 52)
-        signupBtn.addTarget(self, action:#selector(self.signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signupBtn.addTarget(self, action:#selector(signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signupBtn.titleLabel?.numberOfLines = 1
         signupBtn.titleLabel?.font = UIFont.systemFontOfSize(22)
         signupBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
@@ -88,7 +88,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         
         //
 
-        self.animateScrollViewToPostition()
+        animateScrollViewToPostition()
         
     }
 
@@ -118,12 +118,12 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
     
     func signinBtnAction() {
         let newnav = UINavigationController(rootViewController: SignInViewController())
-        self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        navigationController?.presentViewController(newnav, animated: true, completion: nil)
     }
     
     func signupBtnAction() {
         let newnav = UINavigationController(rootViewController: SignUpEmailViewController())
-        self.navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        navigationController?.presentViewController(newnav, animated: true, completion: nil)
         
     }
 

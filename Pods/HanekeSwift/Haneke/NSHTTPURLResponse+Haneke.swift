@@ -11,7 +11,7 @@ import Foundation
 extension NSHTTPURLResponse {
 
     func hnk_isValidStatusCode() -> Bool {
-        switch self.statusCode {
+        switch statusCode {
         case 200...201:
             return true
         default:

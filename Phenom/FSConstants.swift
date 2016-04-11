@@ -33,9 +33,9 @@ extension UIView {
     func addBottomBorder(color: UIColor, width: CGFloat) {
         let border = CALayer()
         border.borderColor = color.CGColor
-        border.frame = CGRect(x: 0, y: self.frame.size.height - width, width:  self.frame.size.width, height: width)
+        border.frame = CGRect(x: 0, y: frame.size.height - width, width:  frame.size.width, height: width)
         border.borderWidth = width
-        self.layer.addSublayer(border)
+        layer.addSublayer(border)
     }
 
 }

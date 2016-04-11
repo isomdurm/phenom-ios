@@ -16,40 +16,40 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor.blackColor()
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
         xBtn.frame = CGRectMake(20, 20, 70, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(xBtn)
+        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "VERIFY EMAIL"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         let nextBtn = UIButton(type: .Custom)
-        nextBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        nextBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
         nextBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //nextBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         nextBtn.backgroundColor = UIColor.blueColor()
-        nextBtn.addTarget(self, action:#selector(self.nextBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(nextBtn)
+        nextBtn.addTarget(self, action:#selector(nextBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(nextBtn)
         
-        emailField.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
+        emailField.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
         emailField.backgroundColor = UIColor.clearColor()
         emailField.delegate = self
         emailField.textColor = UIColor.whiteColor()
@@ -61,13 +61,13 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         emailField.placeholder = "your email"
         emailField.autocapitalizationType = UITextAutocapitalizationType.None
         emailField.autocorrectionType = UITextAutocorrectionType.No
-        self.view.addSubview(emailField)
+        view.addSubview(emailField)
         emailField.text = ""
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 64+63.5, self.view.frame.size.width, 0.5)
-        lineview.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview)
+        lineview.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        view.addSubview(lineview)
 
         
         
@@ -85,8 +85,8 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
     }
     
     func xBtnAction() {
-        self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        view.endEditing(true)
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -94,7 +94,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         if (emailField.text == "") {
             // missing creds
         } else {
-            self.nextBtnAction()
+            nextBtnAction()
         }
         
         return true
@@ -107,7 +107,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
             return false
         }
         
-        if (textField == self.emailField) {
+        if (textField == emailField) {
             let maxLength = 50
             let currentString: NSString = textField.text!
             let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
@@ -123,7 +123,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
 
     func nextBtnAction() {
         
-        self.navigationController?.pushViewController(SignUpViewController(), animated: true)
+        navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
 

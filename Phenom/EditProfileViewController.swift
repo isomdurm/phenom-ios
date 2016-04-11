@@ -25,40 +25,40 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor.blackColor()
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor.blackColor()
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor.blackColor()
+        view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
         xBtn.frame = CGRectMake(20, 20, 70, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(xBtn)
+        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         //titleLbl.text = "EDIT PROFILE"
         titleLbl.font = UIFont.boldSystemFontOfSize(20)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         let saveBtn = UIButton(type: UIButtonType.Custom)
-        saveBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        saveBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
         saveBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //saveBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         saveBtn.backgroundColor = UIColor.blueColor()
-        saveBtn.addTarget(self, action:#selector(self.saveBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(saveBtn)
+        saveBtn.addTarget(self, action:#selector(saveBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(saveBtn)
         
-        textField1.frame = CGRectMake(20, 64, self.view.frame.size.width-40, 64)
+        textField1.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
         textField1.backgroundColor = UIColor.clearColor()
         textField1.delegate = self
         textField1.textColor = UIColor(red:51/255, green:51/255, blue:51/255, alpha:1)
@@ -70,7 +70,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         textField1.autocorrectionType = UITextAutocorrectionType.No
         textField1.text = ""
         
-        textField2.frame = CGRectMake(20, 64+64, self.view.frame.size.width-40, 64)
+        textField2.frame = CGRectMake(20, 64+64, view.frame.size.width-40, 64)
         textField2.backgroundColor = UIColor.clearColor()
         textField2.delegate = self
         textField2.textColor = UIColor(red:51/255, green:51/255, blue:51/255, alpha:1)
@@ -84,12 +84,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         textField2.text = ""
         
         let lineview1 = UIView()
-        lineview1.frame = CGRectMake(0, 64+63.5, self.view.frame.size.width, 0.5)
+        lineview1.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
         lineview1.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
-        self.view.addSubview(lineview1)
+        view.addSubview(lineview1)
         
         let lineview2 = UIView()
-        lineview2.frame = CGRectMake(0, 64+64+63.5, self.view.frame.size.width, 0.5)
+        lineview2.frame = CGRectMake(0, 64+64+63.5, view.frame.size.width, 0.5)
         lineview2.backgroundColor = UIColor.init(white: 0.88, alpha: 1.0)
         
         
@@ -99,21 +99,21 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
             titleLbl.text = "NAME"
             textField1.placeholder = "your first name"
             textField2.placeholder = "your last name"
-            self.view.addSubview(textField1)
-            self.view.addSubview(textField2)
-            self.view.addSubview(lineview2)
+            view.addSubview(textField1)
+            view.addSubview(textField2)
+            view.addSubview(lineview2)
         } else if (passedEditType == "username") {
             titleLbl.text = "USERNAME"
             textField1.placeholder = "username"
-            self.view.addSubview(textField1)
+            view.addSubview(textField1)
         } else if (passedEditType == "birthday") {
             titleLbl.text = "BIRTHDAY"
             textField1.placeholder = "your birthday"
-            self.view.addSubview(textField1)
+            view.addSubview(textField1)
         } else if (passedEditType == "hometown") {
             titleLbl.text = "HOMETOWN"
             textField1.placeholder = "your hometown"
-            self.view.addSubview(textField1)
+            view.addSubview(textField1)
         } else if (passedEditType == "sports") {
             
             titleLbl.text = "SPORTS"
@@ -126,17 +126,17 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
             
             titleLbl.text = "BIO"
             textField1.placeholder = "bio"
-            self.view.addSubview(textField1)
+            view.addSubview(textField1)
             
             
         } else if (passedEditType == "email") {
             titleLbl.text = "EMAIL"
             textField1.placeholder = "your email"
-            self.view.addSubview(textField1)
+            view.addSubview(textField1)
         } else if (passedEditType == "password") {
             titleLbl.text = "PASSWORD"
             textField1.placeholder = "confirm your password"
-            self.view.addSubview(textField1)
+            view.addSubview(textField1)
         } else {
             print("something is wrongggg")
         }
@@ -151,30 +151,30 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         
         
         let sportsScrollViewY = CGFloat(64+64+64+30)
-        self.sportsArray = NSMutableArray(array: ["Baseball", "Basketball", "Football", "Soccer", "Lacrosse", "Ice Hockey", "Softball", "Tennis", "Track & Field", "Volleyball", "Wrestling", "Swimming", "Cross Country", "Field Hockey", "Golf", "Rugby", "Cross Fit", "Skiing", "Snowboading", "Skateboarding", "Figure Skating", "Gymnastics"])
-        self.sportsScrollView.frame = CGRectMake(0, sportsScrollViewY+64+30, self.view.frame.size.width, 120) 
-        self.sportsScrollView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
-        self.sportsScrollView.delegate = self
-        self.sportsScrollView.pagingEnabled = false
-        self.sportsScrollView.showsHorizontalScrollIndicator = true
-        self.sportsScrollView.showsVerticalScrollIndicator = false
-        self.sportsScrollView.scrollsToTop = true
-        self.sportsScrollView.scrollEnabled = true
-        self.sportsScrollView.bounces = true
-        self.sportsScrollView.alwaysBounceVertical = false
-        self.sportsScrollView.alwaysBounceHorizontal = true
-        self.sportsScrollView.userInteractionEnabled = true
-        self.view.addSubview(self.sportsScrollView)
+        sportsArray = NSMutableArray(array: ["Baseball", "Basketball", "Football", "Soccer", "Lacrosse", "Ice Hockey", "Softball", "Tennis", "Track & Field", "Volleyball", "Wrestling", "Swimming", "Cross Country", "Field Hockey", "Golf", "Rugby", "Cross Fit", "Skiing", "Snowboading", "Skateboarding", "Figure Skating", "Gymnastics"])
+        sportsScrollView.frame = CGRectMake(0, sportsScrollViewY+64+30, view.frame.size.width, 120) 
+        sportsScrollView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
+        sportsScrollView.delegate = self
+        sportsScrollView.pagingEnabled = false
+        sportsScrollView.showsHorizontalScrollIndicator = true
+        sportsScrollView.showsVerticalScrollIndicator = false
+        sportsScrollView.scrollsToTop = true
+        sportsScrollView.scrollEnabled = true
+        sportsScrollView.bounces = true
+        sportsScrollView.alwaysBounceVertical = false
+        sportsScrollView.alwaysBounceHorizontal = true
+        sportsScrollView.userInteractionEnabled = true
+        view.addSubview(sportsScrollView)
         
-        let padding = 2*self.sportsArray.count
-        let width = 100*self.sportsArray.count
+        let padding = 2*sportsArray.count
+        let width = 100*sportsArray.count
         let totalWidth = CGFloat(width+padding+20+20)
-        self.sportsScrollView.contentSize = CGSize(width: totalWidth, height: self.sportsScrollView.frame.size.height)
-        self.sportsScrollView.contentOffset = CGPoint(x: 0, y: 0)
+        sportsScrollView.contentSize = CGSize(width: totalWidth, height: sportsScrollView.frame.size.height)
+        sportsScrollView.contentOffset = CGPoint(x: 0, y: 0)
         
         //
         
-        self.buildSportsScrollView()
+        buildSportsScrollView()
 
         //
         
@@ -192,13 +192,13 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
     }
     
     func xBtnAction() {
-        self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        view.endEditing(true)
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func buildSportsScrollView() {
         
-        for (index, element) in self.sportsArray.enumerate() {
+        for (index, element) in sportsArray.enumerate() {
             print("Item \(index): \(element)")
             
             let sport = element as! String
@@ -217,7 +217,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
             sportBtn.setBackgroundImage(UIImage(named: "goldTabBar.png"), forState: .Selected)
             
             sportBtn.backgroundColor = UIColor.blueColor()
-            sportBtn.addTarget(self, action:#selector(self.sportBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            sportBtn.addTarget(self, action:#selector(sportBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
             
             sportBtn.tag = NSInteger(i)
             
@@ -231,7 +231,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
             sportBtn.setTitle(sport, forState: UIControlState.Normal)
             
             
-            self.sportsScrollView.addSubview(sportBtn)
+            sportsScrollView.addSubview(sportBtn)
             
             
             
@@ -246,10 +246,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         
         if (sender.selected) {
             sender.selected = false
-            self.selectedSportsArray.removeObject(sender.currentTitle!)
+            selectedSportsArray.removeObject(sender.currentTitle!)
         } else {
             sender.selected = true
-            self.selectedSportsArray.addObject(sender.currentTitle!)
+            selectedSportsArray.addObject(sender.currentTitle!)
         }
         
     }
@@ -264,8 +264,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         
         //
         
-        self.view.endEditing(true)
-        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
+        view.endEditing(true)
+        navigationController?.dismissViewControllerAnimated(false, completion: nil)
         (UIApplication.sharedApplication().delegate as! AppDelegate).presentTabBarViewController()
         
         

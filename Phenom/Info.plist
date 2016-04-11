@@ -2,6 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MaisonNeue-Bold.ttf</string>
+		<string>MaisonNeue-Book.ttf</string>
+		<string>MaisonNeue-Demi.ttf</string>
+		<string>MaisonNeue-Light.ttf</string>
+		<string>MaisonNeue-Medium.ttf</string>
+		<string>MaisonNeue-Mono.ttf</string>
+		<string>UnitedSansCond-Black.otf</string>
+		<string>UnitedSansCond-Bold.otf</string>
+		<string>UnitedSansCond-Heavy.otf</string>
+		<string>UnitedSansCond-Light.otf</string>
+		<string>UnitedSansCond-Medium.otf</string>
+		<string>UnitedSansReg-Heavy.otf</string>
+		<string>UnitedSansSemiCond-Heavy.otf</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

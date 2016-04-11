@@ -2,7 +2,7 @@
 //  GearCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/30/16.
+//  Created by Clay Zug on 4/10/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 

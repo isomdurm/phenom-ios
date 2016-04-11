@@ -17,14 +17,14 @@ class ProgressView: UIView {
         super.init(frame: frame)
         
         self.frame = frame
-        self.backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clearColor()
         
-        self.bg = UIView()
-        self.bg!.backgroundColor = UIColor.clearColor() //UIColor.init(white: 0.0, alpha: 0.35)
-        self.addSubview(self.bg!)
+        bg = UIView()
+        bg!.backgroundColor = UIColor.clearColor() //UIColor.init(white: 0.0, alpha: 0.35)
+        addSubview(bg!)
         
-        self.activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray) //WhiteLarge
-        self.addSubview(self.activityIndicator!)
+        activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray) //WhiteLarge
+        addSubview(activityIndicator!)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,8 +38,8 @@ class ProgressView: UIView {
     
     override func layoutSubviews() {
         
-        self.bg!.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)
-        self.activityIndicator!.center = CGPoint(x: self.frame.size.width/2, y: self.frame.size.height/2)
+        bg!.frame = CGRectMake(0, 0, frame.size.width, frame.size.height)
+        activityIndicator!.center = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
         
     }
 

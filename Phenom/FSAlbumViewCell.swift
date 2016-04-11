@@ -17,7 +17,7 @@ final class FSAlbumViewCell: UICollectionViewCell {
         
         didSet {
             
-            self.imageView.image = image            
+            imageView.image = image            
         }
     }
 }

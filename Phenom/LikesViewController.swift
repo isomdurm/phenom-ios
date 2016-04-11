@@ -23,50 +23,50 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "LIKES"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         
-        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        self.theTableView.backgroundColor = UIColor.redColor()
-        self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.backgroundColor = UIColor.redColor()
+        theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeRight.direction = .Right
-        self.view.addGestureRecognizer(swipeRight)
+        view.addGestureRecognizer(swipeRight)
         
         //
         
-        self.queryForLikes()
+        queryForLikes()
         
         
     }
@@ -76,7 +76,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func backAction() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
         
     }
     
@@ -142,7 +142,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let moments = JSON(data: self.likesData)
+        let moments = JSON(data: likesData)
         return moments["results"].count
     }
     

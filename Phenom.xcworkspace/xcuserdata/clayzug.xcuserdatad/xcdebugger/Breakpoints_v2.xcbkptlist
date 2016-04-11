@@ -41,13 +41,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Phenom/TimelineViewController.swift"
-            timestampString = "481834283.376837"
+            filePath = "Phenom/ProfileViewController.swift"
+            timestampString = "482049951.621558"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "590"
-            endingLineNumber = "590"
-            landmarkName = "gearBtnAction(_:)"
+            startingLineNumber = "1333"
+            endingLineNumber = "1333"
+            landmarkName = "timelineSingleTapAction(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Phenom/ProfileViewController.swift"
+            timestampString = "482049953.81365"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1394"
+            endingLineNumber = "1394"
+            landmarkName = "gearSingleTapAction(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

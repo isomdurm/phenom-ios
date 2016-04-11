@@ -23,63 +23,63 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "EXPLORE PEOPLE"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         let searchBtn = UIButton(type: .Custom)
-        searchBtn.frame = CGRectMake(self.view.frame.size.width-70-20, 20, 70, 44)
+        searchBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
         searchBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //searchBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         searchBtn.backgroundColor = UIColor.blueColor()
-        searchBtn.addTarget(self, action:#selector(self.searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(searchBtn)
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(searchBtn)
         
-        self.theTableView.frame = CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64-49)
-        //self.theTableView.contentOffset = CGPoint(x: 0, y: 44)
-        self.theTableView.backgroundColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:1)
-        self.theTableView.separatorColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:0.5)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(ExploreCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        
-        //
-        
-        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        //theTableView.contentOffset = CGPoint(x: 0, y: 44)
+        theTableView.backgroundColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:0.5)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(ExploreCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
         
         //
         
-        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
+        theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        
+        //
+        
+        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeBack.direction = .Right
-        self.view.addGestureRecognizer(swipeBack)
+        view.addGestureRecognizer(swipeBack)
         
         //
         
-        //self.queryForPeople()
+        //queryForPeople()
         
         
         
@@ -95,14 +95,14 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
         
         if ((UIApplication.sharedApplication().delegate as! AppDelegate).reloadExplore) {
             (UIApplication.sharedApplication().delegate as! AppDelegate).reloadExplore = false
-            //self.queryForFeatured()
+            //queryForFeatured()
         }
         
-        self.isSearching = false
+        isSearching = false
     }
     
     func backAction() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func searchBtnAction() {
@@ -110,9 +110,9 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
         // pre-select "people"
         let vc = SearchViewController()
         
-        self.navigationController?.pushViewController(vc, animated: false)
+        navigationController?.pushViewController(vc, animated: false)
         
-        self.isSearching = true
+        isSearching = true
     }
     
     func queryForPeople() {
@@ -125,9 +125,9 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
     func navBtnAction() {
         //        print("navBtnAction hit")
         
-        self.navigationController?.pushViewController(SearchViewController(), animated: false)
+        navigationController?.pushViewController(SearchViewController(), animated: false)
         
-        self.isSearching = true
+        isSearching = true
         
     }
     
@@ -165,7 +165,7 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        //self.navigationController?.pushViewController(ProfileViewController(), animated: true)
+        //navigationController?.pushViewController(ProfileViewController(), animated: true)
         
     }
     

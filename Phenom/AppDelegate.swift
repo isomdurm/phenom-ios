@@ -45,13 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         if let window = window {
-            window.backgroundColor = UIColor.blackColor()
+            window.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
             
             UINavigationBar.appearance().setBackgroundImage(UIImage(named: "blackNav.png"), forBarMetrics:UIBarMetrics.Default)
             UINavigationBar.appearance().tintColor = UIColor.blackColor() // UIColor(red:165/255, green:95/255, blue:170/255, alpha:1) //purple
             UITabBar.appearance().tintColor = UINavigationBar.appearance().tintColor
             
-            self.setupDefaults()
+            setupDefaults()
 
             //
             
@@ -61,15 +61,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             
             if (bearerToken == "" || username == "") {
                 // log in
-                self.presentWelcomeViewController()
+                presentWelcomeViewController()
             } else {
                 // we have a user
-                self.presentTabBarViewController()
-                
+                presentTabBarViewController()
             }
 //
             
-//            let oldPushHandlerOnly = !self.respondsToSelector(Selector("application:didReceiveRemoteNotification:fetchCompletionHandler:"))
+//            let oldPushHandlerOnly = !respondsToSelector(Selector("application:didReceiveRemoteNotification:fetchCompletionHandler:"))
 //            let noPushPayload: AnyObject? = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey]
 //            if oldPushHandlerOnly || noPushPayload != nil {
 //                PFAnalytics.trackAppOpenedWithLaunchOptionsInBackground(launchOptions, block: nil)
@@ -101,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 //    func applicationWillTerminate(application: UIApplication) {
 //        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 //        // Saves changes in the application's managed object context before the application terminates.
-//        self.saveContext()
+//        saveContext()
 //    }
 
     
@@ -116,35 +115,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     
     func presentTabBarViewController() {
         
-        self.setupNotifications()
+        setupNotifications()
         
-        self.timelinevc = TimelineViewController()
-        self.explorevc = ExploreViewController()
-        self.myactivityvc = MyActivityViewController()
+        timelinevc = TimelineViewController()
+        explorevc = ExploreViewController()
+        myactivityvc = MyActivityViewController()
         
         
-        self.profilevc = ProfileViewController()
+        profilevc = ProfileViewController()
+        profilevc!.initialProfile = true 
         let defaults = NSUserDefaults.standardUserDefaults()
         let userId = defaults.stringForKey("userId")! as String
         let username = defaults.stringForKey("username")! as String
-        self.profilevc!.userId = userId
-        self.profilevc!.username = username
-        self.profilevc!.firstName = defaults.objectForKey("firstName") as! String
-        self.profilevc!.lastName = defaults.objectForKey("lastName") as! String
-        self.profilevc!.sports = defaults.objectForKey("sports") as! NSArray
-        self.profilevc!.hometown = defaults.objectForKey("hometown") as! String
-        self.profilevc!.bio = defaults.objectForKey("description") as! String
-        self.profilevc!.followersCount = defaults.objectForKey("followersCount") as! NSNumber
-        self.profilevc!.followingCount = defaults.objectForKey("followingCount") as! NSNumber
-        //self.profilevc!.showingTabbar = true
+        profilevc!.userId = userId
+        profilevc!.username = username
+        profilevc!.imageUrl = defaults.objectForKey("imageUrl") as! String
+        profilevc!.firstName = defaults.objectForKey("firstName") as! String
+        profilevc!.lastName = defaults.objectForKey("lastName") as! String
+        profilevc!.sports = defaults.objectForKey("sports") as! NSArray
+        profilevc!.hometown = defaults.objectForKey("hometown") as! String
+        profilevc!.bio = defaults.objectForKey("description") as! String
+        profilevc!.followersCount = defaults.objectForKey("followersCount") as! NSNumber
+        profilevc!.followingCount = defaults.objectForKey("followingCount") as! NSNumber
+        profilevc!.momentCount = defaults.objectForKey("momentCount") as! NSNumber
+        profilevc!.lockerProductCount = defaults.objectForKey("lockerProductCount") as! NSNumber
+        //profilevc!.showingTabbar = true
         
-        let nav1 = UINavigationController(rootViewController: self.timelinevc!)
-        let nav2 = UINavigationController(rootViewController: self.explorevc!)
+        let nav1 = UINavigationController(rootViewController: timelinevc!)
+        let nav2 = UINavigationController(rootViewController: explorevc!)
         let nav3 = UINavigationController(rootViewController: UIViewController())
-        let nav4 = UINavigationController(rootViewController: self.myactivityvc!)
-        let nav5 = UINavigationController(rootViewController: self.profilevc!)
+        let nav4 = UINavigationController(rootViewController: myactivityvc!)
+        let nav5 = UINavigationController(rootViewController: profilevc!)
         
-        self.previousController = nav1
+        previousController = nav1
         
         //let offset2 = CGFloat(6)
         //let imageInset2 = UIEdgeInsetsMake(offset2, 0, -offset2, 0)
@@ -185,24 +188,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         
         let array = [nav1, nav2, nav3, nav4, nav5]
         
-        self.tabbarvc = TabBarViewController()
-        self.tabbarvc!.viewControllers = array
-        self.tabbarvc!.delegate = self
+        tabbarvc = TabBarViewController()
+        tabbarvc!.viewControllers = array
+        tabbarvc!.delegate = self
         
-        window!.rootViewController = self.tabbarvc
+        window!.rootViewController = tabbarvc
         window!.makeKeyAndVisible()
         
     }
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
         
-        if (viewController.isEqual(self.tabbarvc!.viewControllers?[self.tabbarvc!.selectedIndex])) {
+        if (viewController.isEqual(tabbarvc!.viewControllers?[tabbarvc!.selectedIndex])) {
             
             // already selected
             //print("already selected: \(tabBarController.selectedIndex)")
             
-            if (viewController.isEqual(self.tabbarvc!.viewControllers?[1])) {
-                if (self.explorevc!.isSearching) {
+            if (viewController.isEqual(tabbarvc!.viewControllers?[1])) {
+                if (explorevc!.isSearching) {
                     return false
                 } else {
                     return true
@@ -211,7 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
                 return true
             }
         } else {
-            return !viewController.isEqual(self.tabbarvc!.viewControllers?[2])
+            return !viewController.isEqual(tabbarvc!.viewControllers?[2])
         }
     }
     
@@ -220,30 +223,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         if (previousController == viewController) {
             
             if (tabBarController.selectedIndex == 0) {
-                if (!self.timelinevc!.isPushed) {
-                    self.timelinevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                if (!timelinevc!.isPushed) {
+                    timelinevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
             } else if (tabBarController.selectedIndex == 1) {
-                if (self.explorevc!.isSearching) {
+                if (explorevc!.isSearching) {
                     //
                 } else {
-                    //self.explorevc!.theCollectionView.setContentOffset(CGPoint.zero, animated: true)
-                    self.explorevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                    //explorevc!.theCollectionView.setContentOffset(CGPoint.zero, animated: true)
+                    explorevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
             } else if (tabBarController.selectedIndex == 2) {
                 // empty
             } else if (tabBarController.selectedIndex == 3) {
-                if (!self.myactivityvc!.isPushed) {
-                    self.myactivityvc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                if (!myactivityvc!.isPushed) {
+                    myactivityvc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
             } else if (tabBarController.selectedIndex == 4) {
-                if (!self.profilevc!.isPushed) {
-                    self.profilevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                if (!profilevc!.isPushed) {
+                    profilevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
                 
             }
         }
-        self.previousController = viewController
+        previousController = viewController
     }
     
     func setupDefaults() {
@@ -351,7 +354,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     func captureDismissAnimation() {
         
         UIView.animateWithDuration(0.18, animations: {
-            self.self.tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+            self.tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
             }, completion: { finished in
         })
     }

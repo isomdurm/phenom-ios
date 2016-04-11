@@ -13,36 +13,44 @@ class ActivityCell: UITableViewCell {
     var cellWidth = CGFloat()
     
     var userImgView = UIImageView()
+    var userBtn = UIButton()
     var activityLbl = UILabel()
     var momentImgView = UIImageView()
+    var momentBtn = UIButton()
     var followBtn = UIButton(type: UIButtonType.Custom)
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.userImgView.backgroundColor = UIColor.lightGrayColor()
-        self.userImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        self.userImgView.userInteractionEnabled = true
-        self.contentView.addSubview(self.userImgView)
-        self.userImgView.layer.masksToBounds = true
+        userImgView.backgroundColor = UIColor.clearColor()
+        userImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        userImgView.userInteractionEnabled = true
+        contentView.addSubview(userImgView)
+        userImgView.layer.masksToBounds = true
         
-        self.activityLbl.backgroundColor = UIColor.yellowColor()
-        self.activityLbl.font = UIFont.systemFontOfSize(12)
-        self.activityLbl.textColor = UIColor.lightGrayColor()
-        self.activityLbl.textAlignment = NSTextAlignment.Left
-        self.activityLbl.numberOfLines = 1
-        self.activityLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-        self.contentView.addSubview(self.activityLbl)
+        userBtn.backgroundColor = UIColor.clearColor()
+        contentView.addSubview(userBtn)
         
-        self.momentImgView.backgroundColor = UIColor.greenColor()
-        self.momentImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        self.momentImgView.userInteractionEnabled = true
-        self.contentView.addSubview(self.momentImgView)
-        self.momentImgView.layer.masksToBounds = true
+        activityLbl.backgroundColor = UIColor.clearColor()
+        activityLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 13)
+        activityLbl.textColor = UIColor.lightGrayColor()
+        activityLbl.textAlignment = NSTextAlignment.Left
+        activityLbl.numberOfLines = 1
+        activityLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        contentView.addSubview(activityLbl)
         
-        self.followBtn.backgroundColor = UIColor.blueColor()
-        //self.followBtn.addTarget(self, action:#selector(self.followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.contentView.addSubview(self.followBtn)
+        momentImgView.backgroundColor = UIColor.greenColor()
+        momentImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        momentImgView.userInteractionEnabled = true
+        contentView.addSubview(momentImgView)
+        momentImgView.layer.masksToBounds = true
+        
+        momentBtn.backgroundColor = UIColor.clearColor()
+        contentView.addSubview(momentBtn)
+        
+        followBtn.backgroundColor = UIColor.blueColor()
+        //followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        contentView.addSubview(followBtn)
 
     }
     
@@ -54,14 +62,16 @@ class ActivityCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        self.userImgView.frame = CGRectMake(15, 10, 44, 44)
-        self.activityLbl.frame = CGRectMake(15+44+10, 10, self.cellWidth-15-40-15-44-15-10, 44) // x = 15+44+10 is on purpose
+        userImgView.frame = CGRectMake(15, 10, 44, 44)
+        userBtn.frame = CGRectMake(15, 10, 44, 44)
         
-        self.momentImgView.frame = CGRectMake(self.cellWidth-15-44, 10, 44, 44)
-        self.followBtn.frame = CGRectMake(self.cellWidth-15-44, 10, 44, 44)
+        momentImgView.frame = CGRectMake(cellWidth-15-44, 10, 44, 44)
+        momentBtn.frame = CGRectMake(cellWidth-15-44, 10, 44, 44) 
         
-        //self.followBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        //self.followBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        followBtn.frame = CGRectMake(cellWidth-15-44, 10, 44, 44)
+        
+        //followBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        //followBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         
         
         

@@ -26,82 +26,82 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let bg = UIView()
-        bg.frame = CGRectMake(14, 20+7, self.view.frame.size.width-28, 30)
+        bg.frame = CGRectMake(14, 20+7, view.frame.size.width-28, 30)
         bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0) // UIColor.init(white: 0.94, alpha: 1.0)
-        self.navBarView.addSubview(bg)
+        navBarView.addSubview(bg)
         bg.layer.cornerRadius = 7
         bg.layer.masksToBounds = true
         
         let searchWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
         
         let icon = UIImageView()
-        icon.frame = CGRectMake((self.view.frame.size.width/2)-(searchWidth/2)-7, 20+7+10, 12, 12)
+        icon.frame = CGRectMake((view.frame.size.width/2)-(searchWidth/2)-7, 20+7+10, 12, 12)
         icon.backgroundColor = UIColor.clearColor()
         icon.image = UIImage(named:"miniSearchImg.png")
-        self.navBarView.addSubview(icon)
+        navBarView.addSubview(icon)
         
         let lbl = UILabel(frame: CGRectMake(icon.frame.origin.x+icon.frame.size.width+6, 28, searchWidth, 30))
         lbl.textAlignment = NSTextAlignment.Center
         lbl.text = "Search"
         lbl.font = UIFont.systemFontOfSize(15)
         lbl.textColor = UIColor.lightGrayColor()
-        self.navBarView.addSubview(lbl)
+        navBarView.addSubview(lbl)
         
         let navBtn = UIButton(type: UIButtonType.Custom)
         navBtn.frame = CGRectMake(0, 0, bg.frame.size.width, bg.frame.size.height)
         navBtn.backgroundColor = UIColor.clearColor()
-        navBtn.addTarget(self, action:#selector(self.navBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBtn.addTarget(self, action:#selector(navBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         bg.addSubview(navBtn)
         
         let line:UIView = UIView()
-        line.frame = CGRectMake(0, self.navBarView.frame.size.height-0.5, self.navBarView.frame.size.width, 0.5)
+        line.frame = CGRectMake(0, navBarView.frame.size.height-0.5, navBarView.frame.size.width, 0.5)
         line.backgroundColor = UIColor.init(white: 0.80, alpha: 1.0)
-        //self.navBarView.addSubview(line)
+        //navBarView.addSubview(line)
         
-        self.view.addSubview(self.navBarView)
+        view.addSubview(navBarView)
         
         //
         //
         //
     
         
-        self.theTableView.frame = CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64-49) 
-        //self.theTableView.contentOffset = CGPoint(x: 0, y: 44)
-        self.theTableView.backgroundColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:1)
-        self.theTableView.separatorColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:0.5)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(ExploreCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49) 
+        //theTableView.contentOffset = CGPoint(x: 0, y: 44)
+        theTableView.backgroundColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:0.5)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(ExploreCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
         
         //
         
-        let heroHeight = self.theTableView.frame.size.width/2
+        let heroHeight = theTableView.frame.size.width/2
         
         let gearContainerHeight = CGFloat(35+150+35)
         
         let headerHeight = heroHeight+gearContainerHeight
         
-        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, headerHeight))
-        self.theTableView.tableHeaderView?.backgroundColor = UIColor.lightGrayColor()
+        theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, headerHeight))
+        theTableView.tableHeaderView?.backgroundColor = UIColor.lightGrayColor()
         
         let heroBtn = UIButton.init(type: UIButtonType.Custom)
-        heroBtn.frame = CGRectMake(0, 0, (self.theTableView.tableHeaderView?.frame.size.width)!, heroHeight)
+        heroBtn.frame = CGRectMake(0, 0, (theTableView.tableHeaderView?.frame.size.width)!, heroHeight)
         heroBtn.backgroundColor = UIColor.lightGrayColor()
-        heroBtn.addTarget(self, action:#selector(self.heroBtnAction), forControlEvents:.TouchUpInside)
-        heroBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(30)
+        heroBtn.addTarget(self, action:#selector(heroBtnAction), forControlEvents:.TouchUpInside)
+        heroBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 30)
         heroBtn.titleLabel?.numberOfLines = 1
         heroBtn.contentHorizontalAlignment = .Center
         heroBtn.contentVerticalAlignment = .Center
@@ -109,37 +109,37 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         heroBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         heroBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
         heroBtn.setTitle("POPULAR TODAY", forState: .Normal)
-        self.theTableView.tableHeaderView?.addSubview(heroBtn)
+        theTableView.tableHeaderView?.addSubview(heroBtn)
         
-        let gearContainerView = UIView(frame: CGRectMake(0, heroHeight, self.view.frame.size.width, gearContainerHeight))
+        let gearContainerView = UIView(frame: CGRectMake(0, heroHeight, view.frame.size.width, gearContainerHeight))
         gearContainerView.backgroundColor = UIColor.darkGrayColor()
-        self.theTableView.tableHeaderView?.addSubview(gearContainerView)
+        theTableView.tableHeaderView?.addSubview(gearContainerView)
         
-        self.gearScrollView.frame = CGRectMake(0, 35, gearContainerView.frame.size.width, 150)
-        self.gearScrollView.backgroundColor = UIColor.redColor()
-        self.gearScrollView.delegate = self
-        self.gearScrollView.pagingEnabled = false
-        self.gearScrollView.showsHorizontalScrollIndicator = true
-        self.gearScrollView.showsVerticalScrollIndicator = false
-        self.gearScrollView.scrollsToTop = true
-        self.gearScrollView.scrollEnabled = true
-        self.gearScrollView.bounces = true
-        self.gearScrollView.alwaysBounceVertical = false
-        self.gearScrollView.alwaysBounceHorizontal = true
-        self.gearScrollView.userInteractionEnabled = true
-        gearContainerView.addSubview(self.gearScrollView)
+        gearScrollView.frame = CGRectMake(0, 35, gearContainerView.frame.size.width, 150)
+        gearScrollView.backgroundColor = UIColor.redColor()
+        gearScrollView.delegate = self
+        gearScrollView.pagingEnabled = false
+        gearScrollView.showsHorizontalScrollIndicator = true
+        gearScrollView.showsVerticalScrollIndicator = false
+        gearScrollView.scrollsToTop = true
+        gearScrollView.scrollEnabled = true
+        gearScrollView.bounces = true
+        gearScrollView.alwaysBounceVertical = false
+        gearScrollView.alwaysBounceHorizontal = true
+        gearScrollView.userInteractionEnabled = true
+        gearContainerView.addSubview(gearScrollView)
         
-        let padding = CGFloat(2*10) //self.sportsArray.count
-        let width = CGFloat(140*10) //self.sportsArray.count
+        let padding = CGFloat(2*10) //sportsArray.count
+        let width = CGFloat(140*10) //sportsArray.count
         let totalWidth = CGFloat(width+padding+20+20)
-        self.gearScrollView.contentSize = CGSize(width: totalWidth, height: self.gearScrollView.frame.size.height)
+        gearScrollView.contentSize = CGSize(width: totalWidth, height: gearScrollView.frame.size.height)
         
         //
         
         let exploreGearBtn = UIButton.init(type: UIButtonType.Custom)
         exploreGearBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 0, 100, 35)
         exploreGearBtn.backgroundColor = UIColor.greenColor()
-        exploreGearBtn.addTarget(self, action:#selector(self.exploreGearBtnAction), forControlEvents:.TouchUpInside)
+        exploreGearBtn.addTarget(self, action:#selector(exploreGearBtnAction), forControlEvents:.TouchUpInside)
         exploreGearBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         exploreGearBtn.titleLabel?.numberOfLines = 1
         exploreGearBtn.contentHorizontalAlignment = .Center
@@ -151,9 +151,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         gearContainerView.addSubview(exploreGearBtn)
         
         let explorePeopleBtn = UIButton.init(type: UIButtonType.Custom)
-        explorePeopleBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 35+self.gearScrollView.frame.size.height, 100, 35)
+        explorePeopleBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 35+gearScrollView.frame.size.height, 100, 35)
         explorePeopleBtn.backgroundColor = UIColor.greenColor()
-        explorePeopleBtn.addTarget(self, action:#selector(self.explorePeopleBtnAction), forControlEvents:.TouchUpInside)
+        explorePeopleBtn.addTarget(self, action:#selector(explorePeopleBtnAction), forControlEvents:.TouchUpInside)
         explorePeopleBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         explorePeopleBtn.titleLabel?.numberOfLines = 1
         explorePeopleBtn.contentHorizontalAlignment = .Center
@@ -166,11 +166,11 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //
         
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
         //
         
-        self.queryForGear()
+        queryForGear()
         
     }
 
@@ -184,10 +184,10 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if ((UIApplication.sharedApplication().delegate as! AppDelegate).reloadExplore) {
             (UIApplication.sharedApplication().delegate as! AppDelegate).reloadExplore = false
-            //self.queryForFeatured()
+            //queryForFeatured()
         }
         
-        self.isSearching = false
+        isSearching = false
     }
     
     
@@ -249,14 +249,13 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         print("buildGearScrollView hit")
         
-        let gearArray = JSON(data: self.gearData)
+        let gearArray = JSON(data: gearData)
         //let results = gearArray["results"]
-        
         //print("results: \(gearArray["results"])")
         
         for (index, element) in gearArray["results"].enumerate() {
             
-            //print("Item \(index): \(element)")
+            print("item \(index): \(element)")
             
             //let sport = element as! String
             let i = CGFloat(index)
@@ -274,7 +273,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             gearBtn.setBackgroundImage(UIImage(named: "goldTabBar.png"), forState: .Selected)
             
             gearBtn.backgroundColor = UIColor.blueColor()
-            gearBtn.addTarget(self, action:#selector(self.gearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            gearBtn.addTarget(self, action:#selector(gearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
             gearBtn.titleLabel?.numberOfLines = 1
             gearBtn.titleLabel?.font = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
             gearBtn.contentHorizontalAlignment = .Center
@@ -286,7 +285,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             
             gearBtn.tag = NSInteger(i)
             
-            self.gearScrollView.addSubview(gearBtn)
+            gearScrollView.addSubview(gearBtn)
             
             if (index == 9) {
                 break
@@ -299,7 +298,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // now load people ??? on main thread
         
-        self.queryForPeople()
+        queryForPeople()
         
     }
     
@@ -360,9 +359,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
 
     func navBtnAction() {
         
-        self.navigationController?.pushViewController(SearchViewController(), animated: false)
+        navigationController?.pushViewController(SearchViewController(), animated: false)
         
-        self.isSearching = true
+        isSearching = true
         
     }
     
@@ -375,7 +374,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        let people = JSON(data: self.peopleData)
+        let people = JSON(data: peopleData)
         return people["results"].count
     }
     
@@ -388,7 +387,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         //let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
         let cell:ExploreCell = ExploreCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        cell.cellWidth = self.view.frame.size.width
+        cell.cellWidth = view.frame.size.width
         
         
         // people section
@@ -398,7 +397,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.usernameLbl.hidden = false
         cell.followBtn.hidden = false
         
-        let people = JSON(data: self.peopleData)
+        let people = JSON(data: peopleData)
         
         let results = people["results"]
         
@@ -439,15 +438,15 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func heroBtnAction() {
-        self.navigationController?.pushViewController(PopularMomentsViewController(), animated: true)
+        navigationController?.pushViewController(PopularMomentsViewController(), animated: true)
     }
     
     func exploreGearBtnAction() {
-        self.navigationController?.pushViewController(ExploreGearViewController(), animated: true)
+        navigationController?.pushViewController(ExploreGearViewController(), animated: true)
     }
 
     func explorePeopleBtnAction() {
-        self.navigationController?.pushViewController(ExplorePeopleViewController(), animated: true)
+        navigationController?.pushViewController(ExplorePeopleViewController(), animated: true)
     }
     
     func gearBtnAction(sender: UIButton) {
@@ -455,7 +454,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // get specific gear obj
         
-        let gearArray = JSON(data: self.gearData)
+        let gearArray = JSON(data: gearData)
         let results = gearArray["results"]
         
         
@@ -503,8 +502,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         vc.stylingMomentCount = stylingMomentCount!
         vc.existsInLocker = existsInLocker!
         
-        self.navigationController?.pushViewController(vc, animated: true)
-        
+        navigationController?.pushViewController(vc, animated: true)
         
     }
 

@@ -25,47 +25,47 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "NOTIFICATIONS"
-        titleLbl.font = UIFont.boldSystemFontOfSize(17)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
-        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        self.theTableView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
-        self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
-        self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        self.activityIndicator.center = CGPoint(x: self.view.frame.size.width/2, y: 30)
-        self.view.addSubview(self.activityIndicator)
-        self.activityIndicator.startAnimating()
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 30)
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
         
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
-        self.theTableView.addSubview(refreshControl)
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        theTableView.addSubview(refreshControl)
         
         //
         
-        self.queryForMyActivity()
+        queryForMyActivity()
         
         //
         
@@ -78,7 +78,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.isPushed = false
+        isPushed = false
     }
     
     func refreshControlAction() {
@@ -90,7 +90,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         //newme!.saveInBackground()
         
         
-        self.queryForMyActivity()
+        queryForMyActivity()
         
     }
     
@@ -159,8 +159,8 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
         
         // either way
-        self.activityIndicator.stopAnimating()
-        self.activityIndicator.removeFromSuperview()
+        activityIndicator.stopAnimating()
+        activityIndicator.removeFromSuperview()
         
         
     }
@@ -178,63 +178,103 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let moments = JSON(data: self.myActivityData)
+        let moments = JSON(data: myActivityData)
         return moments["results"].count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64
+        //return 64
+        
+        let moments = JSON(data: myActivityData)
+        let results = moments["results"]
+        
+        if let id = results[indexPath.row]["message"].string {
+            
+            let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 13)!, width: self.view.frame.size.width-30)
+            let messageHeight = height+20
+            if (messageHeight > 64) {
+                return messageHeight
+            } else {
+                return 64
+            }
+            
+        } else {
+            return 64
+        }
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell:ActivityCell = ActivityCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        cell.cellWidth = self.view.frame.size.width
+        cell.cellWidth = view.frame.size.width
         
-        let moments = JSON(data: self.myActivityData)
-        
+        let moments = JSON(data: myActivityData)
         let results = moments["results"]
         
         if let id = results[indexPath.row]["source"]["imageUrl"].string {
             let fileUrl = NSURL(string: id)
             
-            cell.userImgView.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
+            cell.userImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
             cell.userImgView.setNeedsLayout()
             
-            cell.userImgView.hnk_setImageFromURL(fileUrl!)
+            cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+                                                     success: { image in
+                                                        
+                                                        //print("image here: \(image)")
+                                                        cell.userImgView.image = image
+                                                        
+                },
+                                                     failure: { error in
+                                                        
+                                                        if ((error) != nil) {
+                                                            print("error here: \(error)")
+                                                        }
+            })
         }
         
         if let id = results[indexPath.row]["message"].string {
             
-            //cell.activityLbl.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
-            //cell.userImgView.setNeedsLayout()
-            
+            let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.activityLbl.font, width: self.view.frame.size.width-30)
+            let messageHeight = height+20
+            if (messageHeight > 64) {
+                cell.activityLbl.frame = CGRectMake(15+44+10, 0, cell.cellWidth-15-40-15-44-15-10, messageHeight)
+            } else {
+                cell.activityLbl.frame = CGRectMake(15+44+10, 0, cell.cellWidth-15-40-15-44-15-10, 64)
+            }
             cell.activityLbl.text = id
+            
+        } else {
+            cell.activityLbl.frame = CGRectMake(15+44+10, 0, cell.cellWidth-15-40-15-44-15-10, 64)
         }
         
         
+        // button actions
         
-//        let timeAgo = (UIApplication.sharedApplication().delegate as! AppDelegate).timeAgoSinceDate(NSDate(), numericDates: NSDate())
+        cell.userBtn.tag = indexPath.row
+        cell.momentBtn.tag = indexPath.row
+        
+        cell.userBtn.addTarget(self, action:#selector(userBtnAction), forControlEvents: .TouchUpInside)
+        cell.momentBtn.addTarget(self, action:#selector(momentBtnAction), forControlEvents: .TouchUpInside)
         
         
         
         return cell
+        
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        let bgView = UIView()
-        bgView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectedBackgroundView = bgView
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
         
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        self.isPushed = true
+        isPushed = true
         
         //let vc = DetailViewController()
         //vc.isGear = true
@@ -242,10 +282,80 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
-    func userBtnAction(sender: UIButton!){
+    func userBtnAction(sender: UIButton!) {
+        print(sender.tag)
         
+        let json = JSON(data: myActivityData)
+
+        let results = json["results"]
+        
+        print("source: \(results[sender.tag]["source"])")
+        
+        if let _ = results[sender.tag]["source"]["id"].string {
+            
+            let id = results[sender.tag]["source"]["id"].string
+            let un = results[sender.tag]["source"]["username"].string
+            
+            let imageUrl = results[sender.tag]["source"]["imageUrl"].string
+            let firstName = results[sender.tag]["source"]["firstName"].string
+            let lastName = results[sender.tag]["source"]["lastName"].string
+            let sport = results[sender.tag]["source"]["sport"].string
+            let hometown = results[sender.tag]["source"]["hometown"].string
+            let bio = results[sender.tag]["source"]["description"].string
+            
+            let userFollows = results[sender.tag]["source"]["userFollows"].bool
+            
+            let lockerProductCount = results[sender.tag]["source"]["lockerProductCount"].number
+            let followingCount = results[sender.tag]["source"]["followingCount"].number
+            let followersCount = results[sender.tag]["source"]["followersCount"].number
+            let momentCount = results[sender.tag]["source"]["momentCount"].number
+            
+            //
+            
+            let vc = ProfileViewController()
+            
+            vc.userId = id!
+            vc.username = un!
+            vc.imageUrl = imageUrl!
+            vc.firstName = firstName!
+            vc.lastName = lastName!
+            vc.sports = [sport!]
+            vc.hometown = hometown!
+            vc.bio = bio!
+            
+            vc.userFollows = userFollows!
+            
+            vc.lockerProductCount = lockerProductCount!
+            vc.followingCount = followingCount!
+            vc.followersCount = followersCount!
+            vc.momentCount = momentCount!
+            
+            navigationController?.pushViewController(vc, animated: true)
+            
+            isPushed = true
+        }
+
         
     }
+
+    
+    func momentBtnAction(sender: UIButton!) {
+        print(sender.tag)
+        
+//        let moments = JSON(data: myActivityData)
+//        let results = moments["results"]
+//        
+//        if let id = results[sender.tag]["id"].string {
+//            print("id: \(id)")
+//            let vc = CommentsViewController()
+//            vc.passedMomentId = id
+//            vc.hidesBottomBarWhenPushed = true
+//            navigationController?.pushViewController(vc, animated: true)
+//            
+//            isPushed = true
+//        }
+    }
+
     
 
 }

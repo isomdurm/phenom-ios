@@ -27,72 +27,72 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor.blackColor()
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
         xBtn.frame = CGRectMake(20, 20, 70, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(self.xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(xBtn)
+        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(xBtn)
 
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "FILTER \(self.passedType)" 
-        titleLbl.font = UIFont.boldSystemFontOfSize(17)
+        titleLbl.text = "FILTER \(passedType)" 
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
-        if (self.passedType == "SPORT") {
+        if (passedType == "SPORT") {
             
-            self.theArray = ["ALL", "BASEBALL", "BASKETBALL", "FOOTBALL", "SOCCER", "LACROSSE", "ICE HOCKEY", "SOFTBALL", "TENNIS", "TRACK & FIELD", "VOLLYBALL", "WRESTLING", "SWIMMING", "CROSS COUNTRY", "FIELD HOCKEY", "GOLF", "RUGBY", "CROSS FIT", "SKIING", "SNOWBOARDING", "SKATEBOARDING", "FIGURE SKATING", "GYMNASTICS"]
+            theArray = ["ALL", "BASEBALL", "BASKETBALL", "FOOTBALL", "SOCCER", "LACROSSE", "ICE HOCKEY", "SOFTBALL", "TENNIS", "TRACK & FIELD", "VOLLYBALL", "WRESTLING", "SWIMMING", "CROSS COUNTRY", "FIELD HOCKEY", "GOLF", "RUGBY", "CROSS FIT", "SKIING", "SNOWBOARDING", "SKATEBOARDING", "FIGURE SKATING", "GYMNASTICS"]
             
         } else {
             
-            self.theArray = ["ALL ", "CAT1", "CAT2", "CAT3", "CAT4", "CAT5", "CAT6"]
+            theArray = ["ALL ", "CAT1", "CAT2", "CAT3", "CAT4", "CAT5", "CAT6"]
             
         }
         
-        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-60)
-        self.theTableView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
-        self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-60)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
-        let bottomContainerView = UIView(frame: CGRectMake(0, self.view.frame.size.height-49, self.view.frame.size.width, 49))
+        let bottomContainerView = UIView(frame: CGRectMake(0, view.frame.size.height-49, view.frame.size.width, 49))
         bottomContainerView.backgroundColor = UIColor.blackColor()
-        self.view.addSubview(bottomContainerView)
+        view.addSubview(bottomContainerView)
         
-        //self.filterBtn.frame = CGRectMake(10, 10, bottomContainerView.frame.size.width-20, bottomContainerView.frame.size.height-20)
-        self.filterBtn.frame = CGRectMake(0, self.view.frame.size.height-60, self.view.frame.size.width, 60)
-        self.filterBtn.backgroundColor = UIColor.greenColor()
-        self.filterBtn.addTarget(self, action:#selector(self.filterBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.filterBtn.titleLabel?.font = UIFont.boldSystemFontOfSize(20)
-        self.filterBtn.titleLabel?.numberOfLines = 1
-        self.filterBtn.contentHorizontalAlignment = .Center
-        self.filterBtn.contentVerticalAlignment = .Center
-        self.filterBtn.titleLabel?.textAlignment = .Center
-        self.filterBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        self.filterBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        self.filterBtn.setTitle("APPLY FILTER", forState: .Normal)
-        self.view.addSubview(self.filterBtn)
+        //filterBtn.frame = CGRectMake(10, 10, bottomContainerView.frame.size.width-20, bottomContainerView.frame.size.height-20)
+        filterBtn.frame = CGRectMake(0, view.frame.size.height-60, view.frame.size.width, 60)
+        filterBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        filterBtn.addTarget(self, action:#selector(filterBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        filterBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+        filterBtn.titleLabel?.numberOfLines = 1
+        filterBtn.contentHorizontalAlignment = .Center
+        filterBtn.contentVerticalAlignment = .Center
+        filterBtn.titleLabel?.textAlignment = .Center
+        filterBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        filterBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        filterBtn.setTitle("APPLY FILTER", forState: .Normal)
+        view.addSubview(filterBtn)
         
         //
         
-//        if let i = self.theArray.indexOfObject("") {
+//        if let i = theArray.indexOfObject("") {
 //            print("Jason is at index \(i)")
 //        } else {
 //            print("not there")
@@ -101,20 +101,20 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         
-        if (self.selectedObj != "") {
+        if (selectedObj != "") {
             // passed a selected cell, figure out the index and select that index
             
-            let i = self.theArray.indexOfObject(self.selectedObj)
-            self.selectedCell = NSIndexPath(forRow: i, inSection: 0)
+            let i = theArray.indexOfObject(selectedObj)
+            selectedCell = NSIndexPath(forRow: i, inSection: 0)
             
         } else {
             
-            self.selectedCell = NSIndexPath(forRow: 0, inSection: 0)
+            selectedCell = NSIndexPath(forRow: 0, inSection: 0)
         }
         
         //
         
-        self.theTableView.reloadData()
+        theTableView.reloadData()
         
         
     }
@@ -127,20 +127,20 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
 
 
     func xBtnAction() {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func filterBtnAction() {
         
-        //print("cell: \(self.selectedCell) - obj: \(self.selectedObj)")
+        //print("cell: \(selectedCell) - obj: \(selectedObj)")
         
         // post nsnotification
         
-        let dict = NSDictionary(dictionary:["type": self.passedType, "obj":self.selectedObj])
+        let dict = NSDictionary(dictionary:["type": passedType, "obj":selectedObj])
         
         NSNotificationCenter.defaultCenter().postNotificationName("ReloadExploreGearNotification", object: nil, userInfo: dict as [NSObject : AnyObject])
         
-        self.xBtnAction()
+        xBtnAction()
         
     }
     
@@ -152,7 +152,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.theArray.count
+        return theArray.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -164,11 +164,12 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
         cell.textLabel?.textColor = UIColor.whiteColor()
+        cell.textLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         
-        let obj = self.theArray.objectAtIndex(indexPath.row) as! String
+        let obj = theArray.objectAtIndex(indexPath.row) as! String
         cell.textLabel?.text = obj
         
-        if (self.selectedCell == indexPath) {
+        if (selectedCell == indexPath) {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None
@@ -179,23 +180,20 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        let bgView = UIView()
-        bgView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectedBackgroundView = bgView
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        let obj = self.theArray.objectAtIndex(indexPath.row) as! String
+        let obj = theArray.objectAtIndex(indexPath.row) as! String
         
-        self.selectedObj = obj
-        self.selectedCell = indexPath
+        selectedObj = obj
+        selectedCell = indexPath
         
-        self.theTableView.reloadData()
+        theTableView.reloadData()
         
         
         

@@ -27,61 +27,61 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "GEAR"
         titleLbl.font = UIFont.boldSystemFontOfSize(17)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         //
         //
         //
         
-        let cellWidth = self.view.frame.size.width/2
+        let cellWidth = view.frame.size.width/2
         
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
         
-        self.theCollectionView = UICollectionView(frame: CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64-49), collectionViewLayout: layout)
-        self.theCollectionView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.theCollectionView.dataSource = self
-        self.theCollectionView.delegate = self
-        //self.theCollectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        self.theCollectionView!.registerClass(GearCell.self, forCellWithReuseIdentifier: "cell")
-        self.view.addSubview(self.theCollectionView)
-        self.theCollectionView.bounces = true
-        self.theCollectionView.scrollEnabled = true
-        self.theCollectionView.alwaysBounceVertical = true
+        theCollectionView = UICollectionView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49), collectionViewLayout: layout)
+        theCollectionView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theCollectionView.dataSource = self
+        theCollectionView.delegate = self
+        //theCollectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        theCollectionView!.registerClass(GearCell.self, forCellWithReuseIdentifier: "cell")
+        view.addSubview(theCollectionView)
+        theCollectionView.bounces = true
+        theCollectionView.scrollEnabled = true
+        theCollectionView.alwaysBounceVertical = true
         
         //
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeRight.direction = .Right
-        self.view.addGestureRecognizer(swipeRight)
+        view.addGestureRecognizer(swipeRight)
         
         //
         
-        self.queryForGear()
+        queryForGear()
         
         
     }
@@ -97,7 +97,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func backAction() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
         
     }
     
@@ -140,11 +140,11 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
 //                            return
 //                        }
 //                        
-//                        self.gearData = dataFromString
+//                        gearData = dataFromString
 //                        
 //                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
 //                            
-//                            self.theCollectionView.reloadData()
+//                            theCollectionView.reloadData()
 //                            
 //                        })
 //                        
@@ -167,7 +167,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 11 // self.objArray.count
+        return 11 // objArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -186,7 +186,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         
-//        let gearArray = JSON(data: self.gearData)
+//        let gearArray = JSON(data: gearData)
 //        let results = gearArray["results"]
 //        
 //        
@@ -233,7 +233,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
 //        vc.stylingMomentCount = stylingMomentCount!
 //        vc.existsInLocker = existsInLocker!
 //        
-//        self.navigationController?.pushViewController(vc, animated: true)
+//        navigationController?.pushViewController(vc, animated: true)
 
         
     }
@@ -255,7 +255,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let cellWidth = self.view.frame.size.width/2
+        let cellWidth = view.frame.size.width/2
         
         return CGSize(width: cellWidth, height: cellWidth) // The size of one cell
     }
@@ -274,7 +274,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSizeMake(self.view.frame.width, 0)  // Header size
+        return CGSizeMake(view.frame.width, 0)  // Header size
     }
     
     //    func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {

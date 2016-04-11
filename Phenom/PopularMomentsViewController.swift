@@ -24,48 +24,48 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside) 
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside) 
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "POPULAR"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
-        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        self.theTableView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
-        self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, 0))
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl.addTarget(self, action: #selector(self.refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
-        self.theTableView.addSubview(refreshControl)
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        theTableView.addSubview(refreshControl)
         
-        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
+        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeBack.direction = .Right
-        self.view.addGestureRecognizer(swipeBack)
+        view.addGestureRecognizer(swipeBack)
 
 
     
@@ -77,7 +77,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func backAction() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func refreshControlAction() {
@@ -128,7 +128,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                             
                             print("add results to current nsdata")
                             
-                            // self.momentsData =
+                            // momentsData =
                             
                             
                             
@@ -165,7 +165,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     // TableViewDelegate
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        let moments = JSON(data: self.momentsData)
+        let moments = JSON(data: momentsData)
         return moments["results"].count
     }
     
@@ -181,7 +181,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         let headerView = TimelineHeaderView(frame: CGRectMake(0, 0, view.frame.size.width, 64))
         
-        let moments = JSON(data: self.momentsData)
+        let moments = JSON(data: momentsData)
         
         //        print(moments)
         
@@ -205,7 +205,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         }
         
         headerView.userBtn!.tag = section
-        headerView.userBtn!.addTarget(self, action:#selector(self.userBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        headerView.userBtn!.addTarget(self, action:#selector(userBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         
         
         //        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
@@ -219,22 +219,22 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return self.view.frame.size.width+164 // probably 150 by default then raise to second line of text if necessary
+        return view.frame.size.width+164 // probably 150 by default then raise to second line of text if necessary
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell:TimelineCell = TimelineCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
-        cell.cellWidth = self.view.frame.size.width
+        cell.cellWidth = view.frame.size.width
         
-        let moments = JSON(data: self.momentsData)
+        let moments = JSON(data: momentsData)
         
         let results = moments["results"]
         
         if let id = results[indexPath.section]["imageUrl"].string {
             let fileUrl = NSURL(string: id)
             
-            cell.momentImgView.frame = CGRectMake(0, 0, cell.self.cellWidth, cell.self.cellWidth)
+            cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
             cell.momentImgView.setNeedsLayout()
             
             cell.momentImgView.hnk_setImageFromURL(fileUrl!)
@@ -297,14 +297,14 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         cell.gearBtn.tag = indexPath.section
         cell.headerBtn.tag = indexPath.section
         
-        cell.commentBtn.addTarget(self, action:#selector(self.commentBtnAction), forControlEvents: .TouchUpInside)
-        cell.gearBtn.addTarget(self, action:#selector(self.gearBtnAction), forControlEvents: .TouchUpInside)
-        cell.headerBtn.addTarget(self, action:#selector(self.commentBtnAction), forControlEvents: .TouchUpInside)
+        cell.commentBtn.addTarget(self, action:#selector(commentBtnAction), forControlEvents: .TouchUpInside)
+        cell.gearBtn.addTarget(self, action:#selector(gearBtnAction), forControlEvents: .TouchUpInside)
+        cell.headerBtn.addTarget(self, action:#selector(commentBtnAction), forControlEvents: .TouchUpInside)
         
         // handle taps
         
-        cell.singleTapRecognizer.addTarget(self, action: #selector(self.singleTapAction(_:)))
-        cell.doubleTapRecognizer.addTarget(self, action: #selector(self.doubleTapAction(_:)))
+        cell.singleTapRecognizer.addTarget(self, action: #selector(singleTapAction(_:)))
+        cell.doubleTapRecognizer.addTarget(self, action: #selector(doubleTapAction(_:)))
         
         
         
@@ -321,18 +321,18 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        //self.isPushed = false
+        //isPushed = false
         
         //let vc  = DetailViewController()
         //vc.isGear = false
-        //self.navigationController?.pushViewController(vc, animated: true)
+        //navigationController?.pushViewController(vc, animated: true)
         
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
 
-        print("y: \(self.theTableView.contentOffset.y)")
-        if (self.theTableView.contentOffset.y != 0) {
+        print("y: \(theTableView.contentOffset.y)")
+        if (theTableView.contentOffset.y != 0) {
 
         }
         
@@ -343,14 +343,14 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         pageNumber = pageNumber + 1
         
-        self.queryForPopular()
+        queryForPopular()
         
     }
     
     func userBtnAction(sender: UIButton!){
         print(sender.tag)
         
-        let moments = JSON(data: self.momentsData)
+        let moments = JSON(data: momentsData)
         
         //        print(moments)
         
@@ -363,8 +363,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             
             //vc.userId = id
             
-            self.navigationController?.pushViewController(vc, animated: true)
-            
+            navigationController?.pushViewController(vc, animated: true)
         }
         
     }
@@ -372,7 +371,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     func commentBtnAction(sender: UIButton!){
         print(sender.tag)
         
-        let moments = JSON(data: self.momentsData)
+        let moments = JSON(data: momentsData)
         let results = moments["results"]
         
         if let id = results[sender.tag]["id"].string {
@@ -380,7 +379,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             let vc = CommentsViewController()
             vc.passedMomentId = id
             vc.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
         }
         
     }
@@ -388,13 +387,13 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     func gearBtnAction(sender: UIButton!){
         print(sender.tag)
         
-        let moments = JSON(data: self.momentsData)
+        let moments = JSON(data: momentsData)
         let moment = moments["results"]
         
         if let id = moment[sender.tag]["id"].string {
             let vc = GearDetailViewController()
 
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
         }
         
     }
@@ -403,9 +402,9 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     func singleTapAction(sender: UITapGestureRecognizer) {
         
         if sender.state == UIGestureRecognizerState.Ended {
-            let tappedLocation = sender.locationInView(self.theTableView)
-            if let tappedIndexPath = self.theTableView.indexPathForRowAtPoint(tappedLocation) {
-                if let tappedCell = self.theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+            let tappedLocation = sender.locationInView(theTableView)
+            if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
+                if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
                     
                     print("single tapped section: \(tappedIndexPath.section), \(tappedCell)")
                     
@@ -422,11 +421,11 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     func doubleTapAction(sender: UITapGestureRecognizer) {
         
         if sender.state == UIGestureRecognizerState.Ended {
-            let tappedLocation = sender.locationInView(self.theTableView)
-            if let tappedIndexPath = self.theTableView.indexPathForRowAtPoint(tappedLocation) {
-                if let tappedCell = self.theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+            let tappedLocation = sender.locationInView(theTableView)
+            if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
+                if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
                     
-                    //self.likeMoment()
+                    //likeMoment()
                     
                     print("double tapped section: \(tappedIndexPath.section), \(tappedCell)")
                     
@@ -458,7 +457,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
 //            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
 //                if (error == nil) {
 //                    
-//                    self.theTableView.reloadData()
+//                    theTableView.reloadData()
 //                    
 //                }
 //                
@@ -489,7 +488,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
 //            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
 //                if (error == nil) {
 //                    
-//                    self.theTableView.reloadData()
+//                    theTableView.reloadData()
 //                    
 //                }
 //                

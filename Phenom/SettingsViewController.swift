@@ -20,46 +20,46 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBarHidden = true
-        self.edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.navigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge.None
         
-        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
-        self.view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        self.navBarView.frame = CGRectMake(0, 0, self.view.frame.size.width, 64)
-        self.navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        self.view.addSubview(self.navBarView)
+        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(20, 20, 70, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(self.backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.navBarView.addSubview(backBtn)
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(backBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, self.navBarView.frame.size.width, 44))
+        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SETTINGS"
         titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
-        self.navBarView.addSubview(titleLbl)
+        navBarView.addSubview(titleLbl)
         
         
-        self.theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        self.theTableView.backgroundColor = UIColor.redColor()
-        self.theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
-        self.theTableView.delegate = self
-        self.theTableView.dataSource = self
-        self.theTableView.showsVerticalScrollIndicator = true
-        self.theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(self.theTableView)
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.backAction))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeRight.direction = .Right
-        self.view.addGestureRecognizer(swipeRight)
+        view.addGestureRecognizer(swipeRight)
         
     }
     
@@ -68,7 +68,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func backAction() {
-        self.navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
         
     }
     
@@ -82,7 +82,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let aLbl = UILabel(frame: CGRectMake(20, 0, self.view.frame.size.width, 35))
+        let aLbl = UILabel(frame: CGRectMake(20, 0, view.frame.size.width, 35))
         aLbl.textAlignment = NSTextAlignment.Left
         
         switch (section) {
@@ -251,11 +251,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
         cell.selectionStyle = UITableViewCellSelectionStyle.Default
         
         let bgView = UIView()
-        bgView.backgroundColor = UIColor(red:39/255, green:39/255, blue:42/255, alpha:1)
+        bgView.backgroundColor = UIColor(red:43/255, green:43/255, blue:45/255, alpha:1)
         cell.selectedBackgroundView = bgView
         
         
@@ -266,7 +266,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if (indexPath.section == 4 && indexPath.row == 0) {
             
-            self.areyousureyouwanttologout()
+            areyousureyouwanttologout()
         }
     }
     
@@ -322,7 +322,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         alertController.addAction(logoutAction)
         alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        presentViewController(alertController, animated: true, completion: nil)
     }
  
 
