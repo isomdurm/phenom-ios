@@ -42,7 +42,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "PROFILE"
-        titleLbl.font = UIFont.boldSystemFontOfSize(20)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
@@ -67,11 +67,11 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         locationField.backgroundColor = UIColor.clearColor()
         locationField.delegate = self
         locationField.textColor = UIColor.whiteColor()
-        locationField.attributedPlaceholder = NSAttributedString(string:"your location",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        locationField.attributedPlaceholder = NSAttributedString(string:"your location",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         locationField.keyboardType = UIKeyboardType.Default
         locationField.returnKeyType = UIReturnKeyType.Next
         locationField.enablesReturnKeyAutomatically = true
-        locationField.font = UIFont.systemFontOfSize(17)
+        locationField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         locationField.placeholder = "your location"
         locationField.autocapitalizationType = UITextAutocapitalizationType.None
         locationField.autocorrectionType = UITextAutocorrectionType.No
@@ -139,7 +139,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             sportBtn.tag = NSInteger(i)
             
             sportBtn.titleLabel?.numberOfLines = 1
-            sportBtn.titleLabel?.font = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
+            sportBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 13)
             sportBtn.contentHorizontalAlignment = .Center
             sportBtn.contentVerticalAlignment = .Bottom
             sportBtn.titleLabel?.textAlignment = .Center

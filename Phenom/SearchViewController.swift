@@ -48,7 +48,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         cancelBtn.frame = CGRectMake(searchView.frame.size.width-70, 20, 70, 44)
         cancelBtn.backgroundColor = UIColor.clearColor()
         cancelBtn.addTarget(self, action:#selector(cancelBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        cancelBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         cancelBtn.titleLabel?.numberOfLines = 1
         cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         cancelBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
@@ -61,7 +61,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         cancelBtn.alpha = 0.0
         
         bg.frame = CGRectMake(14, 20+7, view.frame.size.width-28, 30)
-        bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0) //UIColor.init(white: 0.94, alpha: 1.0)
+        bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
         searchView.addSubview(bg)
         bg.layer.cornerRadius = 7
         bg.layer.masksToBounds = true
@@ -72,7 +72,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         btn.addTarget(self, action:#selector(btnAction), forControlEvents:UIControlEvents.TouchUpInside)
         bg.addSubview(btn)
         
-        let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
+        let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, height: 30)
         
         //icon.frame = CGRectMake(14+10, 20+7+10, 12, 12)
         icon.frame = CGRectMake((view.frame.size.width/2)-(width/2)-7, 20+7+10, 12, 12)
@@ -88,7 +88,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         theTextField.keyboardType = UIKeyboardType.Default
         theTextField.returnKeyType = UIReturnKeyType.Done
         theTextField.enablesReturnKeyAutomatically = true
-        theTextField.font = UIFont.systemFontOfSize(15)
+        theTextField.font = UIFont.init(name: "MaisonNeue-Medium", size: 15)
         theTextField.placeholder = "Search"
         theTextField.autocapitalizationType = UITextAutocapitalizationType.None
         theTextField.autocorrectionType = UITextAutocorrectionType.No
@@ -112,7 +112,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn1.frame = CGRectMake(0, 0, tabView.frame.size.width/2, 44)
         tabBtn1.backgroundColor = UIColor.clearColor()
         tabBtn1.titleLabel?.numberOfLines = 1
-        tabBtn1.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -125,7 +125,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn2.frame = CGRectMake(tabView.frame.size.width/2*1, 0, tabView.frame.size.width/2, 44)
         tabBtn2.backgroundColor = UIColor.clearColor()
         tabBtn2.titleLabel?.numberOfLines = 1
-        tabBtn2.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -152,7 +152,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         theTableView.frame = CGRectMake(0, 64+44, view.frame.size.width, view.frame.size.height-64-44-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.registerClass(SearchCell.self, forCellReuseIdentifier: "cell")
@@ -313,7 +313,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             if (theTextField.text == nothing) {
                 
                 let defaults = NSUserDefaults.standardUserDefaults()
-                let array = defaults.arrayForKey("savedSearchNames")
+                let array = defaults.arrayForKey("savedSearchGear")
                 let ma = NSMutableArray(array: array!)
                 
                 let arr = ma.sort { $0.localizedCaseInsensitiveCompare($1 as! String) == NSComparisonResult.OrderedAscending}
@@ -525,20 +525,21 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         cell.cellString = (theTextField.text)!
         
         cell.textLabel?.frame = CGRectMake(20, 0, view.frame.size.width-20-20-80, 64)
-        cell.textLabel?.font = UIFont.systemFontOfSize(17)
+        cell.textLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         cell.textLabel?.textColor = UIColor.whiteColor()
         
-        cell.addBtn.hidden = true
-        
-        let name = peopleArray.objectAtIndex(indexPath.row) as! String
-        cell.textLabel?.text = name
-        
+//        cell.addBtn.hidden = true
+//        
+//        let name = peopleArray.objectAtIndex(indexPath.row) as! String
+//        cell.textLabel?.text = name
+//        
+        cell.textLabel?.text = "testing"
         
         return cell
     }
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
     }

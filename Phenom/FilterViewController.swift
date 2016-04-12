@@ -58,7 +58,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             
         } else {
             
-            theArray = ["ALL ", "CAT1", "CAT2", "CAT3", "CAT4", "CAT5", "CAT6"]
+            theArray = ["ALL", "CAT1", "CAT2", "CAT3", "CAT4", "CAT5", "CAT6"]
             
         }
         

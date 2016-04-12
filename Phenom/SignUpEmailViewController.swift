@@ -37,7 +37,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "VERIFY EMAIL"
-        titleLbl.font = UIFont.boldSystemFontOfSize(20)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
@@ -53,11 +53,11 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         emailField.backgroundColor = UIColor.clearColor()
         emailField.delegate = self
         emailField.textColor = UIColor.whiteColor()
-        emailField.attributedPlaceholder = NSAttributedString(string:"your email",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        emailField.attributedPlaceholder = NSAttributedString(string:"your email",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         emailField.keyboardType = .EmailAddress
         emailField.returnKeyType = .Next
         emailField.enablesReturnKeyAutomatically = true
-        emailField.font = UIFont.systemFontOfSize(17)
+        emailField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         emailField.placeholder = "your email"
         emailField.autocapitalizationType = UITextAutocapitalizationType.None
         emailField.autocorrectionType = UITextAutocorrectionType.No
@@ -78,10 +78,11 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         emailField.becomeFirstResponder()
+        
     }
     
     func xBtnAction() {

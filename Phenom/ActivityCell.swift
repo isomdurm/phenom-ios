@@ -22,7 +22,7 @@ class ActivityCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        userImgView.backgroundColor = UIColor.clearColor()
+        userImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         userImgView.contentMode = UIViewContentMode.ScaleAspectFill
         userImgView.userInteractionEnabled = true
         contentView.addSubview(userImgView)
@@ -39,7 +39,7 @@ class ActivityCell: UITableViewCell {
         activityLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         contentView.addSubview(activityLbl)
         
-        momentImgView.backgroundColor = UIColor.greenColor()
+        momentImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         momentImgView.contentMode = UIViewContentMode.ScaleAspectFill
         momentImgView.userInteractionEnabled = true
         contentView.addSubview(momentImgView)

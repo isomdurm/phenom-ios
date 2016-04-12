@@ -218,7 +218,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
             cell.userImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
             cell.userImgView.setNeedsLayout()
             
-            cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+            cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                      success: { image in
                                                         
                                                         //print("image here: \(image)")
@@ -265,7 +265,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) 
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         
@@ -320,7 +320,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
             vc.firstName = firstName!
             vc.lastName = lastName!
             vc.sports = [sport!]
-            vc.hometown = hometown!
+            vc.hometown = hometown != nil ? hometown! : ""
             vc.bio = bio!
             
             vc.userFollows = userFollows!

@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Haneke
 
-class LikesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class LikesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
     var likesData = NSData()
     var passedMomentId = NSString()
@@ -50,8 +50,8 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         
         theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        theTableView.backgroundColor = UIColor.redColor()
-        theTableView.separatorColor = UIColor(red:238/255, green:238/255, blue:238/255, alpha:1)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
@@ -73,6 +73,21 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
+        
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
     }
     
     func backAction() {
@@ -165,12 +180,8 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        
-        let bgView = UIView()
-        bgView.backgroundColor = UIColor(red:39/255, green:39/255, blue:42/255, alpha:1)
-        cell.selectedBackgroundView = bgView
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        cell.selectionStyle = .None
         
         
     }

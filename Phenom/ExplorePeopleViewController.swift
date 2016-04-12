@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Haneke
 
-class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
     var exploreGear = NSData()
     
@@ -25,7 +25,7 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
         
         navigationController?.navigationBarHidden = true
         edgesForExtendedLayout = UIRectEdge.None
-        
+
         view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
@@ -58,8 +58,8 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
         
         theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
         //theTableView.contentOffset = CGPoint(x: 0, y: 44)
-        theTableView.backgroundColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:1)
-        theTableView.separatorColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:0.5)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
@@ -99,10 +99,20 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
         }
         
         isSearching = false
+        
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
     }
     
     func backAction() {
         navigationController?.popViewControllerAnimated(true)
+
     }
     
     func searchBtnAction() {
@@ -157,7 +167,7 @@ class ExplorePeopleViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
     }

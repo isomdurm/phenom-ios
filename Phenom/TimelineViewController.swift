@@ -26,7 +26,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var pageNumber = 1
     var loadNextPage: Bool = false
-    
     var playingMedia: Bool = false
     
     override func viewDidLoad() {
@@ -234,6 +233,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // for moments - measure height
         
+        cell.teamBannerView.hidden = true
         cell.teamNameLbl.hidden = true
         cell.teamSportLbl.hidden = true
         cell.teamNumLbl.hidden = true
@@ -282,8 +282,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
             cell.timelineImgView.setNeedsLayout()
             
-            //cell.momentImgView.hnk_setImageFromURL(fileUrl!)
-            cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+            cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                      success: { image in
                                                         
                                                         //print("image here: \(image)")
@@ -322,10 +321,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if let id = results[indexPath.row]["song"]["artistName"].string {
             cell.timelineMusicLbl.hidden = false
+            
             let str = "\(id) | \(results[indexPath.row]["song"]["trackName"])"
+            
             let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.timelineMusicLbl.font, height: cell.timelineMusicLbl.frame.size.height)
+            
             if (width > cell.cellWidth-30) {
-                cell.timelineMusicLbl.frame = CGRectMake(cell.cellWidth-width-20-15, cell.timelineImgView.frame.size.height-20-10-20-15, cell.cellWidth-30, 20)
+                cell.timelineMusicLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height-20-10-20-15, cell.cellWidth-30, 20)
             } else {
                 cell.timelineMusicLbl.frame = CGRectMake(cell.cellWidth-width-20-15, cell.timelineImgView.frame.size.height-20-10-20-15, width+20, 20)
             }
@@ -340,7 +342,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.timelineUserImgView.setNeedsLayout()
             
             //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
-            cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+            cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                          success: { image in
                                                             
                                                             //print("image here: \(image)")
@@ -375,7 +377,11 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             
             var dateStr = ""
             if let ht = results[indexPath.row]["user"]["hometown"].string {
-                dateStr = "\(since) - \(ht)"
+                if (ht == "") {
+                    dateStr = "\(since)"
+                } else {
+                    dateStr = "\(since) - \(ht)"
+                }
             } else {
                 dateStr = "\(since)"
             }
@@ -465,7 +471,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         if (indexPath.row == tableView.indexPathsForVisibleRows?.last?.row) {
@@ -541,7 +547,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             vc.firstName = firstName!
             vc.lastName = lastName!
             vc.sports = [sport!]
-            vc.hometown = hometown!
+            vc.hometown = hometown != nil ? hometown! : ""
             vc.bio = bio!
             vc.userFollows = userFollows!
             vc.lockerProductCount = lockerProductCount!
@@ -580,21 +586,27 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func timelineGearBtnAction(sender: UIButton!){
+    func timelineGearBtnAction(sender: UIButton!) {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
         
         if let id = results[sender.tag]["products"].arrayObject {
-            
-            print("array: \(id)")
-            
-            let vc = GearListViewController()
-            vc.passedProducts = id
-            navigationController?.pushViewController(vc, animated: true)
-            
-            isPushed = true
+            print("id: \(id)")
+            if (id.count > 0) {
+                
+                if let momentId = results[sender.tag]["id"].string {
+                    
+                    let vc = GearListViewController()
+                    vc.passedMomentId = momentId
+                    navigationController?.pushViewController(vc, animated: true)
+                    
+                    isPushed = true
+                    
+                }
+            }
         }
+        
     }
     
     func timelineMoreBtnAction(sender: UIButton!){
@@ -644,18 +656,18 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     let results = json["results"]
                     print(results)
                     
-                    if let id = results[tappedIndexPath.row]["song"]["publicUrl"].string {
-                        
-                        if (playingMedia) {
-                            
-                            // stop media
-                            
-                            
-                            
-                        } else {
-                            
-                            // play media
-                            
+//                    if let id = results[tappedIndexPath.row]["song"]["publicUrl"].string {
+//                        
+//                        if (playingMedia) {
+//                            
+//                            // stop media
+//                            
+//                            
+//                            
+//                        } else {
+//                            
+//                            // play media
+//                            
 //                            let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
 //                            
 //                            let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
@@ -706,9 +718,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 //                                })
 //                                task.resume()
 //                            })
-                            
-                        }
-                    }
+//                            
+//                        }
+//                    }
                 }
             }
         }

@@ -39,7 +39,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SIGN IN"
-        titleLbl.font = UIFont.boldSystemFontOfSize(20)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
@@ -55,11 +55,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
         usernameField.textColor = UIColor.whiteColor()
-        usernameField.attributedPlaceholder = NSAttributedString(string:"your username",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        usernameField.attributedPlaceholder = NSAttributedString(string:"your username",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         usernameField.keyboardType = UIKeyboardType.Default
         usernameField.returnKeyType = UIReturnKeyType.Next
         usernameField.enablesReturnKeyAutomatically = true
-        usernameField.font = UIFont.systemFontOfSize(17)
+        usernameField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         usernameField.placeholder = "your username"
         usernameField.autocapitalizationType = UITextAutocapitalizationType.None
         usernameField.autocorrectionType = UITextAutocorrectionType.No
@@ -70,11 +70,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         passwordField.backgroundColor = UIColor.clearColor()
         passwordField.delegate = self
         passwordField.textColor = UIColor.whiteColor()
-        passwordField.attributedPlaceholder = NSAttributedString(string:"your password",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        passwordField.attributedPlaceholder = NSAttributedString(string:"your password",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         passwordField.keyboardType = UIKeyboardType.Default
         passwordField.returnKeyType = UIReturnKeyType.Go
         passwordField.enablesReturnKeyAutomatically = true
-        passwordField.font = UIFont.systemFontOfSize(17)
+        passwordField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         passwordField.placeholder = "your password"
         passwordField.autocapitalizationType = UITextAutocapitalizationType.None
         passwordField.autocorrectionType = UITextAutocorrectionType.No
@@ -100,10 +100,11 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         usernameField.becomeFirstResponder()
+        
     }
     
     func xBtnAction() {

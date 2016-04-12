@@ -39,7 +39,7 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "INVITE FRIENDS"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         

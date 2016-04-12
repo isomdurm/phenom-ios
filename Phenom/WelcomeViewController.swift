@@ -40,14 +40,13 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
 
         let imgView1 = UIImageView()
         imgView1.frame = CGRectMake(0, 0, theScrollView.frame.size.width, theScrollView.frame.size.height)
-        imgView1.backgroundColor = UIColor.greenColor()
+        imgView1.backgroundColor = UIColor.orangeColor()
         theScrollView.addSubview(imgView1)
-        
         
         //
         
         let containerView = UIView(frame: CGRectMake(0, view.frame.size.height-200, view.frame.size.width, 200))
-        containerView.backgroundColor = UIColor.grayColor()
+        containerView.backgroundColor = UIColor.darkGrayColor() //UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(containerView)
         
         let fbBtn = UIButton(type: UIButtonType.Custom)
@@ -63,7 +62,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         signinBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11, 100, 52)
         signinBtn.addTarget(self, action:#selector(signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signinBtn.titleLabel?.numberOfLines = 1
-        signinBtn.titleLabel?.font = UIFont.systemFontOfSize(22)
+        signinBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         signinBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         signinBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         signinBtn.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -77,7 +76,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         signupBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11+52+11, 100, 52)
         signupBtn.addTarget(self, action:#selector(signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signupBtn.titleLabel?.numberOfLines = 1
-        signupBtn.titleLabel?.font = UIFont.systemFontOfSize(22)
+        signupBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         signupBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         signupBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         signupBtn.titleLabel?.textAlignment = NSTextAlignment.Center

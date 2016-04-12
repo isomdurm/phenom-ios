@@ -10,7 +10,8 @@ import UIKit
 import SwiftyJSON
 import Haneke
 
-class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+
+class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     var initialProfile: Bool = false
     
@@ -225,11 +226,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         fansFollowingInviteContainerView.addSubview(inviteBtn)
         
         headerContainerView.addSubview(fansFollowingInviteContainerView)
-        
-        //
-        //
-        
-        
+    
         
         //
         //
@@ -240,24 +237,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         theTableView.tableHeaderView?.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1) //UIColor(red:43/255, green:43/255, blue:43/255, alpha:1)
         
         theTableView.tableHeaderView?.addSubview(headerContainerView)
-        //
-        
         
         //
         //
         //
-        
-        
-//        let headerNavView = UIView(frame: CGRectMake(0, headerViewHeight-64, headerViewWidth, 64))
-//        headerNavView.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
-//        theTableView.tableHeaderView?.addSubview(headerNavView)
-        
-        
-        
-        let line:UIView = UIView()
-        line.frame = CGRectMake(0, headerViewHeight+64-0.5, headerViewWidth, 0.5)
-        line.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
-        theTableView.tableHeaderView?.addSubview(line)
         
         theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
@@ -286,9 +269,20 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        
         isPushed = false
         
+        if (!initialProfile) {
+            //
+            navigationController?.interactivePopGestureRecognizer!.delegate = self 
+            //
+        }
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
     }
     
     func queryForUser() {
@@ -367,6 +361,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if (Int(followersCount) > 0) {
             let vc = PeopleListViewController()
             vc.passedTitle = "FANS"
+            vc.passedUserId = userId
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -378,6 +373,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if (Int(followingCount) > 0) {
             let vc = PeopleListViewController()
             vc.passedTitle = "FOLLOWING"
+            vc.passedUserId = userId
             navigationController?.pushViewController(vc, animated: true)
         }
         
@@ -425,8 +421,36 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // refresh view to show teams
         
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 70))
-        self.theTableView.tableFooterView?.backgroundColor = UIColor.yellowColor()
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let uid = defaults.stringForKey("userId")! as NSString
+        
+        if (userId == uid && initialProfile) {
+            print("currentUser")
+            
+            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
+            self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+            
+            let addTeamBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+            addTeamBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+            addTeamBtn.addTarget(self, action:#selector(addTeamBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            addTeamBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+            addTeamBtn.titleLabel?.numberOfLines = 1
+            addTeamBtn.contentHorizontalAlignment = .Center
+            addTeamBtn.contentVerticalAlignment = .Center
+            addTeamBtn.titleLabel?.textAlignment = .Center
+            addTeamBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            addTeamBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+            addTeamBtn.setTitle("ADD TEAM", forState: .Normal)
+            self.theTableView.tableFooterView?.addSubview(addTeamBtn)
+            
+        } else {
+            
+            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+            
+        }
+        
+        
         
         self.theTableView.reloadData()
         self.queryForStats()
@@ -494,7 +518,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         print("queryForTimeline hit")
         // get bearer token
         
-        //let date = NSDate().timeIntervalSince1970 * 1000
+        let date = NSDate().timeIntervalSince1970 * 1000
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let bearerToken = defaults.objectForKey("bearerToken") as! NSString
@@ -502,11 +526,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        // /user/:id/moments
-        
-        // need "since" and "limit"
-        let date = NSDate().timeIntervalSince1970 * 1000
+                
         guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments?since=\(date)&limit=20") else {return}
         
         
@@ -653,13 +673,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if (tabBtn1.selected) {
-            return 1
+            return 3
         } else if (tabBtn2.selected) {
             let json = JSON(data: momentsData)
             return json["results"].count
         } else if (tabBtn3.selected) {
-            let gear = JSON(data: gearData)
-            return gear["results"].count
+            let json = JSON(data: gearData)
+            return json["results"].count
         } else {
             return 0
         }
@@ -672,7 +692,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let tabContainerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 64))
-        tabContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        tabContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         let tabWidth = view.frame.width/3
         
@@ -687,7 +707,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
         tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabContainerView.addSubview(tabBtn1)
-        tabBtn1.setTitle("0 STATS", forState: UIControlState.Normal)
+        tabBtn1.setTitle("0 TEAMS", forState: UIControlState.Normal)
         
         tabBtn2.frame = CGRectMake(tabWidth*1, 0, tabWidth, 64)
         tabBtn2.backgroundColor = UIColor.clearColor()
@@ -726,7 +746,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if (tabBtn1.selected) {
             
             // for stats
-            return view.frame.size.width // probably 150 by default then raise to second line of text if necessary
+            return (view.frame.size.width/3)*2
             
         } else if (tabBtn2.selected) {
             
@@ -756,7 +776,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 return imgHeight+padding+40+padding+headlineHeight+padding+40+padding+padding
             }
-            
             
         } else if (tabBtn3.selected) {
             
@@ -791,7 +810,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
             if (brandHeight == 0) {
-                return view.frame.size.width+15+nameHeight+15
+                
+                let contentHeight = view.frame.size.width+15+nameHeight+15
+                
+                if (contentHeight > view.frame.size.width+15+40+15+15) {
+                    return view.frame.size.width+15+nameHeight+15
+                } else {
+                    return view.frame.size.width+15+40+15+15 // default height with add btn, 40 height
+                }
+                
             } else {
                 return view.frame.size.width+15+brandHeight+5+nameHeight+15+15
             }
@@ -809,6 +836,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if (tabBtn1.selected) {
             
             // for stats
+            cell.teamBannerView.hidden = false
             cell.teamNameLbl.hidden = false
             cell.teamSportLbl.hidden = false
             cell.teamNumLbl.hidden = false
@@ -836,6 +864,33 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.gearAddBtn.hidden = true
 
             
+            let padding = CGFloat(10)
+            
+            let teamName = "West Chester Vikings"
+            let mySport = "Lacrosse"
+            let myNumber = "38"
+            let myPosition = "Attack"
+            
+            
+            let teamBannerHeight = ((cell.cellWidth/3)*2)-15
+            let nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(teamName, font: cell.teamNameLbl.font, width: cell.cellWidth-60)+padding
+            let totalContentHeight = nameHeight+padding+(padding/2)+50
+            let nameY = (teamBannerHeight/2)-(totalContentHeight/2)
+            let detailsY = nameY+nameHeight+padding+(padding/2)
+            
+            let sportWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(mySport, font: cell.teamSportLbl.font, height: 40)
+            let positionWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(myPosition, font: cell.teamPositionLbl.font, height: 40)
+            
+            cell.teamBannerView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: teamBannerHeight)
+            cell.teamNameLbl.frame = CGRect(x: 30, y: nameY, width: cell.cellWidth-60, height: nameHeight)
+            cell.teamSportLbl.frame = CGRect(x: cell.cellWidth/2-sportWidth-20-padding, y: detailsY, width: sportWidth, height: 40)
+            cell.teamNumLbl.frame = CGRect(x: cell.cellWidth/2-20, y: detailsY, width: 40, height: 40)
+            cell.teamPositionLbl.frame = CGRect(x: cell.cellWidth/2+20+padding, y: detailsY, width: positionWidth, height: 40)
+
+            cell.teamNameLbl.text = teamName
+            cell.teamSportLbl.text = mySport
+            cell.teamNumLbl.text = myNumber
+            cell.teamPositionLbl.text = myPosition
             
             
             
@@ -843,6 +898,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             // for moments - measure height
 
+            cell.teamBannerView.hidden = true
             cell.teamNameLbl.hidden = true
             cell.teamSportLbl.hidden = true
             cell.teamNumLbl.hidden = true
@@ -891,7 +947,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
                 cell.timelineImgView.setNeedsLayout()
                 
-                cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+                cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                        success: { image in
                                                         
                                                         //print("image here: \(image)")
@@ -945,7 +1001,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.timelineUserImgView.setNeedsLayout()
                 
                 //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
-                cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+                cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                              success: { image in
                                                                 
                                                                 //print("image here: \(image)")
@@ -980,7 +1036,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 var dateStr = ""
                 if let ht = results[indexPath.row]["user"]["hometown"].string {
-                    dateStr = "\(since) - \(ht)"
+                    if (ht == "") {
+                        dateStr = "\(since)"
+                    } else {
+                        dateStr = "\(since) - \(ht)"
+                    }
                 } else {
                     dateStr = "\(since)"
                 }
@@ -1112,7 +1172,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.gearImgView.setNeedsLayout()
                 
                 //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
-                cell.gearImgView.hnk_setImageFromURL(fileUrl!, placeholder: UIImage.init(named: ""),
+                cell.gearImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                              success: { image in
                                                                 
                                                                 //print("image here: \(image)")
@@ -1171,6 +1231,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
         } else {
             
+            cell.teamBannerView.hidden = true
             cell.teamNameLbl.hidden = true
             cell.teamSportLbl.hidden = true
             cell.teamNumLbl.hidden = true
@@ -1203,7 +1264,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) 
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
     }
@@ -1255,23 +1316,26 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             let momentCount = results[sender.tag]["user"]["momentCount"].number
             let lockerProductCount = results[sender.tag]["user"]["lockerProductCount"].number
             
-            let vc = ProfileViewController()
-            vc.userId = id!
-            vc.username = un!
-            vc.imageUrl = imageUrl!
-            vc.firstName = firstName!
-            vc.lastName = lastName!
-            vc.sports = [sport!]
-            vc.hometown = hometown!
-            vc.bio = bio!
-            vc.userFollows = userFollows!
-            vc.lockerProductCount = lockerProductCount!
-            vc.followingCount = followingCount!
-            vc.followersCount = followersCount!
-            vc.momentCount = momentCount!
-            navigationController?.pushViewController(vc, animated: true)
-            
-            isPushed = true
+            if (id! != userId) {
+                
+                let vc = ProfileViewController()
+                vc.userId = id!
+                vc.username = un!
+                vc.imageUrl = imageUrl!
+                vc.firstName = firstName!
+                vc.lastName = lastName!
+                vc.sports = [sport!]
+                vc.hometown = hometown != nil ? hometown! : ""
+                vc.bio = bio!
+                vc.userFollows = userFollows!
+                vc.lockerProductCount = lockerProductCount!
+                vc.followingCount = followingCount!
+                vc.followersCount = followersCount!
+                vc.momentCount = momentCount!
+                navigationController?.pushViewController(vc, animated: true)
+                
+                isPushed = true
+            }
         }
     }
     
@@ -1307,15 +1371,21 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let results = json["results"]
         
         if let id = results[sender.tag]["products"].arrayObject {
-            
-            print("array: \(id)")
-            
-            let vc = GearListViewController()
-            vc.passedProducts = id
-            navigationController?.pushViewController(vc, animated: true)
-            
-            isPushed = true
+            print("id: \(id)")
+            if (id.count > 0) {
+                
+                if let momentId = results[sender.tag]["id"].string {
+                    
+                    let vc = GearListViewController()
+                    vc.passedMomentId = momentId
+                    navigationController?.pushViewController(vc, animated: true)
+                    
+                    isPushed = true
+                    
+                }
+            }
         }
+
     }
     
     func timelineMoreBtnAction(sender: UIButton!){
@@ -1400,7 +1470,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     let vc = GearDetailViewController()
                     
-                    
                     let id = results[tappedIndexPath.row]["id"].number
                     let sku = results[tappedIndexPath.row]["sku"].string
                     let sourceId = results[tappedIndexPath.row]["sourceId"].number
@@ -1469,5 +1538,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    
+    func addTeamBtnAction() {
+        
+        //self.navigationController?.pushViewController(AddTeamViewController(), animated: true)
+        
+        let newnav = UINavigationController(rootViewController: AddTeamViewController())
+        navigationController?.presentViewController(newnav, animated: true, completion: nil)
+    }
 
 }

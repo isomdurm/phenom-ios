@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SafariServices
 
-class GearDetailViewController: UIViewController, UIScrollViewDelegate {
+class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate, UIGestureRecognizerDelegate {
 
     var id = ""
     var sku = ""
@@ -105,12 +106,47 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         
         
         let gearScrollView = UIScrollView(frame: CGRectMake(0, 0, theScrollView.frame.size.width, theScrollView.frame.size.width))
-        gearScrollView.backgroundColor = UIColor.yellowColor()
+        gearScrollView.backgroundColor = UIColor.clearColor() //UIColor.yellowColor()
         theScrollView.addSubview(gearScrollView)
+        
+        let imgView1 = UIImageView(frame: CGRectMake(0, 0, theScrollView.frame.size.width, theScrollView.frame.size.width))
+        imgView1.contentMode = UIViewContentMode.ScaleAspectFill
+        theScrollView.addSubview(imgView1)
+        
+        if (imageUrl != "") {
+            
+            let fileUrl = NSURL(string: imageUrl)
+            
+            imgView1.setNeedsLayout()
+            
+            imgView1.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                                         success: { image in
+                                            
+                                            //print("image here: \(image)")
+                                            imgView1.image = image
+                                            
+                },
+                                         failure: { error in
+                                            
+                                            if ((error) != nil) {
+                                                print("error here: \(error)")
+                                                
+                                                // collapse, this cell - it was prob deleted - error 402
+                                                
+                                            }
+            })
+            //print("cell.momentImgView.image: \(cell.momentImgView.image)")
+        } else {
+            imgView1.image = UIImage(named: "placeholder.png")
+        }
+        
+        
+        
+        
         
         let buyBtn = UIButton.init(type: .Custom)
         buyBtn.frame = CGRectMake(10, gearScrollView.frame.size.height+10, theScrollView.frame.size.width-20, 50)
-        buyBtn.backgroundColor = UIColor.blueColor()
+        buyBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
         buyBtn.setTitle("buy now", forState: .Normal)
         buyBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         buyBtn.addTarget(self, action:#selector(buyBtnAction), forControlEvents: .TouchUpInside)
@@ -247,12 +283,26 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         
     
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+     
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
+    }
 
     func backAction() {
         navigationController?.popViewControllerAnimated(true)
@@ -262,6 +312,16 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
     
     func buyBtnAction() {
         
+        if (productUrl != "") {
+            
+            let svc = SFSafariViewController(URL: NSURL(string: productUrl)!, entersReaderIfAvailable: false)
+            //self.navigationController?.pushViewController(svc, animated: true)
+            self.presentViewController(svc, animated: true, completion: nil)
+            
+            UIApplication.sharedApplication().statusBarStyle = .Default
+            
+            
+        }
         
     }
     
@@ -273,8 +333,24 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate {
         } else {
             print("select lockerBtn")
             lockerBtn.selected = true
+            
+            // add to locker
+            
+            
+            
         }
     }
+    
+    
+    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+        
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        
+        controller.dismissViewControllerAnimated(true, completion: nil)
+        
+        
+    }
+    
     
 
 

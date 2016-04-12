@@ -15,6 +15,7 @@ class MainCell: UITableViewCell {
     
     //
     
+    var teamBannerView = UIView()
     var teamNameLbl = UILabel()
     var teamSportLbl = UILabel()
     var teamNumLbl = UILabel()
@@ -58,34 +59,36 @@ class MainCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        teamNameLbl.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height/3*2)
-        teamNameLbl.font = UIFont.boldSystemFontOfSize(25)
+        teamBannerView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+        contentView.addSubview(teamBannerView)
+        
+        teamNameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 30)
         teamNameLbl.textColor = UIColor.whiteColor()
         teamNameLbl.textAlignment = .Center
         contentView.addSubview(teamNameLbl)
+        teamNameLbl.textAlignment = .Center
+        teamNameLbl.lineBreakMode = .ByWordWrapping
+        teamNameLbl.numberOfLines = 0
         
-        teamSportLbl.frame = CGRect(x: -25, y: frame.size.height/3*2, width: frame.size.width, height: 50)
-        teamSportLbl.font = UIFont.boldSystemFontOfSize(15)
+        teamSportLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         teamSportLbl.textColor = UIColor.whiteColor()
         teamSportLbl.textAlignment = .Right
         contentView.addSubview(teamSportLbl)
         
-        teamNumLbl.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
-        teamNumLbl.backgroundColor = UIColor.orangeColor()
-        teamNumLbl.font = UIFont.boldSystemFontOfSize(15)
+        teamNumLbl.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //gold
+        teamNumLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 20)
         teamNumLbl.textColor = UIColor.whiteColor()
         teamNumLbl.textAlignment = .Center
         contentView.addSubview(teamNumLbl)
         
-        teamPositionLbl.frame = CGRect(x: frame.size.width/2+25, y: frame.size.height/3*2, width: frame.size.width/2, height: 50)
-        teamPositionLbl.font = UIFont.boldSystemFontOfSize(15)
+        teamPositionLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         teamPositionLbl.textColor = UIColor.whiteColor()
         teamPositionLbl.textAlignment = .Left
         contentView.addSubview(teamPositionLbl)
         
         //
         
-        timelineImgView.backgroundColor = UIColor.clearColor() // UIColor.lightGrayColor()
+        timelineImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         timelineImgView.contentMode = UIViewContentMode.ScaleAspectFill
         timelineImgView.image = UIImage(named: "purple200.png")
         contentView.addSubview(timelineImgView)
@@ -104,11 +107,11 @@ class MainCell: UITableViewCell {
         timelineModeLbl.textAlignment = .Center
         contentView.addSubview(timelineModeLbl)
         
-        timelineUserImgView.backgroundColor = UIColor.orangeColor()
+        timelineUserImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         timelineUserImgView.contentMode = UIViewContentMode.ScaleAspectFill
         contentView.addSubview(timelineUserImgView)
         timelineUserImgView.layer.masksToBounds = true
-        
+
         timelineUserImgViewBtn.backgroundColor = UIColor.clearColor()
         contentView.addSubview(timelineUserImgViewBtn)
         
@@ -158,7 +161,7 @@ class MainCell: UITableViewCell {
         
         //
         
-        gearImgView.backgroundColor = UIColor.clearColor()
+        gearImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         gearImgView.contentMode = UIViewContentMode.ScaleAspectFill
         gearImgView.image = UIImage(named: "purple200.png")
         contentView.addSubview(gearImgView)

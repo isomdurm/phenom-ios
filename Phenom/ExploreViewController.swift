@@ -8,6 +8,7 @@
 
 
 import UIKit
+import QuartzCore
 import SwiftyJSON
 import Haneke
 
@@ -38,12 +39,12 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let bg = UIView()
         bg.frame = CGRectMake(14, 20+7, view.frame.size.width-28, 30)
-        bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0) // UIColor.init(white: 0.94, alpha: 1.0)
+        bg.backgroundColor = UIColor.init(white: 0.3, alpha: 1.0)
         navBarView.addSubview(bg)
         bg.layer.cornerRadius = 7
         bg.layer.masksToBounds = true
         
-        let searchWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.systemFontOfSize(15), height: 30)
+        let searchWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView("Search", font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, height: 30)
         
         let icon = UIImageView()
         icon.frame = CGRectMake((view.frame.size.width/2)-(searchWidth/2)-7, 20+7+10, 12, 12)
@@ -54,7 +55,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let lbl = UILabel(frame: CGRectMake(icon.frame.origin.x+icon.frame.size.width+6, 28, searchWidth, 30))
         lbl.textAlignment = NSTextAlignment.Center
         lbl.text = "Search"
-        lbl.font = UIFont.systemFontOfSize(15)
+        lbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 15)
         lbl.textColor = UIColor.lightGrayColor()
         navBarView.addSubview(lbl)
         
@@ -78,12 +79,12 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49) 
         //theTableView.contentOffset = CGPoint(x: 0, y: 44)
-        theTableView.backgroundColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:1)
-        theTableView.separatorColor = UIColor(red:235/255, green:23/255, blue:25/255, alpha:0.5)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(ExploreCell.self, forCellReuseIdentifier: "cell")
+        theTableView.registerClass(PeopleCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
         
         //
@@ -95,13 +96,13 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let headerHeight = heroHeight+gearContainerHeight
         
         theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, headerHeight))
-        theTableView.tableHeaderView?.backgroundColor = UIColor.lightGrayColor()
+        theTableView.tableHeaderView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         let heroBtn = UIButton.init(type: UIButtonType.Custom)
         heroBtn.frame = CGRectMake(0, 0, (theTableView.tableHeaderView?.frame.size.width)!, heroHeight)
-        heroBtn.backgroundColor = UIColor.lightGrayColor()
+        heroBtn.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         heroBtn.addTarget(self, action:#selector(heroBtnAction), forControlEvents:.TouchUpInside)
-        heroBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 30)
+        heroBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 25)
         heroBtn.titleLabel?.numberOfLines = 1
         heroBtn.contentHorizontalAlignment = .Center
         heroBtn.contentVerticalAlignment = .Center
@@ -112,7 +113,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         theTableView.tableHeaderView?.addSubview(heroBtn)
         
         let gearContainerView = UIView(frame: CGRectMake(0, heroHeight, view.frame.size.width, gearContainerHeight))
-        gearContainerView.backgroundColor = UIColor.darkGrayColor()
+        gearContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.tableHeaderView?.addSubview(gearContainerView)
         
         gearScrollView.frame = CGRectMake(0, 35, gearContainerView.frame.size.width, 150)
@@ -379,26 +380,18 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 80
+        return 15+44+15
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
-        let cell:ExploreCell = ExploreCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        let cell:PeopleCell = PeopleCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         cell.cellWidth = view.frame.size.width
         
         
-        // people section
-        
-        cell.userImgView.hidden = false
-        cell.nameLbl.hidden = false
-        cell.usernameLbl.hidden = false
-        cell.followBtn.hidden = false
-        
         let people = JSON(data: peopleData)
-        
         let results = people["results"]
         
         if let person = results[indexPath.row]["username"].string {
@@ -414,10 +407,24 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             
             cell.userImgView.frame = CGRectMake(15, 10, 44, 44)
             cell.userImgView.setNeedsLayout()
-            cell.userImgView.hnk_setImageFromURL(fileUrl!)
+            cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                                                 success: { image in
+                                                    
+                                                    //print("image here: \(image)")
+                                                    cell.userImgView.image = image
+                                                    
+                },
+                                                 failure: { error in
+                                                    
+                                                    if ((error) != nil) {
+                                                        print("error here: \(error)")
+                                                        
+                                                        // collapse, this cell - it was prob deleted - error 402
+                                                        
+                                                    }
+            })
         }
         
-        cell.theScrollView.hidden = true
         
         return cell
         
@@ -425,7 +432,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
     }

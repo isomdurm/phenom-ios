@@ -10,7 +10,7 @@ import UIKit
 import Social
 import MessageUI
 
-class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
+class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate {
     
     var theTableView: UITableView = UITableView()
     var viewersArray = NSMutableArray()
@@ -65,6 +65,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
+        
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
     }
     
     func backAction() {
@@ -251,7 +266,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        cell.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1) //UIColor(red:29/255, green:29/255, blue:32/255, alpha:1)
+        cell.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1) 
         cell.selectionStyle = UITableViewCellSelectionStyle.Default
         
         let bgView = UIView()

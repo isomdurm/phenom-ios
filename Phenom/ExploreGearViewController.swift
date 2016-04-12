@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Haneke
 
-class ExploreGearViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class ExploreGearViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
 
     var collectionsData = NSData()
     var gearData = NSData()
@@ -82,7 +82,6 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeBack.direction = .Right
         view.addGestureRecognizer(swipeBack)
-        theCollectionView.addGestureRecognizer(swipeBack)
         
         //
         
@@ -108,6 +107,16 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         }
         
         isSearching = false
+        
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
+        
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
     }
     
     func backAction() {
@@ -217,8 +226,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         //let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! GearCell
         
-        cell.backgroundColor = UIColor.greenColor()
         
+        cell.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         
         
         
@@ -228,8 +237,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         
-        
-        navigationController?.pushViewController(GearDetailViewController(), animated: true)
+        //navigationController?.pushViewController(GearDetailViewController(), animated: true)
         
     }
     
@@ -243,41 +251,61 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             // Create Header
             let headerView : UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView", forIndexPath: indexPath)
             
+            let heroHeight = theCollectionView.frame.size.width/2
+            
             let headerHeight = theCollectionView.frame.size.width/2+70
             headerView.frame = CGRectMake(0, 0, theCollectionView.frame.size.width, headerHeight)
             
             //theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, headerHeight))
-            headerView.backgroundColor = UIColor.whiteColor()
+            headerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
             
-            let heroView = UIView(frame: CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.width/2))
-            heroView.backgroundColor = UIColor.lightGrayColor()
-            headerView.addSubview(heroView)
+//            let heroView = UIView(frame: CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.width/2))
+//            heroView.backgroundColor = UIColor.lightGrayColor()
+//            headerView.addSubview(heroView)
+            
+            let heroBtn = UIButton.init(type: UIButtonType.Custom)
+            heroBtn.frame = CGRectMake(0, 0, theCollectionView.frame.size.width, heroHeight)
+            heroBtn.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+            heroBtn.addTarget(self, action:#selector(heroBtnAction), forControlEvents:.TouchUpInside)
+            heroBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 25)
+            heroBtn.titleLabel?.numberOfLines = 1
+            heroBtn.contentHorizontalAlignment = .Center
+            heroBtn.contentVerticalAlignment = .Center
+            heroBtn.titleLabel?.textAlignment = .Center
+            heroBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            heroBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+            heroBtn.setTitle("POPULAR GEAR", forState: .Normal)
+            headerView.addSubview(heroBtn)
             
             let sportBtn = UIButton.init(type: UIButtonType.Custom)
             sportBtn.frame = CGRectMake(10, headerView.frame.size.width/2+10, headerView.frame.size.width/2-15, 50)
-            sportBtn.backgroundColor = UIColor.greenColor()
+            sportBtn.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
             sportBtn.addTarget(self, action:#selector(sportBtnAction), forControlEvents:.TouchUpInside)
-            sportBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
+            sportBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
             sportBtn.titleLabel?.numberOfLines = 1
             sportBtn.contentHorizontalAlignment = .Center
             sportBtn.contentVerticalAlignment = .Center
             sportBtn.titleLabel?.textAlignment = .Center
-            sportBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            sportBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+            sportBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Normal)
+            sportBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Highlighted)
             headerView.addSubview(sportBtn)
+            sportBtn.layer.cornerRadius = 4
+            sportBtn.layer.masksToBounds = true
             
             let categoryBtn = UIButton.init(type: UIButtonType.Custom)
             categoryBtn.frame = CGRectMake(headerView.frame.size.width/2+5, headerView.frame.size.width/2+10, headerView.frame.size.width/2-15, 50)
-            categoryBtn.backgroundColor = UIColor.greenColor()
+            categoryBtn.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
             categoryBtn.addTarget(self, action:#selector(categoryBtnAction), forControlEvents:.TouchUpInside)
-            categoryBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
+            categoryBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
             categoryBtn.titleLabel?.numberOfLines = 1
             categoryBtn.contentHorizontalAlignment = .Center
             categoryBtn.contentVerticalAlignment = .Center
             categoryBtn.titleLabel?.textAlignment = .Center
-            categoryBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            categoryBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+            categoryBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Normal)
+            categoryBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Highlighted)
             headerView.addSubview(categoryBtn)
+            categoryBtn.layer.cornerRadius = 4
+            categoryBtn.layer.masksToBounds = true
             
             
             if (sportObj == "ALL") {
@@ -332,9 +360,11 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
     //    }
 
     
-    
-    // 
-    
+    func heroBtnAction() {
+        
+        print("heroBtnAction hit")
+        
+    }
     
     func sportBtnAction() {
         

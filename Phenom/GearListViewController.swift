@@ -2,27 +2,22 @@
 //  GearListViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/5/16.
+//  Created by Clay Zug on 4/11/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
 import UIKit
-import QuartzCore
 import SwiftyJSON
 import Haneke
 
-class GearListViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
+class GearListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
-    var passedProducts = []
-    
-    var gearData = NSData()
-    
-    var theCollectionView: UICollectionView!
-    var refreshControl:UIRefreshControl!
-    
-    var objArray = NSMutableArray()
+    var singleMomentData = NSData()
+    var passedMomentId = String()
     
     var navBarView = UIView()
+    
+    var theTableView: UITableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +26,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         edgesForExtendedLayout = UIRectEdge.None
         
         view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
-        view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
+        view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
@@ -47,33 +42,22 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "GEAR"
-        titleLbl.font = UIFont.boldSystemFontOfSize(17)
+        titleLbl.text = "GEAR LIST"
+        titleLbl.font = UIFont.boldSystemFontOfSize(16)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
-        //
-        //
-        //
         
-        let cellWidth = view.frame.size.width/2
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
+        theTableView.delegate = self
+        theTableView.dataSource = self
+        theTableView.showsVerticalScrollIndicator = true
+        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(theTableView)
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
-        
-        theCollectionView = UICollectionView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49), collectionViewLayout: layout)
-        theCollectionView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        theCollectionView.dataSource = self
-        theCollectionView.delegate = self
-        //theCollectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        theCollectionView!.registerClass(GearCell.self, forCellWithReuseIdentifier: "cell")
-        view.addSubview(theCollectionView)
-        theCollectionView.bounces = true
-        theCollectionView.scrollEnabled = true
-        theCollectionView.alwaysBounceVertical = true
-        
-        //
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
         swipeRight.direction = .Right
@@ -81,7 +65,7 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         
         //
         
-        queryForGear()
+        queryForMomentWithGear()
         
         
     }
@@ -94,6 +78,15 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         super.viewWillAppear(animated)
         
         
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
+        
+    }
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if(navigationController!.viewControllers.count > 1){
+            return true
+        }
+        return false
     }
     
     func backAction() {
@@ -101,196 +94,227 @@ class GearListViewController: UIViewController, UICollectionViewDataSource, UICo
         
     }
     
-    func queryForGear() {
+    
+    func queryForMomentWithGear() {
         
-        // https://api1.phenomapp.com:8081/moment?momentId=STRING
+        //https://api1.phenomapp.com:8081/moment?momentId=STRING
         
-        // gear list inside moment json
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-//        
-//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        
-//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-//        
-//        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)") else {return}
-//        let request = NSMutableURLRequest(URL: URL)
-//        request.HTTPMethod = "GET"
-//        
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-//        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-//        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            
-//            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-//                if (error == nil) {
-//                    
-//                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//                    
-//                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-//                        
-//                        let json = JSON(data: dataFromString)
-//                        if json["errorCode"].number != 200  {
-//                            print("json: \(json)")
-//                            print("error: \(json["errorCode"].number)")
-//                            
-//                            return
-//                        }
-//                        
-//                        gearData = dataFromString
-//                        
-//                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                            
-//                            theCollectionView.reloadData()
-//                            
-//                        })
-//                        
-//                    } else {
-//                        print("URL Session Task Failed: %@", error!.localizedDescription);
-//                    }
-//                }
-//                
-//            })
-//            task.resume()
-//        })
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment?momentId=\(passedMomentId)") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "GET"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
+                        self.singleMomentData = dataFromString
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            self.theTableView.reloadData()
+                            
+                        })
+                        
+                    } else {
+                        print("URL Session Task Failed: %@", error!.localizedDescription)
+                        
+                    }
+                    
+                }
+                
+            })
+            task.resume()
+        })
+       
         
     }
     
     
-    // CollectionViewDelegate
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    // TableViewDelegate
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 11 // objArray.count
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        let json = JSON(data: singleMomentData)
+        let results = json["results"]
+        let productsDict = results["products"]
+        return productsDict.count
+        
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        //let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! GearCell
+        return 130
         
-        cell.backgroundColor = UIColor.greenColor()
-        
-        
-        
-        
-        return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell:GearListCell = GearListCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        cell.cellWidth = self.view.frame.size.width
         
         
-//        let gearArray = JSON(data: gearData)
-//        let results = gearArray["results"]
-//        
-//        
-//        
-//        let vc = GearDetailViewController()
-//        
-//        let id = results[sender.tag]["id"].number
-//        let sku = results[sender.tag]["sku"].string
-//        let sourceId = results[sender.tag]["sourceId"].number
-//        let sourceProductId = results[sender.tag]["sourceProductId"].string
-//        
-//        let name = results[sender.tag]["name"].string
-//        let brand = results[sender.tag]["brand"].string
-//        
-//        let productDescription = results[sender.tag]["description"].string
-//        let productUrl = results[sender.tag]["productUrl"].string
-//        let imageUrl = results[sender.tag]["imageUrl"].string
-//        
-//        let lockerCount = results[sender.tag]["lockerCount"].number
-//        let trainingMomentCount = results[sender.tag]["trainingMomentCount"].number
-//        let gamingMomentCount = results[sender.tag]["gamingMomentCount"].number
-//        let stylingMomentCount = results[sender.tag]["stylingMomentCount"].number
-//        
-//        let existsInLocker = results[sender.tag]["existsInLocker"].bool
-//        
-//        
-//        vc.id = "\(id!)"
-//        vc.sku = sku!
-//        vc.sourceId = "\(sourceId!)"
-//        vc.sourceProductId = sourceProductId!
-//        vc.name = name!
-//        vc.brand = brand!
-//        
-//        if let brandLogoImageUrl = results[sender.tag]["brandLogoImageUrl"].string {
-//            vc.brandLogoImageUrl = brandLogoImageUrl
-//        }
-//        
-//        vc.productDescription = productDescription!
-//        vc.productUrl = productUrl!
-//        vc.imageUrl = imageUrl!
-//        vc.lockerCount = lockerCount!
-//        vc.trainingMomentCount = trainingMomentCount!
-//        vc.gamingMomentCount = gamingMomentCount!
-//        vc.stylingMomentCount = stylingMomentCount!
-//        vc.existsInLocker = existsInLocker!
-//        
-//        navigationController?.pushViewController(vc, animated: true)
+        let json = JSON(data: singleMomentData)
+        let results = json["results"]
+        let productsDict = results["products"]
+
+        if let id = productsDict[indexPath.row]["imageUrl"].string {
+            
+            let fileUrl = NSURL(string: id)
+            
+            cell.gearImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
+            cell.gearImgView.setNeedsLayout()
+            
+            //cell.momentImgView.hnk_setImageFromURL(fileUrl!)
+            cell.gearImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                                                 success: { image in
+                                                    
+                                                    //print("image here: \(image)")
+                                                    cell.gearImgView.image = image
+                                                    
+                },
+                                                 failure: { error in
+                                                    
+                                                    if ((error) != nil) {
+                                                        print("error here: \(error)")
+                                                        
+                                                        // collapse, this cell - it was prob deleted - error 402
+                                                        
+                                                    }
+            })
+            
+        }
+        
 
         
-    }
-    
-    //    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-    //        var reusableView : UICollectionReusableView? = nil
-    //
-    //        // Create header
-    //        if (kind == UICollectionElementKindSectionHeader) {
-    //            // Create Header
-    //            var headerView : PackCollectionSectionView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: kCellheaderReuse, forIndexPath: indexPath) as PackCollectionSectionView
-    //
-    //            reusableView = headerView
-    //        }
-    //        return reusableView!
-    //    }
-    
-    
-    // MARK: UICollectionViewDelegateFlowLayout
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let cellWidth = view.frame.size.width/2
+        var brandHeight = CGFloat()
+        var nameHeight = CGFloat()
         
-        return CGSize(width: cellWidth, height: cellWidth) // The size of one cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0, 0) // margin between cells
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        if let id = productsDict[indexPath.row]["brand"].string {
+            cell.gearBrandLbl.text = id
+            brandHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearBrandLbl.font, width: self.view.frame.size.width-15-15-44-15)
+        } else {
+            brandHeight = 0
+            cell.gearBrandLbl.text = ""
+        }
         
-        return 0
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSizeMake(view.frame.width, 0)  // Header size
-    }
-    
-    //    func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
-    //        return false
-    //    }
-    
-    
-    
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if let id = productsDict[indexPath.row]["name"].string {
+            cell.gearNameLbl.text = id
+            nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearNameLbl.font, width: self.view.frame.size.width-15-15-44-15)
+        } else {
+            cell.gearNameLbl.text = ""
+        }
         
-        return true
-    }
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+//        if let id = obj.objectForKey("existsInLocker") {
+//            let existsInLocker = id as! Bool
+//            if (existsInLocker) {
+//                cell.gearAddBtn.selected = true
+//            } else {
+//                cell.gearAddBtn.selected = false
+//            }
+//        }
         
-        return true
+        cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
+        
+        if (cell.gearBrandLbl.text == "") {
+            cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
+        } else {
+            cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15+brandHeight+5, width: cell.cellWidth-15-15-44-15, height: nameHeight)
+        }
+
+        
+        return cell
+        
     }
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        
+        
+    }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+        
+        let json = JSON(data: singleMomentData)
+        let results = json["results"]
+        let productsDict = results["products"]
+        
+        let vc = GearDetailViewController()
+        
+        let id = productsDict[indexPath.row]["id"].number
+        let sku = productsDict[indexPath.row]["sku"].string
+        let sourceId = productsDict[indexPath.row]["sourceId"].number
+        let sourceProductId = productsDict[indexPath.row]["sourceProductId"].string
+        
+        let name = productsDict[indexPath.row]["name"].string
+        let brand = productsDict[indexPath.row]["brand"].string
+        
+        let productDescription = productsDict[indexPath.row]["description"].string
+        let productUrl = productsDict[indexPath.row]["productUrl"].string
+        let imageUrl = productsDict[indexPath.row]["imageUrl"].string
+        
+        let lockerCount = productsDict[indexPath.row]["lockerCount"].number
+        let trainingMomentCount = productsDict[indexPath.row]["trainingMomentCount"].number
+        let gamingMomentCount = productsDict[indexPath.row]["gamingMomentCount"].number
+        let stylingMomentCount = productsDict[indexPath.row]["stylingMomentCount"].number
+        
+        let existsInLocker = productsDict[indexPath.row]["existsInLocker"].bool
+        
+        
+        vc.id = "\(id!)"
+        vc.sku = sku!
+        vc.sourceId = "\(sourceId!)"
+        vc.sourceProductId = sourceProductId!
+        vc.name = name!
+        vc.brand = brand!
+        
+        if let brandLogoImageUrl = productsDict[indexPath.row]["brandLogoImageUrl"].string {
+            vc.brandLogoImageUrl = brandLogoImageUrl
+        }
+        
+        vc.productDescription = productDescription!
+        vc.productUrl = productUrl!
+        vc.imageUrl = imageUrl!
+        vc.lockerCount = lockerCount!
+        vc.trainingMomentCount = trainingMomentCount!
+        vc.gamingMomentCount = gamingMomentCount!
+        vc.stylingMomentCount = stylingMomentCount!
+        vc.existsInLocker = existsInLocker!
+        
+        navigationController?.pushViewController(vc, animated: true)
+        
+        
+    }
 
 }

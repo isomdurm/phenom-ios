@@ -43,7 +43,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SIGN UP"
-        titleLbl.font = UIFont.boldSystemFontOfSize(20)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
@@ -59,11 +59,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
         usernameField.textColor = UIColor.whiteColor()
-        usernameField.attributedPlaceholder = NSAttributedString(string:"your new username",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        usernameField.attributedPlaceholder = NSAttributedString(string:"your new username",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         usernameField.keyboardType = .Default
         usernameField.returnKeyType = .Next
         usernameField.enablesReturnKeyAutomatically = true
-        usernameField.font = UIFont.systemFontOfSize(17)
+        usernameField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         usernameField.placeholder = "your new username"
         usernameField.autocapitalizationType = UITextAutocapitalizationType.None
         usernameField.autocorrectionType = UITextAutocorrectionType.No
@@ -75,11 +75,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         passwordField.backgroundColor = UIColor.clearColor()
         passwordField.delegate = self
         passwordField.textColor = UIColor.whiteColor()
-        passwordField.attributedPlaceholder = NSAttributedString(string:"your new password",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        passwordField.attributedPlaceholder = NSAttributedString(string:"your new password",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         passwordField.keyboardType = .Default
         passwordField.returnKeyType = .Next
         passwordField.enablesReturnKeyAutomatically = true
-        passwordField.font = UIFont.systemFontOfSize(17)
+        passwordField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         passwordField.placeholder = "your new password"
         passwordField.autocapitalizationType = UITextAutocapitalizationType.None
         passwordField.autocorrectionType = UITextAutocorrectionType.No
@@ -92,11 +92,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         firstNameField.backgroundColor = UIColor.clearColor()
         firstNameField.delegate = self
         firstNameField.textColor = UIColor.whiteColor()
-        firstNameField.attributedPlaceholder = NSAttributedString(string:"first name",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        firstNameField.attributedPlaceholder = NSAttributedString(string:"first name",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         firstNameField.keyboardType = .Default
         firstNameField.returnKeyType = .Next
         firstNameField.enablesReturnKeyAutomatically = true
-        firstNameField.font = UIFont.systemFontOfSize(17)
+        firstNameField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         firstNameField.placeholder = "first name"
         firstNameField.tag = 2
         view.addSubview(firstNameField)
@@ -106,11 +106,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         lastNameField.backgroundColor = UIColor.clearColor()
         lastNameField.delegate = self
         lastNameField.textColor = UIColor.whiteColor()
-        lastNameField.attributedPlaceholder = NSAttributedString(string:"last name",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        lastNameField.attributedPlaceholder = NSAttributedString(string:"last name",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         lastNameField.keyboardType = .Default
         lastNameField.returnKeyType = .Next
         lastNameField.enablesReturnKeyAutomatically = true
-        lastNameField.font = UIFont.systemFontOfSize(17)
+        lastNameField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         lastNameField.placeholder = "last name"
         lastNameField.autocapitalizationType = UITextAutocapitalizationType.None
         lastNameField.autocorrectionType = UITextAutocorrectionType.No
@@ -122,7 +122,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         birthdayField.backgroundColor = UIColor.clearColor()
         birthdayField.delegate = self
         birthdayField.textColor = UIColor.whiteColor()
-        birthdayField.font = UIFont.systemFontOfSize(17)
+        birthdayField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         birthdayField.placeholder = "birthday"
         birthdayField.addTarget(self, action: #selector(birthdayFieldEditing), forControlEvents: .EditingDidBegin)
         birthdayField.tag = 5
@@ -131,14 +131,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         dateFormatter.dateStyle = .MediumStyle
         dateFormatter.timeStyle = .NoStyle
         birthdayField.text = "" //dateFormatter.stringFromDate(NSDate())
-        birthdayField.attributedPlaceholder = NSAttributedString(string:"birthday",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
+        birthdayField.attributedPlaceholder = NSAttributedString(string:"birthday",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
         
         genderField.frame = CGRectMake(20, 64+64+64+64+64, view.frame.size.width-40, 64)
         genderField.backgroundColor = UIColor.clearColor()
         genderField.delegate = self
         genderField.textColor = UIColor.whiteColor()
-        genderField.attributedPlaceholder = NSAttributedString(string:"gender",attributes:[NSForegroundColorAttributeName: UIColor(red:61/255, green:61/255, blue:61/255, alpha:1)])
-        genderField.font = UIFont.systemFontOfSize(17)
+        genderField.attributedPlaceholder = NSAttributedString(string:"gender",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        genderField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         genderField.placeholder = "gender"
         genderField.addTarget(self, action: #selector(genderFieldEditing), forControlEvents: .EditingDidBegin)
         genderField.tag = 5
