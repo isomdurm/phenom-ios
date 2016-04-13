@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewDelegate, FusumaDelegate {
+class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewDelegate, FusumaDelegate, UITextViewDelegate {
 
     var navBarView = UIView()
     
@@ -28,6 +28,10 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     var statusBtn = UIButton()
     
     var imgToPass = UIImage()
+    
+    var savedKeyboardHeight = CGFloat()
+    var statusTextView = KMPlaceholderTextView()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,8 +54,33 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         view.addSubview(cameraViewerContainer)
         
         statusViewerContainer = UIView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-50))
-        statusViewerContainer.backgroundColor = UIColor.yellowColor() // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        statusViewerContainer.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         view.addSubview(statusViewerContainer)
+        
+        
+        statusTextView.frame = CGRectMake(0, 0, self.view.frame.width, 100)
+        statusTextView.backgroundColor = UIColor.clearColor()
+        statusTextView.delegate = self
+        statusTextView.textColor = UIColor.init(white: 1.0, alpha: 1.0)
+        statusTextView.keyboardType = UIKeyboardType.Default
+        statusTextView.returnKeyType = UIReturnKeyType.Default
+        statusTextView.font = UIFont.init(name: "MaisonNeue-Bold", size: 25)
+        statusTextView.enablesReturnKeyAutomatically = true
+        statusTextView.textAlignment = NSTextAlignment.Left
+        statusTextView.autocapitalizationType = UITextAutocapitalizationType.None
+        statusTextView.autocorrectionType = UITextAutocorrectionType.No
+        statusTextView.scrollEnabled = true
+        statusTextView.scrollsToTop = false
+        self.statusViewerContainer.addSubview(statusTextView)
+        statusTextView.text = ""
+        statusTextView.placeholder = "Add a caption..."
+        statusTextView.placeholderColor = UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)
+        statusTextView.textContainerInset = UIEdgeInsetsMake(19, 19, 19, 19)
+        statusTextView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CameraViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
+        
+        
         
         albumView.delegate  = self
         cameraView.delegate = self
@@ -150,12 +179,64 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+        let info = notification.userInfo!
+        
+        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        
+        self.savedKeyboardHeight = keyboardframe.size.height
+        
+        var textViewFrame = statusTextView.frame
+        textViewFrame.size.height = self.view.frame.size.height-self.savedKeyboardHeight-64
+        statusTextView.frame = textViewFrame
+        
+//        let newY = self.view.frame.size.height-self.savedKeyboardHeight-56
+//        
+//        var optionsbarFrame = self.optionsbar.frame
+//        optionsbarFrame.origin.y = newY
+//        self.optionsbar.frame = optionsbarFrame
+    }
+    
+    // UITextViewDelegate
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        
+        if (textView.text == "") {
+            if (text == " ") {
+                return false
+            }
+        }
+        
+        let maxLength = 200
+        let currentString: NSString = textView.text!
+        let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: text)
+        
+        return newString.length <= maxLength
+    }
+    
+    func textViewDidChange(textView: UITextView) {
+        
+        
+    }
+    
+    
+    
     func albumBtnAction() {
         albumViewerContainer.hidden = false
         cameraViewerContainer.hidden = true
         statusViewerContainer.hidden = true
         titleLbl.text = "CAMERA ROLL"
 
+        self.statusTextView.resignFirstResponder()
+        
     }
     
     func cameraBtnAction() {
@@ -163,6 +244,9 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         cameraViewerContainer.hidden = false
         statusViewerContainer.hidden = true
         titleLbl.text = "CAMERA"
+        
+        self.statusTextView.resignFirstResponder()
+        
     }
     
     func statusBtnAction() {
@@ -170,6 +254,9 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         cameraViewerContainer.hidden = true
         statusViewerContainer.hidden = false
         titleLbl.text = "STATUS"
+        
+        self.statusTextView.becomeFirstResponder()
+        
     }
     
     func xBtnAction() {
@@ -214,7 +301,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
             
             let vc = ComposeViewController()
             vc.statusOnly = true
-            vc.passedHeader = "this is a test"
+            vc.passedHeadline = self.statusTextView.text
             navigationController?.pushViewController(vc, animated: true)
             
         } else {

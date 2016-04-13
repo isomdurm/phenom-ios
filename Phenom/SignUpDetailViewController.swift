@@ -67,14 +67,14 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         locationField.backgroundColor = UIColor.clearColor()
         locationField.delegate = self
         locationField.textColor = UIColor.whiteColor()
-        locationField.attributedPlaceholder = NSAttributedString(string:"your location",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        locationField.attributedPlaceholder = NSAttributedString(string:"your location",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         locationField.keyboardType = UIKeyboardType.Default
         locationField.returnKeyType = UIReturnKeyType.Next
         locationField.enablesReturnKeyAutomatically = true
         locationField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         locationField.placeholder = "your location"
-        locationField.autocapitalizationType = UITextAutocapitalizationType.None
-        locationField.autocorrectionType = UITextAutocorrectionType.No
+        locationField.autocapitalizationType = .Words
+        locationField.autocorrectionType = .No
         view.addSubview(locationField)
         locationField.text = ""
         

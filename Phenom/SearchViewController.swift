@@ -99,7 +99,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         let line:UIView = UIView()
         line.frame = CGRectMake(0, searchView.frame.size.height-0.5, searchView.frame.size.width, 0.5)
         line.backgroundColor = UIColor.init(white: 0.30, alpha: 1.0)
-        searchView.addSubview(line)
+        //searchView.addSubview(line)
         
         view.addSubview(searchView)
         

@@ -60,7 +60,7 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         teamNameField.backgroundColor = UIColor.clearColor()
         teamNameField.delegate = self
         teamNameField.textColor = UIColor.whiteColor()
-        teamNameField.attributedPlaceholder = NSAttributedString(string:"team name",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        teamNameField.attributedPlaceholder = NSAttributedString(string:"team name",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         teamNameField.keyboardType = .Default
         teamNameField.returnKeyType = .Next
         teamNameField.enablesReturnKeyAutomatically = true
@@ -75,7 +75,7 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         sportField.backgroundColor = UIColor.clearColor()
         sportField.delegate = self
         sportField.textColor = UIColor.whiteColor()
-        sportField.attributedPlaceholder = NSAttributedString(string:"sport",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        sportField.attributedPlaceholder = NSAttributedString(string:"sport",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         sportField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         sportField.placeholder = "sport"
         sportField.addTarget(self, action: #selector(sportFieldEditing), forControlEvents: .EditingDidBegin)
@@ -87,7 +87,7 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         numberField.backgroundColor = UIColor.clearColor()
         numberField.delegate = self
         numberField.textColor = UIColor.whiteColor()
-        numberField.attributedPlaceholder = NSAttributedString(string:"your number",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        numberField.attributedPlaceholder = NSAttributedString(string:"your number",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         numberField.keyboardType = .NumberPad
         numberField.returnKeyType = .Next
         numberField.enablesReturnKeyAutomatically = true
@@ -101,7 +101,7 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         positionField.backgroundColor = UIColor.clearColor()
         positionField.delegate = self
         positionField.textColor = UIColor.whiteColor()
-        positionField.attributedPlaceholder = NSAttributedString(string:"your position",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        positionField.attributedPlaceholder = NSAttributedString(string:"your position",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         positionField.keyboardType = .Default
         positionField.returnKeyType = .Done
         positionField.enablesReturnKeyAutomatically = true

@@ -155,6 +155,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         self.momentsData = dataFromString
                         
+                        //let results = json["results"]
+                        //print("timeline results: \(results)")
+                        
                         // done, reload tableView
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
@@ -282,6 +285,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
             cell.timelineImgView.setNeedsLayout()
             
+            //cell.timelineImgView.hnk_setImageFromURL(fileUrl!)
             cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                      success: { image in
                                                         
@@ -336,7 +340,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.timelineMusicLbl.hidden = true
         }
         
-        if let id = results[indexPath.row]["user"]["imageUrl"].string {
+        if let id = results[indexPath.row]["user"]["imageUrlTiny"].string {
             
             let fileUrl = NSURL(string: id)
             cell.timelineUserImgView.setNeedsLayout()
@@ -432,35 +436,71 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         //            }
         
         
-        if let id = results[indexPath.row]["user"]["userFollows"].bool {
-            if (id) {
-                cell.timelineFollowBtn.selected = true
-                cell.timelineFollowBtn.hidden = true
-            } else {
-                cell.timelineFollowBtn.selected = false
-                cell.timelineFollowBtn.hidden = false
-            }
+        let momentId = results[indexPath.row]["id"].string
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId!)) {
+            cell.timelineLikeBtn.selected = false
         } else {
-            cell.timelineFollowBtn.selected = true
-            cell.timelineFollowBtn.hidden = true
+            
+            if ((UIApplication.sharedApplication().delegate as! AppDelegate).likedMomentId(momentId!)) {
+                cell.timelineLikeBtn.selected = true
+            } else {
+                // check if user likes
+                
+                if let id = results[indexPath.row]["userLikes"].bool {
+                    if (id) {
+                        // add it!
+                        (UIApplication.sharedApplication().delegate as! AppDelegate).addLikedMomentId(momentId!)
+                        cell.timelineLikeBtn.selected = true
+                    } else {
+                        cell.timelineLikeBtn.selected = false
+                    }
+                } else {
+                    cell.timelineLikeBtn.selected = true
+                }
+            }
+            
         }
         
         
-        // button actions
+        let uid = results[indexPath.row]["user"]["id"].string
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).followingUserId(uid!)) {
+            cell.timelineFollowBtn.hidden = true
+        } else {
+            // check if following this user
+            if let id = results[indexPath.row]["user"]["userFollows"].bool {
+                if (id) {
+                    // add user!
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).followUserId(uid!)
+                    cell.timelineFollowBtn.hidden = true
+                } else {
+                    cell.timelineFollowBtn.selected = false
+                    cell.timelineFollowBtn.hidden = false
+                }
+            } else {
+                cell.timelineFollowBtn.hidden = true
+            }
+        }
+        
+        
+        // buttons
         
         cell.timelineUserImgViewBtn.tag = indexPath.row
         cell.timelineLikeBtn.tag = indexPath.row
         cell.timelineCommentBtn.tag = indexPath.row
         cell.timelineGearBtn.tag = indexPath.row
         cell.timelineMoreBtn.tag = indexPath.row
+        cell.timelineFollowBtn.tag = indexPath.row
         
         cell.timelineUserImgViewBtn.addTarget(self, action:#selector(timelineUserImgViewBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineLikeBtn.addTarget(self, action:#selector(timelineLikeBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineCommentBtn.addTarget(self, action:#selector(timelineCommentBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineGearBtn.addTarget(self, action:#selector(timelineGearBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineMoreBtn.addTarget(self, action:#selector(timelineMoreBtnAction), forControlEvents: .TouchUpInside)
+        cell.timelineFollowBtn.addTarget(self, action:#selector(timelineFollowBtnAction), forControlEvents: .TouchUpInside)
         
-        // handle taps
+        // taps
         
         cell.timelineSingleTapRecognizer.addTarget(self, action: #selector(timelineSingleTapAction(_:)))
         cell.timelineDoubleTapRecognizer.addTarget(self, action: #selector(timelineDoubleTapAction(_:)))
@@ -476,25 +516,25 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if (indexPath.row == tableView.indexPathsForVisibleRows?.last?.row) {
             //end of loading
-            print("this section hit: \(indexPath.row)")
+            //print("this section hit: \(indexPath.row)")
             
-            let json = JSON(data: momentsData)
-            let lastMomentNum = json["results"].count-1
-            
-            if (indexPath.row == lastMomentNum) {
-                
-                if (!loadNextPage) {
-                    
-                    print("load next page")
-                    loadNextPage = true
-                    
-                    pageNumber = pageNumber+1
-                    
-                    queryForTimeline()
-                    
-                    
-                }
-            }
+//            let json = JSON(data: momentsData)
+//            let lastMomentNum = json["results"].count-1
+//            
+//            if (indexPath.row == lastMomentNum) {
+//                
+//                if (!loadNextPage) {
+//                    
+//                    print("load next page")
+//                    loadNextPage = true
+//                    
+//                    pageNumber = pageNumber+1
+//                    
+//                    queryForTimeline()
+//                    
+//                    
+//                }
+//            }
         }
         
     }
@@ -519,7 +559,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    func timelineUserImgViewBtnAction(sender: UIButton!){
+    func timelineUserImgViewBtnAction(sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -560,24 +600,170 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func timelineLikeBtnAction(sender: UIButton!){
+    func timelineLikeBtnAction(sender: UIButton) {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
+        let id = results[sender.tag]["id"].string
         
-        if let _ = results[sender.tag]["id"].string {
+        if (sender.selected) {
+            print("currently liked")
+            sender.selected = false
+            unlikeAction(id!)
+        } else {
+            print("currently NOT liked")
+            sender.selected = true
             
+            if ((UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(id!)) {
+                (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.removeObjectsInArray([id!])
+            }
+            
+            likeAction(id!)
         }
     }
     
-    func timelineCommentBtnAction(sender: UIButton!){
+    func likeAction(momentId : String) {
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).likedMomentId(momentId)) {
+            return
+        }
+        
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            return
+                        }
+                        
+                        // update likedPostIdeas
+                        //
+                        // reload
+                        
+                        let array = defaults.arrayForKey("likedMomentIds")
+                        let ma = NSMutableArray(array: array!)
+                        if (ma.containsObject(momentId)) {
+                            // in likedMomentIds, do nothing
+                        } else {
+                            ma.addObject(momentId)
+                            let newarray = ma as NSArray
+                            defaults.setObject(newarray, forKey: "likedMomentIds")
+                            defaults.synchronize()
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            print("liked")
+                            self.theTableView.reloadData()
+                        })
+                    } else {
+                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                } else {
+                    //
+                }
+            })
+            task.resume()
+        })
+    }
+    
+    func unlikeAction(momentId : String) {
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
+                    
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
+                        // update likedPostIdeas
+                        //
+                        // reload
+                        
+                        let array = defaults.arrayForKey("likedMomentIds")
+                        let ma = NSMutableArray(array: array!)
+                        if (ma.containsObject(momentId)) {
+                            // in likedMomentIds, do nothing
+                            ma.removeObject(momentId)
+                            let newarray = ma as NSArray
+                            defaults.setObject(newarray, forKey: "likedMomentIds")
+                            defaults.synchronize()
+                        }
+                        
+                        
+                        if (!(UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId)) {
+                            (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.addObject(momentId)
+                        }
+                        
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            print("unliked")
+                            self.theTableView.reloadData()
+                        })
+                        
+                    } else {
+                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                } else {
+                    //
+                }
+            })
+            task.resume()
+        })
+    }
+    
+    
+    func timelineCommentBtnAction(sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
         
         if let id = results[sender.tag]["id"].string {
             print("id: \(id)")
-            let vc = CommentsViewController()
+            let vc = ChatViewController()
             vc.passedMomentId = id
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
@@ -586,7 +772,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func timelineGearBtnAction(sender: UIButton!) {
+    func timelineGearBtnAction(sender: UIButton) {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -606,10 +792,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
         }
-        
     }
     
-    func timelineMoreBtnAction(sender: UIButton!){
+    func timelineMoreBtnAction(sender: UIButton) {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -619,26 +804,86 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func likesBtnAction(sender: UIButton!){
-        print(sender.tag)
+    func timelineFollowBtnAction(sender : UIButton) {
+        
+        // follow only
+        
+        sender.hidden = true
         
         let json = JSON(data: momentsData)
         let results = json["results"]
+        let uid = results[sender.tag]["user"]["id"].string
         
-        if let id = results[sender.tag]["likesCount"].number {
-            if (Int(id) > 0) {
-                if let id = results[sender.tag]["id"].string {
-                    print("id: \(id)")
-                    let vc = LikesViewController()
-                    vc.passedMomentId = id
-                    vc.hidesBottomBarWhenPushed = false
-                    navigationController?.pushViewController(vc, animated: true)
+        // follow
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "POST"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                if (error == nil) {
                     
-                    isPushed = true
+                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    
+                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                        
+                        let json = JSON(data: dataFromString)
+                        if json["errorCode"].number != 200  {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            return
+                        }
+                        
+                        // followed
+                        
+                        // update followingUserIds
+                        //
+                        // reload
+                        
+                        let array = defaults.arrayForKey("followingUserIds")
+                        let ma = NSMutableArray(array: array!)
+                        if (ma.containsObject(uid!)) {
+                            // in likedMomentIds, do nothing
+                        } else {
+                            ma.addObject(uid!)
+                            let newarray = ma as NSArray
+                            defaults.setObject(newarray, forKey: "followingUserIds")
+                            defaults.synchronize()
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            
+                            print("followed")
+                            self.theTableView.reloadData()
+                        })
+                        
+                    } else {
+                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                        
+                    }
+                } else {
+                    //
                 }
-            }
-        }
+            })
+            task.resume()
+        })
     }
+    
     
     func timelineSingleTapAction(sender: UITapGestureRecognizer) {
         
@@ -651,76 +896,12 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     // play video or music !!!
                     
-                    let json = JSON(data: momentsData)
+//                    let json = JSON(data: momentsData)
+//                    
+//                    let results = json["results"]
+//                    print(results)
+
                     
-                    let results = json["results"]
-                    print(results)
-                    
-//                    if let id = results[tappedIndexPath.row]["song"]["publicUrl"].string {
-//                        
-//                        if (playingMedia) {
-//                            
-//                            // stop media
-//                            
-//                            
-//                            
-//                        } else {
-//                            
-//                            // play media
-//                            
-//                            let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//                            
-//                            let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-//                            
-//                            guard let URL = NSURL(string: id) else {return}
-//                            let request = NSMutableURLRequest(URL: URL)
-//                            request.HTTPMethod = "GET"
-//                            
-//                            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//                            
-//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                                
-//                                let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-//                                    if (error == nil) {
-//                                        
-//                                        let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//                                        
-//                                        print("ok: \(datastring)")
-//                                        
-//                                        if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-//                                            
-//                                            let json = JSON(data: dataFromString)
-//                                            if json["errorCode"].number != 200  {
-//                                                print("json: \(json)")
-//                                                print("error: \(json["errorCode"].number)")
-//                                                
-//                                                return
-//                                            }
-//                                            
-//                                            
-//                                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                                                
-//                                                
-//                                                
-//                                            })
-//                                            
-//                                        } else {
-//                                            print("URL Session Task Failed: %@", error!.localizedDescription)
-//                                            
-//                                        }
-//                                        
-//                                    } else {
-//                                        
-//                                        print("error in \(self)")
-//                                    }
-//                                    
-//                                    
-//                                })
-//                                task.resume()
-//                            })
-//                            
-//                        }
-//                    }
                 }
             }
         }
@@ -734,9 +915,16 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
                 if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
                     
-                    //likeMoment()
+                    //print("double tapped: \(tappedIndexPath.row), \(tappedCell)")
                     
-                    print("double tapped: \(tappedIndexPath.row), \(tappedCell)")
+                    let json = JSON(data: momentsData)
+                    let results = json["results"]
+                    let id = results[tappedIndexPath.row]["id"].string
+                    
+                    let cell = tappedCell as! MainCell
+                    cell.timelineLikeBtn.selected = true
+                    
+                    likeHeartAnimation(tappedCell, momentId: id!)
                     
                     
                 }
@@ -744,7 +932,52 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    
+    func likeHeartAnimation(cell : UITableViewCell, momentId : String) {
+        
+        // get height of media
+        
+        let mediaHeight = cell.frame.size.width+100
+        
+        //let heartImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height/2-50, 100, 100))
+        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-50, mediaHeight/2-50, 100, 100))
+        heartImgView.backgroundColor = UIColor.clearColor()
+        heartImgView.image = UIImage(named: "heart.png")
+        cell.addSubview(heartImgView)
+        
+        heartImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.75, 0.75)
+        
+        UIView.animateWithDuration(0.18, animations: {
+            heartImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.04, 1.04)
+            }, completion: { finished in
+                if (finished){
+                    UIView.animateWithDuration(0.16, animations: {
+                        heartImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                        }, completion: { finished in
+                            if (finished) {
+                                
+                                let delay = 0.3 * Double(NSEC_PER_SEC)
+                                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+                                dispatch_after(time, dispatch_get_main_queue()) {
+                                    
+                                    UIView.animateWithDuration(0.18, animations: {
+                                        heartImgView.alpha = 0.0
+                                        }, completion: { finished in
+                                            if (finished) {
+                                                heartImgView.removeFromSuperview()
+                                                
+                                                //
+                                                self.likeAction(momentId)
+                                                //
+                                                
+                                            }
+                                    })
+                                }
+                            }
+                    })
+                }
+        })
+        
+    }
     
     
     // UIScrollViewDelegate
@@ -836,68 +1069,5 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    
-    
-    func likeMoment() {
-        
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-//        
-//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        
-//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-//        
-//        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/like") else {return}
-//        let request = NSMutableURLRequest(URL: URL)
-//        request.HTTPMethod = "POST"
-//        
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-//        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-//        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            
-//            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-//                if (error == nil) {
-//                        
-//                    theTableView.reloadData()
-//
-//                }
-//                
-//            })
-//            task.resume()
-//        })
-    }
-    
-    func unlikeMoment() {
-        
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-//        
-//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        
-//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-//        
-//        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/unlike") else {return}
-//        let request = NSMutableURLRequest(URL: URL)
-//        request.HTTPMethod = "DELETE"
-//        
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-//        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-//        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            
-//            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-//                if (error == nil) {
-//                    
-//                    theTableView.reloadData()
-//                    
-//                }
-//                
-//            })
-//            task.resume()
-//        })
-    }
-    
+
 }

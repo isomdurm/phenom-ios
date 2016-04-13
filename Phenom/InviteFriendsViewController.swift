@@ -55,6 +55,17 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
         
         
+        // auto-follow friends
+        //
+        // ask for access to contacts
+        //
+        // show friends already on the service
+        //
+        // show 10 suggested users under
+        
+        
+        
+        
         
     }
     

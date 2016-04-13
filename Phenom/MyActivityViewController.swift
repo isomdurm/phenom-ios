@@ -133,6 +133,9 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                             return
                         }
                         
+                        let results = json["results"]
+                        print("results: \(results)")
+                        
                         self.myActivityData = dataFromString
                         
                         // done, reload tableView
@@ -178,15 +181,15 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let moments = JSON(data: myActivityData)
-        return moments["results"].count
+        let json = JSON(data: myActivityData)
+        return json["results"].count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //return 64
         
-        let moments = JSON(data: myActivityData)
-        let results = moments["results"]
+        let json = JSON(data: myActivityData)
+        let results = json["results"]
         
         if let id = results[indexPath.row]["message"].string {
             
@@ -212,7 +215,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         let moments = JSON(data: myActivityData)
         let results = moments["results"]
         
-        if let id = results[indexPath.row]["source"]["imageUrl"].string {
+        if let id = results[indexPath.row]["source"]["imageUrlTiny"].string {
             let fileUrl = NSURL(string: id)
             
             cell.userImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
@@ -249,14 +252,74 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         }
         
         
+        // notificationType
+        
+        if let id = results[indexPath.row]["notificationType"].number {
+            if (id == 0) {
+                // like
+                cell.momentImgView.hidden = false
+                cell.momentBtn.hidden = false
+                cell.followBtn.hidden = true
+                
+                // show my moment
+                if let id = results[indexPath.row]["target"]["imageUrlTiny"].string {
+                    let fileUrl = NSURL(string: id)
+                    
+                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    cell.momentImgView.setNeedsLayout()
+                    
+                    cell.momentImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                        success: { image in
+                            
+                            //print("image here: \(image)")
+                            cell.momentImgView.image = image
+                            
+                        },
+                        failure: { error in
+                            
+                            if ((error) != nil) {
+                                print("error here: \(error)")
+                            }
+                    })
+                }
+                
+            } else if (id == 1) {
+                // follow
+                cell.momentImgView.hidden = true
+                cell.momentBtn.hidden = true
+                cell.followBtn.hidden = false
+                
+                
+                if let id = results[indexPath.row]["userFollows"].bool {
+                    if (id) {
+                        cell.followBtn.selected = true
+                    } else {
+                        cell.followBtn.selected = false
+                    }
+                } else {
+                    cell.followBtn.selected = true
+                    cell.followBtn.hidden = true
+                }
+                
+            } else {
+                // hmmm
+                
+                
+            }
+        } else {
+            // something is wrong
+            
+        }
+        
         // button actions
         
         cell.userBtn.tag = indexPath.row
         cell.momentBtn.tag = indexPath.row
+        cell.followBtn.tag = indexPath.row
         
         cell.userBtn.addTarget(self, action:#selector(userBtnAction), forControlEvents: .TouchUpInside)
         cell.momentBtn.addTarget(self, action:#selector(momentBtnAction), forControlEvents: .TouchUpInside)
-        
+        cell.followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents: .TouchUpInside)
         
         
         return cell
@@ -282,7 +345,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
-    func userBtnAction(sender: UIButton!) {
+    func userBtnAction(sender: UIButton) {
         print(sender.tag)
         
         let json = JSON(data: myActivityData)
@@ -339,23 +402,31 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     
-    func momentBtnAction(sender: UIButton!) {
+    func momentBtnAction(sender: UIButton) {
         print(sender.tag)
         
-//        let moments = JSON(data: myActivityData)
-//        let results = moments["results"]
-//        
-//        if let id = results[sender.tag]["id"].string {
-//            print("id: \(id)")
-//            let vc = CommentsViewController()
-//            vc.passedMomentId = id
-//            vc.hidesBottomBarWhenPushed = true
-//            navigationController?.pushViewController(vc, animated: true)
-//            
-//            isPushed = true
-//        }
+        let moments = JSON(data: myActivityData)
+        let results = moments["results"]
+        
+        print("moment model: \(results)")
+        
+        if let id = results[sender.tag]["additionalData"]["momentId"].string {
+            print("id: \(id)")
+            let vc = ChatViewController()
+            vc.passedMomentId = id
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
+            
+            isPushed = true
+        }
     }
 
+    func followBtnAction(sender: UIButton) {
+        print(sender.tag)
+     
+        
+        
+    }
     
 
 }

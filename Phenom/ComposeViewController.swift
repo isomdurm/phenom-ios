@@ -15,6 +15,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
     var theScrollView = UIScrollView()
     
     var passedImage = UIImage()
+    var passedHeadline = ""
     
     var tabBtn1 = UIButton(type: UIButtonType.Custom)
     var tabBtn2 = UIButton(type: UIButtonType.Custom)
@@ -24,7 +25,6 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
     var textFieldAtTop: Bool = false
     
     var statusOnly: Bool = false
-    var passedHeader = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,10 +171,10 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         theTextView.scrollsToTop = false
         theScrollView.addSubview(theTextView)
         
-        if (passedHeader == "") {
+        if (passedHeadline == "") {
             theTextView.text = ""
         } else {
-            theTextView.text = passedHeader
+            theTextView.text = passedHeadline
         }
         //theTextView.text = ""
         theTextView.placeholder = "Add a caption..."

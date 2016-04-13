@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 import SafariServices
 
 class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate, UIGestureRecognizerDelegate {
@@ -112,17 +113,15 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         let imgView1 = UIImageView(frame: CGRectMake(0, 0, theScrollView.frame.size.width, theScrollView.frame.size.width))
         imgView1.contentMode = UIViewContentMode.ScaleAspectFill
         theScrollView.addSubview(imgView1)
+        imgView1.layer.masksToBounds = true
         
         if (imageUrl != "") {
             
             let fileUrl = NSURL(string: imageUrl)
-            
             imgView1.setNeedsLayout()
-            
             imgView1.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                          success: { image in
                                             
-                                            //print("image here: \(image)")
                                             imgView1.image = image
                                             
                 },
@@ -135,28 +134,49 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
                                                 
                                             }
             })
-            //print("cell.momentImgView.image: \(cell.momentImgView.image)")
         } else {
             imgView1.image = UIImage(named: "placeholder.png")
         }
         
         
         
-        
-        
         let buyBtn = UIButton.init(type: .Custom)
         buyBtn.frame = CGRectMake(10, gearScrollView.frame.size.height+10, theScrollView.frame.size.width-20, 50)
         buyBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
-        buyBtn.setTitle("buy now", forState: .Normal)
-        buyBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
+        buyBtn.setTitle("BUY NOW", forState: .Normal)
+        buyBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 16)
         buyBtn.addTarget(self, action:#selector(buyBtnAction), forControlEvents: .TouchUpInside)
         theScrollView.addSubview(buyBtn)
         
         
-        let brandImgView = UIImageView(frame: CGRectMake(0, gearScrollView.frame.size.height+70, gearScrollView.frame.size.width/2, 70))
-        brandImgView.backgroundColor = UIColor.redColor()
+        let brandImgView = UIImageView(frame: CGRectMake(10, gearScrollView.frame.size.height+70+10, gearScrollView.frame.size.width/2-20, 70-20))
+        brandImgView.contentMode = UIViewContentMode.ScaleAspectFit
+        brandImgView.backgroundColor = UIColor.clearColor()
+        brandImgView.layer.masksToBounds = true
         
         // IF brandLogoImageUrl than get it
+        if (brandLogoImageUrl != "") {
+            
+            let fileUrl = NSURL(string: brandLogoImageUrl)
+            brandImgView.setNeedsLayout()
+            brandImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                success: { image in
+                    
+                    brandImgView.image = image
+                    
+                },
+                failure: { error in
+                    
+                    if ((error) != nil) {
+                        print("error here: \(error)")
+                        
+                        // collapse, this cell - it was prob deleted - error 402
+                        
+                    }
+            })
+        } else {
+            brandImgView.image = UIImage(named: "placeholder.png")
+        }
         
         theScrollView.addSubview(brandImgView)
         

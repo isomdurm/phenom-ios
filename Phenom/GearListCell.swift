@@ -42,6 +42,8 @@ class GearListCell: UITableViewCell {
         contentView.addSubview(gearBrandLbl)
 
         gearAddBtn.backgroundColor = UIColor.orangeColor()
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(gearAddBtn)
     }
     
@@ -58,8 +60,6 @@ class GearListCell: UITableViewCell {
         let padding = CGFloat(10)
         
         let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(gearNameLbl.text!, font: gearNameLbl.font, width: cellWidth-15-100-15-15)+padding
-        //let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView("this is a test", font: gearNameLbl.font, width: cellWidth-15-100-15-15)
-        
         
         gearNameLbl.frame = CGRectMake(15+100+15, 15, cellWidth-15-100-15-15, height)
         gearBrandLbl.frame = CGRectMake(15+100+15, 15+height, cellWidth-15-100-15-15, 20)

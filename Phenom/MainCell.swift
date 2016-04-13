@@ -123,11 +123,13 @@ class MainCell: UITableViewCell {
         
         timelineTimeLbl.backgroundColor = UIColor.clearColor()
         timelineTimeLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
-        timelineTimeLbl.textColor = UIColor.whiteColor()
+        timelineTimeLbl.textColor = UIColor.grayColor()
         timelineTimeLbl.textAlignment = .Left
         contentView.addSubview(timelineTimeLbl)
 
         timelineFollowBtn.backgroundColor = UIColor.orangeColor()
+        timelineFollowBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        timelineFollowBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         timelineFollowBtn.contentMode = UIViewContentMode.ScaleAspectFill
         contentView.addSubview(timelineFollowBtn)
         
@@ -140,6 +142,8 @@ class MainCell: UITableViewCell {
         timelineHeadlineLbl.numberOfLines = 0
         
         timelineLikeBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        timelineLikeBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        timelineLikeBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(timelineLikeBtn)
         
         timelineCommentBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
@@ -184,6 +188,8 @@ class MainCell: UITableViewCell {
         gearNameLbl.numberOfLines = 0
         
         gearAddBtn.backgroundColor = UIColor.orangeColor()
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(gearAddBtn)
         
         gearSingleTapRecognizer.numberOfTapsRequired = 1

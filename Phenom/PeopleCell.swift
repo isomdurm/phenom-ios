@@ -43,7 +43,8 @@ class PeopleCell: UITableViewCell {
         contentView.addSubview(usernameLbl)
         
         followBtn.backgroundColor = UIColor.orangeColor()
-        //followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        followBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        followBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(followBtn)
         
         

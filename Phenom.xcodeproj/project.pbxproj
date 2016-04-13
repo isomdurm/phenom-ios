@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		45926ED78AC076A816D0CBF3 /* Pods_Phenom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */; };
-		5709538D1CA9992D0007B537 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709538C1CA9992D0007B537 /* CommentsViewController.swift */; };
+		5709538D1CA9992D0007B537 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709538C1CA9992D0007B537 /* ChatViewController.swift */; };
 		570AC4FB1CA4C38E00441F4A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E71CA4C38E00441F4A /* AVFoundation.framework */; };
 		570AC4FC1CA4C38F00441F4A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E81CA4C38E00441F4A /* CFNetwork.framework */; };
 		570AC4FD1CA4C38F00441F4A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E91CA4C38E00441F4A /* Contacts.framework */; };
@@ -99,6 +99,10 @@
 		57773D671CBC2B5000A5D868 /* GearListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57773D661CBC2B5000A5D868 /* GearListCell.swift */; };
 		57773D691CBC2C3200A5D868 /* GearListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57773D681CBC2C3200A5D868 /* GearListViewController.swift */; };
 		57773D6B1CBC69EB00A5D868 /* PeopleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57773D6A1CBC69EB00A5D868 /* PeopleCell.swift */; };
+		57773D6E1CBD77B900A5D868 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57773D6D1CBD77B900A5D868 /* CoreMedia.framework */; };
+		57773D711CBD942B00A5D868 /* addedBtnImg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57773D6F1CBD942B00A5D868 /* addedBtnImg@2x.png */; };
+		57773D721CBD942B00A5D868 /* notAddedBtnImg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57773D701CBD942B00A5D868 /* notAddedBtnImg@2x.png */; };
+		57773D741CBDB0C900A5D868 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57773D731CBDB0C900A5D868 /* heart@2x.png */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -131,7 +135,7 @@
 
 /* Begin PBXFileReference section */
 		02ACC6A2D52CE68C6BBF5794 /* Pods-Phenom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.debug.xcconfig"; sourceTree = "<group>"; };
-		5709538C1CA9992D0007B537 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		5709538C1CA9992D0007B537 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		570AC4E71CA4C38E00441F4A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		570AC4E81CA4C38E00441F4A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		570AC4E91CA4C38E00441F4A /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
@@ -228,6 +232,10 @@
 		57773D661CBC2B5000A5D868 /* GearListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearListCell.swift; sourceTree = "<group>"; };
 		57773D681CBC2C3200A5D868 /* GearListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GearListViewController.swift; sourceTree = "<group>"; };
 		57773D6A1CBC69EB00A5D868 /* PeopleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleCell.swift; sourceTree = "<group>"; };
+		57773D6D1CBD77B900A5D868 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		57773D6F1CBD942B00A5D868 /* addedBtnImg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addedBtnImg@2x.png"; sourceTree = "<group>"; };
+		57773D701CBD942B00A5D868 /* notAddedBtnImg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notAddedBtnImg@2x.png"; sourceTree = "<group>"; };
+		57773D731CBDB0C900A5D868 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -249,6 +257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57773D6E1CBD77B900A5D868 /* CoreMedia.framework in Frameworks */,
 				57773D651CBC254300A5D868 /* SafariServices.framework in Frameworks */,
 				570AC4FB1CA4C38E00441F4A /* AVFoundation.framework in Frameworks */,
 				570AC4FC1CA4C38F00441F4A /* CFNetwork.framework in Frameworks */,
@@ -391,15 +400,15 @@
 		572DF4B81CA37A15002184E2 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 				57C6DD121CA4807900B939DF /* TimelineCell.swift */,
+				5768B8EA1CAC9921002E9664 /* ExploreCell.swift */,
 				57773D621CBAF27300A5D868 /* GearCell.swift */,
 				5768B8EC1CADEC99002E9664 /* SearchCell.swift */,
 				570AC5131CA5CD8300441F4A /* ActivityCell.swift */,
-				5768B8EA1CAC9921002E9664 /* ExploreCell.swift */,
 				57773D6A1CBC69EB00A5D868 /* PeopleCell.swift */,
 				57773D661CBC2B5000A5D868 /* GearListCell.swift */,
 				5768B8E61CAC51B9002E9664 /* MainCell.swift */,
-				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -418,6 +427,9 @@
 		572DF4BA1CA37A1F002184E2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				57773D731CBDB0C900A5D868 /* heart@2x.png */,
+				57773D6F1CBD942B00A5D868 /* addedBtnImg@2x.png */,
+				57773D701CBD942B00A5D868 /* notAddedBtnImg@2x.png */,
 				57773D5B1CBAE69300A5D868 /* blackTabBar@2x.png */,
 				570AC50F1CA5C0DB00441F4A /* goldTabBar@2x.png */,
 			);
@@ -447,6 +459,7 @@
 		572DF4BD1CA37A39002184E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57773D6D1CBD77B900A5D868 /* CoreMedia.framework */,
 				57773D641CBC254300A5D868 /* SafariServices.framework */,
 				570AC4E71CA4C38E00441F4A /* AVFoundation.framework */,
 				570AC4E81CA4C38E00441F4A /* CFNetwork.framework */,
@@ -512,7 +525,7 @@
 				570AC5111CA5CA3600441F4A /* SettingsViewController.swift */,
 				5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */,
 				5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */,
-				5709538C1CA9992D0007B537 /* CommentsViewController.swift */,
+				5709538C1CA9992D0007B537 /* ChatViewController.swift */,
 				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
 				570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */,
 				5768B9391CB217F1002E9664 /* ExplorePeopleViewController.swift */,
@@ -520,8 +533,8 @@
 				5768B9371CB217DA002E9664 /* ExploreGearViewController.swift */,
 				57773D681CBC2C3200A5D868 /* GearListViewController.swift */,
 				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
-				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
 				57C6DD081CA46F2A00B939DF /* ProfileViewController.swift */,
+				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
 				57C6DD021CA46E4700B939DF /* TimelineViewController.swift */,
 				57C6DD001CA46E3000B939DF /* TabBarViewController.swift */,
 			);
@@ -648,8 +661,10 @@
 			files = (
 				571CC53D1CAB324600A42997 /* FSCameraView.xib in Resources */,
 				57773D421CBADEE200A5D868 /* MaisonNeue-Book.ttf in Resources */,
+				57773D711CBD942B00A5D868 /* addedBtnImg@2x.png in Resources */,
 				57773D561CBADEE200A5D868 /* UniversLTStd.otf in Resources */,
 				57773D431CBADEE200A5D868 /* MaisonNeue-BookItalic.ttf in Resources */,
+				57773D741CBDB0C900A5D868 /* heart@2x.png in Resources */,
 				57773D4C1CBADEE200A5D868 /* UnitedSansCond-Black.otf in Resources */,
 				57773D4A1CBADEE200A5D868 /* MaisonNeue-Mono.ttf in Resources */,
 				57773D481CBADEE200A5D868 /* MaisonNeue-Medium.ttf in Resources */,
@@ -660,6 +675,7 @@
 				57773D501CBADEE200A5D868 /* UnitedSansCond-Medium.otf in Resources */,
 				57773D441CBADEE200A5D868 /* MaisonNeue-Demi.ttf in Resources */,
 				57773D451CBADEE200A5D868 /* MaisonNeue-DemiItalic.ttf in Resources */,
+				57773D721CBD942B00A5D868 /* notAddedBtnImg@2x.png in Resources */,
 				57773D4F1CBADEE200A5D868 /* UnitedSansCond-Light.otf in Resources */,
 				57773D411CBADEE200A5D868 /* MaisonNeue-BoldItalic.ttf in Resources */,
 				57773D401CBADEE200A5D868 /* MaisonNeue-Bold.ttf in Resources */,
@@ -754,7 +770,7 @@
 				57242DF11CAB4F7C00A71A7F /* KMPlaceholderTextView.swift in Sources */,
 				57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */,
 				571CC53C1CAB324600A42997 /* FSCameraView.swift in Sources */,
-				5709538D1CA9992D0007B537 /* CommentsViewController.swift in Sources */,
+				5709538D1CA9992D0007B537 /* ChatViewController.swift in Sources */,
 				571CC4FB1CAB149D00A42997 /* CameraViewController.swift in Sources */,
 				57773D691CBC2C3200A5D868 /* GearListViewController.swift in Sources */,
 				571CC53F1CAB324600A42997 /* FSImageCropView.swift in Sources */,

@@ -49,7 +49,8 @@ class ActivityCell: UITableViewCell {
         contentView.addSubview(momentBtn)
         
         followBtn.backgroundColor = UIColor.blueColor()
-        //followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        followBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        followBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(followBtn)
 
     }

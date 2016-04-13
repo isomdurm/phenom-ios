@@ -53,7 +53,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         emailField.backgroundColor = UIColor.clearColor()
         emailField.delegate = self
         emailField.textColor = UIColor.whiteColor()
-        emailField.attributedPlaceholder = NSAttributedString(string:"your email",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        emailField.attributedPlaceholder = NSAttributedString(string:"your email",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         emailField.keyboardType = .EmailAddress
         emailField.returnKeyType = .Next
         emailField.enablesReturnKeyAutomatically = true
@@ -78,8 +78,8 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         emailField.becomeFirstResponder()
         

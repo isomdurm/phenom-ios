@@ -298,10 +298,9 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
             
         }
         
-        
     }
     
-    func userBtnAction(sender: UIButton!){
+    func userBtnAction(sender: UIButton){
         print(sender.tag)
         
         

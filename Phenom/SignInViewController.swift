@@ -55,7 +55,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         usernameField.backgroundColor = UIColor.clearColor()
         usernameField.delegate = self
         usernameField.textColor = UIColor.whiteColor()
-        usernameField.attributedPlaceholder = NSAttributedString(string:"your username",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        usernameField.attributedPlaceholder = NSAttributedString(string:"your username",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         usernameField.keyboardType = UIKeyboardType.Default
         usernameField.returnKeyType = UIReturnKeyType.Next
         usernameField.enablesReturnKeyAutomatically = true
@@ -70,7 +70,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         passwordField.backgroundColor = UIColor.clearColor()
         passwordField.delegate = self
         passwordField.textColor = UIColor.whiteColor()
-        passwordField.attributedPlaceholder = NSAttributedString(string:"your password",attributes:[NSForegroundColorAttributeName: UIColor(red:73/255, green:73/255, blue:75/255, alpha:1)])
+        passwordField.attributedPlaceholder = NSAttributedString(string:"your password",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         passwordField.keyboardType = UIKeyboardType.Default
         passwordField.returnKeyType = UIReturnKeyType.Go
         passwordField.enablesReturnKeyAutomatically = true
@@ -100,7 +100,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         usernameField.becomeFirstResponder()
@@ -199,7 +199,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                             return
                         }
                         
-                        // add to likedPostIds
+                        // add to likedMomentIds
                         let defaults = NSUserDefaults.standardUserDefaults()
                         
                         let newBearerToken = json["access_token"].string!

@@ -45,12 +45,14 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         
         //
         
+        let btnWidth = ((view.frame.size.width/2)/4)*3
+        
         let containerView = UIView(frame: CGRectMake(0, view.frame.size.height-200, view.frame.size.width, 200))
         containerView.backgroundColor = UIColor.darkGrayColor() //UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(containerView)
         
         let fbBtn = UIButton(type: UIButtonType.Custom)
-        fbBtn.frame = CGRectMake(containerView.frame.width/2-50, 11, 100, 52)
+        fbBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), 11, btnWidth, 52)
         fbBtn.setImage(UIImage(named: "fb-signin.png"), forState: UIControlState.Normal)
         //addBtn.setBackgroundImage(UIImage(named: "plus60.png"), forState: UIControlState.Normal)
         fbBtn.backgroundColor = UIColor.blueColor()
@@ -59,7 +61,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         
         let signinBtn = UIButton(type: UIButtonType.Custom)
         signinBtn.backgroundColor = UIColor.blueColor()
-        signinBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11, 100, 52)
+        signinBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), 11+52+11, btnWidth, 52)
         signinBtn.addTarget(self, action:#selector(signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signinBtn.titleLabel?.numberOfLines = 1
         signinBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
@@ -73,7 +75,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         
         let signupBtn = UIButton(type: UIButtonType.Custom)
         signupBtn.backgroundColor = UIColor.blueColor()
-        signupBtn.frame = CGRectMake(containerView.frame.width/2-50, 11+52+11+52+11, 100, 52)
+        signupBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), 11+52+11+52+11, btnWidth, 52)
         signupBtn.addTarget(self, action:#selector(signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signupBtn.titleLabel?.numberOfLines = 1
         signupBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)

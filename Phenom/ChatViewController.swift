@@ -1,5 +1,5 @@
 //
-//  CommentsViewController.swift
+//  ChatViewController.swift
 //  Phenom
 //
 //  Created by Clay Zug on 3/28/16.
@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Haneke
 
-class CommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     var commentsData = NSData()
     
@@ -149,7 +149,7 @@ class CommentsViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
-    func userBtnAction(sender: UIButton!){
+    func userBtnAction(sender: UIButton){
         print(sender.tag)
        
         

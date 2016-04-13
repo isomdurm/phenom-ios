@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var previousController = UIViewController()
     var nav: UINavigationController?
     
+    var reloadTimeline: Bool = false
     var reloadExplore: Bool = false
     var reloadMyActivity: Bool = false
     var reloadFriendsActivity: Bool = false
@@ -40,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var bannerView = UIView?()
     var activityDotView = UIView?()
     
+    var tempUnLikedIdsArray = NSMutableArray()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
@@ -268,11 +270,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             "momentCount" : 0,
             "lockerProductCount" : 0,
             
-            "viewedPostIds" : [],
-            "likedPostIds" : [],
+            "likedMomentIds" : [],
+            "followingUserIds" : [],
             "savedSearchGear" : [],
             "savedSearchNames" : [],
-            "followingIds" : [],
+            
             "rateAlertShown" : false
         ]
         
@@ -452,6 +454,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         task.resume()
         
     }
+    
+    func likedMomentId(str : String) -> Bool {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let array = defaults.arrayForKey("likedMomentIds")
+        let ma = NSMutableArray(array: array!)
+        if (ma.containsObject(str)) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func addLikedMomentId(str : String) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let array = defaults.arrayForKey("likedMomentIds")
+        let ma = NSMutableArray(array: array!)
+        if (ma.containsObject(str)) {
+            // in likedMomentIds, do nothing
+        } else {
+            // add it
+            ma.addObject(str) 
+            let newarray = ma as NSArray
+            defaults.setObject(newarray, forKey: "likedMomentIds")
+            defaults.synchronize()
+        }
+    }
+    
+    func followingUserId(str : String) -> Bool {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let array = defaults.arrayForKey("followingUserIds")
+        let ma = NSMutableArray(array: array!)
+        if (ma.containsObject(str)) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func followUserId(str : String) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let array = defaults.arrayForKey("followingUserIds")
+        let ma = NSMutableArray(array: array!)
+        if (ma.containsObject(str)) {
+            // in followingUserIds, do nothing
+        } else {
+            // add it
+            ma.addObject(str)
+            let newarray = ma as NSArray
+            defaults.setObject(newarray, forKey: "followingUserIds")
+            defaults.synchronize()
+        }
+    }
+
     
 }
 
