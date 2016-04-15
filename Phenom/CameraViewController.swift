@@ -93,7 +93,6 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         cameraViewerContainer.hidden = true
         statusViewerContainer.hidden = true
         
-        
         //
         //
         //

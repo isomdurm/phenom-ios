@@ -117,7 +117,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn1.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn1.setTitle("PEOPLE", forState: UIControlState.Normal)
         tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn1)
@@ -130,7 +130,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn2.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabBtn2.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn2.setTitle("GEAR", forState: UIControlState.Normal)
         tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn2)
@@ -379,52 +379,41 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         // https://api1.phenomapp.com:8081/product?query=STRING
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "query=\(self.theTextField.text)"
+        let type = "GET"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/discover/gear") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.gear = dataFromString
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.theTableView.reloadData()
-                        })
-                        
-                    } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        return
                     }
+                    
+                    self.gear = dataFromString
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.theTableView.reloadData()
+                    })
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
                 
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
         
     }
@@ -434,53 +423,42 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         //https://api1.phenomapp.com:8081/user/search?pageNumber=INT&query=STRING
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/search"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "pageNumber=1&query=\(self.theTextField.text)"
+        let type = "GET"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/discover/people") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.people = dataFromString
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.theTableView.reloadData()
-                        })
-                        
-                        
-                    } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        return
                     }
+                    
+                    self.people = dataFromString
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.theTableView.reloadData()
+                    })
+                    
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
                 
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
         
     }

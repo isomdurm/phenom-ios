@@ -28,13 +28,7 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(20, 20, 70, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        navBarView.addSubview(backBtn)
+        // NO BACK BUTTON
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
@@ -43,8 +37,15 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
+        let doneBtn = UIButton(type: UIButtonType.Custom)
+        doneBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
+        doneBtn.setImage(UIImage(named: "doneBtn.png"), forState: UIControlState.Normal)
+        //doneBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        doneBtn.backgroundColor = UIColor.redColor()
+        doneBtn.addTarget(self, action:#selector(doneBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(doneBtn)
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64)
         theTableView.backgroundColor = UIColor.redColor()
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
@@ -116,6 +117,15 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
         
+        
+    }
+    
+    
+    func doneBtnAction() {
+        
+        self.view.endEditing(true)
+        self.navigationController?.dismissViewControllerAnimated(false, completion: nil)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).presentTabBarViewController()
         
     }
     

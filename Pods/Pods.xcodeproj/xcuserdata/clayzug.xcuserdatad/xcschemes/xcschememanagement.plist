@@ -8,75 +8,71 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 		<key>Bolts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 		<key>FBSDKCoreKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>FBSDKLoginKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
 		</dict>
 		<key>FBSDKShareKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
 		</dict>
 		<key>HanekeSwift.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>8</integer>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Just.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>Pods-Phenom.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>Reachability.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>9</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0282F736D21ED5ACF1FA0FEC76C07701</key>
+		<key>0121BA2B9A770E93F20E8DEB393F1EB7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0BFA564714626A5122A9C170855E1317</key>
+		<key>0465490DA4E9F160CECC8A897940404E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4E286D373D75563CE26E479A68203892</key>
+		<key>2007A2E2EDF6B8D4ADC2CB19C1C1AEE8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>52D82BFDD1E808D9CB257431922C1EE4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -86,32 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>63A18C6A528BD7E47DDAF39B2AEAF1D1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>7DDF79495F24B309AF089ACC99FC1151</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7FE88107C9641088C7CD4B238F4265A1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>81D7FE2A0FD9258247B1232874B837DA</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>821636B1C165EB965D01EB1B1FD26901</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>850185718CB18041AF694405C92E34BA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -121,27 +92,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>A92807FF7CB47B609A4D4264522515F4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>B09575BE910C7DDE2955E8C69D01382B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C78CAB9013653EB1A250B2DFD3BC7666</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F21523DE0EE1E35B265242490D97EE4C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>F5ACF367AE3BD7A7F2AF2D430901DF7B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FA68AEDC4F8356DFD0293A0B5D4F6BBD</key>
 		<dict>
 			<key>primary</key>
 			<true/>

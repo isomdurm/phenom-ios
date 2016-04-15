@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import QuartzCore
 
 class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource  {
+    
+    var passedEmail = ""
     
     var navBarView = UIView()
     var usernameField: UITextField = UITextField()
@@ -17,7 +20,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     var lastNameField: UITextField = UITextField()
     var birthdayField: UITextField = UITextField()
     var genderField: UITextField = UITextField()
-    let genderData = ["M","F"]
+    let genderData = ["Male","Female"]
+    
+    let passwordCheckmarkImgView = UIImageView()
+    
+    var birthdayDate = NSDate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -177,8 +184,13 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         lineview4.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview4)
         
-
         
+        passwordCheckmarkImgView.frame = CGRectMake(self.view.frame.size.width-20-20, 64+64+22, 20, 20)
+        passwordCheckmarkImgView.backgroundColor = UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)
+        self.view.addSubview(passwordCheckmarkImgView)
+        passwordCheckmarkImgView.layer.cornerRadius = 10
+        passwordCheckmarkImgView.layer.masksToBounds = true
+        passwordCheckmarkImgView.image = UIImage()
         
     }
     
@@ -212,6 +224,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
         birthdayField.text = dateFormatter.stringFromDate(sender.date)
+        birthdayDate = sender.date
     }
     
     
@@ -272,15 +285,34 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         }
         
         if (textField == usernameField) {
+            
             let maxLength = 20
             let currentString: NSString = textField.text!
             let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
             return newString.length <= maxLength
+            
+        } else if (textField == passwordField) {
+            
+            let minLength = 8
+            let currentString: NSString = textField.text!
+            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            
+            if (newString.length >= minLength) {
+                // show checkmark
+                passwordCheckmarkImgView.image = UIImage(named: "heart.png")
+            } else {
+                // needs to be longer
+                passwordCheckmarkImgView.image = UIImage()
+            }
+            return true
+        
         } else {
+            
             let maxLength = 50
             let currentString: NSString = textField.text!
             let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
             return newString.length <= maxLength
+            
         }
         
     }
@@ -288,7 +320,19 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     func nextBtnAction() {
         
         view.endEditing(true)
-        navigationController?.pushViewController(SignUpDetailViewController(), animated: true)
+        
+        let vc = SignUpDetailViewController()
+        vc.passedEmail = passedEmail
+        vc.passedUsername = usernameField.text!
+        vc.passedPassword = passwordField.text!
+        vc.passedFirstName = firstNameField.text!
+        vc.passedLastName = lastNameField.text!
+        vc.passedGender = genderField.text!
+        
+        vc.passedBirthdayDate = birthdayDate
+        
+        navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     

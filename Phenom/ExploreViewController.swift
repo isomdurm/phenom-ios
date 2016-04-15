@@ -194,56 +194,44 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func queryForGear() {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "pageNumber=1"
+        let type = "GET"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear?pageNumber=1") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.gearData = dataFromString                        
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.buildGearScrollView()
-                            
-                        })
-                        
-                    } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription)
-                        
+                        return
                     }
                     
+                    self.gearData = dataFromString
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.buildGearScrollView()
+                        
+                    })
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription)
+                    
                 }
-                
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
+        
     }
     
     func buildGearScrollView() {
@@ -305,56 +293,46 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func queryForPeople() {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/people"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "pageNumber=1"
+        let type = "GET"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/people?pageNumber=1") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.peopleData = dataFromString
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.theTableView.reloadData()
-                            
-                        })
-                        
-                    } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription)
-                        
+                        return
                     }
-                  
+                    
+                    self.peopleData = dataFromString
+                    print("self.peopleData hit")
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        
+                        self.theTableView.reloadData()
+                        
+                    })
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription)
+                    
                 }
-            
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
+        
     }
     
 

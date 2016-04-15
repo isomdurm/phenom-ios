@@ -171,7 +171,7 @@ class TimelineCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        momentImgView.frame = CGRectMake(0, 0, cellWidth, cellWidth+100)
+        //momentImgView.frame = CGRectMake(0, 0, cellWidth, cellWidth+100)
         //musicLbl.frame = CGRectMake(15, cellWidth-10-20-10-20, 200, 20)
         //modeLbl.frame = CGRectMake(15, cellWidth-10-20, 200, 20)
         

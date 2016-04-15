@@ -286,8 +286,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             sportBtn.contentHorizontalAlignment = .Center
             sportBtn.contentVerticalAlignment = .Center
             sportBtn.titleLabel?.textAlignment = .Center
-            sportBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Normal)
-            sportBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Highlighted)
+            sportBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: .Normal)
+            sportBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: .Highlighted)
             headerView.addSubview(sportBtn)
             sportBtn.layer.cornerRadius = 4
             sportBtn.layer.masksToBounds = true
@@ -301,8 +301,8 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
             categoryBtn.contentHorizontalAlignment = .Center
             categoryBtn.contentVerticalAlignment = .Center
             categoryBtn.titleLabel?.textAlignment = .Center
-            categoryBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Normal)
-            categoryBtn.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: .Highlighted)
+            categoryBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: .Normal)
+            categoryBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: .Highlighted)
             headerView.addSubview(categoryBtn)
             categoryBtn.layer.cornerRadius = 4
             categoryBtn.layer.masksToBounds = true

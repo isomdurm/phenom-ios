@@ -109,76 +109,59 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     
     func queryForPopular() {
         
-        // get bearer token
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/moment/featured"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "pageNumber=\(pageNumber)"
+        let type = "GET"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/moment/featured?pageNumber=\(pageNumber)") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        //
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        
+                        return
+                    }
                     
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    if (self.pageNumber > 1) {
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
+                        print("add results to current nsdata")
                         
-                        if (self.pageNumber > 1) {
-                            
-                            print("add results to current nsdata")
-                            
-                            // momentsData =
-                            
-                            
-                            
-                        } else {
-                            
-                            self.momentsData = dataFromString
-                            
-                        }
+                        // momentsData =
                         
-                        // done, reload tableView
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.refreshControl.endRefreshing()
-                            
-                            self.theTableView.reloadData()
-                            
-                        })
                         
                     } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
-                        self.refreshControl.endRefreshing()
+                        
+                        self.momentsData = dataFromString
+                        
                     }
+                    
+                    // done, reload tableView
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.refreshControl.endRefreshing()
+                        
+                        self.theTableView.reloadData()
+                        
+                    })
+                    
                 } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                     self.refreshControl.endRefreshing()
                 }
-            })
-            task.resume()
-            //
+            } else {
+                //
+            }
         })
+        
+        self.refreshControl.endRefreshing()
         
         
     }
@@ -196,30 +179,11 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        let padding = CGFloat(15)
-        let imgHeight = view.frame.size.width+100
-        
-        var headlineHeight = CGFloat()
-        
         let json = JSON(data: momentsData)
         let results = json["results"]
-        if let id = results[indexPath.row]["headline"].string {
-            let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            if (trimmedString == "") {
-                headlineHeight = 0
-            } else {
-                let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(trimmedString, font: UIFont.init(name: "MaisonNeue-Medium", size: 14)!, width: self.view.frame.size.width-30)
-                headlineHeight = height+10
-            }
-        } else {
-            headlineHeight = 0
-        }
         
-        if (headlineHeight == 0) {
-            return imgHeight+padding+40+padding+40+padding+padding
-        } else {
-            return imgHeight+padding+40+padding+headlineHeight+padding+40+padding+padding
-        }
+        let h = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForTimelineMoment(results, ip: indexPath, cellWidth: view.frame.size.width)
+        return h
         
     }
     
@@ -248,7 +212,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         cell.timelineFollowBtn.hidden = false
         cell.timelineHeadlineLbl.hidden = false
         cell.timelineLikeBtn.hidden = false
-        cell.timelineCommentBtn.hidden = false
+        cell.timelineChatBtn.hidden = false
         cell.timelineGearBtn.hidden = false
         cell.timelineMoreBtn.hidden = false
         
@@ -259,24 +223,28 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         //
         
-        cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
+        let mediaHeight = cell.frame.size.width+102
+        
+        cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+mediaHeight)
         
         //timelineTinyHeartBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
         //timelineLikeLblBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
         
-        cell.timelineUserImgView.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15, 40, 40)
+        cell.timelineUserImgView.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15, 38, 38)
         cell.timelineUserImgViewBtn.frame = CGRectMake(cell.timelineUserImgView.frame.origin.x, cell.timelineUserImgView.frame.origin.y, cell.timelineUserImgView.frame.size.width, cell.timelineUserImgView.frame.size.height)
-        cell.timelineFollowBtn.frame = CGRectMake(cell.cellWidth-50-15, cell.timelineImgView.frame.size.height+15, 50, 40)
+        cell.timelineFollowBtn.frame = CGRectMake(cell.cellWidth-65-15, cell.timelineImgView.frame.size.height+15, 65, 38)
         
         //
         
         let json = JSON(data: momentsData)
         let results = json["results"]
         
+        // get mediaHeight
+        
         if let id = results[indexPath.row]["imageUrl"].string {
             let fileUrl = NSURL(string: id)
             
-            cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
+            cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
             cell.timelineImgView.setNeedsLayout()
             
             cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -360,7 +328,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             let last = "\(results[indexPath.row]["user"]["lastName"])"
             let str = "\(id) \(last)"
             let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.timelineNameLbl.font, height: 20)
-            cell.timelineNameLbl.frame = CGRect(x: 15+40+15, y: cell.timelineImgView.frame.size.height+15, width: width, height: 20)
+            cell.timelineNameLbl.frame = CGRect(x: 15+38+15, y: cell.timelineImgView.frame.size.height+15, width: width, height: 19)
             cell.timelineNameLbl.text = str
             
         }
@@ -383,7 +351,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                 dateStr = "\(since)"
             }
             let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(dateStr, font: cell.timelineTimeLbl.font, height: 20)
-            cell.timelineTimeLbl.frame = CGRect(x: 15+40+15, y: cell.timelineImgView.frame.size.height+15+20, width: width, height: 20)
+            cell.timelineTimeLbl.frame = CGRect(x: 15+38+15, y: cell.timelineImgView.frame.size.height+15+19, width: width, height: 19)
             cell.timelineTimeLbl.text = dateStr
         }
         
@@ -409,17 +377,17 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         } else {
             headlineHeight = 0
         }
-        cell.timelineHeadlineLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15+40+15, cell.cellWidth-30, headlineHeight)
+        cell.timelineHeadlineLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15+38+15, cell.cellWidth-30, headlineHeight)
         
         
         var btnY = CGFloat()
         if (headlineHeight == 0) {
-            btnY = cell.timelineImgView.frame.size.height+15+40+15
+            btnY = cell.timelineImgView.frame.size.height+15+38+15
         } else {
-            btnY = cell.timelineImgView.frame.size.height+15+40+15+cell.timelineHeadlineLbl.frame.size.height+15
+            btnY = cell.timelineImgView.frame.size.height+15+38+15+cell.timelineHeadlineLbl.frame.size.height+15
         }
         cell.timelineLikeBtn.frame = CGRectMake(15, btnY, 65, 38)
-        cell.timelineCommentBtn.frame = CGRectMake(15+64+10, btnY, 65, 38)
+        cell.timelineChatBtn.frame = CGRectMake(15+64+10, btnY, 65, 38)
         cell.timelineGearBtn.frame = CGRectMake(15+64+10+64+10, btnY, 65, 38)
         cell.timelineMoreBtn.frame = CGRectMake(15+64+10+64+10+64+10, btnY, 50, 38)
         
@@ -481,14 +449,14 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         cell.timelineUserImgViewBtn.tag = indexPath.row
         cell.timelineLikeBtn.tag = indexPath.row
-        cell.timelineCommentBtn.tag = indexPath.row
+        cell.timelineChatBtn.tag = indexPath.row
         cell.timelineGearBtn.tag = indexPath.row
         cell.timelineMoreBtn.tag = indexPath.row
         cell.timelineFollowBtn.tag = indexPath.row
         
         cell.timelineUserImgViewBtn.addTarget(self, action:#selector(timelineUserImgViewBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineLikeBtn.addTarget(self, action:#selector(timelineLikeBtnAction), forControlEvents: .TouchUpInside)
-        cell.timelineCommentBtn.addTarget(self, action:#selector(timelineCommentBtnAction), forControlEvents: .TouchUpInside)
+        cell.timelineChatBtn.addTarget(self, action:#selector(timelineChatBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineGearBtn.addTarget(self, action:#selector(timelineGearBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineMoreBtn.addTarget(self, action:#selector(timelineMoreBtnAction), forControlEvents: .TouchUpInside)
         cell.timelineFollowBtn.addTarget(self, action:#selector(timelineFollowBtnAction), forControlEvents: .TouchUpInside)
@@ -622,134 +590,115 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             return
         }
         
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "POST"
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                        
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            return
-                        }
-                        
-                        // update likedPostIdeas
-                        //
-                        // reload
-                        
-                        let array = defaults.arrayForKey("likedMomentIds")
-                        let ma = NSMutableArray(array: array!)
-                        if (ma.containsObject(momentId)) {
-                            // in likedMomentIds, do nothing
-                        } else {
-                            ma.addObject(momentId)
-                            let newarray = ma as NSArray
-                            defaults.setObject(newarray, forKey: "likedMomentIds")
-                            defaults.synchronize()
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            print("liked")
-                            self.theTableView.reloadData()
-                        })
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        return
                     }
-                } else {
+                    
+                    // update likedPostIdeas
                     //
+                    // reload
+                    
+                    let array = defaults.arrayForKey("likedMomentIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(momentId)) {
+                        // in likedMomentIds, do nothing
+                    } else {
+                        ma.addObject(momentId)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "likedMomentIds")
+                        defaults.synchronize()
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("liked")
+                        self.theTableView.reloadData()
+                    })
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            })
-            task.resume()
+            } else {
+                //
+            }
         })
+        
     }
     
     func unlikeAction(momentId : String) {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "DELETE"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "DELETE"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        // update likedPostIdeas
-                        //
-                        // reload
-                        
-                        let array = defaults.arrayForKey("likedMomentIds")
-                        let ma = NSMutableArray(array: array!)
-                        if (ma.containsObject(momentId)) {
-                            // in likedMomentIds, do nothing
-                            ma.removeObject(momentId)
-                            let newarray = ma as NSArray
-                            defaults.setObject(newarray, forKey: "likedMomentIds")
-                            defaults.synchronize()
-                        }
-                        
-                        
-                        if (!(UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId)) {
-                            (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.addObject(momentId)
-                        }
-                        
-                        
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            print("unliked")
-                            self.theTableView.reloadData()
-                        })
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                        return
                     }
-                } else {
+                    
+                    // update likedPostIdeas
                     //
-                }
-            })
-            task.resume()
+                    // reload
+                    
+                    let array = defaults.arrayForKey("likedMomentIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(momentId)) {
+                        // in likedMomentIds, do nothing
+                        ma.removeObject(momentId)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "likedMomentIds")
+                        defaults.synchronize()
+                    }
+                    
+                    
+                    if (!(UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId)) {
+                        (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.addObject(momentId)
+                    }
+                    
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("unliked")
+                        self.theTableView.reloadData()
+                    })
+                    
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                }            } else {
+                //
+            }
         })
+        
     }
     
     
-    func timelineCommentBtnAction(sender: UIButton){
+    func timelineChatBtnAction(sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -758,6 +707,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             print("id: \(id)")
             let vc = ChatViewController()
             vc.passedMomentId = id
+            vc.passedMomentHeadline = results[sender.tag]["headline"].string!
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
@@ -801,6 +751,62 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         sender.hidden = true
         
+        // get height of media
+        //
+        // get frame of follow btn
+        //
+        // CGRectMake(cell.cellWidth-50-15, cell.timelineImgView.frame.size.height+15, 50, 50)
+        
+        let ip = NSIndexPath(forItem: sender.tag, inSection: 0)
+        let cell = self.theTableView.cellForRowAtIndexPath(ip) as! MainCell
+        
+        let mediaHeight = cell.frame.size.width+102
+        
+        let followImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width-50-15, mediaHeight+15, 50, 50))
+        followImgView.backgroundColor = UIColor.clearColor()
+        followImgView.image = UIImage(named: "addedBtnImg.png")
+        cell.addSubview(followImgView)
+        
+        followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.75, 0.75)
+        
+        UIView.animateWithDuration(0.18, animations: {
+            followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.04, 1.04)
+            }, completion: { finished in
+                if (finished){
+                    UIView.animateWithDuration(0.16, animations: {
+                        followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                        }, completion: { finished in
+                            if (finished) {
+                                
+                                let delay = 0.3 * Double(NSEC_PER_SEC)
+                                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+                                dispatch_after(time, dispatch_get_main_queue()) {
+                                    
+                                    UIView.animateWithDuration(0.18, animations: {
+                                        followImgView.alpha = 0.0
+                                        }, completion: { finished in
+                                            if (finished) {
+                                                followImgView.removeFromSuperview()
+                                                
+                                                //
+                                                self.followAction(sender)
+                                                //
+                                                
+                                            }
+                                    })
+                                }
+                            }
+                    })
+                }
+        })
+    }
+    
+    func followAction(sender : UIButton) {
+        
+        // follow only
+        
+        sender.hidden = true
+        
         let json = JSON(data: momentsData)
         let results = json["results"]
         let uid = results[sender.tag]["user"]["id"].string
@@ -808,71 +814,63 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         // follow
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "POST"
         
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        // followed
-                        
-                        // update followingUserIds
-                        //
-                        // reload
-                        
-                        let array = defaults.arrayForKey("followingUserIds")
-                        let ma = NSMutableArray(array: array!)
-                        if (ma.containsObject(uid!)) {
-                            // in likedMomentIds, do nothing
-                        } else {
-                            ma.addObject(uid!)
-                            let newarray = ma as NSArray
-                            defaults.setObject(newarray, forKey: "followingUserIds")
-                            defaults.synchronize()
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            print("followed")
-                            self.theTableView.reloadData()
-                        })
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
-                        
+                        return
                     }
-                } else {
+                    
+                    // followed
+                    
+                    // update followingUserIds
                     //
+                    // reload
+                    
+                    let array = defaults.arrayForKey("followingUserIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(uid!)) {
+                        // in followingUserIds, do nothing
+                    } else {
+                        let followingCount = defaults.objectForKey("followingCount") as! Int
+                        let newcount = followingCount+1
+                        
+                        ma.addObject(uid!)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "followingUserIds")
+                        defaults.setObject(newcount, forKey: "followingCount")
+                        defaults.synchronize()
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("followed")
+                        self.theTableView.reloadData()
+                    })
+                    
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            })
-            task.resume()
+            } else {
+                //
+            }
+            
         })
+
     }
     
     
@@ -926,7 +924,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         // get height of media
         
-        let mediaHeight = cell.frame.size.width+100
+        let mediaHeight = cell.frame.size.width+102
         
         //let heartImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height/2-50, 100, 100))
         let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-50, mediaHeight/2-50, 100, 100))

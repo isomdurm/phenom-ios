@@ -42,7 +42,8 @@ class GearListCell: UITableViewCell {
         contentView.addSubview(gearBrandLbl)
 
         gearAddBtn.backgroundColor = UIColor.orangeColor()
-        gearAddBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear.png") , forState: UIControlState.Normal)
+        //gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear-selected.png") , forState: UIControlState.Selected)
         gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(gearAddBtn)
     }
@@ -64,7 +65,7 @@ class GearListCell: UITableViewCell {
         gearNameLbl.frame = CGRectMake(15+100+15, 15, cellWidth-15-100-15-15, height)
         gearBrandLbl.frame = CGRectMake(15+100+15, 15+height, cellWidth-15-100-15-15, 20)
         
-        gearAddBtn.frame = CGRect(x: cellWidth-44-15, y: 130-40-15, width: 44, height: 40)
+        gearAddBtn.frame = CGRect(x: cellWidth-65-15, y: 130-38-15, width: 65, height: 38)
         
         
     }

@@ -26,7 +26,7 @@ class TabBarViewController: UITabBarController {
         super.setViewControllers(viewControllers, animated: animated)
         
         let centerBtn = UIButton(type: UIButtonType.Custom)
-        centerBtn.frame = CGRectMake(tabBar.bounds.size.width/5*2, -10, tabBar.bounds.size.width/5, tabBar.bounds.size.height+10)
+        centerBtn.frame = CGRectMake(tabBar.bounds.size.width/5*2, 0, tabBar.bounds.size.width/5, tabBar.bounds.size.height)
         centerBtn.backgroundColor = UIColor.blackColor()
         //centerBtn.setBackgroundImage(UIImage.init(named: "blueNav.png") , forState: UIControlState.Normal)
         //centerBtn.setBackgroundImage(UIImage.init(named: "blueNavHighlighted.png") , forState: UIControlState.Highlighted)
@@ -52,7 +52,7 @@ class TabBarViewController: UITabBarController {
             
             }, completion: { finished in
                 if (finished) {
-                    let newnav = UINavigationController(rootViewController: CameraViewController())
+                    let newnav = UINavigationController(rootViewController: CreateViewController()) //CameraViewController()
                     self.presentViewController(newnav, animated: true, completion: nil)
                 }
         })

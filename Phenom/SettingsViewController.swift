@@ -109,7 +109,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default: aLbl.text = ""}
         
         aLbl.font = UIFont.boldSystemFontOfSize(12)
-        aLbl.textColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //gold
+        aLbl.textColor = UINavigationBar.appearance().tintColor //gold
         
         let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
         aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)

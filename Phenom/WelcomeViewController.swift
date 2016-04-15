@@ -45,10 +45,11 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         
         //
         
-        let btnWidth = ((view.frame.size.width/2)/4)*3
+        //let btnWidth = ((view.frame.size.width/2)/4)*3
+        let btnWidth = (view.frame.size.width/3)*2
         
         let containerView = UIView(frame: CGRectMake(0, view.frame.size.height-200, view.frame.size.width, 200))
-        containerView.backgroundColor = UIColor.darkGrayColor() //UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        containerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(containerView)
         
         let fbBtn = UIButton(type: UIButtonType.Custom)
@@ -57,11 +58,11 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         //addBtn.setBackgroundImage(UIImage(named: "plus60.png"), forState: UIControlState.Normal)
         fbBtn.backgroundColor = UIColor.blueColor()
         fbBtn.addTarget(self, action:#selector(fbBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        containerView.addSubview(fbBtn)
+        //containerView.addSubview(fbBtn)
         
         let signinBtn = UIButton(type: UIButtonType.Custom)
-        signinBtn.backgroundColor = UIColor.blueColor()
-        signinBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), 11+52+11, btnWidth, 52)
+        signinBtn.backgroundColor = UINavigationBar.appearance().tintColor
+        signinBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), containerView.frame.size.height/2-70, btnWidth, 60)
         signinBtn.addTarget(self, action:#selector(signinBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signinBtn.titleLabel?.numberOfLines = 1
         signinBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
@@ -71,11 +72,11 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         signinBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         signinBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
         containerView.addSubview(signinBtn)
-        signinBtn.setTitle("Sign In", forState: UIControlState.Normal)
+        signinBtn.setTitle("SIGN IN", forState: UIControlState.Normal)
         
         let signupBtn = UIButton(type: UIButtonType.Custom)
-        signupBtn.backgroundColor = UIColor.blueColor()
-        signupBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), 11+52+11+52+11, btnWidth, 52)
+        signupBtn.backgroundColor = UINavigationBar.appearance().tintColor
+        signupBtn.frame = CGRectMake((view.frame.size.width/2)-(btnWidth/2), containerView.frame.size.height/2+10, btnWidth, 60)
         signupBtn.addTarget(self, action:#selector(signupBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         signupBtn.titleLabel?.numberOfLines = 1
         signupBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
@@ -85,7 +86,7 @@ class WelcomeViewController: UIViewController, UIScrollViewDelegate {
         signupBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         signupBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
         containerView.addSubview(signupBtn)
-        signupBtn.setTitle("Sign Up", forState: UIControlState.Normal)
+        signupBtn.setTitle("SIGN UP", forState: UIControlState.Normal)
         
         //
 

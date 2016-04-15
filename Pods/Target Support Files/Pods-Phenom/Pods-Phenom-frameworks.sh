@@ -90,6 +90,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Phenom/FBSDKLoginKit.framework"
   install_framework "Pods-Phenom/FBSDKShareKit.framework"
   install_framework "Pods-Phenom/Haneke.framework"
+  install_framework "Pods-Phenom/Just.framework"
   install_framework "Pods-Phenom/Reachability.framework"
   install_framework "Pods-Phenom/SwiftyJSON.framework"
 fi
@@ -100,6 +101,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Phenom/FBSDKLoginKit.framework"
   install_framework "Pods-Phenom/FBSDKShareKit.framework"
   install_framework "Pods-Phenom/Haneke.framework"
+  install_framework "Pods-Phenom/Just.framework"
   install_framework "Pods-Phenom/Reachability.framework"
   install_framework "Pods-Phenom/SwiftyJSON.framework"
 fi

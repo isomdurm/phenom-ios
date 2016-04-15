@@ -103,6 +103,21 @@
 		57773D711CBD942B00A5D868 /* addedBtnImg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57773D6F1CBD942B00A5D868 /* addedBtnImg@2x.png */; };
 		57773D721CBD942B00A5D868 /* notAddedBtnImg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57773D701CBD942B00A5D868 /* notAddedBtnImg@2x.png */; };
 		57773D741CBDB0C900A5D868 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57773D731CBDB0C900A5D868 /* heart@2x.png */; };
+		5781C3981CC0B92F00F37E75 /* tabbar-activity-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C3941CC0B92F00F37E75 /* tabbar-activity-icon@2x.png */; };
+		5781C3991CC0B92F00F37E75 /* tabbar-explore-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C3951CC0B92F00F37E75 /* tabbar-explore-icon@2x.png */; };
+		5781C39A1CC0B92F00F37E75 /* tabbar-profile-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C3961CC0B92F00F37E75 /* tabbar-profile-icon@2x.png */; };
+		5781C39B1CC0B92F00F37E75 /* tabbar-timeline-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C3971CC0B92F00F37E75 /* tabbar-timeline-icon@2x.png */; };
+		5781C3A01CC159A000F37E75 /* timeline-chat-btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C39C1CC159A000F37E75 /* timeline-chat-btn@2x.png */; };
+		5781C3A11CC159A000F37E75 /* timeline-follow-btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C39D1CC159A000F37E75 /* timeline-follow-btn@2x.png */; };
+		5781C3A21CC159A000F37E75 /* timeline-gear-btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C39E1CC159A000F37E75 /* timeline-gear-btn@2x.png */; };
+		5781C3A31CC159A000F37E75 /* timeline-like-btn-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C39F1CC159A000F37E75 /* timeline-like-btn-selected@2x.png */; };
+		5781C3A51CC15A0C00F37E75 /* timeline-like-btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C3A41CC15A0C00F37E75 /* timeline-like-btn@2x.png */; };
+		5781C3A71CC1626000F37E75 /* add-gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5781C3A61CC1626000F37E75 /* add-gear@2x.png */; };
+		57A5D1E71CBEED3F0056D4FB /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1E61CBEED3F0056D4FB /* ChatCell.swift */; };
+		57A5D1E91CC005BE0056D4FB /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1E81CC005BD0056D4FB /* CreateViewController.swift */; };
+		57A5D1EF1CC060720056D4FB /* ActiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1EC1CC060720056D4FB /* ActiveLabel.swift */; };
+		57A5D1F01CC060720056D4FB /* ActiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1ED1CC060720056D4FB /* ActiveType.swift */; };
+		57A5D1F11CC060720056D4FB /* RegexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1EE1CC060720056D4FB /* RegexParser.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -236,6 +251,21 @@
 		57773D6F1CBD942B00A5D868 /* addedBtnImg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addedBtnImg@2x.png"; sourceTree = "<group>"; };
 		57773D701CBD942B00A5D868 /* notAddedBtnImg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notAddedBtnImg@2x.png"; sourceTree = "<group>"; };
 		57773D731CBDB0C900A5D868 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
+		5781C3941CC0B92F00F37E75 /* tabbar-activity-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar-activity-icon@2x.png"; sourceTree = "<group>"; };
+		5781C3951CC0B92F00F37E75 /* tabbar-explore-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar-explore-icon@2x.png"; sourceTree = "<group>"; };
+		5781C3961CC0B92F00F37E75 /* tabbar-profile-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar-profile-icon@2x.png"; sourceTree = "<group>"; };
+		5781C3971CC0B92F00F37E75 /* tabbar-timeline-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar-timeline-icon@2x.png"; sourceTree = "<group>"; };
+		5781C39C1CC159A000F37E75 /* timeline-chat-btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline-chat-btn@2x.png"; sourceTree = "<group>"; };
+		5781C39D1CC159A000F37E75 /* timeline-follow-btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline-follow-btn@2x.png"; sourceTree = "<group>"; };
+		5781C39E1CC159A000F37E75 /* timeline-gear-btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline-gear-btn@2x.png"; sourceTree = "<group>"; };
+		5781C39F1CC159A000F37E75 /* timeline-like-btn-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline-like-btn-selected@2x.png"; sourceTree = "<group>"; };
+		5781C3A41CC15A0C00F37E75 /* timeline-like-btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline-like-btn@2x.png"; sourceTree = "<group>"; };
+		5781C3A61CC1626000F37E75 /* add-gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-gear@2x.png"; sourceTree = "<group>"; };
+		57A5D1E61CBEED3F0056D4FB /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		57A5D1E81CC005BD0056D4FB /* CreateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
+		57A5D1EC1CC060720056D4FB /* ActiveLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveLabel.swift; sourceTree = "<group>"; };
+		57A5D1ED1CC060720056D4FB /* ActiveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveType.swift; sourceTree = "<group>"; };
+		57A5D1EE1CC060720056D4FB /* RegexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegexParser.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -392,7 +422,6 @@
 		572DF4B71CA37A11002184E2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5768B9331CB21753002E9664 /* LikesViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -405,6 +434,7 @@
 				5768B8EA1CAC9921002E9664 /* ExploreCell.swift */,
 				57773D621CBAF27300A5D868 /* GearCell.swift */,
 				5768B8EC1CADEC99002E9664 /* SearchCell.swift */,
+				57A5D1E61CBEED3F0056D4FB /* ChatCell.swift */,
 				570AC5131CA5CD8300441F4A /* ActivityCell.swift */,
 				57773D6A1CBC69EB00A5D868 /* PeopleCell.swift */,
 				57773D661CBC2B5000A5D868 /* GearListCell.swift */,
@@ -416,6 +446,9 @@
 		572DF4B91CA37A1A002184E2 /* Globals */ = {
 			isa = PBXGroup;
 			children = (
+				57A5D1EC1CC060720056D4FB /* ActiveLabel.swift */,
+				57A5D1ED1CC060720056D4FB /* ActiveType.swift */,
+				57A5D1EE1CC060720056D4FB /* RegexParser.swift */,
 				5768B8EE1CAEEEE4002E9664 /* UserManager.swift */,
 				57C6DD0E1CA47EFC00B939DF /* Person.swift */,
 				57242DF01CAB4F7C00A71A7F /* KMPlaceholderTextView.swift */,
@@ -427,6 +460,16 @@
 		572DF4BA1CA37A1F002184E2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5781C3A61CC1626000F37E75 /* add-gear@2x.png */,
+				5781C3A41CC15A0C00F37E75 /* timeline-like-btn@2x.png */,
+				5781C39D1CC159A000F37E75 /* timeline-follow-btn@2x.png */,
+				5781C39C1CC159A000F37E75 /* timeline-chat-btn@2x.png */,
+				5781C39E1CC159A000F37E75 /* timeline-gear-btn@2x.png */,
+				5781C39F1CC159A000F37E75 /* timeline-like-btn-selected@2x.png */,
+				5781C3941CC0B92F00F37E75 /* tabbar-activity-icon@2x.png */,
+				5781C3951CC0B92F00F37E75 /* tabbar-explore-icon@2x.png */,
+				5781C3961CC0B92F00F37E75 /* tabbar-profile-icon@2x.png */,
+				5781C3971CC0B92F00F37E75 /* tabbar-timeline-icon@2x.png */,
 				57773D731CBDB0C900A5D868 /* heart@2x.png */,
 				57773D6F1CBD942B00A5D868 /* addedBtnImg@2x.png */,
 				57773D701CBD942B00A5D868 /* notAddedBtnImg@2x.png */,
@@ -520,6 +563,7 @@
 		57773D611CBAE97B00A5D868 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5768B9331CB21753002E9664 /* LikesViewController.swift */,
 				5768B9471CB58127002E9664 /* FilterViewController.swift */,
 				5768B93D1CB2193F002E9664 /* EditProfileViewController.swift */,
 				570AC5111CA5CA3600441F4A /* SettingsViewController.swift */,
@@ -547,6 +591,7 @@
 				571CC52B1CAB321100A42997 /* Fusuma */,
 				57242DEE1CAB457600A71A7F /* ComposeViewController.swift */,
 				571CC4FA1CAB149D00A42997 /* CameraViewController.swift */,
+				57A5D1E81CC005BD0056D4FB /* CreateViewController.swift */,
 			);
 			name = Creation;
 			sourceTree = "<group>";
@@ -659,11 +704,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5781C39B1CC0B92F00F37E75 /* tabbar-timeline-icon@2x.png in Resources */,
+				5781C3A71CC1626000F37E75 /* add-gear@2x.png in Resources */,
 				571CC53D1CAB324600A42997 /* FSCameraView.xib in Resources */,
 				57773D421CBADEE200A5D868 /* MaisonNeue-Book.ttf in Resources */,
 				57773D711CBD942B00A5D868 /* addedBtnImg@2x.png in Resources */,
 				57773D561CBADEE200A5D868 /* UniversLTStd.otf in Resources */,
 				57773D431CBADEE200A5D868 /* MaisonNeue-BookItalic.ttf in Resources */,
+				5781C3991CC0B92F00F37E75 /* tabbar-explore-icon@2x.png in Resources */,
 				57773D741CBDB0C900A5D868 /* heart@2x.png in Resources */,
 				57773D4C1CBADEE200A5D868 /* UnitedSansCond-Black.otf in Resources */,
 				57773D4A1CBADEE200A5D868 /* MaisonNeue-Mono.ttf in Resources */,
@@ -676,11 +724,14 @@
 				57773D441CBADEE200A5D868 /* MaisonNeue-Demi.ttf in Resources */,
 				57773D451CBADEE200A5D868 /* MaisonNeue-DemiItalic.ttf in Resources */,
 				57773D721CBD942B00A5D868 /* notAddedBtnImg@2x.png in Resources */,
+				5781C3981CC0B92F00F37E75 /* tabbar-activity-icon@2x.png in Resources */,
 				57773D4F1CBADEE200A5D868 /* UnitedSansCond-Light.otf in Resources */,
 				57773D411CBADEE200A5D868 /* MaisonNeue-BoldItalic.ttf in Resources */,
+				5781C3A21CC159A000F37E75 /* timeline-gear-btn@2x.png in Resources */,
 				57773D401CBADEE200A5D868 /* MaisonNeue-Bold.ttf in Resources */,
 				57773D4B1CBADEE200A5D868 /* MaisonNeue-MonoItalic.ttf in Resources */,
 				57773D551CBADEE200A5D868 /* UniversLTStd-Bold.otf in Resources */,
+				5781C3A31CC159A000F37E75 /* timeline-like-btn-selected@2x.png in Resources */,
 				57773D511CBADEE200A5D868 /* UnitedSansReg-Heavy.otf in Resources */,
 				57773D461CBADEE200A5D868 /* MaisonNeue-Light.ttf in Resources */,
 				570AC5101CA5C0DC00441F4A /* goldTabBar@2x.png in Resources */,
@@ -690,9 +741,13 @@
 				5715005E1CA3136800AA8744 /* LaunchScreen.storyboard in Resources */,
 				57773D4D1CBADEE200A5D868 /* UnitedSansCond-Bold.otf in Resources */,
 				571CC5391CAB324600A42997 /* FSAlbumView.xib in Resources */,
+				5781C3A01CC159A000F37E75 /* timeline-chat-btn@2x.png in Resources */,
 				571CC5371CAB324600A42997 /* Assets.xcassets in Resources */,
 				571CC5411CAB324600A42997 /* FusumaViewController.xib in Resources */,
+				5781C3A51CC15A0C00F37E75 /* timeline-like-btn@2x.png in Resources */,
+				5781C39A1CC0B92F00F37E75 /* tabbar-profile-icon@2x.png in Resources */,
 				57773D521CBADEE200A5D868 /* UnitedSansSemiCond-Heavy.otf in Resources */,
+				5781C3A11CC159A000F37E75 /* timeline-follow-btn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -766,6 +821,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5768B9481CB58127002E9664 /* FilterViewController.swift in Sources */,
+				57A5D1F01CC060720056D4FB /* ActiveType.swift in Sources */,
 				57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */,
 				57242DF11CAB4F7C00A71A7F /* KMPlaceholderTextView.swift in Sources */,
 				57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */,
@@ -796,19 +852,23 @@
 				57C6DD111CA47EFC00B939DF /* ProgressView.swift in Sources */,
 				57773D6B1CBC69EB00A5D868 /* PeopleCell.swift in Sources */,
 				5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */,
+				57A5D1F11CC060720056D4FB /* RegexParser.swift in Sources */,
 				57C6DD0D1CA47BFE00B939DF /* SignUpViewController.swift in Sources */,
 				570AC5121CA5CA3600441F4A /* SettingsViewController.swift in Sources */,
 				570AC5141CA5CD8300441F4A /* ActivityCell.swift in Sources */,
 				570AC51E1CA5E2A100441F4A /* MyActivityViewController.swift in Sources */,
 				5768B9321CB2172F002E9664 /* InviteFriendsViewController.swift in Sources */,
 				57C6DD0B1CA47A6900B939DF /* SignInViewController.swift in Sources */,
+				57A5D1E91CC005BE0056D4FB /* CreateViewController.swift in Sources */,
 				571500511CA3136800AA8744 /* AppDelegate.swift in Sources */,
 				5768B9401CB2197C002E9664 /* AddTeamViewController.swift in Sources */,
 				57C6DD091CA46F2A00B939DF /* ProfileViewController.swift in Sources */,
 				5768B9421CB2247A002E9664 /* GearDetailViewController.swift in Sources */,
+				57A5D1E71CBEED3F0056D4FB /* ChatCell.swift in Sources */,
 				57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */,
 				5768B93C1CB218F4002E9664 /* SignUpDetailViewController.swift in Sources */,
 				5768B94E1CB715C9002E9664 /* PeopleListViewController.swift in Sources */,
+				57A5D1EF1CC060720056D4FB /* ActiveLabel.swift in Sources */,
 				5768B94C1CB6CA48002E9664 /* PopularMomentsViewController.swift in Sources */,
 				5768B9341CB21753002E9664 /* LikesViewController.swift in Sources */,
 				57773D631CBAF27300A5D868 /* GearCell.swift in Sources */,

@@ -97,59 +97,48 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func queryForMomentWithGear() {
         
-        //https://api1.phenomapp.com:8081/moment?momentId=STRING
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "momentId=\(passedMomentId)"
+        let type = "GET"
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-        
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment?momentId=\(passedMomentId)") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.singleMomentData = dataFromString
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.theTableView.reloadData()
-                            
-                        })
-                        
-                    } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription)
-                        
+                        return
                     }
                     
+                    self.singleMomentData = dataFromString
+                    
+                    
+                    let results = json["results"]
+                    print("results: \(results)")
+                    
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.theTableView.reloadData()
+                        
+                    })
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription)
+                    
                 }
-                
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
-       
         
     }
     
@@ -233,14 +222,15 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.gearNameLbl.text = ""
         }
         
-//        if let id = obj.objectForKey("existsInLocker") {
-//            let existsInLocker = id as! Bool
-//            if (existsInLocker) {
-//                cell.gearAddBtn.selected = true
-//            } else {
-//                cell.gearAddBtn.selected = false
-//            }
-//        }
+        
+        
+        if let id = productsDict[indexPath.row]["existsInLocker"].bool {
+            if (id) {
+                cell.gearAddBtn.selected = true
+            } else {
+                cell.gearAddBtn.selected = false
+            }
+        }
         
         cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
         
@@ -249,6 +239,9 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
         } else {
             cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15+brandHeight+5, width: cell.cellWidth-15-15-44-15, height: nameHeight)
         }
+        
+        cell.gearAddBtn.tag = indexPath.row
+        cell.gearAddBtn.addTarget(self, action:#selector(gearAddBtnAction), forControlEvents: .TouchUpInside)
 
         
         return cell
@@ -316,5 +309,237 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
     }
+    
+    
+    
+    func gearAddBtnAction(sender : UIButton) {
+        
+        if (sender.selected) {
+            
+            sender.selected = false
+            removeGearFromLocker(sender)
+            
+        } else {
+            
+            sender.selected = true
+            addGearToLocker(sender)
+            
+        }
+    }
+    
+    func addGearToLocker(sender : UIButton) {
+        
+        let json = JSON(data: singleMomentData)
+        let results = json["results"]
+        let productsDict = results["products"]
+        
+        let productJson = productsDict[sender.tag]
+        print("productJson: \(productJson)")
+        
+        let id = productsDict[sender.tag]["id"].number
+        let sid = productsDict[sender.tag]["sourceId"].number
+        let n = productsDict[sender.tag]["name"].string
+        let d = productsDict[sender.tag]["description"].string
+        let purl = productsDict[sender.tag]["productUrl"].string
+        let b = productsDict[sender.tag]["brand"].string
+        let sku = productsDict[sender.tag]["sku"].string
+        let iurl = productsDict[sender.tag]["imageUrl"].string
+        
+//        let product = [
+//            
+//            "product" : [
+//                "id" : id!,
+//                "sourceId" : sid!,
+//                "name" : n!,
+//                "description" : d!,
+//                "productUrl" : purl!,
+//                "brand" : b!,
+//                "sku" : sku!,
+//                "imageUrl" : iurl!
+//                
+//            ]
+//        ]
+        
+//        let product = [
+//            "id" : id!,
+//            "sourceId" : sid!,
+//            "name" : n!,
+//            "description" : d!,
+//            "productUrl" : purl!,
+//            "brand" : b!,
+//            "sku" : sku!,
+//            "imageUrl" : iurl!
+//        ]
+        
+        
+        
+//        let productDict = NSDictionary(dictionary: ["id" : id!,
+//            "sourceId" : sid!,
+//            "name" : n!,
+//            "description" : d!,
+//            "productUrl" : purl!,
+//            "brand" : b!,
+//            "sku" : sku!,
+//            "imageUrl" : iurl!]
+//        
+//        )
+//        
+//        let product = NSDictionary(dictionary: ["product" : productDict])
+        
+        // testing
+        
+        let product = [
+            "alternateImages": "",
+            "brand": "Oakley",
+            "brandLogoImageUrl": "https://d244enpr8fckgo.cloudfront.net/brandImages/oakley",
+            "description": "Comfortable, durable and stylish, the Oakley Flak Jacket Polarized sunglasses fit all your needs. Made with O Matter frame material, the Flak Jacket Polarized sunglasses are stress-resistant and comfortable. A Three-Point Fit keeps the Oakley Flak Jacket Polarized sunglasses comfortably in place while Plutonite lens filters 100 percent of UVA, UVB and UVC rays to keep you safe in the Oakley Flak Jacket.",
+            "existsInLocker": "1",
+            "gamingMomentCount": "2",
+            "id": "262908",
+            "imageUrl": "https://d244enpr8fckgo.cloudfront.net/productImages/2bce500f6fa96896699061a399ec1ba8",
+            "lockerCount": "3",
+            "momentCount": "7",
+            "name": "Flak Jacket Polarized Sunglasses",
+            "productUrl": "http://www.dickssportinggoods.com/product/index.jsp?productId=11005693",
+            "sku": "9155566",
+            "sourceId": "2",
+            "sourceProductId": "9155566",
+            "stylingMomentCount": "0",
+            "trainingMomentCount": "30"
+        
+        ]
+        print("product: \(product)")
+        
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! String
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        
+        let urlStr = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker?product=\([product.description])"
+        let urlEncoded : NSString = urlStr.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        let url : NSURL = NSURL(string: urlEncoded as String)!
+        
+        print("url: \(url)")
+        
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+//        let bodyObject = [
+//            "username": usernameField.text!,
+//            "password": base64Encoded,
+//            "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
+//            "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+//            "grant_type": "password"
+//        ]
+//        
+//        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if (json["errorCode"].number == nil) {
+                        
+                        print("u shall pass")
+                        
+                    } else {
+                        // double check
+                        if json["errorCode"].number != 200 {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            
+                            sender.selected = false
+                            return
+                        }
+                    }
+                    
+                    sender.selected = true
+                    
+                    // reload table
+                    
+                    //
+                }
+            }
+            else {
+                
+                //                print("URL Session Task Failed: %@", error!.localizedDescription);
+            }
+        })
+        task.resume()
+        
+        
+        //
+        //
+        //
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+//        
+//        
+//        
+//        
+//        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker"
+//        //let date = NSDate().timeIntervalSince1970 * 1000
+//        let params = "product=\(product)" //"since=\(date)&limit=20"
+//        let type = "PUT"
+//        
+//        
+//        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+//            if (error == nil) {
+//                
+//                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+//                    
+//                    let json = JSON(data: dataFromString)
+//                    if json["errorCode"].number != 200  {
+//                        print("json: \(json)")
+//                        print("error: \(json["errorCode"].number)")
+//                        
+//                        sender.selected = false
+//                        
+//                        return
+//                    }
+//                    
+//                    print("added to locker")
+//                    
+//                    sender.selected = true
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        
+//                        self.theTableView.reloadData()
+//                    })
+//                } else {
+//                    print("URL Session Task Failed: %@", error!.localizedDescription);
+//                }
+//            } else {
+//                //
+//                print("errorrr in \(self)")
+//            }
+//        })
+        
+    }
+    
+    func removeGearFromLocker(sender : UIButton) {
+        
+        
+    }
+
 
 }

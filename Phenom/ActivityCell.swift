@@ -14,6 +14,7 @@ class ActivityCell: UITableViewCell {
     
     var userImgView = UIImageView()
     var userBtn = UIButton()
+    
     var activityLbl = UILabel()
     var momentImgView = UIImageView()
     var momentBtn = UIButton()
@@ -21,6 +22,7 @@ class ActivityCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         
         userImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         userImgView.contentMode = UIViewContentMode.ScaleAspectFill
@@ -32,12 +34,13 @@ class ActivityCell: UITableViewCell {
         contentView.addSubview(userBtn)
         
         activityLbl.backgroundColor = UIColor.clearColor()
-        activityLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 13)
+        activityLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
         activityLbl.textColor = UIColor.lightGrayColor()
         activityLbl.textAlignment = NSTextAlignment.Left
-        activityLbl.numberOfLines = 1
-        activityLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         contentView.addSubview(activityLbl)
+        activityLbl.numberOfLines = 0
+        activityLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        activityLbl.sizeToFit()
         
         momentImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         momentImgView.contentMode = UIViewContentMode.ScaleAspectFill
@@ -70,10 +73,6 @@ class ActivityCell: UITableViewCell {
         momentBtn.frame = CGRectMake(cellWidth-15-44, 10, 44, 44) 
         
         followBtn.frame = CGRectMake(cellWidth-15-44, 10, 44, 44)
-        
-        //followBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        //followBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        
         
         
     }

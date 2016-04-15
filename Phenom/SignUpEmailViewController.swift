@@ -124,7 +124,9 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
 
     func nextBtnAction() {
         
-        navigationController?.pushViewController(SignUpViewController(), animated: true)
+        let vc = SignUpViewController()
+        vc.passedEmail = emailField.text!
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 

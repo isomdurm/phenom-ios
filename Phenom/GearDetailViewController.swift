@@ -142,7 +142,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         
         let buyBtn = UIButton.init(type: .Custom)
         buyBtn.frame = CGRectMake(10, gearScrollView.frame.size.height+10, theScrollView.frame.size.width-20, 50)
-        buyBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        buyBtn.backgroundColor = UINavigationBar.appearance().tintColor
         buyBtn.setTitle("BUY NOW", forState: .Normal)
         buyBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 16)
         buyBtn.addTarget(self, action:#selector(buyBtnAction), forControlEvents: .TouchUpInside)
@@ -335,14 +335,12 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         if (productUrl != "") {
             
             let svc = SFSafariViewController(URL: NSURL(string: productUrl)!, entersReaderIfAvailable: false)
-            //self.navigationController?.pushViewController(svc, animated: true)
-            self.presentViewController(svc, animated: true, completion: nil)
+            //self.navigationController?.pushViewController(svc, animated: false)
+            self.presentViewController(svc, animated: false, completion: nil)
             
             UIApplication.sharedApplication().statusBarStyle = .Default
             
-            
         }
-        
     }
     
     func lockerBtnAction() {

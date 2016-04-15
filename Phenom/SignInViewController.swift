@@ -157,9 +157,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             // get bearerToken
             
             let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-            
             let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-            
             guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
             let request = NSMutableURLRequest(URL: URL)
             request.HTTPMethod = "POST"
@@ -168,11 +166,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
             
             let utf8str: NSData = passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)!
-            //let utf8str = passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)
-            
             let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-            //let base64Encoded = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.fromRaw(0)!)
-
             print("base64Encoded: \(base64Encoded)")
             
             let bodyObject = [
@@ -193,11 +187,19 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                         
                         let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != nil  {
-                            print("error: \(json["errorCode"].number)")
+                        if (json["errorCode"].number == nil) {
                             
-                            return
+                            print("u shall pass")
+                            
+                        } else {
+                            // double check
+                            if json["errorCode"].number != 200 {
+                                print("json: \(json)")
+                                print("error: \(json["errorCode"].number)")
+                                return
+                            }
                         }
+
                         
                         // add to likedMomentIds
                         let defaults = NSUserDefaults.standardUserDefaults()
@@ -222,9 +224,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     //                print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
             })
-            task.resume()
-            
-            
+            task.resume()            
             
         }
         
@@ -236,7 +236,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         //
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.stringForKey("bearerToken")! as NSString
+        let bearerToken = defaults.stringForKey("bearerToken")! as String
         
         if (bearerToken == "") {
             // something is wrong
@@ -246,19 +246,12 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         //
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "GET"
         
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
                 let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
@@ -272,7 +265,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                         
                         return
                     }
-
+                    
                     
                     // success, save user defaults
                     
@@ -327,12 +320,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 }
                 
             }
-            else {
-                
-                //                print("URL Session Task Failed: %@", error!.localizedDescription);
-            }
         })
-        task.resume()
         
     }
 

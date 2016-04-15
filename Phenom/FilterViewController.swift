@@ -78,7 +78,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         
         //filterBtn.frame = CGRectMake(10, 10, bottomContainerView.frame.size.width-20, bottomContainerView.frame.size.height-20)
         filterBtn.frame = CGRectMake(0, view.frame.size.height-60, view.frame.size.width, 60)
-        filterBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        filterBtn.backgroundColor = UINavigationBar.appearance().tintColor
         filterBtn.addTarget(self, action:#selector(filterBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         filterBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         filterBtn.titleLabel?.numberOfLines = 1

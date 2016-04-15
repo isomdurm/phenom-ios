@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var clientId = "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO"
     var clientSecret = "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko="
     var apiVersion = "1.2.3"
-    var phenomApiUrl = "https://api1.phenomapp.com:8081" //https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081
+    var phenomApiUrl = "https://api1.phenomapp.com:8081" // "http://192.168.129.95:8081" // "http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
     
     var window: UIWindow?
 
@@ -50,16 +50,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             window.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
             
             UINavigationBar.appearance().setBackgroundImage(UIImage(named: "blackNav.png"), forBarMetrics:UIBarMetrics.Default)
-            UINavigationBar.appearance().tintColor = UIColor.blackColor() // UIColor(red:165/255, green:95/255, blue:170/255, alpha:1) //purple
+            UINavigationBar.appearance().tintColor = UIColor(red:177/255, green:155/255, blue:84/255, alpha:1) //UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //actually gold
             UITabBar.appearance().tintColor = UINavigationBar.appearance().tintColor
+
+            //
             
             setupDefaults()
 
             //
             
             let defaults = NSUserDefaults.standardUserDefaults()
-            let bearerToken = defaults.stringForKey("bearerToken")! as NSString
-            let username = defaults.stringForKey("username")! as NSString
+            let bearerToken = defaults.stringForKey("bearerToken")! as String
+            let username = defaults.stringForKey("username")! as String
             
             if (bearerToken == "" || username == "") {
                 // log in
@@ -155,29 +157,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         //let imageInset2 = UIEdgeInsetsMake(offset2, 0, -offset2, 0)
         
         let homeInsets = UIEdgeInsetsMake(6, 0, -6, 0)
-        let homeimg = UIImage(named: "269-happyface.png")
-        let homeimgselected = UIImage(named: "269-happyface.png")
+        let homeimg = UIImage(named: "tabbar-timeline-icon.png")
+        let homeimgselected = UIImage(named: "tabbar-timeline-icon.png")
         let tabitem1 = UITabBarItem(title: "", image: homeimg, selectedImage: homeimgselected)
         tabitem1.titlePositionAdjustment = UIOffset.init(horizontal: 0, vertical: 25)
         tabitem1.imageInsets = homeInsets
         
         let discoveryInsets = UIEdgeInsetsMake(5, 0, -5, 0)
-        let discoverimg = UIImage(named: "28-star-rounded2.png") //"06-magnify.png"
-        let discoverimgselected = UIImage(named: "28-star-rounded2.png") //"06-magnify.png"
+        let discoverimg = UIImage(named: "tabbar-explore-icon.png")
+        let discoverimgselected = UIImage(named: "tabbar-explore-icon.png")
         let tabitem2 = UITabBarItem(title: "", image: discoverimg, selectedImage: discoverimgselected)
         tabitem2.titlePositionAdjustment = UIOffset.init(horizontal: 0, vertical: 25)
         tabitem2.imageInsets = discoveryInsets
         
         let activityInsets = UIEdgeInsetsMake(6, 0, -6, 0)
-        let activityimg = UIImage(named: "29-heart.png")
-        let activityimgselected = UIImage(named: "29-heart.png")
+        let activityimg = UIImage(named: "tabbar-activity-icon")
+        let activityimgselected = UIImage(named: "tabbar-activity-icon.png")
         let tabitem4 = UITabBarItem(title: "", image: activityimg, selectedImage: activityimgselected)
         tabitem4.titlePositionAdjustment = UIOffset.init(horizontal: 0, vertical: 25)
         tabitem4.imageInsets = activityInsets
         
         let profileInsets = UIEdgeInsetsMake(6, 0, -6, 0)
-        let profileimg = UIImage(named: "145-persondot2.png")  //19-gear.png
-        let profileimgselected = UIImage(named: "145-persondot2.png")  //19-gear.png
+        let profileimg = UIImage(named: "tabbar-profile-icon.png")
+        let profileimgselected = UIImage(named: "tabbar-profile-icon.png")
         let tabitem5 = UITabBarItem(title: "", image: profileimg, selectedImage: profileimgselected)
         tabitem5.titlePositionAdjustment = UIOffset.init(horizontal: 0, vertical: 25)
         tabitem5.imageInsets = profileInsets
@@ -265,6 +267,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             "description" : "",
             "firstName" : "",
             "lastName" : "",
+            "birthday" : NSDate(),
+            "gender" : "",
             "followersCount" : 0,
             "followingCount" : 0,
             "momentCount" : 0,
@@ -394,12 +398,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         
     }
     
+    //
+    //
+    //
+    //func sendRequest(url: String, parameters: [String: AnyObject], type: String, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) ->
+    func sendRequest(url: String, parameters: String, type: String, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> NSURLSessionTask {
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.objectForKey("bearerToken") as! String
+        
+        //let requestURL = NSURL(string:"\(url)?\(parameters)")!
+        let urlStr = "\(url)?\(parameters)"
+        let urlEncoded : NSString = urlStr.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        let requestURL : NSURL = NSURL(string: urlEncoded as String)!
+        
+        
+        let request = NSMutableURLRequest(URL: requestURL)
+        request.HTTPMethod = type // "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization") 
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request, completionHandler:completionHandler)
+        task.resume()
+        
+        return task
+    }
+    //
+    //
+    //
+    
     
     func logoutAction() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let username = defaults.stringForKey("username")! as NSString
-        let password = defaults.stringForKey("password")! as NSString
+        let username = defaults.stringForKey("username")! as String
+        let password = defaults.stringForKey("password")! as String
+        let bearerToken = defaults.stringForKey("bearerToken")! as String
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
@@ -407,9 +443,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "DELETE"
-        
+                
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")        
+        // need this
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        //
         
         let bodyObject = [
             "username": username,
@@ -424,27 +463,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
-                if (error == 404) {
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if (json["errorCode"].number == nil) {
+                        
+                        print("u shall pass")
+                        
+                    } else {
+                        // double check
+                        if json["errorCode"].number != 200 {
+                            print("json: \(json)")
+                            print("error: \(json["errorCode"].number)")
+                            return
+                        }
+                    }
+                    
+                    //
+                    
+                    if (error == 404) {
+                        
+                    }
+                    
+                    print("error: \(error)")
+                    
+                    // logged out
+                    
+                    dispatch_async(dispatch_get_main_queue(),{
+                        
+                        let appDomain = NSBundle.mainBundle().bundleIdentifier!
+                        NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain)
+                        
+                        self.setupDefaults()
+                        
+                        self.nav?.popToRootViewControllerAnimated(false)
+                        
+                        self.presentWelcomeViewController()
+                        
+                    })
+                    
                     
                 }
-                
-                print("error: \(error)")
-                
-                
-                // logged out
-                
-                dispatch_async(dispatch_get_main_queue(),{
-                    
-                    let appDomain = NSBundle.mainBundle().bundleIdentifier!
-                    NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain)
-                    
-                    self.setupDefaults()
-                    
-                    self.nav?.popToRootViewControllerAnimated(false)
-                    
-                    self.presentWelcomeViewController()
-                    
-                })
                 
             } else {
                 print("URL Session Task Failed: %@", error!.localizedDescription);
@@ -507,6 +568,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         }
     }
 
+    func heightForTimelineMoment(results : JSON, ip : NSIndexPath, cellWidth : CGFloat) -> CGFloat {
+        
+        let padding = CGFloat(15)
+        var mediaHeight = CGFloat()
+        var headlineHeight = CGFloat()
+        
+        
+        if let id = results[ip.row]["mediaHeight"].number {
+            mediaHeight = CGFloat(id)
+        } else {
+            mediaHeight = cellWidth+102
+        }
+        
+        if let id = results[ip.row]["headline"].string {
+            let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            if (trimmedString == "") {
+                headlineHeight = 0
+            } else {
+                let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(trimmedString, font: UIFont.init(name: "MaisonNeue-Medium", size: 14)!, width: cellWidth-30)
+                headlineHeight = height+10
+            }
+        } else {
+            headlineHeight = 0
+        }
+        
+        if (headlineHeight == 0) {
+            return mediaHeight+padding+38+padding+38+padding+padding
+        } else {
+            return mediaHeight+padding+38+padding+headlineHeight+padding+38+padding+padding
+        }
+        
+    }
     
 }
 

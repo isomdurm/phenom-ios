@@ -96,78 +96,95 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     func queryForMyActivity() {
         
-        // https://api1.phenomapp.com:8081/notification?since=DATE&limit=INT
-        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/notification"
         let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "since=\(date)&limit=30"
+        let type = "GET"
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-        
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/notification?since=\(date)&limit=30") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-    
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
+                        return
+                    }
+                    
+                    let results = json["results"]
+                    print("results: \(results)")
+                    
+                    self.myActivityData = dataFromString
+                    
+                    if (results.count > 0) {
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            return
-                        }
+                            self.theTableView.scrollEnabled = true
+                            self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, 0, 0))
+                            self.theTableView.tableHeaderView!.userInteractionEnabled = true
+                            
+                            self.refreshControl.endRefreshing()
+                            self.theTableView.reloadData()
+                        })
                         
-                        let results = json["results"]
-                        print("results: \(results)")
-                        
-                        self.myActivityData = dataFromString
+                    } else {
                         
                         // done, reload tableView
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            self.refreshControl.endRefreshing()
-                            
-                            self.theTableView.reloadData()
+                            self.showEmptyTimeline()
                             
                         })
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
-                        self.refreshControl.endRefreshing()
                     }
+                    
                 } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                     self.refreshControl.endRefreshing()
                 }
-            })
-            task.resume()
-            //
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
-        
+    
         
         
         // either way
+        self.refreshControl.endRefreshing()
         activityIndicator.stopAnimating()
         activityIndicator.removeFromSuperview()
         
         
     }
     
+    func showEmptyTimeline() {
+        
+        // show empty timeline btn
+        self.theTableView.scrollEnabled = false
+        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, self.theTableView.frame.size.height))
+        self.theTableView.tableHeaderView!.userInteractionEnabled = true
+        let emptyTimelineBtn = UIButton(type: UIButtonType.Custom)
+        emptyTimelineBtn.frame = CGRectMake(self.theTableView.tableHeaderView!.frame.size.width/2-125, self.theTableView.tableHeaderView!.frame.size.height/2-50, 250, 100)
+        emptyTimelineBtn.backgroundColor = UIColor.clearColor()
+        emptyTimelineBtn.titleLabel?.numberOfLines = 2
+        emptyTimelineBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 18)
+        emptyTimelineBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        emptyTimelineBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        emptyTimelineBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        emptyTimelineBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Normal)
+        emptyTimelineBtn.setTitleColor(UIColor(red:197/255, green:175/255, blue:104/255, alpha:1), forState: UIControlState.Highlighted)
+        emptyTimelineBtn.setTitle("Phenom is more fun with friends! Tap to invite.", forState: UIControlState.Normal)
+        emptyTimelineBtn.addTarget(self, action:#selector(emptyTimelineBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.theTableView.tableHeaderView!.addSubview(emptyTimelineBtn)
+        
+        self.theTableView.reloadData()
+    }
     
     func emptyTimelineBtnAction() {
         
@@ -262,7 +279,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                 cell.followBtn.hidden = true
                 
                 // show my moment
-                if let id = results[indexPath.row]["target"]["imageUrlTiny"].string {
+                if let id = results[indexPath.row]["additionalData"]["imageUrlTiny"].string {
                     let fileUrl = NSURL(string: id)
                     
                     cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
@@ -301,11 +318,60 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                     cell.followBtn.hidden = true
                 }
                 
+            } else if (id == 2) {
+                // commented on your moment
+                
+                cell.momentImgView.hidden = false
+                cell.momentBtn.hidden = false
+                cell.followBtn.hidden = true
+                
+                // show my moment
+                if let id = results[indexPath.row]["additionalData"]["momentId"].string {
+                    
+                    
+                    // GET "imageUrlTiny" !!!
+                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    
+                }
+                
+            } else if (id == 3) {
+                // mentioned in a comment
+                
+                cell.momentImgView.hidden = false
+                cell.momentBtn.hidden = false
+                cell.followBtn.hidden = true
+                
+                // show my moment
+                if let id = results[indexPath.row]["additionalData"]["momentId"].string {
+                    
+                    
+                    // GET "imageUrlTiny" !!!
+                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    
+                }
+                
+                
+            } else if (id == 4) {
+                // tagged in a moment - mentioned in headline
+                
+                cell.momentImgView.hidden = false
+                cell.momentBtn.hidden = false
+                cell.followBtn.hidden = true
+                
+                // show my moment
+                if let id = results[indexPath.row]["additionalData"]["momentId"].string {
+                    
+                    
+                    // GET "imageUrlTiny" !!!
+                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    
+                }
+                
+                
             } else {
-                // hmmm
-                
-                
+                // something is
             }
+            
         } else {
             // something is wrong
             
@@ -414,6 +480,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
             print("id: \(id)")
             let vc = ChatViewController()
             vc.passedMomentId = id
+            vc.passedMomentHeadline = results[sender.tag]["headline"].string!
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             

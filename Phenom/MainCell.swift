@@ -40,7 +40,7 @@ class MainCell: UITableViewCell {
     var timelineHeadlineLbl = UILabel()
     
     var timelineLikeBtn = UIButton()
-    var timelineCommentBtn = UIButton()
+    var timelineChatBtn = UIButton()
     var timelineGearBtn = UIButton()
     var timelineMoreBtn = UIButton()
     
@@ -75,7 +75,7 @@ class MainCell: UITableViewCell {
         teamSportLbl.textAlignment = .Right
         contentView.addSubview(teamSportLbl)
         
-        teamNumLbl.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1) //gold
+        teamNumLbl.backgroundColor = UINavigationBar.appearance().tintColor //gold
         teamNumLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 20)
         teamNumLbl.textColor = UIColor.whiteColor()
         teamNumLbl.textAlignment = .Center
@@ -95,13 +95,13 @@ class MainCell: UITableViewCell {
         timelineImgView.layer.masksToBounds = true
         timelineImgView.userInteractionEnabled = true
         
-        timelineMusicLbl.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        timelineMusicLbl.backgroundColor = UINavigationBar.appearance().tintColor
         timelineMusicLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
         timelineMusicLbl.textColor = UIColor.whiteColor()
         timelineMusicLbl.textAlignment = .Center
         contentView.addSubview(timelineMusicLbl)
         
-        timelineModeLbl.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        timelineModeLbl.backgroundColor = UINavigationBar.appearance().tintColor
         timelineModeLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
         timelineModeLbl.textColor = UIColor.whiteColor()
         timelineModeLbl.textAlignment = .Center
@@ -128,8 +128,8 @@ class MainCell: UITableViewCell {
         contentView.addSubview(timelineTimeLbl)
 
         timelineFollowBtn.backgroundColor = UIColor.orangeColor()
-        timelineFollowBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
-        timelineFollowBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        timelineFollowBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Normal)
+        timelineFollowBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Selected)
         timelineFollowBtn.contentMode = UIViewContentMode.ScaleAspectFill
         contentView.addSubview(timelineFollowBtn)
         
@@ -141,15 +141,18 @@ class MainCell: UITableViewCell {
         timelineHeadlineLbl.lineBreakMode = .ByWordWrapping
         timelineHeadlineLbl.numberOfLines = 0
         
-        timelineLikeBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
-        timelineLikeBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
-        timelineLikeBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        timelineLikeBtn.backgroundColor = UINavigationBar.appearance().tintColor
+        timelineLikeBtn.setBackgroundImage(UIImage.init(named: "timeline-like-btn.png") , forState: UIControlState.Normal)
+        timelineLikeBtn.setBackgroundImage(UIImage.init(named: "timeline-like-btn-selected.png") , forState: UIControlState.Selected)
         contentView.addSubview(timelineLikeBtn)
         
-        timelineCommentBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
-        contentView.addSubview(timelineCommentBtn)
+        timelineChatBtn.backgroundColor = UINavigationBar.appearance().tintColor
+        timelineChatBtn.setBackgroundImage(UIImage.init(named: "timeline-chat-btn.png") , forState: UIControlState.Normal)
+        //timelineChatBtn.setBackgroundImage(UIImage.init(named: "timeline-chat-btn.png") , forState: UIControlState.Selected)
+        contentView.addSubview(timelineChatBtn)
 
-        timelineGearBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        timelineGearBtn.backgroundColor = UINavigationBar.appearance().tintColor
+        timelineGearBtn.setBackgroundImage(UIImage.init(named: "timeline-gear-btn.png") , forState: UIControlState.Normal)
         contentView.addSubview(timelineGearBtn)
         
         timelineMoreBtn.backgroundColor = UIColor.init(white: 0.25, alpha: 1.0)
@@ -188,7 +191,8 @@ class MainCell: UITableViewCell {
         gearNameLbl.numberOfLines = 0
         
         gearAddBtn.backgroundColor = UIColor.orangeColor()
-        gearAddBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear.png") , forState: UIControlState.Normal)
+        //gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear-selected.png") , forState: UIControlState.Selected)
         gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
         contentView.addSubview(gearAddBtn)
         

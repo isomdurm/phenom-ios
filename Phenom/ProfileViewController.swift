@@ -9,9 +9,11 @@
 import UIKit
 import SwiftyJSON
 import Haneke
+import AVFoundation
+import MobileCoreServices
+import Just
 
-
-class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var initialProfile: Bool = false
     
@@ -136,7 +138,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         sportHometownLbl.textColor = UIColor.whiteColor()
         profileContainerView.addSubview(sportHometownLbl)
         let sportsStr = sports.componentsJoinedByString(", ")
-        sportHometownLbl.text = String("\(sportsStr) IN \(hometown)").uppercaseString
+        sportHometownLbl.text = String("\(sportsStr)").uppercaseString // IN \(hometown)
         
         descriptionLbl.frame = CGRectMake((headerViewWidth/2)-(bioWidth/2), profileImgView.frame.origin.y+profileImgView.frame.size.height+padding+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, bioWidth, bioHeight)
         descriptionLbl.backgroundColor = UIColor.clearColor()
@@ -214,7 +216,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let dif = half - inviteBtnWidth
         
         inviteBtn.frame = CGRectMake(headerViewWidth/2+(dif/2), 0, inviteBtnWidth, fansHeight)
-        inviteBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
+        inviteBtn.backgroundColor = UINavigationBar.appearance().tintColor
         inviteBtn.addTarget(self, action:#selector(inviteBtnAction), forControlEvents:.TouchUpInside)
         inviteBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         inviteBtn.titleLabel?.numberOfLines = 1
@@ -226,7 +228,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         fansFollowingInviteContainerView.addSubview(inviteBtn)
         
         headerContainerView.addSubview(fansFollowingInviteContainerView)
-    
         
         //
         //
@@ -288,7 +289,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func queryForUser() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as NSString
+        let uid = defaults.stringForKey("userId")! as String
         
         if (initialProfile) {
             
@@ -301,6 +302,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             navBarView.addSubview(settingsBtn)
             
             inviteBtn.setTitle("INVITE TEAM", forState: .Normal)
+            
+            //
+            updateCurrentUser()
+            //
+            
             
         } else {
             
@@ -341,6 +347,87 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         queryForStats()
         
         //
+    }
+    
+    func updateCurrentUser() {
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "GET"
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        return
+                    }
+                    
+                    // update currrentUser, both on this page and in userDefaults
+                    
+                    let user = json["results"]
+                    print("currentUser: \(user)")
+                    
+                    // success, save user defaults
+                    
+                    self.userId = user["id"].string!
+                    self.username = user["username"].string!
+                    self.hometown = user["hometown"].string!
+                    self.imageUrl = user["imageUrl"].string!
+                    self.bio = user["description"].string!
+                    self.firstName = user["firstName"].string!
+                    self.lastName = user["lastName"].string!
+                    
+                    self.followersCount = user["followersCount"].number!
+                    self.followingCount = user["followingCount"].number!
+                    
+                    self.momentCount = user["momentCount"].number!
+                    self.lockerProductCount = user["lockerProductCount"].number!
+                    
+                    let sport = user["sport"].string! // make an array
+                    self.sports = [sport]
+                    
+                    //
+                    
+                    defaults.setObject(self.userId, forKey: "userId")
+                    defaults.setObject(self.username, forKey: "username")
+                    defaults.setObject(self.hometown, forKey: "hometown")
+                    defaults.setObject(self.imageUrl, forKey: "imageUrl")
+                    defaults.setObject(self.bio, forKey: "description")
+                    defaults.setObject(self.firstName, forKey: "firstName")
+                    defaults.setObject(self.lastName, forKey: "lastName")
+                    defaults.setObject(self.followersCount, forKey: "followersCount")
+                    defaults.setObject(self.followingCount, forKey: "followingCount")
+                    
+                    defaults.setObject(self.momentCount, forKey: "momentCount")
+                    defaults.setObject(self.lockerProductCount, forKey: "lockerProductCount")
+                    
+                    defaults.setObject(self.sports, forKey: "sports")
+                    
+                    defaults.synchronize()
+                    
+                    
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("got here")
+                        self.theTableView.reloadData()
+                    })
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                }
+                
+            }
+        })
+        
     }
     
     
@@ -387,7 +474,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // if not currentUser - follow / un-follow
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as NSString
+        let uid = defaults.stringForKey("userId")! as String
         
         if (userId == uid) {
             print("currentUser")
@@ -425,7 +512,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // refresh view to show teams
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as NSString
+        let uid = defaults.stringForKey("userId")! as String
         
         if (userId == uid && initialProfile) {
             print("currentUser")
@@ -433,18 +520,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
             self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
             
-            let addTeamBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
-            addTeamBtn.backgroundColor = UIColor(red:157/255, green:135/255, blue:64/255, alpha:1)
-            addTeamBtn.addTarget(self, action:#selector(addTeamBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-            addTeamBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-            addTeamBtn.titleLabel?.numberOfLines = 1
-            addTeamBtn.contentHorizontalAlignment = .Center
-            addTeamBtn.contentVerticalAlignment = .Center
-            addTeamBtn.titleLabel?.textAlignment = .Center
-            addTeamBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            addTeamBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-            addTeamBtn.setTitle("ADD TEAM", forState: .Normal)
-            self.theTableView.tableFooterView?.addSubview(addTeamBtn)
+            let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+            addBtn.backgroundColor = UINavigationBar.appearance().tintColor
+            addBtn.addTarget(self, action:#selector(addTeamBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+            addBtn.titleLabel?.numberOfLines = 1
+            addBtn.contentHorizontalAlignment = .Center
+            addBtn.contentVerticalAlignment = .Center
+            addBtn.titleLabel?.textAlignment = .Center
+            addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+            addBtn.setTitle("ADD TEAM", forState: .Normal)
+            self.theTableView.tableFooterView?.addSubview(addBtn)
             
         } else {
             
@@ -452,7 +539,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
             
         }
-        
         
         
         self.theTableView.reloadData()
@@ -471,6 +557,40 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
         
         // refresh view to show moments
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let uid = defaults.stringForKey("userId")! as String
+        
+        if (userId == uid && initialProfile) {
+            print("currentUser")
+            
+            let json = JSON(data: momentsData)
+            if (json["results"].count == 0) {
+                
+                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
+                self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+                
+                let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+                addBtn.backgroundColor = UINavigationBar.appearance().tintColor
+                addBtn.addTarget(self, action:#selector(addMomentBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+                addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+                addBtn.titleLabel?.numberOfLines = 1
+                addBtn.contentHorizontalAlignment = .Center
+                addBtn.contentVerticalAlignment = .Center
+                addBtn.titleLabel?.textAlignment = .Center
+                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+                addBtn.setTitle("ADD A MOMENT", forState: .Normal)
+                self.theTableView.tableFooterView?.addSubview(addBtn)
+            }
+            
+        } else {
+            
+            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+            
+        }
+
         
         if (self.queriedForTimeline) {
             // do nothing
@@ -491,8 +611,38 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // refresh view to show gear
         
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 00))
-        self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let uid = defaults.stringForKey("userId")! as String
+        
+        if (userId == uid && initialProfile) {
+            print("currentUser")
+            
+            let json = JSON(data: gearData)
+            if (json["results"].count == 0) {
+                
+                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
+                self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+                
+                let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+                addBtn.backgroundColor = UINavigationBar.appearance().tintColor
+                addBtn.addTarget(self, action:#selector(addGearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+                addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+                addBtn.titleLabel?.numberOfLines = 1
+                addBtn.contentHorizontalAlignment = .Center
+                addBtn.contentVerticalAlignment = .Center
+                addBtn.titleLabel?.textAlignment = .Center
+                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+                addBtn.setTitle("ADD GEAR", forState: .Normal)
+                self.theTableView.tableFooterView?.addSubview(addBtn)
+            }
+            
+        } else {
+            
+            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+            
+        }
         
         // refresh view to show gear
         
@@ -521,137 +671,103 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         print("queryForTimeline hit")
         // get bearer token
         
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments"
         let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "since=\(date)&limit=20"
+        let type = "GET"
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-        
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
                 
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments?since=\(date)&limit=20") else {return}
-        
-        
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.momentsData = dataFromString
-                        
-                        self.queriedForTimeline = true
-                        
-                        // done, reload tableView
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.refreshControl.endRefreshing()
-                            
-                            self.theTableView.reloadData()
-                        })
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
-                        self.refreshControl.endRefreshing()
+                        return
                     }
+                    
+                    self.momentsData = dataFromString
+                    
+                    self.queriedForTimeline = true
+                    
+                    // done, reload tableView
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.refreshControl.endRefreshing()
+                        
+                        self.theTableView.reloadData()
+                    })
+                    
                 } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                     self.refreshControl.endRefreshing()
                 }
-            })
-            task.resume()
-            //
+                
+            } else {
+                //
+            }
         })
-        
-        // end with animation
         
     }
     
     func queryForGear() {
         print("queryForGear hit")
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
-        
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker"
         let date = NSDate().timeIntervalSince1970 * 1000
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker?since=\(date)&limit=20") else {return}
+        let params = "since=\(date)&limit=20"
+        let type = "GET"
         
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "GET"
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        self.gearData = dataFromString
-                        
-                        let results = json["results"]
-                        print(results)
-                        
-                        self.queriedForGear = true
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            self.refreshControl.endRefreshing()
-                            
-                            self.theTableView.reloadData()
-                            
-                        })
-                        
-                    } else {
-                        print("URL Session Task Failed: %@", error!.localizedDescription)
-                        
+                        return
                     }
                     
+                    self.gearData = dataFromString
+                    
+                    let results = json["results"]
+                    print(results)
+                    
+                    self.queriedForGear = true
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.refreshControl.endRefreshing()
+                        
+                        self.theTableView.reloadData()
+                        
+                    })
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription)
+                    
                 }
-                
-            })
-            task.resume()
+            } else {
+                //
+            }
         })
+        
     }
    
     func emptyTimelineBtnAction() {
-        
+
         //(UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.inviteFriends()
+        
     }
     
     func backAction() {
@@ -659,6 +775,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func settingsBtnAction() {
+        
+        //self.cameraBtnAction()
+        
         navigationController?.pushViewController(SettingsViewController(), animated: true)
     }
     
@@ -666,125 +785,103 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func followAction(sender: UIButton) {
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()        
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/follow") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/follow"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "POST"
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            sender.selected = false
-                            
-                            return
-                        }
+                        sender.selected = false
                         
-                        // followed
-                        
-                        // update followingUserIds
-                        //
-                        // reload
-                        
-                        let array = defaults.arrayForKey("followingUserIds")
-                        let ma = NSMutableArray(array: array!)
-                        if (ma.containsObject(self.userId)) {
-                            // in likedMomentIds, do nothing
-                        } else {
-                            ma.addObject(self.userId)
-                            let newarray = ma as NSArray
-                            defaults.setObject(newarray, forKey: "followingUserIds")
-                            defaults.synchronize()
-                        }
-                        
-                        print("followed")
-                        
-                        sender.selected = true
-                        
-                        (UIApplication.sharedApplication().delegate as! AppDelegate).reloadTimeline = true
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
-                        
+                        return
                     }
+                    
+                    // followed
+                    
+                    let array = defaults.arrayForKey("followingUserIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(self.userId)) {
+                        // in followingUserIds, do nothing
+                    } else {
+                        let followingCount = defaults.objectForKey("followingCount") as! Int
+                        let newcount = followingCount+1
+                        
+                        ma.addObject(self.userId)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "followingUserIds")
+                        defaults.setObject(newcount, forKey: "followingCount")
+                        defaults.synchronize()
+                    }
+                    
+                    print("followed")
+                    
+                    sender.selected = true
+                    
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).reloadTimeline = true
+                    
                 } else {
-                    //
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
-            })
-            task.resume()
+            } else {
+                //
+            }
         })
         
     }
     
     func unfollowAction(sender: UIButton) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
         
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/unfollow"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "DELETE"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/unfollow") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "DELETE"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            sender.selected = true
-                            
-                            return
-                        }
+                        sender.selected = true
                         
-                        
-                        print("unfollowed")
-                        
-                        sender.selected = false
-                        
-                        (UIApplication.sharedApplication().delegate as! AppDelegate).reloadTimeline = true
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                        return
                     }
+                    
+                    
+                    print("unfollowed")
+                    
+                    sender.selected = false
+                    
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).reloadTimeline = true
+                    
                 } else {
-                    //
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            })
-            task.resume()
+            } else {
+                //
+            }
         })
         
     }
-    
-    
     
     
     
@@ -828,7 +925,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn1.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabContainerView.addSubview(tabBtn1)
         tabBtn1.setTitle("0 STATS", forState: UIControlState.Normal)
@@ -841,7 +938,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn2.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn2.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabContainerView.addSubview(tabBtn2)
         let s = momentCount == 1 ? "" : "S"
@@ -855,7 +952,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn3.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn3.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn3.addTarget(self, action:#selector(tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabContainerView.addSubview(tabBtn3)
         tabBtn3.setTitle("\(lockerProductCount) GEAR", forState: UIControlState.Normal)
@@ -876,30 +973,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             // for moments - measure height
             
-            let padding = CGFloat(15)
-            let imgHeight = view.frame.size.width+100
-            
-            var headlineHeight = CGFloat()
-            
             let json = JSON(data: momentsData)
             let results = json["results"]
-            if let id = results[indexPath.row]["headline"].string {
-                let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                if (trimmedString == "") {
-                    headlineHeight = 0
-                } else {
-                    let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(trimmedString, font: UIFont.init(name: "MaisonNeue-Medium", size: 14)!, width: self.view.frame.size.width-30)
-                    headlineHeight = height+10
-                }
-            } else {
-                headlineHeight = 0
-            }
             
-            if (headlineHeight == 0) {
-                return imgHeight+padding+40+padding+40+padding+padding
-            } else {
-                return imgHeight+padding+40+padding+headlineHeight+padding+40+padding+padding
-            }
+            let h = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForTimelineMoment(results, ip: indexPath, cellWidth: view.frame.size.width) 
+            return h
             
         } else if (tabBtn3.selected) {
             
@@ -915,7 +993,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 if (id == "") {
                     brandHeight = 0
                 } else {
-                    let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 16)!, width: self.view.frame.size.width-15-15-44-15)
+                    let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 16)!, width: self.view.frame.size.width-15-15-50-15)
                     brandHeight = height
                 }
             } else {
@@ -926,7 +1004,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 if (id == "") {
                     nameHeight = 0
                 } else {
-                    let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 16)!, width: self.view.frame.size.width-15-15-44-15)
+                    let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 16)!, width: self.view.frame.size.width-15-15-50-15)
                     nameHeight = height
                 }
             } else {
@@ -937,10 +1015,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 let contentHeight = view.frame.size.width+15+nameHeight+15
                 
-                if (contentHeight > view.frame.size.width+15+40+15+15) {
+                if (contentHeight > view.frame.size.width+15+38+15+15) {
                     return view.frame.size.width+15+nameHeight+15
                 } else {
-                    return view.frame.size.width+15+40+15+15 // default height with add btn, 40 height
+                    return view.frame.size.width+15+38+15+15 // default height with add btn, 38 height
                 }
                 
             } else {
@@ -978,7 +1056,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineFollowBtn.hidden = true
             cell.timelineHeadlineLbl.hidden = true
             cell.timelineLikeBtn.hidden = true
-            cell.timelineCommentBtn.hidden = true
+            cell.timelineChatBtn.hidden = true
             cell.timelineGearBtn.hidden = true
             cell.timelineMoreBtn.hidden = true
             
@@ -1040,7 +1118,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineFollowBtn.hidden = false
             cell.timelineHeadlineLbl.hidden = false
             cell.timelineLikeBtn.hidden = false
-            cell.timelineCommentBtn.hidden = false
+            cell.timelineChatBtn.hidden = false
             cell.timelineGearBtn.hidden = false
             cell.timelineMoreBtn.hidden = false
             
@@ -1051,24 +1129,28 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             //
             
-            cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
+            let mediaHeight = view.frame.size.width+102
+            
+            cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
             
             //timelineTinyHeartBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
             //timelineLikeLblBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
             
-            cell.timelineUserImgView.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15, 40, 40)
+            cell.timelineUserImgView.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15, 38, 38)
             cell.timelineUserImgViewBtn.frame = CGRectMake(cell.timelineUserImgView.frame.origin.x, cell.timelineUserImgView.frame.origin.y, cell.timelineUserImgView.frame.size.width, cell.timelineUserImgView.frame.size.height)
-            cell.timelineFollowBtn.frame = CGRectMake(cell.cellWidth-50-15, cell.timelineImgView.frame.size.height+15, 50, 40)
+            cell.timelineFollowBtn.frame = CGRectMake(cell.cellWidth-65-15, cell.timelineImgView.frame.size.height+15, 65, 38)
             
             //
             
             let json = JSON(data: momentsData)
             let results = json["results"]
             
+            // get mediaHeight
+            
             if let id = results[indexPath.row]["imageUrl"].string {
                 let fileUrl = NSURL(string: id)
                 
-                cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
+                cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
                 cell.timelineImgView.setNeedsLayout()
                 
                 cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -1152,7 +1234,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 let last = "\(results[indexPath.row]["user"]["lastName"])"
                 let str = "\(id) \(last)"
                 let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.timelineNameLbl.font, height: 20)
-                cell.timelineNameLbl.frame = CGRect(x: 15+40+15, y: cell.timelineImgView.frame.size.height+15, width: width, height: 20)
+                cell.timelineNameLbl.frame = CGRect(x: 15+38+15, y: cell.timelineImgView.frame.size.height+15, width: width, height: 19)
                 cell.timelineNameLbl.text = str
                 
             }
@@ -1175,7 +1257,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     dateStr = "\(since)"
                 }
                 let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(dateStr, font: cell.timelineTimeLbl.font, height: 20)
-                cell.timelineTimeLbl.frame = CGRect(x: 15+40+15, y: cell.timelineImgView.frame.size.height+15+20, width: width, height: 20)
+                cell.timelineTimeLbl.frame = CGRect(x: 15+38+15, y: cell.timelineImgView.frame.size.height+15+19, width: width, height: 19)
                 cell.timelineTimeLbl.text = dateStr
             }
             
@@ -1201,17 +1283,17 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 headlineHeight = 0
             }
-            cell.timelineHeadlineLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15+40+15, cell.cellWidth-30, headlineHeight)
+            cell.timelineHeadlineLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15+38+15, cell.cellWidth-30, headlineHeight)
             
             
             var btnY = CGFloat()
             if (headlineHeight == 0) {
-                btnY = cell.timelineImgView.frame.size.height+15+40+15
+                btnY = cell.timelineImgView.frame.size.height+15+38+15
             } else {
-                btnY = cell.timelineImgView.frame.size.height+15+40+15+cell.timelineHeadlineLbl.frame.size.height+15
+                btnY = cell.timelineImgView.frame.size.height+15+38+15+cell.timelineHeadlineLbl.frame.size.height+15
             }
             cell.timelineLikeBtn.frame = CGRectMake(15, btnY, 65, 38)
-            cell.timelineCommentBtn.frame = CGRectMake(15+64+10, btnY, 65, 38)
+            cell.timelineChatBtn.frame = CGRectMake(15+64+10, btnY, 65, 38)
             cell.timelineGearBtn.frame = CGRectMake(15+64+10+64+10, btnY, 65, 38)
             cell.timelineMoreBtn.frame = CGRectMake(15+64+10+64+10+64+10, btnY, 50, 38)
             
@@ -1252,14 +1334,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             cell.timelineUserImgViewBtn.tag = indexPath.row
             cell.timelineLikeBtn.tag = indexPath.row
-            cell.timelineCommentBtn.tag = indexPath.row
+            cell.timelineChatBtn.tag = indexPath.row
             cell.timelineGearBtn.tag = indexPath.row
             cell.timelineMoreBtn.tag = indexPath.row
             cell.timelineFollowBtn.tag = indexPath.row
             
             cell.timelineUserImgViewBtn.addTarget(self, action:#selector(timelineUserImgViewBtnAction), forControlEvents: .TouchUpInside)
             cell.timelineLikeBtn.addTarget(self, action:#selector(timelineLikeBtnAction), forControlEvents: .TouchUpInside)
-            cell.timelineCommentBtn.addTarget(self, action:#selector(timelineCommentBtnAction), forControlEvents: .TouchUpInside)
+            cell.timelineChatBtn.addTarget(self, action:#selector(timelineChatBtnAction), forControlEvents: .TouchUpInside)
             cell.timelineGearBtn.addTarget(self, action:#selector(timelineGearBtnAction), forControlEvents: .TouchUpInside)
             cell.timelineMoreBtn.addTarget(self, action:#selector(timelineMoreBtnAction), forControlEvents: .TouchUpInside)
             cell.timelineFollowBtn.hidden = true
@@ -1292,7 +1374,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineFollowBtn.hidden = true
             cell.timelineHeadlineLbl.hidden = true
             cell.timelineLikeBtn.hidden = true
-            cell.timelineCommentBtn.hidden = true
+            cell.timelineChatBtn.hidden = true
             cell.timelineGearBtn.hidden = true
             cell.timelineMoreBtn.hidden = true
             
@@ -1303,8 +1385,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             
             cell.gearImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
-            cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+10, width: cell.cellWidth-15-15-44-15, height: 25)
-            cell.gearAddBtn.frame = CGRect(x: cell.cellWidth-44-15, y: cell.cellWidth+15, width: 44, height: 40)
+            cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+10, width: cell.cellWidth-15-15-65-15, height: 25)
+            cell.gearAddBtn.frame = CGRect(x: cell.cellWidth-65-15, y: cell.cellWidth+15, width: 65, height: 38)
             
             let json = JSON(data: gearData)
             let results = json["results"]
@@ -1337,7 +1419,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if let id = results[indexPath.row]["brand"].string {
                 cell.gearBrandLbl.text = id
-                brandHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearBrandLbl.font, width: self.view.frame.size.width-15-15-44-15)
+                brandHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearBrandLbl.font, width: self.view.frame.size.width-15-15-65-15)
             } else {
                 brandHeight = 0
                 cell.gearBrandLbl.text = ""
@@ -1345,7 +1427,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if let id = results[indexPath.row]["name"].string {
                 cell.gearNameLbl.text = id
-                nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearNameLbl.font, width: self.view.frame.size.width-15-15-44-15)
+                nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearNameLbl.font, width: self.view.frame.size.width-15-15-65-15)
             } else {
                 cell.gearNameLbl.text = ""
             }
@@ -1358,14 +1440,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
             }
 
-            cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
+            cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-65-15, height: brandHeight)
             
             if (cell.gearBrandLbl.text == "") {
-                cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
+                cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-65-15, height: nameHeight)
             } else {
-                cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15+brandHeight+5, width: cell.cellWidth-15-15-44-15, height: nameHeight)
+                cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15+brandHeight+5, width: cell.cellWidth-15-15-65-15, height: nameHeight)
             }
             
+            cell.gearAddBtn.tag = indexPath.row
+            cell.gearAddBtn.addTarget(self, action: #selector(gearAddBtnAction), forControlEvents: .TouchUpInside)
             
             cell.gearSingleTapRecognizer.addTarget(self, action: #selector(gearSingleTapAction(_:)))
             cell.gearDoubleTapRecognizer.addTarget(self, action: #selector(gearDoubleTapAction(_:)))
@@ -1392,7 +1476,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineFollowBtn.hidden = true
             cell.timelineHeadlineLbl.hidden = true
             cell.timelineLikeBtn.hidden = true
-            cell.timelineCommentBtn.hidden = true
+            cell.timelineChatBtn.hidden = true
             cell.timelineGearBtn.hidden = true
             cell.timelineMoreBtn.hidden = true
             
@@ -1516,133 +1600,117 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             return
         }
         
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "POST"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                        
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            return
-                        }
-                        
-                        // update likedPostIdeas
-                        //
-                        // reload
-                        
-                        let array = defaults.arrayForKey("likedMomentIds")
-                        let ma = NSMutableArray(array: array!)
-                        if (ma.containsObject(momentId)) {
-                            // in likedMomentIds, do nothing
-                        } else {
-                            ma.addObject(momentId)
-                            let newarray = ma as NSArray
-                            defaults.setObject(newarray, forKey: "likedMomentIds")
-                            defaults.synchronize()
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            print("liked")
-                            self.theTableView.reloadData()
-                        })
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        return
                     }
-                } else {
+                    
+                    // update likedPostIdeas
                     //
+                    // reload
+                    
+                    let array = defaults.arrayForKey("likedMomentIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(momentId)) {
+                        // in likedMomentIds, do nothing
+                    } else {
+                        ma.addObject(momentId)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "likedMomentIds")
+                        defaults.synchronize()
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("liked")
+                        self.theTableView.reloadData()
+                    })
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
+        
     }
     
     func unlikeAction(momentId : String) {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         
-        let bearerToken = defaults.objectForKey("bearerToken") as! NSString
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "DELETE"
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "DELETE"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-                if (error == nil) {
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
                         
-                        let json = JSON(data: dataFromString)
-                        if json["errorCode"].number != 200  {
-                            print("json: \(json)")
-                            print("error: \(json["errorCode"].number)")
-                            
-                            return
-                        }
-                        
-                        // update likedPostIdeas
-                        //
-                        // reload
-                        
-                        let array = defaults.arrayForKey("likedMomentIds")
-                        let ma = NSMutableArray(array: array!)
-                        if (ma.containsObject(momentId)) {
-                            // in likedMomentIds, do nothing
-                            ma.removeObject(momentId)
-                            let newarray = ma as NSArray
-                            defaults.setObject(newarray, forKey: "likedMomentIds")
-                            defaults.synchronize()
-                        }
-                        
-                        
-                        if (!(UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId)) {
-                            (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.addObject(momentId)
-                        }
-                        
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            
-                            print("unliked")
-                            self.theTableView.reloadData()
-                        })
-                        
-                    } else {
-                        // print("URL Session Task Failed: %@", error!.localizedDescription);
+                        return
                     }
-                } else {
+                    
+                    // update likedPostIdeas
                     //
+                    // reload
+                    
+                    let array = defaults.arrayForKey("likedMomentIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(momentId)) {
+                        // in likedMomentIds, do nothing
+                        ma.removeObject(momentId)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "likedMomentIds")
+                        defaults.synchronize()
+                    }
+                    
+                    
+                    if (!(UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId)) {
+                        (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.addObject(momentId)
+                    }
+                    
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("unliked")
+                        self.theTableView.reloadData()
+                    })
+                    
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            })
-            task.resume()
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
         })
+
     }
     
     
-    func timelineCommentBtnAction(sender: UIButton){
+    func timelineChatBtnAction(sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -1651,6 +1719,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             print("id: \(id)")
             let vc = ChatViewController()
             vc.passedMomentId = id
+            vc.passedMomentHeadline = results[sender.tag]["headline"].string!
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
@@ -1743,8 +1812,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let mediaHeight = cell.frame.size.width+100
         
-        //let heartImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height/2-50, 100, 100))
-        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-50, mediaHeight/2-50, 100, 100))
+        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-44, mediaHeight/2-44, 88, 88))
         heartImgView.backgroundColor = UIColor.clearColor()
         heartImgView.image = UIImage(named: "heart.png")
         cell.addSubview(heartImgView)
@@ -1871,16 +1939,305 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func gearAddBtnAction(sender : UIButton) {
+        
+        if (sender.selected) {
+            
+            sender.selected = false
+            removeGearFromLocker(sender)
+            
+        } else {
+            
+            sender.selected = true
+            addGearToLocker(sender)
+            
+        }
+    }
+    
+    func addGearToLocker(sender : UIButton) {
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker"
+        let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "since=\(date)&limit=20"
+        let type = "GET"
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        
+                        sender.selected = false
+                        
+                        return
+                    }
+                    
+                    print("added to locker")
+                    
+                    sender.selected = true
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.theTableView.reloadData()
+                    })
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                }
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
+        })
+        
+    }
+    
+    func removeGearFromLocker(sender : UIButton) {
+        
+        
+    }
+    
     //
     // team actions
     //
     
     func addTeamBtnAction() {
         
-        //self.navigationController?.pushViewController(AddTeamViewController(), animated: true)
+        let newnav = UINavigationController(rootViewController: AddTeamViewController())
+        navigationController?.presentViewController(newnav, animated: true, completion: nil)
+    }
+    
+    func addMomentBtnAction() {
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc!.centerBtnAction()
+    }
+    
+    func addGearBtnAction() {
         
         let newnav = UINavigationController(rootViewController: AddTeamViewController())
         navigationController?.presentViewController(newnav, animated: true, completion: nil)
     }
 
+    
+    
+    
+    
+    //
+    //
+    //
+    
+    // photo picker
+    
+    func cameraBtnAction() {
+        
+        let imagePicker = UIImagePickerController()
+        
+        imagePicker.delegate = self
+        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        imagePicker.allowsEditing = true
+        
+        self.presentViewController(imagePicker, animated: true,
+                                   completion: nil)
+    }
+    
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        let mediaType = info[UIImagePickerControllerMediaType] as! NSString
+        
+        if mediaType.isEqualToString(kUTTypeImage as String) {
+            
+            //print("mediaType: \(mediaType)")
+            let selectedImage = info[UIImagePickerControllerEditedImage] as! UIImage
+            self.savePhoto(selectedImage)
+            
+        } else if mediaType.isEqualToString(kUTTypeVideo as String) {
+            
+            print("mediaType: \(mediaType)")
+            //let selectedImage = info[UIImagePickerControllerEditedImage] as! UIImage
+            //self.savePhoto(selectedImage)
+            
+        } else {
+        }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func savePhoto(image:UIImage) {
+        
+        // maxHeight
+        // maxWidth
+        
+        
+        //let resizedimage = self.resizeImage(image, newWidth: 600)
+        //let resizedimagesmall = self.resizeImage(image, newWidth: 300)
+        
+        //let imageData = UIImageJPEGRepresentation(image, 1.0)
+        //let imagedatasmall = UIImageJPEGRepresentation(image, 1.0)
+        
+        // multi-part upload
+        //print("image: \(image)")
+        //print("imagedata: \(imagedata)")
+        
+        
+        //let request = self.createRequest("uid", password: "pw", email: "email@email.com")
+        
+        
+        self.uploadImage(image)
+        
+        
+        let path  = NSURL(fileURLWithPath: "flash.jpeg")
+        
+        //  talk to registration end point
+        let r = Just.post(
+            "http://justiceleauge.org/member/register",
+            data: ["username": "barryallen", "password":"ReverseF1ashSucks"],
+            files: ["profile_photo": .URL(path, nil)]
+        )
+        
+        if (r.ok) {
+            /* success! */
+            print("r.json: \(r.json)")
+            
+        }
+        
+        
+        Just.get("http://httpbin.org/get", params:["page": 3]) { (r) in
+            // the same "r" is available asynchronously here
+            if (r.ok) {
+                // success
+            }
+        }
+        
+//        if let json = Just.post(
+//            "http://httpbin.org/post",
+//            data:["lastName":"Musk"],
+//            files:["elon":path, nil)]
+//            ).json as? [String:AnyObject] {
+//            print(json["form"] ?? [:])      // lastName:Musk
+//            print(json["files"] ?? [:])     // elon
+//        }
+        
+        
+        
+        
+        //[mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName] forKey:@"Content-Disposition"];
+        //[mutableHeaders setValue:mimeType forKey:@"Content-Type"];
+        
+        
+//        var url = NSURL(string: "http://www.i35.club.tw/old_tree/test/uplo.php")
+//        var request = NSMutableURLRequest(URL: url!)
+//        request.HTTPMethod = "POST"
+//        request.HTTPBody = imageData! //UIImagePNGRepresentation(imageData)
+//        
+//        var response: NSURLResponse? = nil
+//        var error: NSError? = nil
+//        let reply = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&error)
+//        
+//        let results = NSString(data:reply!, encoding:NSUTF8StringEncoding)
+//        print("API Response: \(results)")
+        
+        
+    }
+    
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight))
+        image.drawInRect(CGRectMake(0, 0, newWidth, newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
+    
+    func uploadImage(image : UIImage) {
+        
+        let url = NSURL(string: "http://www.kaleidosblog.com/tutorial/upload.php")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        
+        let boundary = generateBoundaryString()
+        
+        //define the multipart request type
+        
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+
+        
+        let image_data = UIImagePNGRepresentation(image)
+        
+        if(image_data == nil) {
+            return
+        }
+        
+        
+        let body = NSMutableData()
+        
+        let fname = "test.png"
+        let mimetype = "image/png"
+        
+        //define the data post parameter
+        
+        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData("Content-Disposition:form-data; name=\"test\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData("hi\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        
+        
+        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData("Content-Disposition:form-data; name=\"file\"; filename=\"\(fname)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData("Content-Type: \(mimetype)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData(image_data!)
+        body.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        
+        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        
+        
+        request.HTTPBody = body
+        
+        
+        
+        let session = NSURLSession.sharedSession()
+        
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                print("error")
+                return
+            }
+            
+            let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print(dataString)
+            
+        }
+        
+        task.resume()
+        
+    }
+    
+    
+    func generateBoundaryString() -> String
+    {
+        return "Boundary-\(NSUUID().UUIDString)"
+    }
+    
+    
 }

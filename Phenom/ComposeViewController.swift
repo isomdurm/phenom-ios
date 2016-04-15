@@ -112,7 +112,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn1.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabBtn1.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn1.setTitle("TRAINING", forState: UIControlState.Normal)
         tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn1)
@@ -127,7 +127,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn2.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabBtn2.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn2.setTitle("GAMING", forState: UIControlState.Normal)
         tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn2)
@@ -140,7 +140,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
         tabBtn3.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabBtn3.setTitleColor(UIColor(red:157/255, green:135/255, blue:64/255, alpha:1), forState: UIControlState.Selected)
+        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
         tabBtn3.setTitle("STYLING", forState: UIControlState.Normal)
         tabBtn3.addTarget(self, action:#selector(tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
         tabView.addSubview(tabBtn3)
