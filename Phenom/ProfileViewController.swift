@@ -2140,100 +2140,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         
-        //[mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName] forKey:@"Content-Disposition"];
-        //[mutableHeaders setValue:mimeType forKey:@"Content-Type"];
-        
-//        let urlStr = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
-//        //let date = NSDate().timeIntervalSince1970 * 1000
-//        //let params = "product=\(productJson)"
-//        
-//        var url = NSURL(string: urlStr)
-//        var request = NSMutableURLRequest(URL: url!)
-//        request.HTTPMethod = "PUT"
-//        request.HTTPBody = imageData! //UIImagePNGRepresentation(imageData)
-//        
-//        var response: NSURLResponse? = nil
-//        var error: NSError? = nil
-//        let reply = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&error)
-//        
-//        let results = NSString(data:reply!, encoding:NSUTF8StringEncoding)
-//        print("API Response: \(results)")
-        
-        
-        
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let bearerToken = defaults.stringForKey("bearerToken")! as String
-        
-//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-//        
-//        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
-//        let request = NSMutableURLRequest(URL: URL)
-//        request.HTTPMethod = "PUT"
-//        
-//        //request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        let boundary = generateBoundaryString()
-//        
-//        //request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-//        //
-//        
-//        
-//
-//        
-//        let err = NSError?()
-//        var returnData = NSURLConnection.sendSynchronousRequest(request, returningResponse: nil, error: err)
-//        var returnString = NSString(data: returnData!, encoding: NSUTF8StringEncoding)
-        
-        
-        
-//        
-//        
-//        let urlPath: String = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
-//        var url: NSURL = NSURL(string: urlPath)!
-//        var request1: NSURLRequest = NSURLRequest(URL: url)
-//        
-//        // testing
-//        let body  = NSMutableData()
-//        body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"profile_img\"; filename=\"img.jpg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData(NSString(format: "Content-Type: application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData(imageData!)
-//        body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
-//        request.HTTPBody = body
-//        //
-//        
-//        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-//        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-//        
-//    
-//   
-//        
-//        
-//        
-//        
-//        var request = NSMutableURLRequest(URL: NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user")!)
-//        request.HTTPMethod = "POST"
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("application/json", forHTTPHeaderField: "Accept")
-//        
-//        //var imageData = UIImageJPEGRepresentation(image, 0.9)
-//        var base64String = imageData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0)) // encode the image
-//        
-//        var err: NSError? = nil
-//        var params = ["image":[ "content_type": "image/jpeg", "filename":"test.jpg", "file_data": base64String]]
-//        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: NSJSONWritingOptions(0), error: nil)!
-//        
-//        var session = NSURLSession.sharedSession()
-//        var task = session.dataTaskWithRequest(request.toMutableURLRequest(), completionHandler: { data, response, error -> Void in
-//            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-//            var err: NSError?
-//            
-//            // process the response
-//        })
-//        
-//        task.resume() // this is needed to start the task
-//        
-        
     }
     
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
@@ -2247,8 +2153,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         return newImage
     }
-    
-    
     
     
     
@@ -2355,12 +2259,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let defaults = NSUserDefaults.standardUserDefaults()
         let bearerToken = defaults.stringForKey("bearerToken")! as String
         let boundary = generateBoundaryString()
+        let mimetype = "image/jpeg"
+
+        
+
+        
+        
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         /* Create session, and optionally set a NSURLSessionDelegate. */
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         /* Create the Request:
-         My API (PUT http://localhost:8081/user)
+
          */
         guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
         let request = NSMutableURLRequest(URL: URL)
@@ -2377,9 +2287,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let body  = NSMutableData()
         body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
-        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"profile_img\"; filename=\"img.jpg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"image\"; filename=\"image.jpeg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(NSString(format: "Content-Type: application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(imageData)
+        body.appendData("Content-Type: \(mimetype)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
         request.HTTPBody = body
         
