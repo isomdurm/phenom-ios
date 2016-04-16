@@ -464,7 +464,6 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
             isPushed = true
         }
 
-        
     }
 
     

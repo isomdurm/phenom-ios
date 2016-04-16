@@ -129,6 +129,7 @@
 		57C6DD111CA47EFC00B939DF /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD0F1CA47EFC00B939DF /* ProgressView.swift */; };
 		57C6DD131CA4807900B939DF /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD121CA4807900B939DF /* TimelineCell.swift */; };
 		57C6DD1C1CA4BF7700B939DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6DD1B1CA4BF7700B939DF /* UIKit.framework */; };
+		57DB87B31CC19C8100A27A43 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB87B21CC19C8100A27A43 /* Product.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -278,6 +279,7 @@
 		57C6DD121CA4807900B939DF /* TimelineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
 		57C6DD171CA4BE6100B939DF /* Phenom-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Phenom-Bridging-Header.h"; sourceTree = "<group>"; };
 		57C6DD1B1CA4BF7700B939DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		57DB87B21CC19C8100A27A43 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Phenom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F102D4B6AD0980225AA1C48 /* Pods-Phenom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.release.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -446,6 +448,7 @@
 		572DF4B91CA37A1A002184E2 /* Globals */ = {
 			isa = PBXGroup;
 			children = (
+				57DB87B21CC19C8100A27A43 /* Product.swift */,
 				57A5D1EC1CC060720056D4FB /* ActiveLabel.swift */,
 				57A5D1ED1CC060720056D4FB /* ActiveType.swift */,
 				57A5D1EE1CC060720056D4FB /* RegexParser.swift */,
@@ -851,6 +854,7 @@
 				5768B8EF1CAEEEE4002E9664 /* UserManager.swift in Sources */,
 				57C6DD111CA47EFC00B939DF /* ProgressView.swift in Sources */,
 				57773D6B1CBC69EB00A5D868 /* PeopleCell.swift in Sources */,
+				57DB87B31CC19C8100A27A43 /* Product.swift in Sources */,
 				5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */,
 				57A5D1F11CC060720056D4FB /* RegexParser.swift in Sources */,
 				57C6DD0D1CA47BFE00B939DF /* SignUpViewController.swift in Sources */,

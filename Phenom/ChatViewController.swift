@@ -9,8 +9,9 @@
 import UIKit
 import SwiftyJSON
 import Haneke
+import SafariServices
 
-class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate {
+class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, SFSafariViewControllerDelegate {
     
     var commentsData = NSData()
     
@@ -143,6 +144,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
         
         navigationController?.interactivePopGestureRecognizer!.delegate = self
     }
@@ -541,12 +544,24 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
                 print("\(userHandle) tapped")
                 
+                //self.handleMentionTap(indexPath, username: <#T##String#>)
+                
+//                if let id = comments[indexPath.row]["author"]["id"].string {
+//                    
+//                }
             }
             
             cell.chatLbl.handleURLTap { userHandle in
                 
                 print("\(userHandle) tapped")
                 
+                if (userHandle != "") {
+                    
+                    let svc = SFSafariViewController(URL: userHandle, entersReaderIfAvailable: false)
+                    self.presentViewController(svc, animated: false, completion: nil)
+                    
+                    UIApplication.sharedApplication().statusBarStyle = .Default
+                }
             }
             
         } else {
@@ -633,5 +648,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
+    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+        
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func handleMentionTap(ip : NSIndexPath, username : String) {
+    
+        
+        
+    }
 
 }

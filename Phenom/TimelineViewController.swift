@@ -105,7 +105,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed"
         let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "date=\(date)&amount=20"
+        let params = "date=\(date)&amount=30"
         let type = "GET"
         
         (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in

@@ -412,7 +412,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         let urlEncoded : NSString = urlStr.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
         let requestURL : NSURL = NSURL(string: urlEncoded as String)!
         
-        
         let request = NSMutableURLRequest(URL: requestURL)
         request.HTTPMethod = type // "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

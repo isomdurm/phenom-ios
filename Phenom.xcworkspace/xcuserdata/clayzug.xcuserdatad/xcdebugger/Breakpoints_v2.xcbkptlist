@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Phenom/AppDelegate.swift"
-            timestampString = "482448731.614292"
+            timestampString = "482453326.549691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "438"
-            endingLineNumber = "438"
+            startingLineNumber = "437"
+            endingLineNumber = "437"
             landmarkName = "logoutAction()"
             landmarkType = "5">
          </BreakpointContent>

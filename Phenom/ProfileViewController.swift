@@ -273,10 +273,17 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         isPushed = false
         
         if (!initialProfile) {
-            //
-            navigationController?.interactivePopGestureRecognizer!.delegate = self 
-            //
+
+            navigationController?.interactivePopGestureRecognizer!.delegate = self
         }
+        
+        
+        //
+        // to update user defaults
+        //
+        self.theTableView.reloadData()
+        //
+        
     }
     
     func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -302,11 +309,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             navBarView.addSubview(settingsBtn)
             
             inviteBtn.setTitle("INVITE TEAM", forState: .Normal)
-            
-            //
-            updateCurrentUser()
-            //
-            
             
         } else {
             
@@ -343,15 +345,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         //
-        
-        queryForStats()
-        
+        // now get user
         //
-    }
-    
-    func updateCurrentUser() {
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
         
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)"
         //let date = NSDate().timeIntervalSince1970 * 1000
@@ -395,26 +390,27 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     let sport = user["sport"].string! // make an array
                     self.sports = [sport]
                     
+                    
+                    if (self.userId == uid) {
+                        
+                        // update defaults
+                        
+                        defaults.setObject(self.userId, forKey: "userId")
+                        defaults.setObject(self.username, forKey: "username")
+                        defaults.setObject(self.hometown, forKey: "hometown")
+                        defaults.setObject(self.imageUrl, forKey: "imageUrl")
+                        defaults.setObject(self.bio, forKey: "description")
+                        defaults.setObject(self.firstName, forKey: "firstName")
+                        defaults.setObject(self.lastName, forKey: "lastName")
+                        defaults.setObject(self.followersCount, forKey: "followersCount")
+                        defaults.setObject(self.followingCount, forKey: "followingCount")
+                        defaults.setObject(self.momentCount, forKey: "momentCount")
+                        defaults.setObject(self.lockerProductCount, forKey: "lockerProductCount")
+                        defaults.setObject(self.sports, forKey: "sports")
+                        defaults.synchronize()
+                    }
+                    
                     //
-                    
-                    defaults.setObject(self.userId, forKey: "userId")
-                    defaults.setObject(self.username, forKey: "username")
-                    defaults.setObject(self.hometown, forKey: "hometown")
-                    defaults.setObject(self.imageUrl, forKey: "imageUrl")
-                    defaults.setObject(self.bio, forKey: "description")
-                    defaults.setObject(self.firstName, forKey: "firstName")
-                    defaults.setObject(self.lastName, forKey: "lastName")
-                    defaults.setObject(self.followersCount, forKey: "followersCount")
-                    defaults.setObject(self.followingCount, forKey: "followingCount")
-                    
-                    defaults.setObject(self.momentCount, forKey: "momentCount")
-                    defaults.setObject(self.lockerProductCount, forKey: "lockerProductCount")
-                    
-                    defaults.setObject(self.sports, forKey: "sports")
-                    
-                    defaults.synchronize()
-                    
-                    
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
@@ -428,7 +424,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         })
         
+        
+        refreshControl.endRefreshing()
+        
     }
+    
     
     
     func refreshControlAction() {
@@ -437,7 +437,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         theTableView.reloadData()
         
         refreshControl.endRefreshing()
-        
         
     }
     
@@ -542,7 +541,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         self.theTableView.reloadData()
-        self.queryForStats()
         
         
     }
@@ -656,16 +654,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
     }
-    
-    func queryForStats() {
-        
-        // either way
-        
-        theTableView.reloadData()
-        
-        refreshControl.endRefreshing()
-        
-    }
+
     
     func queryForTimeline() {
         print("queryForTimeline hit")
@@ -776,9 +765,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func settingsBtnAction() {
         
-        //self.cameraBtnAction()
+        self.cameraBtnAction()
         
-        navigationController?.pushViewController(SettingsViewController(), animated: true)
+        //navigationController?.pushViewController(SettingsViewController(), animated: true)
     }
     
     
@@ -1956,15 +1945,24 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func addGearToLocker(sender : UIButton) {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker"
-        let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "since=\(date)&limit=20"
-        let type = "GET"
+        let json = JSON(data: gearData)
+        let results = json["results"]
+        
+        let productJson = results[sender.tag] 
+        print("productJson: \(productJson)")
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "product=\(productJson)"
+        let type = "PUT"
         
         (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
                 let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
                 if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
                     
                     let json = JSON(data: dataFromString)
@@ -1977,21 +1975,29 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         return
                     }
                     
-                    print("added to locker")
+                    print("+1 added to locker")
                     
                     sender.selected = true
+                    
+                    let followingCount = defaults.objectForKey("lockerProductCount") as! Int
+                    let newcount = followingCount+1
+                    defaults.setObject(newcount, forKey: "lockerProductCount")
+                    defaults.synchronize()
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.theTableView.reloadData()
                     })
+                    
                 } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
+                
             } else {
                 //
-                print("errorrr in \(self)")
             }
+            
         })
         
     }
@@ -2081,8 +2087,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //let resizedimage = self.resizeImage(image, newWidth: 600)
         //let resizedimagesmall = self.resizeImage(image, newWidth: 300)
         
-        //let imageData = UIImageJPEGRepresentation(image, 1.0)
+        let imageData = UIImageJPEGRepresentation(image, 1.0)
         //let imagedatasmall = UIImageJPEGRepresentation(image, 1.0)
+        
+        
+        
+        self.sendRequest(imageData!)
         
         // multi-part upload
         //print("image: \(image)")
@@ -2092,31 +2102,31 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //let request = self.createRequest("uid", password: "pw", email: "email@email.com")
         
         
-        self.uploadImage(image)
-        
-        
-        let path  = NSURL(fileURLWithPath: "flash.jpeg")
-        
-        //  talk to registration end point
-        let r = Just.post(
-            "http://justiceleauge.org/member/register",
-            data: ["username": "barryallen", "password":"ReverseF1ashSucks"],
-            files: ["profile_photo": .URL(path, nil)]
-        )
-        
-        if (r.ok) {
-            /* success! */
-            print("r.json: \(r.json)")
-            
-        }
-        
-        
-        Just.get("http://httpbin.org/get", params:["page": 3]) { (r) in
-            // the same "r" is available asynchronously here
-            if (r.ok) {
-                // success
-            }
-        }
+//        self.uploadImage(image)
+//        
+//
+//        let path  = NSURL(fileURLWithPath: "flash.jpeg")
+//        
+//        //  talk to registration end point
+//        let r = Just.post(
+//            "http://justiceleauge.org/member/register",
+//            data: ["username": "barryallen", "password":"ReverseF1ashSucks"],
+//            files: ["profile_photo": .URL(path, nil)]
+//        )
+//
+//        if (r.ok) {
+//            /* success! */
+//            print("r.json: \(r.json)")
+//            
+//        }
+//        
+//        
+//        Just.get("http://httpbin.org/get", params:["page": 3]) { (r) in
+//            // the same "r" is available asynchronously here
+//            if (r.ok) {
+//                // success
+//            }
+//        }
         
 //        if let json = Just.post(
 //            "http://httpbin.org/post",
@@ -2133,10 +2143,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //[mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName] forKey:@"Content-Disposition"];
         //[mutableHeaders setValue:mimeType forKey:@"Content-Type"];
         
-        
-//        var url = NSURL(string: "http://www.i35.club.tw/old_tree/test/uplo.php")
+//        let urlStr = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+//        //let date = NSDate().timeIntervalSince1970 * 1000
+//        //let params = "product=\(productJson)"
+//        
+//        var url = NSURL(string: urlStr)
 //        var request = NSMutableURLRequest(URL: url!)
-//        request.HTTPMethod = "POST"
+//        request.HTTPMethod = "PUT"
 //        request.HTTPBody = imageData! //UIImagePNGRepresentation(imageData)
 //        
 //        var response: NSURLResponse? = nil
@@ -2146,6 +2159,80 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 //        let results = NSString(data:reply!, encoding:NSUTF8StringEncoding)
 //        print("API Response: \(results)")
         
+        
+        
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        let bearerToken = defaults.stringForKey("bearerToken")! as String
+        
+//        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+//        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+//        
+//        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
+//        let request = NSMutableURLRequest(URL: URL)
+//        request.HTTPMethod = "PUT"
+//        
+//        //request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        let boundary = generateBoundaryString()
+//        
+//        //request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+//        //
+//        
+//        
+//
+//        
+//        let err = NSError?()
+//        var returnData = NSURLConnection.sendSynchronousRequest(request, returningResponse: nil, error: err)
+//        var returnString = NSString(data: returnData!, encoding: NSUTF8StringEncoding)
+        
+        
+        
+//        
+//        
+//        let urlPath: String = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+//        var url: NSURL = NSURL(string: urlPath)!
+//        var request1: NSURLRequest = NSURLRequest(URL: url)
+//        
+//        // testing
+//        let body  = NSMutableData()
+//        body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"profile_img\"; filename=\"img.jpg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData(NSString(format: "Content-Type: application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData(imageData!)
+//        body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
+//        request.HTTPBody = body
+//        //
+//        
+//        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+//        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+//        
+//    
+//   
+//        
+//        
+//        
+//        
+//        var request = NSMutableURLRequest(URL: NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user")!)
+//        request.HTTPMethod = "POST"
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("application/json", forHTTPHeaderField: "Accept")
+//        
+//        //var imageData = UIImageJPEGRepresentation(image, 0.9)
+//        var base64String = imageData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0)) // encode the image
+//        
+//        var err: NSError? = nil
+//        var params = ["image":[ "content_type": "image/jpeg", "filename":"test.jpg", "file_data": base64String]]
+//        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: NSJSONWritingOptions(0), error: nil)!
+//        
+//        var session = NSURLSession.sharedSession()
+//        var task = session.dataTaskWithRequest(request.toMutableURLRequest(), completionHandler: { data, response, error -> Void in
+//            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+//            var err: NSError?
+//            
+//            // process the response
+//        })
+//        
+//        task.resume() // this is needed to start the task
+//        
         
     }
     
@@ -2162,6 +2249,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
+    
+    
+    
+    
+    
     func uploadImage(image : UIImage) {
         
         let url = NSURL(string: "http://www.kaleidosblog.com/tutorial/upload.php")
@@ -2174,8 +2266,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //define the multipart request type
         
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
-
         
         let image_data = UIImagePNGRepresentation(image)
         
@@ -2238,6 +2328,81 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         return "Boundary-\(NSUUID().UUIDString)"
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func sendRequest(imageData : NSData) {
+        /* Configure session, choose between:
+         * defaultSessionConfiguration
+         * ephemeralSessionConfiguration
+         * backgroundSessionConfigurationWithIdentifier:
+         And set session-wide properties, such as: HTTPAdditionalHeaders,
+         HTTPCookieAcceptPolicy, requestCachePolicy or timeoutIntervalForRequest.
+         */
+        
+        
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.stringForKey("bearerToken")! as String
+        let boundary = generateBoundaryString()
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        /* Create session, and optionally set a NSURLSessionDelegate. */
+        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        /* Create the Request:
+         My API (PUT http://localhost:8081/user)
+         */
+        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
+        let request = NSMutableURLRequest(URL: URL)
+        request.HTTPMethod = "PUT"
+        // Headers
+        //request.addValue("multipart/form-data; boundary=__X_PAW_BOUNDARY__", forHTTPHeaderField: "Content-Type")
+        request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        
+        // Body
+        //let bodyString = "--__X_PAW_BOUNDARY__--"
+        //request.HTTPBody = bodyString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        let body  = NSMutableData()
+        body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"profile_img\"; filename=\"img.jpg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData(NSString(format: "Content-Type: application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData(imageData)
+        body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
+        request.HTTPBody = body
+        
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        
+        /* Start a new Task */
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+            }
+            else {
+                // Failure
+                print("URL Session Task Failed: %@", error!.localizedDescription);
+            }
+        })
+        task.resume()
+    }
+    
+    
+    
     
     
 }
