@@ -2084,10 +2084,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // maxWidth
         
         
-        //let resizedimage = self.resizeImage(image, newWidth: 600)
+        let resizedimage = self.resizeImage(image, newWidth: 600)
         //let resizedimagesmall = self.resizeImage(image, newWidth: 300)
         
-        let imageData = UIImageJPEGRepresentation(image, 1.0)
+        let imageData = UIImageJPEGRepresentation(resizedimage, 0.9)
         //let imagedatasmall = UIImageJPEGRepresentation(image, 1.0)
         
         
@@ -2259,14 +2259,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let defaults = NSUserDefaults.standardUserDefaults()
         let bearerToken = defaults.stringForKey("bearerToken")! as String
         let boundary = generateBoundaryString()
-        let mimetype = "image/jpeg"
-
-        
-
-        
-        
         
         let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+    
         /* Create session, and optionally set a NSURLSessionDelegate. */
         let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         /* Create the Request:
@@ -2275,11 +2271,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
         let request = NSMutableURLRequest(URL: URL)
         request.HTTPMethod = "PUT"
+        
         // Headers
         //request.addValue("multipart/form-data; boundary=__X_PAW_BOUNDARY__", forHTTPHeaderField: "Content-Type")
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.addValue("1.2.3", forHTTPHeaderField: "apiVersion")
-        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         
         // Body
         //let bodyString = "--__X_PAW_BOUNDARY__--"
@@ -2287,13 +2283,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let body  = NSMutableData()
         body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
-        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"image\"; filename=\"image.jpeg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData(NSString(format:"Content-Disposition: form-data; name=\"image\"; filename=\"image.jpeg\"; mimetype=\"image/jpeg\"\\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(NSString(format: "Content-Type: application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(imageData)
-        body.appendData("Content-Type: \(mimetype)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(NSString(format: "\r\n--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
         request.HTTPBody = body
         
+        // bearer & version
         request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         
