@@ -29,7 +29,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(20, 20, 70, 44)
+        xBtn.frame = CGRectMake(15, 20, 44, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
@@ -44,7 +44,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         navBarView.addSubview(titleLbl)
         
         let signInBtn = UIButton(type: UIButtonType.Custom)
-        signInBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
+        signInBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
         signInBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //signInBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signInBtn.backgroundColor = UIColor.blueColor()
@@ -217,11 +217,12 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                         self.signIn()
                         
                         //
+                    } else {
+                        print("no data string ?")
                     }
-                }
-                else {
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                     
-                    //                print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
             })
             task.resume()            

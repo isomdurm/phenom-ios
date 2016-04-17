@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		45926ED78AC076A816D0CBF3 /* Pods_Phenom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */; };
+		5703D9FD1CC31465008AAC6D /* PopularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703D9FC1CC31465008AAC6D /* PopularViewController.swift */; };
+		5703D9FF1CC328CF008AAC6D /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */; };
+		5703DA011CC348E2008AAC6D /* 28-star-rounded2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */; };
+		5703DA031CC366F9008AAC6D /* SingleMomentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703DA021CC366F9008AAC6D /* SingleMomentViewController.swift */; };
 		5709538D1CA9992D0007B537 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5709538C1CA9992D0007B537 /* ChatViewController.swift */; };
 		570AC4FB1CA4C38E00441F4A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E71CA4C38E00441F4A /* AVFoundation.framework */; };
 		570AC4FC1CA4C38F00441F4A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 570AC4E81CA4C38E00441F4A /* CFNetwork.framework */; };
@@ -151,6 +155,10 @@
 
 /* Begin PBXFileReference section */
 		02ACC6A2D52CE68C6BBF5794 /* Pods-Phenom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.debug.xcconfig"; sourceTree = "<group>"; };
+		5703D9FC1CC31465008AAC6D /* PopularViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopularViewController.swift; sourceTree = "<group>"; };
+		5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star-rounded2@2x.png"; sourceTree = "<group>"; };
+		5703DA021CC366F9008AAC6D /* SingleMomentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleMomentViewController.swift; sourceTree = "<group>"; };
 		5709538C1CA9992D0007B537 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		570AC4E71CA4C38E00441F4A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		570AC4E81CA4C38E00441F4A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -424,6 +432,13 @@
 		572DF4B71CA37A11002184E2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */,
+				5768B9391CB217F1002E9664 /* ExplorePeopleViewController.swift */,
+				5768B9371CB217DA002E9664 /* ExploreGearViewController.swift */,
+				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
+				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
+				5768B9471CB58127002E9664 /* FilterViewController.swift */,
+				5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -463,6 +478,7 @@
 		572DF4BA1CA37A1F002184E2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */,
 				5781C3A61CC1626000F37E75 /* add-gear@2x.png */,
 				5781C3A41CC15A0C00F37E75 /* timeline-like-btn@2x.png */,
 				5781C39D1CC159A000F37E75 /* timeline-follow-btn@2x.png */,
@@ -566,22 +582,18 @@
 		57773D611CBAE97B00A5D868 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				5768B9331CB21753002E9664 /* LikesViewController.swift */,
-				5768B9471CB58127002E9664 /* FilterViewController.swift */,
+				5703DA021CC366F9008AAC6D /* SingleMomentViewController.swift */,
 				5768B93D1CB2193F002E9664 /* EditProfileViewController.swift */,
 				570AC5111CA5CA3600441F4A /* SettingsViewController.swift */,
-				5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */,
-				5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */,
+				5768B9331CB21753002E9664 /* LikesViewController.swift */,
 				5709538C1CA9992D0007B537 /* ChatViewController.swift */,
-				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
-				570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */,
-				5768B9391CB217F1002E9664 /* ExplorePeopleViewController.swift */,
 				5768B9411CB2247A002E9664 /* GearDetailViewController.swift */,
-				5768B9371CB217DA002E9664 /* ExploreGearViewController.swift */,
 				57773D681CBC2C3200A5D868 /* GearListViewController.swift */,
-				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
+				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
+				5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */,
+				570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */,
 				57C6DD081CA46F2A00B939DF /* ProfileViewController.swift */,
-				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
+				5703D9FC1CC31465008AAC6D /* PopularViewController.swift */,
 				57C6DD021CA46E4700B939DF /* TimelineViewController.swift */,
 				57C6DD001CA46E3000B939DF /* TabBarViewController.swift */,
 			);
@@ -670,7 +682,7 @@
 				TargetAttributes = {
 					5715004C1CA3136800AA8744 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = ZB8CUPMZ3P;
+						DevelopmentTeam = 8QP9DE374E;
 					};
 					571500631CA3136800AA8744 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -725,6 +737,7 @@
 				57773D541CBADEE200A5D868 /* Univers-LT-55-Roman.ttf in Resources */,
 				57773D501CBADEE200A5D868 /* UnitedSansCond-Medium.otf in Resources */,
 				57773D441CBADEE200A5D868 /* MaisonNeue-Demi.ttf in Resources */,
+				5703DA011CC348E2008AAC6D /* 28-star-rounded2@2x.png in Resources */,
 				57773D451CBADEE200A5D868 /* MaisonNeue-DemiItalic.ttf in Resources */,
 				57773D721CBD942B00A5D868 /* notAddedBtnImg@2x.png in Resources */,
 				5781C3981CC0B92F00F37E75 /* tabbar-activity-icon@2x.png in Resources */,
@@ -831,6 +844,7 @@
 				571CC53C1CAB324600A42997 /* FSCameraView.swift in Sources */,
 				5709538D1CA9992D0007B537 /* ChatViewController.swift in Sources */,
 				571CC4FB1CAB149D00A42997 /* CameraViewController.swift in Sources */,
+				5703DA031CC366F9008AAC6D /* SingleMomentViewController.swift in Sources */,
 				57773D691CBC2C3200A5D868 /* GearListViewController.swift in Sources */,
 				571CC53F1CAB324600A42997 /* FSImageCropView.swift in Sources */,
 				57C6DD051CA46E5200B939DF /* ExploreViewController.swift in Sources */,
@@ -842,6 +856,7 @@
 				57242DEF1CAB457600A71A7F /* ComposeViewController.swift in Sources */,
 				5768B93E1CB2193F002E9664 /* EditProfileViewController.swift in Sources */,
 				5768B9441CB32033002E9664 /* SignUpEmailViewController.swift in Sources */,
+				5703D9FF1CC328CF008AAC6D /* DiscoverViewController.swift in Sources */,
 				5768B8ED1CADEC99002E9664 /* SearchCell.swift in Sources */,
 				571CC5401CAB324600A42997 /* FusumaViewController.swift in Sources */,
 				571CC5381CAB324600A42997 /* FSAlbumView.swift in Sources */,
@@ -871,6 +886,7 @@
 				57A5D1E71CBEED3F0056D4FB /* ChatCell.swift in Sources */,
 				57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */,
 				5768B93C1CB218F4002E9664 /* SignUpDetailViewController.swift in Sources */,
+				5703D9FD1CC31465008AAC6D /* PopularViewController.swift in Sources */,
 				5768B94E1CB715C9002E9664 /* PeopleListViewController.swift in Sources */,
 				57A5D1EF1CC060720056D4FB /* ActiveLabel.swift in Sources */,
 				5768B94C1CB6CA48002E9664 /* PopularMomentsViewController.swift in Sources */,

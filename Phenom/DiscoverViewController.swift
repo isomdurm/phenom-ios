@@ -1,22 +1,22 @@
 //
-//  LikesViewController.swift
+//  DiscoverViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/3/16.
+//  Created by Clay Zug on 4/16/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
 import UIKit
+import QuartzCore
 import SwiftyJSON
 import Haneke
 
-class LikesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
+class DiscoverViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
-    var likesData = NSData()
-    var passedMomentId = NSString()
+    var peopleData = NSData()
+    var gearData = NSData()
     
     var theTableView: UITableView = UITableView()
-    var viewersArray = NSMutableArray()
     
     var navBarView = UIView()
     
@@ -43,11 +43,10 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "LIKES"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.text = "DISCOVER"
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
-        
         
         theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
@@ -66,7 +65,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         //
         
-        queryForLikes()
+        //queryForLikes()
         
         
     }
@@ -96,49 +95,17 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    func queryForLikes() {
+    func queryForPeople() {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/likes"
-        //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "GET"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
-                
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
-                    }
-                    
-                    self.likesData = dataFromString
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.theTableView.reloadData()
-                        
-                    })
-                    
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
-                }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
         
     }
     
-    
+    func queryForGear() {
+        
+        
+        
+    }
     
     // TableViewDelegate
     
@@ -147,7 +114,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let moments = JSON(data: likesData)
+        let moments = JSON(data: peopleData)
         return moments["results"].count
     }
     
@@ -163,7 +130,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
         
         //cell.textLabel?.text = "text"
-     
+        
         return cell
         
     }
@@ -179,9 +146,9 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
         
-
+        
     }
     
-    
+
 
 }

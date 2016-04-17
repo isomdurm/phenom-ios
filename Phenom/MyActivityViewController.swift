@@ -37,6 +37,14 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
+        let searchBtn = UIButton(type: UIButtonType.Custom)
+        searchBtn.frame = CGRectMake(15, 20, 44, 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+        //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        searchBtn.backgroundColor = UIColor.clearColor()
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(searchBtn)
+        
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "NOTIFICATIONS"
@@ -44,7 +52,12 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
+        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+20)
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        theTableView.frame = CGRectMake(0, 64+60, view.frame.size.width, view.frame.size.height-64-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
@@ -54,13 +67,9 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         view.addSubview(theTableView)
         theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 30)
-        view.addSubview(activityIndicator)
-        activityIndicator.startAnimating()
-        
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.tintColor = UIColor.whiteColor()
+        refreshControl.addTarget(self, action: #selector(queryForMyActivity), forControlEvents: UIControlEvents.ValueChanged)
         theTableView.addSubview(refreshControl)
         
         //
@@ -81,17 +90,12 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         isPushed = false
     }
     
-    func refreshControlAction() {
+    
+    func searchBtnAction() {
         
-        //(UIApplication.sharedApplication().delegate as! AppDelegate).lastvisiteddate = NSDate()
+        self.navigationController?.pushViewController(DiscoverViewController(), animated: true)
         
-        //let newme = PFUser.currentUser()
-        //newme!.setObject(NSDate(), forKey: "lastvisiteddate")
-        //newme!.saveInBackground()
-        
-        
-        queryForMyActivity()
-        
+        self.isPushed = true
     }
     
     func queryForMyActivity() {
@@ -125,12 +129,8 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            self.theTableView.scrollEnabled = true
-                            self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, 0, 0))
-                            self.theTableView.tableHeaderView!.userInteractionEnabled = true
+                            self.reloadAction()
                             
-                            self.refreshControl.endRefreshing()
-                            self.theTableView.reloadData()
                         })
                         
                     } else {
@@ -152,14 +152,30 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                 print("errorrr in \(self)")
             }
         })
+        
+    }
     
+    func reloadAction() {
         
+        self.theTableView.scrollEnabled = true
+        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, 0, 0))
+        self.theTableView.tableHeaderView!.userInteractionEnabled = true
         
-        // either way
+        self.theTableView.reloadData()
         self.refreshControl.endRefreshing()
-        activityIndicator.stopAnimating()
-        activityIndicator.removeFromSuperview()
         
+        UIView.animateWithDuration(0.38, delay:0.5, options: .CurveEaseInOut, animations: {
+            
+            var tableFrame = self.theTableView.frame
+            tableFrame.origin.y = 64
+            self.theTableView.frame = tableFrame
+            
+            }, completion: { finished in
+                
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
+                
+        })
         
     }
     
@@ -422,43 +438,8 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
         if let _ = results[sender.tag]["source"]["id"].string {
             
-            let id = results[sender.tag]["source"]["id"].string
-            let un = results[sender.tag]["source"]["username"].string
-            
-            let imageUrl = results[sender.tag]["source"]["imageUrl"].string
-            let firstName = results[sender.tag]["source"]["firstName"].string
-            let lastName = results[sender.tag]["source"]["lastName"].string
-            let sport = results[sender.tag]["source"]["sport"].string
-            let hometown = results[sender.tag]["source"]["hometown"].string
-            let bio = results[sender.tag]["source"]["description"].string
-            
-            let userFollows = results[sender.tag]["source"]["userFollows"].bool
-            
-            let lockerProductCount = results[sender.tag]["source"]["lockerProductCount"].number
-            let followingCount = results[sender.tag]["source"]["followingCount"].number
-            let followersCount = results[sender.tag]["source"]["followersCount"].number
-            let momentCount = results[sender.tag]["source"]["momentCount"].number
-            
-            //
-            
             let vc = ProfileViewController()
-            
-            vc.userId = id!
-            vc.username = un!
-            vc.imageUrl = imageUrl!
-            vc.firstName = firstName!
-            vc.lastName = lastName!
-            vc.sports = [sport!]
-            vc.hometown = hometown != nil ? hometown! : ""
-            vc.bio = bio!
-            
-            vc.userFollows = userFollows!
-            
-            vc.lockerProductCount = lockerProductCount!
-            vc.followingCount = followingCount!
-            vc.followersCount = followersCount!
-            vc.momentCount = momentCount!
-            
+            vc.passedUserData = results[sender.tag]["source"]
             navigationController?.pushViewController(vc, animated: true)
             
             isPushed = true
@@ -476,11 +457,9 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         print("moment model: \(results)")
         
         if let id = results[sender.tag]["additionalData"]["momentId"].string {
-            print("id: \(id)")
-            let vc = ChatViewController()
+
+            let vc = SingleMomentViewController()
             vc.passedMomentId = id
-            vc.passedMomentHeadline = results[sender.tag]["headline"].string!
-            vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
             isPushed = true

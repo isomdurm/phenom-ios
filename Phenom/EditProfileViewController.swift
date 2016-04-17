@@ -36,7 +36,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(20, 20, 70, 44)
+        xBtn.frame = CGRectMake(15, 20, 44, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
@@ -51,7 +51,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UIScroll
         navBarView.addSubview(titleLbl)
         
         let saveBtn = UIButton(type: UIButtonType.Custom)
-        saveBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
+        saveBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
         saveBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //saveBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         saveBtn.backgroundColor = UIColor.blueColor()

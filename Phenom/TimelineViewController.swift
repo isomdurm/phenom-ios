@@ -41,6 +41,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
+        let searchBtn = UIButton(type: UIButtonType.Custom)
+        searchBtn.frame = CGRectMake(15, 0, 44, 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+        //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        searchBtn.backgroundColor = UIColor.clearColor()
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(searchBtn)
+        
         let titleLbl = UILabel(frame: CGRectMake(0, 0, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "PHENOM"
@@ -48,7 +56,12 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-20-49)
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
+        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+20)
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        theTableView.frame = CGRectMake(0, 64+60, view.frame.size.width, view.frame.size.height-20-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorStyle = .None
         theTableView.delegate = self
@@ -58,12 +71,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         view.addSubview(theTableView)
         theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+30)
-        view.addSubview(activityIndicator)
-        activityIndicator.startAnimating()
-    
         refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: #selector(queryForTimeline), forControlEvents: UIControlEvents.ValueChanged)
         theTableView.addSubview(refreshControl)
         //
@@ -101,6 +110,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         isPushed = false
     }
     
+    func searchBtnAction() {
+        
+        self.navigationController?.pushViewController(DiscoverViewController(), animated: true)
+        
+        self.isPushed = true
+    }
+    
     func queryForTimeline() {
         
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed"
@@ -131,9 +147,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     // done, reload tableView
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                        self.refreshControl.endRefreshing()
-                        
-                        self.theTableView.reloadData()
+                        self.reloadAction()
                         
                     })
                 } else {
@@ -144,12 +158,34 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         })
         
-        self.refreshControl.endRefreshing()
+        //self.refreshControl.endRefreshing()
         
-        activityIndicator.stopAnimating()
-        activityIndicator.removeFromSuperview()
+        //activityIndicator.stopAnimating()
+        //activityIndicator.removeFromSuperview()
         
         // end with animation
+        
+    }
+    
+    
+    func reloadAction() {
+        
+        self.theTableView.reloadData()
+        self.refreshControl.endRefreshing()
+        
+        UIView.animateWithDuration(0.38, delay:0.5, options: .CurveEaseInOut, animations: {
+            
+            var tableFrame = self.theTableView.frame
+            tableFrame.origin.y = 64
+            self.theTableView.frame = tableFrame
+            
+            }, completion: { finished in
+                
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
+                
+                //(UIApplication.sharedApplication().delegate as! AppDelegate).queryForActivityCountSinceLastVisit()
+        })
         
     }
     
@@ -191,6 +227,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.timelineImgView.hidden = false
         cell.timelineMusicLbl.hidden = false
         cell.timelineModeLbl.hidden = false
+        cell.timelineRankLbl.hidden = true // odd one out
         cell.timelineTinyHeartBtn.hidden = false
         cell.timelineLikeLblBtn.hidden = false
         cell.timelineUserImgView.hidden = false
@@ -211,7 +248,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //
         
-        let mediaHeight = view.frame.size.width+102
+        let mediaHeight = view.frame.size.width+108
         
         cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
         
@@ -229,7 +266,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // get mediaHeight
         
-        if let id = results[indexPath.row]["imageUrl"].string {
+        if let id = results[indexPath.row]["imageUrl"].string { //imageUrlCropped
             let fileUrl = NSURL(string: id)
             
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
@@ -516,34 +553,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if let _ = results[sender.tag]["user"]["id"].string {
             
-            let id = results[sender.tag]["user"]["id"].string
-            let un = results[sender.tag]["user"]["username"].string
-            let imageUrl = results[sender.tag]["user"]["imageUrl"].string
-            let firstName = results[sender.tag]["user"]["firstName"].string
-            let lastName = results[sender.tag]["user"]["lastName"].string
-            let sport = results[sender.tag]["user"]["sport"].string
-            let hometown = results[sender.tag]["user"]["hometown"].string
-            let bio = results[sender.tag]["user"]["description"].string
-            let userFollows = results[sender.tag]["user"]["userFollows"].bool
-            let followingCount = results[sender.tag]["user"]["followingCount"].number
-            let followersCount = results[sender.tag]["user"]["followersCount"].number
-            let momentCount = results[sender.tag]["user"]["momentCount"].number
-            let lockerProductCount = results[sender.tag]["user"]["lockerProductCount"].number
-            
             let vc = ProfileViewController()
-            vc.userId = id!
-            vc.username = un!
-            vc.imageUrl = imageUrl!
-            vc.firstName = firstName!
-            vc.lastName = lastName!
-            vc.sports = [sport!]
-            vc.hometown = hometown != nil ? hometown! : ""
-            vc.bio = bio!
-            vc.userFollows = userFollows!
-            vc.lockerProductCount = lockerProductCount!
-            vc.followingCount = followingCount!
-            vc.followersCount = followersCount!
-            vc.momentCount = momentCount!
+            vc.passedUserData = results[sender.tag]["user"]
             navigationController?.pushViewController(vc, animated: true)
             
             isPushed = true
@@ -698,10 +709,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if let id = results[sender.tag]["id"].string {
             print("id: \(id)")
             let vc = ChatViewController()
-            vc.passedMomentId = id
-            vc.passedMomentHeadline = results[sender.tag]["headline"].string!
-            vc.passedMomentUsername = results[sender.tag]["user"]["username"].string!
-            vc.passedMomentUserImageUrl = results[sender.tag]["user"]["imageUrlTiny"].string!
+            vc.passedMomentData = results[sender.tag]
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
@@ -739,6 +747,32 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if let _ = results[sender.tag]["id"].string {
             
         }
+        
+        let alertController = UIAlertController(title:nil, message:nil, preferredStyle:.ActionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        }
+        let reportAction = UIAlertAction(title: "Report", style: .Destructive) { (action) in
+            
+        }
+        let facebookAction = UIAlertAction(title: "Share to Facebook", style: .Default) { (action) in
+            
+        }
+        let twitterAction = UIAlertAction(title: "Tweet", style: .Default) { (action) in
+            
+        }
+        let copyUrlAction = UIAlertAction(title: "Copy Share URL", style: .Default) { (action) in
+            
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(reportAction)
+        alertController.addAction(facebookAction)
+        alertController.addAction(twitterAction)
+        alertController.addAction(copyUrlAction)
+        self.presentViewController(alertController, animated: true) {
+        }
+        
+        
+        
     }
     
     func timelineFollowBtnAction(sender : UIButton) {
@@ -754,7 +788,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         let ip = NSIndexPath(forItem: sender.tag, inSection: 0)
         let cell = self.theTableView.cellForRowAtIndexPath(ip) as! MainCell
         
-        let mediaHeight = cell.frame.size.width+102
+        let mediaHeight = cell.frame.size.width+108
         
         let followImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width-65-15, mediaHeight+15, 65, 38))
         followImgView.backgroundColor = UIColor.clearColor()
@@ -917,7 +951,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // get height of media
         
-        let mediaHeight = cell.frame.size.width+102
+        let mediaHeight = cell.frame.size.width+108
         
         //let heartImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height/2-50, 100, 100))
         let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-50, mediaHeight/2-50, 100, 100))

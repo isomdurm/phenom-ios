@@ -38,7 +38,7 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         navBarView.addSubview(titleLbl)
         
         let doneBtn = UIButton(type: UIButtonType.Custom)
-        doneBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
+        doneBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
         doneBtn.setImage(UIImage(named: "doneBtn.png"), forState: UIControlState.Normal)
         //doneBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         doneBtn.backgroundColor = UIColor.redColor()

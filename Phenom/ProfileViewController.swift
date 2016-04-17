@@ -19,6 +19,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var navBarView = UIView()
     
+    var passedUserData = JSON(data: NSData())
+    
     var teamData = NSData()
     var momentsData = NSData()
     var gearData = NSData()
@@ -70,9 +72,43 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
+        // parse user json
+        
+        if (!self.initialProfile) {
+            
+            let ht = passedUserData["hometown"].string
+            
+            userId = passedUserData["id"].string!
+            username = passedUserData["username"].string!
+            imageUrl = passedUserData["imageUrl"].string!
+            firstName = passedUserData["firstName"].string!
+            lastName = passedUserData["lastName"].string!
+            sports = [passedUserData["sport"].string!]
+            hometown = ht != nil ? ht! : ""
+            bio = passedUserData["description"].string!
+            
+            userFollows = passedUserData["userFollows"].bool!
+            
+            lockerProductCount = passedUserData["lockerProductCount"].number!
+            followingCount = passedUserData["followingCount"].number!
+            followersCount = passedUserData["followersCount"].number!
+            momentCount = passedUserData["momentCount"].number!
+            
+        }
+        
+        //
+        
         navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
+        
+        let searchBtn = UIButton(type: UIButtonType.Custom)
+        searchBtn.frame = CGRectMake(15, 20, 44, 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+        //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        searchBtn.backgroundColor = UIColor.clearColor()
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(searchBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
@@ -144,7 +180,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         descriptionLbl.backgroundColor = UIColor.clearColor()
         descriptionLbl.numberOfLines = 0
         descriptionLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
-        descriptionLbl.textColor = UIColor.init(white: 0.35, alpha: 1.0)
+        descriptionLbl.textColor = UIColor.init(white: 0.5, alpha: 1.0)
         descriptionLbl.textAlignment = NSTextAlignment.Center
         profileContainerView.addSubview(descriptionLbl)
         descriptionLbl.text = bio
@@ -246,6 +282,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
         refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
         theTableView.addSubview(refreshControl)
         
@@ -254,8 +291,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.tabBtn1Action()
         
         //
-        
-        print("userId: \(userId)")
         
         queryForUser()
         
@@ -286,12 +321,44 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    func searchBtnAction() {
+        
+        self.navigationController?.pushViewController(DiscoverViewController(), animated: true)
+        
+        self.isPushed = true
+        
+    }
+    
+    
+    
     func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
         if(navigationController!.viewControllers.count > 1){
             return true
         }
         return false
     }
+    
+    func refreshControlAction() {
+        
+        if (tabBtn1.selected) {
+            
+            self.queryForUser()
+            
+        } else if (tabBtn2.selected) {
+            
+            self.queryForTimeline()
+            
+        } else if (tabBtn3.selected) {
+            
+            self.queryForGear()
+            
+        } else {
+            print("no tab selected")
+        }
+        
+    }
+    
+    
     
     func queryForUser() {
         
@@ -301,7 +368,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if (initialProfile) {
             
             let settingsBtn = UIButton(type: UIButtonType.Custom)
-            settingsBtn.frame = CGRectMake(navBarView.frame.size.width-70-20, 20, 70, 44)
+            settingsBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
             settingsBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             settingsBtn.backgroundColor = UIColor.blueColor()
@@ -331,7 +398,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             // need back action
             
             let backBtn = UIButton(type: UIButtonType.Custom)
-            backBtn.frame = CGRectMake(20, 20, 70, 44)
+            backBtn.frame = CGRectMake(15, 20, 44, 44)
             backBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             backBtn.backgroundColor = UIColor.redColor()
@@ -366,10 +433,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         return
                     }
                     
-                    // update currrentUser, both on this page and in userDefaults
-                    
+                    // update user
+    
                     let user = json["results"]
-                    print("currentUser: \(user)")
+                    print("user: \(user)")
                     
                     // success, save user defaults
                     
@@ -393,7 +460,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     if (self.userId == uid) {
                         
-                        // update defaults
+                        // update current user defaults
                         
                         defaults.setObject(self.userId, forKey: "userId")
                         defaults.setObject(self.username, forKey: "username")
@@ -415,7 +482,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         print("got here")
-                        self.theTableView.reloadData()
+                        self.reloadAction()
                     })
                 } else {
                     // print("URL Session Task Failed: %@", error!.localizedDescription);
@@ -431,7 +498,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     
-    func refreshControlAction() {
+    func reloadAction() {
         
         
         theTableView.reloadData()
@@ -486,16 +553,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             if (inviteBtn.selected) {
                 
                 inviteBtn.selected = false
-                inviteBtn.setTitle("FOLLOW", forState: .Normal)
                 
-                followAction(sender)
+                inviteBtn.setTitle("UNFOLLOW", forState: .Normal)
+                unfollowAction(sender)
                 
             } else {
                 
                 inviteBtn.selected = true
-                inviteBtn.setTitle("UNFOLLOW", forState: .Normal)
                 
-                unfollowAction(sender)
+                inviteBtn.setTitle("FOLLOW", forState: .Normal)
+                followAction(sender)
                 
             }
             
@@ -1036,6 +1103,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineImgView.hidden = true
             cell.timelineMusicLbl.hidden = true
             cell.timelineModeLbl.hidden = true
+            cell.timelineRankLbl.hidden = true
             cell.timelineTinyHeartBtn.hidden = true
             cell.timelineLikeLblBtn.hidden = true
             cell.timelineUserImgView.hidden = true
@@ -1098,6 +1166,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineImgView.hidden = false
             cell.timelineMusicLbl.hidden = false
             cell.timelineModeLbl.hidden = false
+            cell.timelineRankLbl.hidden = true // odd one out
             cell.timelineTinyHeartBtn.hidden = false
             cell.timelineLikeLblBtn.hidden = false
             cell.timelineUserImgView.hidden = false
@@ -1118,7 +1187,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             //
             
-            let mediaHeight = view.frame.size.width+102
+            let mediaHeight = view.frame.size.width+108
             
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
             
@@ -1354,6 +1423,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineImgView.hidden = true
             cell.timelineMusicLbl.hidden = true
             cell.timelineModeLbl.hidden = true
+            cell.timelineRankLbl.hidden = true
             cell.timelineTinyHeartBtn.hidden = true
             cell.timelineLikeLblBtn.hidden = true
             cell.timelineUserImgView.hidden = true
@@ -1456,6 +1526,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineImgView.hidden = true
             cell.timelineMusicLbl.hidden = true
             cell.timelineModeLbl.hidden = true
+            cell.timelineRankLbl.hidden = true 
             cell.timelineTinyHeartBtn.hidden = true
             cell.timelineLikeLblBtn.hidden = true
             cell.timelineUserImgView.hidden = true
@@ -1525,34 +1596,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if let _ = results[sender.tag]["user"]["id"].string {
             
-            let id = results[sender.tag]["user"]["id"].string
-            let un = results[sender.tag]["user"]["username"].string
-            let imageUrl = results[sender.tag]["user"]["imageUrl"].string
-            let firstName = results[sender.tag]["user"]["firstName"].string
-            let lastName = results[sender.tag]["user"]["lastName"].string
-            let sport = results[sender.tag]["user"]["sport"].string
-            let hometown = results[sender.tag]["user"]["hometown"].string
-            let bio = results[sender.tag]["user"]["description"].string
-            let userFollows = results[sender.tag]["user"]["userFollows"].bool
-            let followingCount = results[sender.tag]["user"]["followingCount"].number
-            let followersCount = results[sender.tag]["user"]["followersCount"].number
-            let momentCount = results[sender.tag]["user"]["momentCount"].number
-            let lockerProductCount = results[sender.tag]["user"]["lockerProductCount"].number
-            
             let vc = ProfileViewController()
-            vc.userId = id!
-            vc.username = un!
-            vc.imageUrl = imageUrl!
-            vc.firstName = firstName!
-            vc.lastName = lastName!
-            vc.sports = [sport!]
-            vc.hometown = hometown != nil ? hometown! : ""
-            vc.bio = bio!
-            vc.userFollows = userFollows!
-            vc.lockerProductCount = lockerProductCount!
-            vc.followingCount = followingCount!
-            vc.followersCount = followersCount!
-            vc.momentCount = momentCount!
+            vc.passedUserData = results[sender.tag]["user"]
             navigationController?.pushViewController(vc, animated: true)
             
             isPushed = true
@@ -1707,8 +1752,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if let id = results[sender.tag]["id"].string {
             print("id: \(id)")
             let vc = ChatViewController()
-            vc.passedMomentId = id
-            vc.passedMomentHeadline = results[sender.tag]["headline"].string!
+            vc.passedMomentData = results[sender.tag]
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             

@@ -36,7 +36,7 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(20, 20, 70, 44)
+        backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
@@ -251,34 +251,8 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let _ = results[indexPath.row]["id"].string {
             
-            let id = results[indexPath.row]["id"].string
-            let un = results[indexPath.row]["username"].string
-            let imageUrl = results[indexPath.row]["imageUrl"].string
-            let firstName = results[indexPath.row]["firstName"].string
-            let lastName = results[indexPath.row]["lastName"].string
-            let sport = results[indexPath.row]["sport"].string
-            let hometown = results[indexPath.row]["hometown"].string
-            let bio = results[indexPath.row]["description"].string
-            let userFollows = results[indexPath.row]["userFollows"].bool
-            let followingCount = results[indexPath.row]["followingCount"].number
-            let followersCount = results[indexPath.row]["followersCount"].number
-            let momentCount = results[indexPath.row]["momentCount"].number
-            let lockerProductCount = results[indexPath.row]["lockerProductCount"].number
-            
             let vc = ProfileViewController()
-            vc.userId = id!
-            vc.username = un!
-            vc.imageUrl = imageUrl!
-            vc.firstName = firstName!
-            vc.lastName = lastName!
-            vc.sports = [sport!]
-            vc.hometown = hometown != nil ? hometown! : ""
-            vc.bio = bio!
-            vc.userFollows = userFollows!
-            vc.lockerProductCount = lockerProductCount!
-            vc.followingCount = followingCount!
-            vc.followersCount = followersCount!
-            vc.momentCount = momentCount!
+            vc.passedUserData = results[indexPath.row]
             navigationController?.pushViewController(vc, animated: true)
             
         }

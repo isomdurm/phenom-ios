@@ -1,24 +1,25 @@
 //
-//  LikesViewController.swift
+//  SingleMomentViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/3/16.
+//  Created by Clay Zug on 4/16/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
 import UIKit
+import QuartzCore
 import SwiftyJSON
 import Haneke
 
-class LikesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
-    
-    var likesData = NSData()
-    var passedMomentId = NSString()
-    
-    var theTableView: UITableView = UITableView()
-    var viewersArray = NSMutableArray()
-    
+class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate {
+
     var navBarView = UIView()
+    
+    var theScrollView = UIScrollView()
+    
+    var passedMomentId = ""
+    
+    var momentData = NSData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,44 +44,44 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "LIKES"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.text = "MOMENT"
         navBarView.addSubview(titleLbl)
         
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
-        theTableView.delegate = self
-        theTableView.dataSource = self
-        theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, 0, 0))
-        
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-        swipeRight.direction = .Right
-        view.addGestureRecognizer(swipeRight)
+        theScrollView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theScrollView.backgroundColor = UIColor.clearColor()
+        theScrollView.delegate = self
+        theScrollView.pagingEnabled = false
+        theScrollView.showsHorizontalScrollIndicator = false
+        theScrollView.showsVerticalScrollIndicator = true
+        theScrollView.scrollsToTop = true
+        theScrollView.scrollEnabled = true
+        theScrollView.bounces = true
+        theScrollView.alwaysBounceVertical = true
+        theScrollView.userInteractionEnabled = true
+        view.addSubview(theScrollView)
+        theScrollView.contentOffset = CGPoint(x: 0, y: 0)
+        theScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         //
         
-        queryForLikes()
+        self.queryForMoment()
+
+    
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
+        navigationController?.interactivePopGestureRecognizer!.delegate = self
         
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-        navigationController?.interactivePopGestureRecognizer!.delegate = self
-        
+        // Dispose of any resources that can be recreated.
     }
     
     func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -95,10 +96,9 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
-    
-    func queryForLikes() {
+    func queryForMoment() {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/likes"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)"
         //let date = NSDate().timeIntervalSince1970 * 1000
         let params = ""
         let type = "GET"
@@ -118,11 +118,11 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
                         return
                     }
                     
-                    self.likesData = dataFromString
+                    self.momentData = dataFromString
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                        self.theTableView.reloadData()
+                        self.reloadAction()
                         
                     })
                     
@@ -135,52 +135,20 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
                 print("errorrr in \(self)")
             }
         })
-        
     }
     
     
-    
-    // TableViewDelegate
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let moments = JSON(data: likesData)
-        return moments["results"].count
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func reloadAction() {
         
-        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
-        
-        //cell.detailTextLabel?.textColor = UIColor.init(white: 0.6, alpha: 1.0)
-        //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
-        
-        //cell.textLabel?.text = "text"
-     
-        return cell
-        
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectionStyle = .None
-        
-        
-    }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
-        
-        
+        let json = JSON(data: momentData)
+        let results = json["results"]
 
+        print("results: \(results)")
+        
+        
+        
     }
+    
     
     
 

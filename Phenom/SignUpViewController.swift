@@ -40,7 +40,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(20, 20, 70, 44)
+        backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.blueColor()
@@ -55,7 +55,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         navBarView.addSubview(titleLbl)
         
         let nextBtn = UIButton(type: .Custom)
-        nextBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
+        nextBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
         nextBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //nextBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         nextBtn.backgroundColor = UIColor.blueColor()

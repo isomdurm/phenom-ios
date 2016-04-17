@@ -39,7 +39,7 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         view.addSubview(navBarView)
 
         let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(20, 20, 70, 44)
+        backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
@@ -54,10 +54,10 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         navBarView.addSubview(titleLbl)
         
         let searchBtn = UIButton(type: .Custom)
-        searchBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
-        searchBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        searchBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
         //searchBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        searchBtn.backgroundColor = UIColor.blueColor()
+        searchBtn.backgroundColor = UIColor.clearColor()
         searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(searchBtn)
         

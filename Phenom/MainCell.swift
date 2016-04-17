@@ -26,6 +26,7 @@ class MainCell: UITableViewCell {
     var timelineImgView = UIImageView()
     var timelineMusicLbl = UILabel()
     var timelineModeLbl = UILabel()
+    var timelineRankLbl = UILabel()
     
     var timelineTinyHeartBtn = UIButton()
     var timelineLikeLblBtn = UIButton()
@@ -107,6 +108,12 @@ class MainCell: UITableViewCell {
         timelineModeLbl.textAlignment = .Center
         contentView.addSubview(timelineModeLbl)
         
+        timelineRankLbl.backgroundColor = UINavigationBar.appearance().tintColor
+        timelineRankLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 18)
+        timelineRankLbl.textColor = UIColor.whiteColor()
+        timelineRankLbl.textAlignment = .Center
+        contentView.addSubview(timelineRankLbl)
+        
         timelineUserImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         timelineUserImgView.contentMode = UIViewContentMode.ScaleAspectFill
         contentView.addSubview(timelineUserImgView)
@@ -132,6 +139,8 @@ class MainCell: UITableViewCell {
         timelineFollowBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Selected)
         timelineFollowBtn.contentMode = UIViewContentMode.ScaleAspectFill
         contentView.addSubview(timelineFollowBtn)
+        timelineFollowBtn.layer.cornerRadius = 2
+        timelineFollowBtn.layer.masksToBounds = true
         
         timelineHeadlineLbl.backgroundColor = UIColor.clearColor()
         timelineHeadlineLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
@@ -145,18 +154,26 @@ class MainCell: UITableViewCell {
         timelineLikeBtn.setBackgroundImage(UIImage.init(named: "timeline-like-btn.png") , forState: UIControlState.Normal)
         timelineLikeBtn.setBackgroundImage(UIImage.init(named: "timeline-like-btn-selected.png") , forState: UIControlState.Selected)
         contentView.addSubview(timelineLikeBtn)
+        timelineLikeBtn.layer.cornerRadius = 2
+        timelineLikeBtn.layer.masksToBounds = true
         
         timelineChatBtn.backgroundColor = UINavigationBar.appearance().tintColor
         timelineChatBtn.setBackgroundImage(UIImage.init(named: "timeline-chat-btn.png") , forState: UIControlState.Normal)
         //timelineChatBtn.setBackgroundImage(UIImage.init(named: "timeline-chat-btn.png") , forState: UIControlState.Selected)
         contentView.addSubview(timelineChatBtn)
+        timelineChatBtn.layer.cornerRadius = 2
+        timelineChatBtn.layer.masksToBounds = true
 
         timelineGearBtn.backgroundColor = UINavigationBar.appearance().tintColor
         timelineGearBtn.setBackgroundImage(UIImage.init(named: "timeline-gear-btn.png") , forState: UIControlState.Normal)
         contentView.addSubview(timelineGearBtn)
+        timelineGearBtn.layer.cornerRadius = 2
+        timelineGearBtn.layer.masksToBounds = true
         
         timelineMoreBtn.backgroundColor = UIColor.init(white: 0.25, alpha: 1.0)
         contentView.addSubview(timelineMoreBtn)
+        timelineMoreBtn.layer.cornerRadius = 2
+        timelineMoreBtn.layer.masksToBounds = true
 
         timelineSingleTapRecognizer.numberOfTapsRequired = 1
         timelineImgView.addGestureRecognizer(timelineSingleTapRecognizer)

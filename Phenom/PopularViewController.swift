@@ -1,27 +1,31 @@
 //
-//  PopularMomentsViewController.swift
+//  PopularViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/7/16.
+//  Created by Clay Zug on 4/16/16.
 //  Copyright © 2016 Clay Zug. All rights reserved.
 //
 
 import UIKit
+import QuartzCore
 import SwiftyJSON
 import Haneke
 
-class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIGestureRecognizerDelegate {
+class PopularViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var momentsData = NSData()
     
     var navBarView = UIView()
     
+    let activityIndicator = UIActivityIndicatorView()
     var theTableView: UITableView = UITableView()
     var refreshControl:UIRefreshControl!
-
+    
     var pageNumber = 1
     var loadNextPage: Bool = false
     var playingMedia: Bool = false
+    
+    var isPushed: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,22 +40,28 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside) 
-        navBarView.addSubview(backBtn)
+     
+        let searchBtn = UIButton(type: UIButtonType.Custom)
+        searchBtn.frame = CGRectMake(15, 20, 44, 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+        //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        searchBtn.backgroundColor = UIColor.clearColor()
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        navBarView.addSubview(searchBtn)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "POPULAR"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.text = "POPULAR" //🔥
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
+        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+20)
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        theTableView.frame = CGRectMake(0, 64+60, view.frame.size.width, view.frame.size.height-20-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorStyle = .None
         theTableView.delegate = self
@@ -62,21 +72,19 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.tintColor = UIColor.whiteColor()
+        refreshControl.addTarget(self, action: #selector(queryForTimeline), forControlEvents: UIControlEvents.ValueChanged)
         theTableView.addSubview(refreshControl)
         
-        let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-        swipeBack.direction = .Right
-        view.addGestureRecognizer(swipeBack)
-
+        //theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, theTableView.frame.size.width/2))
+        //theTableView.tableHeaderView?.backgroundColor = UIColor.lightGrayColor()
+        
+        queryForTimeline()
+        
         //
         
-        queryForPopular()
-
-        
-    
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -86,28 +94,19 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         super.viewWillAppear(animated)
         
         
-        navigationController?.interactivePopGestureRecognizer!.delegate = self
+        isPushed = false
         
     }
-    
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if(navigationController!.viewControllers.count > 1){
-            return true
-        }
-        return false
-    }
-    
-    func backAction() {
-        navigationController?.popViewControllerAnimated(true)
-    }
-    
-    func refreshControlAction() {
+ 
+    func searchBtnAction() {
         
+        navigationController?.pushViewController(DiscoverViewController(), animated: true)
         
+        isPushed = true
     }
     
     
-    func queryForPopular() {
+    func queryForTimeline() {
         
         
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/moment/featured"
@@ -146,9 +145,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                     // done, reload tableView
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                        self.refreshControl.endRefreshing()
-                        
-                        self.theTableView.reloadData()
+                        self.reloadAction()
                         
                     })
                     
@@ -161,8 +158,25 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             }
         })
         
+    }
+
+    func reloadAction() {
+        
+        self.theTableView.reloadData()
         self.refreshControl.endRefreshing()
         
+        UIView.animateWithDuration(0.38, delay:0.5, options: .CurveEaseInOut, animations: {
+            
+            var tableFrame = self.theTableView.frame
+            tableFrame.origin.y = 64
+            self.theTableView.frame = tableFrame
+            
+            }, completion: { finished in
+                
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.removeFromSuperview()
+                
+        })
         
     }
     
@@ -224,9 +238,9 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         //
         
-        let mediaHeight = cell.frame.size.width+108
+        let mediaHeight = view.frame.size.width+108
         
-        cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+mediaHeight)
+        cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
         
         //timelineTinyHeartBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
         //timelineLikeLblBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
@@ -242,12 +256,13 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         // get mediaHeight
         
-        if let id = results[indexPath.row]["imageUrl"].string {
+        if let id = results[indexPath.row]["imageUrl"].string { //imageUrlCropped
             let fileUrl = NSURL(string: id)
             
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
             cell.timelineImgView.setNeedsLayout()
             
+            //cell.timelineImgView.hnk_setImageFromURL(fileUrl!)
             cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                 success: { image in
                     
@@ -266,6 +281,10 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             })
             //print("cell.momentImgView.image: \(cell.momentImgView.image)")
         }
+        
+        cell.timelineRankLbl.frame = CGRect(x: 15, y: 15, width: 50, height: 50)
+        cell.timelineRankLbl.text = "#\(indexPath.row+1)"
+        
         
         if let id = results[indexPath.row]["mode"].number {
             var str = ""
@@ -301,6 +320,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         } else {
             cell.timelineMusicLbl.hidden = true
         }
+        
         
         if let id = results[indexPath.row]["user"]["imageUrlTiny"].string {
             
@@ -492,7 +512,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                     
                     pageNumber = pageNumber+1
                     
-                    queryForPopular()
+                    queryForTimeline()
                     
                     
                 }
@@ -517,7 +537,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         pageNumber = pageNumber + 1
         
-        queryForPopular()
+        queryForTimeline()
         
     }
     
@@ -844,7 +864,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
             }
             
         })
-
+        
     }
     
     
@@ -858,11 +878,11 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                     print("single tapped: \(tappedIndexPath.row), \(tappedCell)")
                     
                     // play video or music !!!
-//                    
-//                    let json = JSON(data: momentsData)
-//                    
-//                    let results = json["results"]
-//                    print(results)
+                    //
+                    //                    let json = JSON(data: momentsData)
+                    //
+                    //                    let results = json["results"]
+                    //                    print(results)
                     
                 }
             }
@@ -941,5 +961,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
     }
     
+
+   
 
 }

@@ -16,8 +16,7 @@ class CreateViewController: UIViewController {
     
     var albumBtn = UIButton()
     var cameraBtn = UIButton()
-    var statusBtn = UIButton()
-    
+
     var imgToPass = UIImage()
     
     var savedKeyboardHeight = CGFloat()
@@ -38,7 +37,7 @@ class CreateViewController: UIViewController {
         view.addSubview(navBarView)
         
         let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(20, 20, 70, 44)
+        xBtn.frame = CGRectMake(15, 20, 44, 44)
         xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         xBtn.backgroundColor = UIColor.blueColor()
@@ -53,7 +52,7 @@ class CreateViewController: UIViewController {
         navBarView.addSubview(titleLbl)
         
         let nextBtn = UIButton()
-        nextBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
+        nextBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44) 
         nextBtn.backgroundColor = UIColor.blueColor()
         //nextBtn.addTarget(self, action:#selector(nextBtnAction), forControlEvents:.TouchUpInside)
         nextBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
@@ -71,43 +70,42 @@ class CreateViewController: UIViewController {
         //let btnWidth = ((view.frame.size.width/2)/4)*3
         //let btnWidth = (view.frame.size.width/3)*2
         
-        let topContainerHeight = self.view.frame.size.width+100
-        let bottomContainerHeight = self.view.frame.size.height-64-topContainerHeight
+        let mediaHeight = self.view.frame.size.width+108
         
-        let topView = UIView(frame: CGRectMake(0, 64, view.frame.size.width, topContainerHeight))
-        topView.backgroundColor = UIColor.darkGrayColor()
-        view.addSubview(topView)
+        // album
         
-        
-        
-        
-        let bottomContainerView = UIView(frame: CGRectMake(0, view.frame.size.height-bottomContainerHeight, view.frame.size.width, bottomContainerHeight))
-        bottomContainerView.backgroundColor = UIColor.lightGrayColor() // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        view.addSubview(bottomContainerView)
+        let albumView = UIView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49))
+        albumView.backgroundColor = UIColor.darkGrayColor()
+        view.addSubview(albumView)
         
         albumBtn = UIButton(type: UIButtonType.Custom)
-        albumBtn.frame = CGRectMake(bottomContainerView.frame.size.width/3*0, bottomContainerView.frame.size.height-50, bottomContainerView.frame.size.width/3, 50)
+        albumBtn.frame = CGRectMake(view.frame.size.width/2*0, view.frame.size.height-49, view.frame.size.width/2, 49)
         albumBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
         //albumBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
         albumBtn.backgroundColor = UIColor.blueColor()
         //albumBtn.addTarget(self, action:#selector(albumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        bottomContainerView.addSubview(albumBtn)
+        view.addSubview(albumBtn)
+        
+        // camera
+        
+        let blankHeight = self.view.frame.size.height-64-49
+        let targetHeight = self.view.frame.size.height-64-49-70 // need at least 70 for a camera button
+        
+        let topContainerHeight = mediaHeight > targetHeight ? blankHeight : mediaHeight
+        
+        let cameraView = UIView(frame: CGRectMake(0, 64, view.frame.size.width, topContainerHeight))
+        cameraView.backgroundColor = UIColor.darkGrayColor()
+        view.addSubview(cameraView)
         
         cameraBtn = UIButton(type: UIButtonType.Custom)
-        cameraBtn.frame = CGRectMake(bottomContainerView.frame.size.width/3*1, bottomContainerView.frame.size.height-50, bottomContainerView.frame.size.width/3, 50)
+        cameraBtn.frame = CGRectMake(view.frame.size.width/2*1, view.frame.size.height-49, view.frame.size.width/2, 49)
         cameraBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
         //cameraBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
         cameraBtn.backgroundColor = UIColor.redColor()
         //cameraBtn.addTarget(self, action:#selector(cameraBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        bottomContainerView.addSubview(cameraBtn)
+        view.addSubview(cameraBtn)
         
-        statusBtn = UIButton(type: UIButtonType.Custom)
-        statusBtn.frame = CGRectMake(bottomContainerView.frame.size.width/3*2, bottomContainerView.frame.size.height-50, bottomContainerView.frame.size.width/3, 50)
-        statusBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
-        //statusBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
-        statusBtn.backgroundColor = UIColor.orangeColor()
-        //statusBtn.addTarget(self, action:#selector(statusBtnAction), forControlEvents:.TouchUpInside)
-        bottomContainerView.addSubview(statusBtn)
+
         
     
     }

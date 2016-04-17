@@ -16,13 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var clientId = "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO"
     var clientSecret = "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko="
     var apiVersion = "1.2.3"
-    var phenomApiUrl = "http://192.168.129.253:8081" // "http://192.168.129.95:8081" // "http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
+    var phenomApiUrl = "https://api1.phenomapp.com:8081" //"http://192.168.129.253:8081" // "http://192.168.129.95:8081" // "http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
     
     var window: UIWindow?
 
     var tabbarvc:TabBarViewController?
     var timelinevc:TimelineViewController?
-    var explorevc:ExploreViewController?
+    var explorevc:PopularViewController?
     var myactivityvc:MyActivityViewController?
     var profilevc:ProfileViewController?
     
@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     
     var bannerView = UIView?()
     var activityDotView = UIView?()
+    
     
     var tempUnLikedIdsArray = NSMutableArray()
 
@@ -84,28 +85,78 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     }
 
     func applicationWillResignActive(application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        //        if ((PFUser.currentUser()) != nil) {
+        //            if (self.mainvc != nil) {
+        //                // update
+        //                self.lastvisiteddate = NSDate()
+        //                let newme = PFUser.currentUser()
+        //                newme!.setObject(NSDate(), forKey: "lastvisiteddate")
+        //                newme!.saveInBackground()
+        //            } else {
+        //                // signed up but did not finish onboarding
+        //            }
+        //        }
     }
-
+    
     func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+        self.nav?.popToRootViewControllerAnimated(false)
+        
+        //        if ((PFUser.currentUser()) != nil) {
+        //            if (self.mainvc != nil) {
+        //                let ip = NSIndexPath(forRow: 0, inSection: 0)
+        //                self.mainvc!.theTableView.scrollToRowAtIndexPath(ip, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+        //            } else {
+        //                // signed up but did not finish onboarding
+        //                self.nav?.popToRootViewControllerAnimated(false)
+        //                self.presentTabBarViewController()
+        //            }
+        //        }
+        
     }
-
     func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        
+        //        if ("currentUser") != nil) {
+        //
+        //            if (self.mainvc!.isOpen) {
+        //
+        //                self.justcreatedpost = false
+        //                self.reloadDiscovery = true // reload until proven not
+        //                self.reloadMyActivity = true
+        //                self.reloadFriendsActivity = true
+        //                //
+        //                let date = PFUser.currentUser()!.objectForKey("lastvisiteddate") as! NSDate
+        //                self.lastvisiteddate = date
+        //                //
+        //                let newme = PFUser.currentUser()
+        //                newme!.setObject(NSDate(), forKey: "lastvisiteddate")
+        //                newme!.saveInBackground()
+        //                //
+        //                // IF ACTIVITY VC IS OPEN, GET RID OF OLD BLUE CELLS
+        //                if (self.activityvc!.isOpen) {
+        //                    self.activityvc!.myactivityvc.theTableView.reloadData()
+        //                    if (self.activityvc!.friendsactivityvc.isOpen) {
+        //                        self.activityvc!.friendsactivityvc.theTableView.reloadData()
+        //                    }
+        //                }
+        //                //
+        //                // reload mainvc
+        //                //
+        //                self.mainvc!.refreshControlAction()
+        //                //
+        //                //
+        //            }
+        //        }
+        
     }
-
+    
     func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
     }
-
-//    func applicationWillTerminate(application: UIApplication) {
-//        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-//        // Saves changes in the application's managed object context before the application terminates.
-//        saveContext()
-//    }
+    
+    func applicationWillTerminate(application: UIApplication) {
+        
+    }
 
     
     // MARK: - Navigation
@@ -122,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         setupNotifications()
         
         timelinevc = TimelineViewController()
-        explorevc = ExploreViewController()
+        explorevc = PopularViewController()
         myactivityvc = MyActivityViewController()
         
         
@@ -164,8 +215,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         tabitem1.imageInsets = homeInsets
         
         let discoveryInsets = UIEdgeInsetsMake(5, 0, -5, 0)
-        let discoverimg = UIImage(named: "tabbar-explore-icon.png")
-        let discoverimgselected = UIImage(named: "tabbar-explore-icon.png")
+        let discoverimg = UIImage(named: "28-star-rounded2.png") //tabbar-explore-icon.png
+        let discoverimgselected = UIImage(named: "28-star-rounded2.png")
         let tabitem2 = UITabBarItem(title: "", image: discoverimg, selectedImage: discoverimgselected)
         tabitem2.titlePositionAdjustment = UIOffset.init(horizontal: 0, vertical: 25)
         tabitem2.imageInsets = discoveryInsets
@@ -208,15 +259,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             // already selected
             //print("already selected: \(tabBarController.selectedIndex)")
             
-            if (viewController.isEqual(tabbarvc!.viewControllers?[1])) {
-                if (explorevc!.isSearching) {
-                    return false
-                } else {
-                    return true
-                }
-            } else {
-                return true
-            }
+            return true
         } else {
             return !viewController.isEqual(tabbarvc!.viewControllers?[2])
         }
@@ -231,9 +274,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
                     timelinevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
             } else if (tabBarController.selectedIndex == 1) {
-                if (explorevc!.isSearching) {
-                    //
-                } else {
+                if (!explorevc!.isPushed) {
                     //explorevc!.theCollectionView.setContentOffset(CGPoint.zero, animated: true)
                     explorevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
@@ -577,7 +618,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         if let id = results[ip.row]["mediaHeight"].number {
             mediaHeight = CGFloat(id)
         } else {
-            mediaHeight = cellWidth+102
+            mediaHeight = cellWidth+108
         }
         
         if let id = results[ip.row]["headline"].string {

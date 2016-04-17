@@ -15,11 +15,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var commentsData = NSData()
     
+    var passedMomentData = JSON(data: NSData())
+    
     var passedMomentId = ""
     var passedMomentUsername = ""
     var passedMomentUserImageUrl = ""
     var passedMomentHeadline = ""
     var passedMomentCreatedAt = ""
+    var passedMomentReferences = NSArray()
     
     var navBarView = UIView()
     
@@ -42,12 +45,24 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
+        // parse passed moment
+        
+        passedMomentId = passedMomentData["id"].string!
+        passedMomentHeadline = passedMomentData["headline"].string!
+        passedMomentUsername = passedMomentData["user"]["username"].string!
+        passedMomentUserImageUrl = passedMomentData["user"]["imageUrlTiny"].string!
+        let obj = passedMomentData["references"].arrayObject!
+        passedMomentReferences = obj as NSArray
+        print("passedMomentReferences: \(passedMomentReferences)")
+        
+        //
+        
         navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(20, 20, 70, 44)
+        backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.redColor()
@@ -56,7 +71,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = "COMMENTS"
+        titleLbl.text = "CHAT"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
@@ -199,8 +214,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         
         let json = JSON(data: commentsData)
-        let comments = json["results"]["comments"]
-        if (comments.count>0) {
+        let results = json["results"]["comments"]
+        if (results.count>0) {
             let lastrow = self.theTableView.numberOfRowsInSection(1)
             let ip = NSIndexPath(forRow: lastrow-1, inSection: 1)
             self.theTableView.scrollToRowAtIndexPath(ip, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
@@ -294,8 +309,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         
         let json = JSON(data: commentsData)
-        let comments = json["results"]["comments"]
-        if (comments.count>0) {
+        let results = json["results"]["comments"]
+        if (results.count>0) {
             let lastrow = self.theTableView.numberOfRowsInSection(1)
             let ip = NSIndexPath(forRow: lastrow-1, inSection: 1)
             self.theTableView.scrollToRowAtIndexPath(ip, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
@@ -359,8 +374,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     self.commentsData = dataFromString
                     print("results: \(json["results"])")
-                    let comments = json["results"]["comments"]
-                    print("comments: \(comments)")
+                    let results = json["results"]["comments"]
+                    print("comments: \(results)")
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
@@ -399,8 +414,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return 1
         } else if (section == 1) {
             let json = JSON(data: commentsData)
-            let comments = json["results"]["comments"]
-            return comments.count
+            let results = json["results"]["comments"]
+            return results.count
         } else {
             return 0
         }
@@ -420,8 +435,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else if (indexPath.section == 1) {
             
             let json = JSON(data: commentsData)
-            let comments = json["results"]["comments"]
-            if let id = comments[indexPath.row]["commentText"].string {
+            let results = json["results"]["comments"]
+            if let id = results[indexPath.row]["commentText"].string {
                 
                 let width = self.view.frame.size.width-15-44-15-15
                 let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, width: width)
@@ -473,15 +488,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(self.passedMomentHeadline, font: cell.chatLbl.font, width: chatWidth)
             cell.chatLbl.frame = CGRectMake(15+44+15, 15+20, chatWidth, height+10)
             cell.chatLbl.text = self.passedMomentHeadline
+        
             
-            
-            cell.userBtn.hidden = true
-            
+            cell.userBtn.hidden = false
+            cell.userBtn.tag = indexPath.row
+            cell.userBtn.addTarget(self, action:#selector(userBtnAction1), forControlEvents: .TouchUpInside)
             
         } else if (indexPath.section == 1) {
             
             let json = JSON(data: commentsData)
-            let comments = json["results"]["comments"]
+            let results = json["results"]["comments"]
             
             // author
             // - username
@@ -491,7 +507,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // createdAt
             // flaggedAsInappropriate
             
-            if let id = comments[indexPath.row]["author"]["imageUrl"].string {
+            if let id = results[indexPath.row]["author"]["imageUrl"].string {
                 let fileUrl = NSURL(string: id)
                 
                 cell.userImgView.setNeedsLayout()
@@ -509,7 +525,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 })
             }            
             
-            if let id = comments[indexPath.row]["author"]["username"].string {
+            if let id = results[indexPath.row]["author"]["username"].string {
                 
                 let nameWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(id, font: cell.usernameBtn.titleLabel!.font, height: 20)
                 cell.usernameBtn.frame = CGRectMake(15+44+15, 15, nameWidth, 20)
@@ -517,7 +533,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
             }
             
-            if let id = comments[indexPath.row]["createdAt"].string {
+            if let id = results[indexPath.row]["createdAt"].string {
                 
                 let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(id, font: cell.dateLbl.font, height: 20)
                 cell.dateLbl.frame = CGRectMake(cell.cellWidth-width-15, 15, width, 20)
@@ -525,7 +541,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
             }
             
-            if let id = comments[indexPath.row]["commentText"].string {
+            if let id = results[indexPath.row]["commentText"].string {
                 
                 let width = cell.cellWidth-15-44-15-15
                 let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.chatLbl.font, width: width)
@@ -536,8 +552,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             cell.userBtn.hidden = false
             cell.userBtn.tag = indexPath.row
-            
-            cell.userBtn.addTarget(self, action:#selector(userBtnAction), forControlEvents: .TouchUpInside)
+            cell.userBtn.addTarget(self, action:#selector(userBtnAction2), forControlEvents: .TouchUpInside)
             
             
             cell.chatLbl.handleMentionTap { userHandle in
@@ -546,7 +561,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 //self.handleMentionTap(indexPath, username: <#T##String#>)
                 
-//                if let id = comments[indexPath.row]["author"]["id"].string {
+//                if let id = results[indexPath.row]["author"]["id"].string {
 //                    
 //                }
             }
@@ -586,66 +601,31 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
             // get user, then go to user
             
-            
         } else if (indexPath.section == 1) {
 
         } else {
             
         }
-        
     }
     
-    func userBtnAction(sender: UIButton){
-        print(sender.tag)
+    func userBtnAction1(sender: UIButton){
+        
+        let vc = ProfileViewController()
+        vc.passedUserData = passedMomentData["user"]
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func userBtnAction2(sender: UIButton){
        
-        // 
-        
         let json = JSON(data: commentsData)
-        let comments = json["results"]["comments"]
+        let results = json["results"]["comments"]
         
-        if let _ = comments[sender.tag]["author"]["id"].string {
-            
-            let id = comments[sender.tag]["author"]["id"].string
-            let un = comments[sender.tag]["author"]["username"].string
-            
-            let imageUrl = comments[sender.tag]["author"]["imageUrl"].string
-            let firstName = comments[sender.tag]["author"]["firstName"].string
-            let lastName = comments[sender.tag]["author"]["lastName"].string
-            let sport = comments[sender.tag]["author"]["sport"].string
-            let hometown = comments[sender.tag]["author"]["hometown"].string
-            let bio = comments[sender.tag]["author"]["description"].string
-            
-            let userFollows = comments[sender.tag]["author"]["userFollows"].bool
-            
-            let lockerProductCount = comments[sender.tag]["author"]["lockerProductCount"].number
-            let followingCount = comments[sender.tag]["author"]["followingCount"].number
-            let followersCount = comments[sender.tag]["author"]["followersCount"].number
-            let momentCount = comments[sender.tag]["author"]["momentCount"].number
-            
-            //
+        if let _ = results[sender.tag]["author"]["id"].string {
             
             let vc = ProfileViewController()
-            
-            vc.userId = id!
-            vc.username = un!
-            vc.imageUrl = imageUrl!
-            vc.firstName = firstName!
-            vc.lastName = lastName!
-            vc.sports = [sport!]
-            vc.hometown = hometown != nil ? hometown! : ""
-            vc.bio = bio!
-            
-            vc.userFollows = userFollows!
-            
-            vc.lockerProductCount = lockerProductCount!
-            vc.followingCount = followingCount!
-            vc.followersCount = followersCount!
-            vc.momentCount = momentCount!
-            
+            vc.passedUserData = results[sender.tag]["author"]
             navigationController?.pushViewController(vc, animated: true)
-            
         }
-        
     }
     
     func safariViewControllerDidFinish(controller: SFSafariViewController) {
