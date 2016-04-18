@@ -270,10 +270,63 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let headerViewHeight = CGFloat(50+headerContainerViewHeight+40)
         
-        theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, headerViewWidth, headerViewHeight))
-        theTableView.tableHeaderView?.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1) //UIColor(red:43/255, green:43/255, blue:43/255, alpha:1)
+        ////
+        
+        //let tabContainerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 64))
+        let tabContainerView = UIView(frame: CGRectMake(0, headerViewHeight, self.view.frame.size.width, 64))
+        tabContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        
+        //let tabWidth = view.frame.width/3
+        let tabWidth = view.frame.width/2
+        
+        tabBtn1.frame = CGRectMake(0, 0, tabWidth, 64)
+        tabBtn1.backgroundColor = UIColor.clearColor()
+        tabBtn1.titleLabel?.numberOfLines = 1
+        tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
+        tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabBtn1.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
+        tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
+        //tabContainerView.addSubview(tabBtn1)
+        tabBtn1.setTitle("0 STATS", forState: UIControlState.Normal)
+        
+        tabBtn2.frame = CGRectMake(tabWidth*0, 0, tabWidth, 64)
+        tabBtn2.backgroundColor = UIColor.clearColor()
+        tabBtn2.titleLabel?.numberOfLines = 1
+        tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
+        tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabBtn2.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
+        tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabContainerView.addSubview(tabBtn2)
+        let s = momentCount == 1 ? "" : "S"
+        tabBtn2.setTitle("\(momentCount) MOMENT\(s)", forState: UIControlState.Normal)
+        
+        tabBtn3.frame = CGRectMake(tabWidth*1, 0, tabWidth, 64)
+        tabBtn3.backgroundColor = UIColor.clearColor()
+        tabBtn3.titleLabel?.numberOfLines = 1
+        tabBtn3.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
+        tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabBtn3.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
+        tabBtn3.addTarget(self, action:#selector(tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabContainerView.addSubview(tabBtn3)
+        tabBtn3.setTitle("\(lockerProductCount) GEAR", forState: UIControlState.Normal)
+        
+        ////
+        
+        theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, headerViewWidth, headerViewHeight+64))
+        theTableView.tableHeaderView?.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         
         theTableView.tableHeaderView?.addSubview(headerContainerView)
+        
+        theTableView.tableHeaderView?.addSubview(tabContainerView)
         
         //
         //
@@ -288,7 +341,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //
         
-        self.tabBtn1Action()
+        //self.tabBtn1Action()
+        self.tabBtn2Action()
         
         //
         
@@ -491,12 +545,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         })
         
-        
         refreshControl.endRefreshing()
         
     }
-    
-    
     
     func reloadAction() {
         
@@ -755,8 +806,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.refreshControl.endRefreshing()
-                        
                         self.theTableView.reloadData()
+                        self.tabBtn2Action()
+                        
                     })
                     
                 } else {
@@ -797,15 +849,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.gearData = dataFromString
                     
                     let results = json["results"]
-                    print(results)
+                    print("gear results: \(results)")
                     
                     self.queriedForGear = true
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.refreshControl.endRefreshing()
-                        
                         self.theTableView.reloadData()
+                        self.tabBtn3Action()
                         
                     })
                     
@@ -962,60 +1014,61 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 64
-    }
-    
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let tabContainerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 64))
-        tabContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        
-        let tabWidth = view.frame.width/3
-        
-        tabBtn1.frame = CGRectMake(0, 0, tabWidth, 64)
-        tabBtn1.backgroundColor = UIColor.clearColor()
-        tabBtn1.titleLabel?.numberOfLines = 1
-        tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabBtn1.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
-        tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
-        tabContainerView.addSubview(tabBtn1)
-        tabBtn1.setTitle("0 STATS", forState: UIControlState.Normal)
-        
-        tabBtn2.frame = CGRectMake(tabWidth*1, 0, tabWidth, 64)
-        tabBtn2.backgroundColor = UIColor.clearColor()
-        tabBtn2.titleLabel?.numberOfLines = 1
-        tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabBtn2.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
-        tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
-        tabContainerView.addSubview(tabBtn2)
-        let s = momentCount == 1 ? "" : "S"
-        tabBtn2.setTitle("\(momentCount) MOMENT\(s)", forState: UIControlState.Normal)
-        
-        tabBtn3.frame = CGRectMake(tabWidth*2, 0, tabWidth, 64)
-        tabBtn3.backgroundColor = UIColor.clearColor()
-        tabBtn3.titleLabel?.numberOfLines = 1
-        tabBtn3.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabBtn3.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
-        tabBtn3.addTarget(self, action:#selector(tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
-        tabContainerView.addSubview(tabBtn3)
-        tabBtn3.setTitle("\(lockerProductCount) GEAR", forState: UIControlState.Normal)
-        
-        return tabContainerView
-        
-    }
+//    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 64
+//    }
+//    
+//    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        
+//        let tabContainerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 60))
+//        tabContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+//        
+//        //let tabWidth = view.frame.width/3
+//        let tabWidth = view.frame.width/2
+//        
+//        tabBtn1.frame = CGRectMake(0, 0, tabWidth, 64)
+//        tabBtn1.backgroundColor = UIColor.clearColor()
+//        tabBtn1.titleLabel?.numberOfLines = 1
+//        tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
+//        tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+//        tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+//        tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
+//        tabBtn1.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+//        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
+//        tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
+//        //tabContainerView.addSubview(tabBtn1)
+//        tabBtn1.setTitle("0 STATS", forState: UIControlState.Normal)
+//        
+//        tabBtn2.frame = CGRectMake(tabWidth*0, 0, tabWidth, 64)
+//        tabBtn2.backgroundColor = UIColor.clearColor()
+//        tabBtn2.titleLabel?.numberOfLines = 1
+//        tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
+//        tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+//        tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+//        tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
+//        tabBtn2.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+//        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
+//        tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
+//        tabContainerView.addSubview(tabBtn2)
+//        let s = momentCount == 1 ? "" : "S"
+//        tabBtn2.setTitle("\(momentCount) MOMENT\(s)", forState: UIControlState.Normal)
+//        
+//        tabBtn3.frame = CGRectMake(tabWidth*1, 0, tabWidth, 64)
+//        tabBtn3.backgroundColor = UIColor.clearColor()
+//        tabBtn3.titleLabel?.numberOfLines = 1
+//        tabBtn3.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
+//        tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+//        tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+//        tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
+//        tabBtn3.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
+//        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
+//        tabBtn3.addTarget(self, action:#selector(tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
+//        tabContainerView.addSubview(tabBtn3)
+//        tabBtn3.setTitle("\(lockerProductCount) GEAR", forState: UIControlState.Normal)
+//        
+//        return tabContainerView
+//        
+//    }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //return view.frame.size.width+164 // probably 150 by default then raise to second line of text if necessary
@@ -1187,7 +1240,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             //
             
-            let mediaHeight = view.frame.size.width+108
+            let mediaHeight = view.frame.size.width+135
             
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
             

@@ -615,11 +615,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         var headlineHeight = CGFloat()
         
         
-        if let id = results[ip.row]["mediaHeight"].number {
-            mediaHeight = CGFloat(id)
-        } else {
-            mediaHeight = cellWidth+108
-        }
+//        if let id = results[ip.row]["mediaHeight"].number {
+//            mediaHeight = CGFloat(id)
+//        } else {
+//            mediaHeight = cellWidth+140
+//        }
+        mediaHeight = cellWidth+135
         
         if let id = results[ip.row]["headline"].string {
             let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())

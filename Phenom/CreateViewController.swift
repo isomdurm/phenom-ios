@@ -70,7 +70,7 @@ class CreateViewController: UIViewController {
         //let btnWidth = ((view.frame.size.width/2)/4)*3
         //let btnWidth = (view.frame.size.width/3)*2
         
-        let mediaHeight = self.view.frame.size.width+108
+        let mediaHeight = self.view.frame.size.width+135
         
         // album
         

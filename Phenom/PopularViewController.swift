@@ -57,7 +57,7 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
         navBarView.addSubview(titleLbl)
         
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
-        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+20)
+        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+30)
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
@@ -238,7 +238,7 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         //
         
-        let mediaHeight = view.frame.size.width+108
+        let mediaHeight = view.frame.size.width+135
         
         cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
         
@@ -754,7 +754,7 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
         let ip = NSIndexPath(forItem: sender.tag, inSection: 0)
         let cell = self.theTableView.cellForRowAtIndexPath(ip) as! MainCell
         
-        let mediaHeight = cell.frame.size.width+108
+        let mediaHeight = cell.frame.size.width+135
         
         let followImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width-50-15, mediaHeight+15, 50, 50))
         followImgView.backgroundColor = UIColor.clearColor()
@@ -918,7 +918,7 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // get height of media
         
-        let mediaHeight = cell.frame.size.width+108
+        let mediaHeight = cell.frame.size.width+135
         
         //let heartImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height/2-50, 100, 100))
         let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-50, mediaHeight/2-50, 100, 100))

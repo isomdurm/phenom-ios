@@ -53,7 +53,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         navBarView.addSubview(titleLbl)
         
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
-        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+20)
+        activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+30)
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         

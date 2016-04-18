@@ -67,6 +67,12 @@ class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate,
         
         //
         
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
+        swipeRight.direction = .Right
+        view.addGestureRecognizer(swipeRight)
+        
+        //
+        
         self.queryForMoment()
 
     
