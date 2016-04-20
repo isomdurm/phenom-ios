@@ -29,48 +29,50 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        //navigationController?.navigationBarHidden = true
+        //edgesForExtendedLayout = UIRectEdge.None
         
         view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
         view.backgroundColor = UIColor(red:20/255, green:20/255, blue:22/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
-        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        view.addSubview(navBarView)
-        
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
-        navBarView.addSubview(backBtn)
-        
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
-        titleLbl.textColor = UIColor.whiteColor()
-        titleLbl.text = "I AM"
-        navBarView.addSubview(titleLbl)
-        
-        let shareBtn = UIButton()
-        shareBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-        shareBtn.backgroundColor = UIColor.blueColor()
-        shareBtn.addTarget(self, action:#selector(shareBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        shareBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
-        shareBtn.titleLabel?.numberOfLines = 1
-        shareBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        shareBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        shareBtn.titleLabel?.textAlignment = NSTextAlignment.Center
-        shareBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        shareBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
-        shareBtn.setTitle("SHARE", forState: UIControlState.Normal)
-        navBarView.addSubview(shareBtn)
+//        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+//        navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+//        view.addSubview(navBarView)
+//
+//        let backBtn = UIButton(type: UIButtonType.Custom)
+//        backBtn.frame = CGRectMake(15, 20, 44, 44)
+//        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+//        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+//        backBtn.backgroundColor = UIColor.redColor()
+//        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+//        navBarView.addSubview(backBtn)
+//        
+//        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
+//        titleLbl.textAlignment = NSTextAlignment.Center
+//        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+//        titleLbl.textColor = UIColor.whiteColor()
+//        titleLbl.text = "I AM"
+//        navBarView.addSubview(titleLbl)
+//        
+//        let shareBtn = UIButton()
+//        shareBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
+//        shareBtn.backgroundColor = UIColor.blueColor()
+//        shareBtn.addTarget(self, action:#selector(shareBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+//        shareBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+//        shareBtn.titleLabel?.numberOfLines = 1
+//        shareBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+//        shareBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+//        shareBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+//        shareBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+//        shareBtn.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
+//        shareBtn.setTitle("SHARE", forState: UIControlState.Normal)
+//        navBarView.addSubview(shareBtn)
         
         //
         
-        let theImageView = UIImageView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.width))
+        let mediaHeight = view.frame.size.width+110
+        
+        let theImageView = UIImageView(frame: CGRectMake(0, 0, view.frame.size.width, mediaHeight))
         theImageView.image  = passedImage
         theImageView.contentMode = UIViewContentMode.ScaleAspectFit
         theImageView.userInteractionEnabled = true
@@ -79,7 +81,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         
         //
         
-        theScrollView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64)
+        theScrollView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
         theScrollView.backgroundColor = UIColor.clearColor()
         theScrollView.delegate = self
         theScrollView.pagingEnabled = true
@@ -92,7 +94,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         theScrollView.userInteractionEnabled = true
         view.addSubview(theScrollView)
         theScrollView.contentOffset = CGPoint(x: 0, y: 0)
-        theScrollView.contentInset = UIEdgeInsets(top: view.frame.size.width, left: 0, bottom: 0, right: 0)
+        theScrollView.contentInset = UIEdgeInsets(top: mediaHeight, left: 0, bottom: 0, right: 0)
         
         // measure necessary height
         theScrollView.contentSize = CGSize(width: theScrollView.frame.size.width, height: theScrollView.frame.size.height)

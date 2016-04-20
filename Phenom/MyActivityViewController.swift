@@ -93,7 +93,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     func searchBtnAction() {
         
-        self.navigationController?.pushViewController(DiscoverViewController(), animated: true)
+        self.navigationController?.pushViewController(ExploreViewController(), animated: true)
         
         self.isPushed = true
     }

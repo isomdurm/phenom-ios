@@ -52,11 +52,32 @@ class TabBarViewController: UITabBarController {
             
             }, completion: { finished in
                 if (finished) {
-                    let newnav = UINavigationController(rootViewController: CreateViewController()) //CameraViewController()
-                    self.presentViewController(newnav, animated: true, completion: nil)
+                    
+//                    let pickerController = PickerViewController()
+//                    pickerController.assetType = .AllPhotos // assetType
+//                    pickerController.allowsLandscape = false // allowsLandscape
+//                    pickerController.allowMultipleTypes = false // allowMultipleType
+//                    //pickerController.sourceType = .Photo // sourceType // by hiding this - it shows the camera button as the first item
+//                    pickerController.singleSelect = true //singleSelect
+//                    // pickerController.showsEmptyAlbums = false
+//                    // pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
+//                    pickerController.showsCancelButton = true
+//                    // Clear all the selected assets if you used the picker controller as a single instance.
+//                    pickerController.defaultSelectedAssets = nil
+//                    //pickerController.defaultSelectedAssets = self.assets
+//                   
+                    
+                    //let newnav = UINavigationController(rootViewController: CreateViewController()) //PickerViewController() //CameraViewController()  //
+                    //newnav.navigationController?.navigationBarHidden = true
+                    
+                    self.presentViewController(PickerViewController(), animated: true, completion: nil)
+                    
+                    
                 }
         })
         
     }
+    
+    
     
 }

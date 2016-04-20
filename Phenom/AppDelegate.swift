@@ -620,7 +620,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 //        } else {
 //            mediaHeight = cellWidth+140
 //        }
-        mediaHeight = cellWidth+135
+        mediaHeight = cellWidth+110
         
         if let id = results[ip.row]["headline"].string {
             let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())

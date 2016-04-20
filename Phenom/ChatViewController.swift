@@ -131,7 +131,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.sendBtn.setTitleColor(UIColor(red:207/255, green:185/255, blue:114/255, alpha:1), forState: UIControlState.Highlighted)
         self.sendBtn.setTitleColor(UIColor.init(white: 0.6, alpha: 1.0), forState: UIControlState.Disabled)
         self.sendBtn.setTitle("Send", forState: UIControlState.Normal)
-        //self.sendBtn.addTarget(self, action:"sendBtnAction", forControlEvents:UIControlEvents.TouchUpInside)
+        self.sendBtn.addTarget(self, action:"sendBtnAction", forControlEvents:UIControlEvents.TouchUpInside)
         self.chatView.addSubview(self.sendBtn)
         self.sendBtn.enabled = false
         
@@ -638,6 +638,58 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
         
         
+    }
+    
+    
+    //
+    //
+    //
+    
+    
+    func sendBtnAction() {
+        
+        print("sendBtnAction hit")
+        
+        return
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/comment/\(self.passedMomentId)"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "PUT"
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        
+                        return
+                    }
+                    
+                    // sent
+                    
+                    // reload table
+                    
+                    
+                    
+                    
+                    
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
+                }
+                
+            } else {
+                //
+            }
+            
+        })
     }
 
 }

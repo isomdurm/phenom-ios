@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>DKImagePickerController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>FBSDKCoreKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -30,6 +35,16 @@
 			<false/>
 		</dict>
 		<key>HanekeSwift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ImagePicker-ImagePicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ImagePicker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -62,12 +77,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0465490DA4E9F160CECC8A897940404E</key>
+		<key>199B89785A8289D93B14E1EBE54C7818</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2007A2E2EDF6B8D4ADC2CB19C1C1AEE8</key>
+		<key>2F609E69CAF860283AD0953C2B44ED37</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>454B3E9A6602CC0A6E641A525A8F9075</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +102,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>7116AA14740A17264FF47B18C2B67020</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7DDF79495F24B309AF089ACC99FC1151</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>91CED7D0452F42349393A06A23226CF0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -92,12 +122,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A92807FF7CB47B609A4D4264522515F4</key>
+		<key>B09575BE910C7DDE2955E8C69D01382B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B09575BE910C7DDE2955E8C69D01382B</key>
+		<key>D001DE49152FF44ED8E5FD8B382C4DB7</key>
 		<dict>
 			<key>primary</key>
 			<true/>

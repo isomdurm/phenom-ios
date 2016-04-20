@@ -24,6 +24,8 @@ pod 'Reachability',           '3.1.1'
 pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 pod 'HanekeSwift'
 pod 'Just'
+pod 'DKImagePickerController'
+pod 'ImagePicker'
 
 end
 

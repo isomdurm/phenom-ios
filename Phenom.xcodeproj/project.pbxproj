@@ -57,6 +57,7 @@
 		571CC5411CAB324600A42997 /* FusumaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 571CC5361CAB324600A42997 /* FusumaViewController.xib */; };
 		57242DEF1CAB457600A71A7F /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57242DEE1CAB457600A71A7F /* ComposeViewController.swift */; };
 		57242DF11CAB4F7C00A71A7F /* KMPlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57242DF01CAB4F7C00A71A7F /* KMPlaceholderTextView.swift */; };
+		57654A231CC5B07800316A7F /* blackNav@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57654A221CC5B07800316A7F /* blackNav@2x.png */; };
 		5768B8E71CAC51B9002E9664 /* MainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E61CAC51B9002E9664 /* MainCell.swift */; };
 		5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */; };
 		5768B8EB1CAC9921002E9664 /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8EA1CAC9921002E9664 /* ExploreCell.swift */; };
@@ -122,6 +123,11 @@
 		57A5D1EF1CC060720056D4FB /* ActiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1EC1CC060720056D4FB /* ActiveLabel.swift */; };
 		57A5D1F01CC060720056D4FB /* ActiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1ED1CC060720056D4FB /* ActiveType.swift */; };
 		57A5D1F11CC060720056D4FB /* RegexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A5D1EE1CC060720056D4FB /* RegexParser.swift */; };
+		57B030571CC56FEF00C53CD2 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B030561CC56FEF00C53CD2 /* CameraManager.swift */; };
+		57B030591CC5700D00C53CD2 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57B030581CC5700D00C53CD2 /* AssetsLibrary.framework */; };
+		57B0305B1CC5702C00C53CD2 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57B0305A1CC5702C00C53CD2 /* PhotosUI.framework */; };
+		57B0305D1CC5704500C53CD2 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57B0305C1CC5704500C53CD2 /* Photos.framework */; };
+		57B0305F1CC5848C00C53CD2 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B0305E1CC5848C00C53CD2 /* PickerViewController.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -210,6 +216,7 @@
 		571CC5361CAB324600A42997 /* FusumaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FusumaViewController.xib; sourceTree = "<group>"; };
 		57242DEE1CAB457600A71A7F /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		57242DF01CAB4F7C00A71A7F /* KMPlaceholderTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMPlaceholderTextView.swift; sourceTree = "<group>"; };
+		57654A221CC5B07800316A7F /* blackNav@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackNav@2x.png"; sourceTree = "<group>"; };
 		5768B8E61CAC51B9002E9664 /* MainCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCell.swift; sourceTree = "<group>"; };
 		5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineHeaderView.swift; sourceTree = "<group>"; };
 		5768B8EA1CAC9921002E9664 /* ExploreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
@@ -275,6 +282,11 @@
 		57A5D1EC1CC060720056D4FB /* ActiveLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveLabel.swift; sourceTree = "<group>"; };
 		57A5D1ED1CC060720056D4FB /* ActiveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveType.swift; sourceTree = "<group>"; };
 		57A5D1EE1CC060720056D4FB /* RegexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegexParser.swift; sourceTree = "<group>"; };
+		57B030561CC56FEF00C53CD2 /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		57B030581CC5700D00C53CD2 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		57B0305A1CC5702C00C53CD2 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+		57B0305C1CC5704500C53CD2 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		57B0305E1CC5848C00C53CD2 /* PickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -297,6 +309,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57B0305D1CC5704500C53CD2 /* Photos.framework in Frameworks */,
+				57B0305B1CC5702C00C53CD2 /* PhotosUI.framework in Frameworks */,
+				57B030591CC5700D00C53CD2 /* AssetsLibrary.framework in Frameworks */,
 				57773D6E1CBD77B900A5D868 /* CoreMedia.framework in Frameworks */,
 				57773D651CBC254300A5D868 /* SafariServices.framework in Frameworks */,
 				570AC4FB1CA4C38E00441F4A /* AVFoundation.framework in Frameworks */,
@@ -435,7 +450,7 @@
 				5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */,
 				5768B9391CB217F1002E9664 /* ExplorePeopleViewController.swift */,
 				5768B9371CB217DA002E9664 /* ExploreGearViewController.swift */,
-				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
+				5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */,
 				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
 				5768B9471CB58127002E9664 /* FilterViewController.swift */,
 				5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */,
@@ -478,6 +493,7 @@
 		572DF4BA1CA37A1F002184E2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				57654A221CC5B07800316A7F /* blackNav@2x.png */,
 				5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */,
 				5781C3A61CC1626000F37E75 /* add-gear@2x.png */,
 				5781C3A41CC15A0C00F37E75 /* timeline-like-btn@2x.png */,
@@ -521,6 +537,9 @@
 		572DF4BD1CA37A39002184E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57B0305C1CC5704500C53CD2 /* Photos.framework */,
+				57B0305A1CC5702C00C53CD2 /* PhotosUI.framework */,
+				57B030581CC5700D00C53CD2 /* AssetsLibrary.framework */,
 				57773D6D1CBD77B900A5D868 /* CoreMedia.framework */,
 				57773D641CBC254300A5D868 /* SafariServices.framework */,
 				570AC4E71CA4C38E00441F4A /* AVFoundation.framework */,
@@ -590,7 +609,7 @@
 				5768B9411CB2247A002E9664 /* GearDetailViewController.swift */,
 				57773D681CBC2C3200A5D868 /* GearListViewController.swift */,
 				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
-				5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */,
+				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
 				570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */,
 				57C6DD081CA46F2A00B939DF /* ProfileViewController.swift */,
 				5703D9FC1CC31465008AAC6D /* PopularViewController.swift */,
@@ -603,10 +622,12 @@
 		57C6DD161CA4861F00B939DF /* Creation */ = {
 			isa = PBXGroup;
 			children = (
+				57B030561CC56FEF00C53CD2 /* CameraManager.swift */,
 				571CC52B1CAB321100A42997 /* Fusuma */,
 				57242DEE1CAB457600A71A7F /* ComposeViewController.swift */,
 				571CC4FA1CAB149D00A42997 /* CameraViewController.swift */,
 				57A5D1E81CC005BD0056D4FB /* CreateViewController.swift */,
+				57B0305E1CC5848C00C53CD2 /* PickerViewController.swift */,
 			);
 			name = Creation;
 			sourceTree = "<group>";
@@ -757,6 +778,7 @@
 				5715005E1CA3136800AA8744 /* LaunchScreen.storyboard in Resources */,
 				57773D4D1CBADEE200A5D868 /* UnitedSansCond-Bold.otf in Resources */,
 				571CC5391CAB324600A42997 /* FSAlbumView.xib in Resources */,
+				57654A231CC5B07800316A7F /* blackNav@2x.png in Resources */,
 				5781C3A01CC159A000F37E75 /* timeline-chat-btn@2x.png in Resources */,
 				571CC5371CAB324600A42997 /* Assets.xcassets in Resources */,
 				571CC5411CAB324600A42997 /* FusumaViewController.xib in Resources */,
@@ -872,6 +894,7 @@
 				57DB87B31CC19C8100A27A43 /* Product.swift in Sources */,
 				5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */,
 				57A5D1F11CC060720056D4FB /* RegexParser.swift in Sources */,
+				57B0305F1CC5848C00C53CD2 /* PickerViewController.swift in Sources */,
 				57C6DD0D1CA47BFE00B939DF /* SignUpViewController.swift in Sources */,
 				570AC5121CA5CA3600441F4A /* SettingsViewController.swift in Sources */,
 				570AC5141CA5CD8300441F4A /* ActivityCell.swift in Sources */,
@@ -882,6 +905,7 @@
 				571500511CA3136800AA8744 /* AppDelegate.swift in Sources */,
 				5768B9401CB2197C002E9664 /* AddTeamViewController.swift in Sources */,
 				57C6DD091CA46F2A00B939DF /* ProfileViewController.swift in Sources */,
+				57B030571CC56FEF00C53CD2 /* CameraManager.swift in Sources */,
 				5768B9421CB2247A002E9664 /* GearDetailViewController.swift in Sources */,
 				57A5D1E71CBEED3F0056D4FB /* ChatCell.swift in Sources */,
 				57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */,

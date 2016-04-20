@@ -377,7 +377,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func searchBtnAction() {
         
-        self.navigationController?.pushViewController(DiscoverViewController(), animated: true)
+        self.navigationController?.pushViewController(ExploreViewController(), animated: true)
         
         self.isPushed = true
         
@@ -674,40 +674,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // refresh view to show moments
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as String
-        
-        if (userId == uid && initialProfile) {
-            print("currentUser")
-            
-            let json = JSON(data: momentsData)
-            if (json["results"].count == 0) {
-                
-                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
-                self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-                
-                let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
-                addBtn.backgroundColor = UINavigationBar.appearance().tintColor
-                addBtn.addTarget(self, action:#selector(addMomentBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-                addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-                addBtn.titleLabel?.numberOfLines = 1
-                addBtn.contentHorizontalAlignment = .Center
-                addBtn.contentVerticalAlignment = .Center
-                addBtn.titleLabel?.textAlignment = .Center
-                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-                addBtn.setTitle("ADD A MOMENT", forState: .Normal)
-                self.theTableView.tableFooterView?.addSubview(addBtn)
-            }
-            
-        } else {
-            
-            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
-            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
-            
-        }
-
-        
         if (self.queriedForTimeline) {
             // do nothing
             self.theTableView.reloadData()
@@ -724,41 +690,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn1.selected = false
         tabBtn2.selected = false
         tabBtn3.selected = true
-        
-        // refresh view to show gear
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as String
-        
-        if (userId == uid && initialProfile) {
-            print("currentUser")
-            
-            let json = JSON(data: gearData)
-            if (json["results"].count == 0) {
-                
-                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
-                self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-                
-                let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
-                addBtn.backgroundColor = UINavigationBar.appearance().tintColor
-                addBtn.addTarget(self, action:#selector(addGearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-                addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-                addBtn.titleLabel?.numberOfLines = 1
-                addBtn.contentHorizontalAlignment = .Center
-                addBtn.contentVerticalAlignment = .Center
-                addBtn.titleLabel?.textAlignment = .Center
-                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-                addBtn.setTitle("ADD GEAR", forState: .Normal)
-                self.theTableView.tableFooterView?.addSubview(addBtn)
-            }
-            
-        } else {
-            
-            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
-            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
-            
-        }
+    
         
         // refresh view to show gear
         
@@ -805,9 +737,51 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     // done, reload tableView
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
+                        // footer
+                        //
+                        let defaults = NSUserDefaults.standardUserDefaults()
+                        let uid = defaults.stringForKey("userId")! as String
+                        
+                        if (self.userId == uid && self.initialProfile) {
+                            print("currentUser")
+                            
+                            let json = JSON(data: self.momentsData)
+                            if (json["results"].count == 0) {
+                                
+                                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
+                                self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+                                
+                                let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+                                addBtn.backgroundColor = UINavigationBar.appearance().tintColor
+                                addBtn.addTarget(self, action:#selector(self.addMomentBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+                                addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+                                addBtn.titleLabel?.numberOfLines = 1
+                                addBtn.contentHorizontalAlignment = .Center
+                                addBtn.contentVerticalAlignment = .Center
+                                addBtn.titleLabel?.textAlignment = .Center
+                                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+                                addBtn.setTitle("ADD A MOMENT", forState: .Normal)
+                                self.theTableView.tableFooterView?.addSubview(addBtn)
+                                
+                            } else {
+                                
+                                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+                                self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+                                
+                            }
+                        } else {
+                            
+                            // no momments
+                            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+                            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+                        }
+                        //
+                        //
+                        
                         self.refreshControl.endRefreshing()
                         self.theTableView.reloadData()
-                        self.tabBtn2Action()
+                        
                         
                     })
                     
@@ -855,18 +829,59 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
+                        // footer
+                        //
+                        let defaults = NSUserDefaults.standardUserDefaults()
+                        let uid = defaults.stringForKey("userId")! as String
+                        
+                        if (self.userId == uid && self.initialProfile) {
+                            print("currentUser")
+                            
+                            let json = JSON(data: self.gearData)
+                            if (json["results"].count == 0) {
+                                
+                                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
+                                self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+                                
+                                let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+                                addBtn.backgroundColor = UINavigationBar.appearance().tintColor
+                                addBtn.addTarget(self, action:#selector(self.addGearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+                                addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
+                                addBtn.titleLabel?.numberOfLines = 1
+                                addBtn.contentHorizontalAlignment = .Center
+                                addBtn.contentVerticalAlignment = .Center
+                                addBtn.titleLabel?.textAlignment = .Center
+                                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                                addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+                                addBtn.setTitle("ADD GEAR", forState: .Normal)
+                                self.theTableView.tableFooterView?.addSubview(addBtn)
+                                
+                            } else {
+                                
+                                self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+                                self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+                            }
+                        } else {
+                            
+                            // no gear
+                            
+                            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
+                            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+                        }
+                        //
+                        //
+                        
+                        
                         self.refreshControl.endRefreshing()
                         self.theTableView.reloadData()
-                        self.tabBtn3Action()
                         
                     })
                     
                 } else {
                     print("URL Session Task Failed: %@", error!.localizedDescription)
-                    
                 }
             } else {
-                //
+                
             }
         })
         
@@ -884,9 +899,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func settingsBtnAction() {
         
-        self.cameraBtnAction()
-        
-        //navigationController?.pushViewController(SettingsViewController(), animated: true)
+        navigationController?.pushViewController(SettingsViewController(), animated: true)
     }
     
     
@@ -1240,7 +1253,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             //
             
-            let mediaHeight = view.frame.size.width+135
+            let mediaHeight = view.frame.size.width+110
             
             cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
             
@@ -2133,7 +2146,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     //
     //
     
-    // photo picker
+    // testing photo picker
     
     func cameraBtnAction() {
         
@@ -2147,7 +2160,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         self.presentViewController(imagePicker, animated: true,
                                    completion: nil)
     }
-    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
@@ -2404,8 +2416,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         })
         task.resume()
     }
-    
-    
     
     
     
