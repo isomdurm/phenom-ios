@@ -70,7 +70,7 @@ class TabBarViewController: UITabBarController {
                     //let newnav = UINavigationController(rootViewController: CreateViewController()) //PickerViewController() //CameraViewController()  //
                     //newnav.navigationController?.navigationBarHidden = true
                     
-                    self.presentViewController(PickerViewController(), animated: true, completion: nil)
+                    self.presentViewController(PickMediaViewController(), animated: true, completion: nil)
                     
                     
                 }

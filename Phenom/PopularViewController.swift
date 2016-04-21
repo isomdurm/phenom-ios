@@ -920,8 +920,7 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let mediaHeight = cell.frame.size.width+110
         
-        //let heartImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height/2-50, 100, 100))
-        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-50, mediaHeight/2-50, 100, 100))
+        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-45, mediaHeight/2-45, 90, 90))
         heartImgView.backgroundColor = UIColor.clearColor()
         heartImgView.image = UIImage(named: "heart.png")
         cell.addSubview(heartImgView)

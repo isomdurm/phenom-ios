@@ -899,7 +899,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func settingsBtnAction() {
         
+        //self.cameraBtnAction()
+        
         navigationController?.pushViewController(SettingsViewController(), animated: true)
+        
     }
     
     
@@ -1909,9 +1912,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // get height of media
         
-        let mediaHeight = cell.frame.size.width+100
+        let mediaHeight = cell.frame.size.width+110
         
-        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-44, mediaHeight/2-44, 88, 88))
+        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-45, mediaHeight/2-45, 90, 90))
         heartImgView.backgroundColor = UIColor.clearColor()
         heartImgView.image = UIImage(named: "heart.png")
         cell.addSubview(heartImgView)
@@ -2201,11 +2204,98 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         
-        self.sendRequest(imageData!)
+        //self.sendRequest(imageData!)
+        
+        self.uploadImage(resizedimage)
+        
+        
         
         // multi-part upload
         //print("image: \(image)")
         //print("imagedata: \(imagedata)")
+        
+        
+        
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        
+//        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+//        //let date = NSDate().timeIntervalSince1970 * 1000
+//        //let params = "product=\(productJson)"
+//        let type = "PUT"
+//        
+//        let boundary = "Boundary-\(NSUUID().UUIDString)" //generateBoundaryString()
+//        
+//        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+//        
+//        let selectedImg = UIImage()
+//        let imageData = UIImageJPEGRepresentation(selectedImg, 1)
+//        
+//        if(imageData==nil)  { return; }
+//        
+//        request.HTTPBody = createBodyWithParameters(param, filePathKey: "file", imageDataKey: imageData!, boundary: boundary)
+//        
+//        
+//        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+//            if (error == nil) {
+//                
+//                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//                
+//                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+//                    
+//                    let json = JSON(data: dataFromString)
+//                    if json["errorCode"].number != 200  {
+//                        print("json: \(json)")
+//                        print("error: \(json["errorCode"].number)")
+//                        
+//                        sender.selected = false
+//                        
+//                        return
+//                    }
+//                    
+//                    print("+1 added to locker")
+//                    
+//                    sender.selected = true
+//                    
+//                    let followingCount = defaults.objectForKey("lockerProductCount") as! Int
+//                    let newcount = followingCount+1
+//                    defaults.setObject(newcount, forKey: "lockerProductCount")
+//                    defaults.synchronize()
+//                    
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        
+//                        self.theTableView.reloadData()
+//                    })
+//                    
+//                } else {
+//                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+//                    
+//                }
+//                
+//            } else {
+//                //
+//            }
+//            
+//        })
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         //let request = self.createRequest("uid", password: "pw", email: "email@email.com")
@@ -2247,8 +2337,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 //        }
         
         
-        
-        
     }
     
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
@@ -2266,13 +2354,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     
-    
     func uploadImage(image : UIImage) {
         
-        let url = NSURL(string: "http://www.kaleidosblog.com/tutorial/upload.php")
+        print("uploadImage hit")
+        
+        
+        let url = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user")
         
         let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "POST"
+        request.HTTPMethod = "PUT"
         
         let boundary = generateBoundaryString()
         
@@ -2280,7 +2370,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        let image_data = UIImagePNGRepresentation(image)
+        
+        // needs
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let bearerToken = defaults.stringForKey("bearerToken")! as String
+        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        //
+        
+        
+        let image_data = UIImageJPEGRepresentation(image, 0.9)
+        
+        print(image_data)// UIImagePNGRepresentation(image)
         
         if(image_data == nil) {
             return
@@ -2289,20 +2390,20 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let body = NSMutableData()
         
-        let fname = "test.png"
-        let mimetype = "image/png"
+        let fname = "image.jpeg"
+        let mimetype = "image/jpeg"
         
         //define the data post parameter
         
-        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        body.appendData("Content-Disposition:form-data; name=\"test\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        body.appendData("hi\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        
-        
+        // [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName] forKey:@"Content-Disposition"];
         
         body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        body.appendData("Content-Disposition:form-data; name=\"file\"; filename=\"\(fname)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        body.appendData("Content-Type: \(mimetype)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"test\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("hi\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+//        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        body.appendData("Content-Disposition:form-data; name=\"file\"; filename=\"\(fname)\"; mimeType=\"\(mimetype)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Type: \(mimetype)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         body.appendData(image_data!)
         body.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
@@ -2328,7 +2429,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
             let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print(dataString)
+            print("dataString hit: \(dataString)")
             
         }
         
@@ -2341,17 +2442,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         return "Boundary-\(NSUUID().UUIDString)"
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     func sendRequest(imageData : NSData) {
@@ -2384,7 +2474,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Headers
         //request.addValue("multipart/form-data; boundary=__X_PAW_BOUNDARY__", forHTTPHeaderField: "Content-Type")
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         
         // Body
         //let bodyString = "--__X_PAW_BOUNDARY__--"
@@ -2415,6 +2504,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         })
         task.resume()
+        
+        
     }
     
     

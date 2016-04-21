@@ -374,51 +374,6 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     }
     
     
-    
-    func queryForGearWithString(str : String) {
-        
-        // https://api1.phenomapp.com:8081/product?query=STRING
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product"
-        //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "query=\(self.theTextField.text)"
-        let type = "GET"
-        
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
-                
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
-                    }
-                    
-                    self.gear = dataFromString
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.theTableView.reloadData()
-                    })
-                    
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
-                }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
-        
-    }
-    
-    
     func queryForPeopleWithString(str : String) {
         
         //https://api1.phenomapp.com:8081/user/search?pageNumber=INT&query=STRING
@@ -450,6 +405,49 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                         self.theTableView.reloadData()
                     })
                     
+                    
+                } else {
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                }
+                
+            } else {
+                //
+                print("errorrr in \(self)")
+            }
+        })
+        
+    }
+    
+    func queryForGearWithString(str : String) {
+        
+        // https://api1.phenomapp.com:8081/product?query=STRING
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = "query=\(self.theTextField.text)"
+        let type = "GET"
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        
+                        return
+                    }
+                    
+                    self.gear = dataFromString
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.theTableView.reloadData()
+                    })
                     
                 } else {
                     print("URL Session Task Failed: %@", error!.localizedDescription);
@@ -500,7 +498,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         let cell:SearchCell = SearchCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
         cell.cellWidth = view.frame.size.width
-        cell.cellString = (theTextField.text)!
+        //cell.cellString = (theTextField.text)!
         
         cell.textLabel?.frame = CGRectMake(20, 0, view.frame.size.width-20-20-80, 64)
         cell.textLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)

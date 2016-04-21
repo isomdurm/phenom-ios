@@ -165,7 +165,8 @@ public class DKImagePickerController : UINavigationController {
         }
     }
     
-    internal var selectedAssets = [DKAsset]()
+    //internal var selectedAssets = [DKAsset]()
+    var selectedAssets = [DKAsset]()
     
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: UIButtonType.Custom)

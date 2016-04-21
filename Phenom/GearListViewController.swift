@@ -179,30 +179,28 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             let fileUrl = NSURL(string: id)
             
-            cell.gearImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth+100)
+            cell.gearImgView.frame = CGRectMake(15, 15, 100, 100)
             cell.gearImgView.setNeedsLayout()
             
             //cell.momentImgView.hnk_setImageFromURL(fileUrl!)
             cell.gearImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                                                 success: { image in
-                                                    
-                                                    //print("image here: \(image)")
-                                                    cell.gearImgView.image = image
-                                                    
+                success: { image in
+                    
+                    //print("image here: \(image)")
+                    cell.gearImgView.image = image
+                    
                 },
-                                                 failure: { error in
-                                                    
-                                                    if ((error) != nil) {
-                                                        print("error here: \(error)")
-                                                        
-                                                        // collapse, this cell - it was prob deleted - error 402
-                                                        
-                                                    }
+                failure: { error in
+                    
+                    if ((error) != nil) {
+                        print("error here: \(error)")
+                        
+                        // collapse, this cell - it was prob deleted - error 402
+                        
+                    }
             })
             
         }
-        
-
         
         var brandHeight = CGFloat()
         var nameHeight = CGFloat()
@@ -222,7 +220,13 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.gearNameLbl.text = ""
         }
         
+        cell.gearBrandLbl.frame = CGRect(x: 15+100+15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
         
+        if (cell.gearBrandLbl.text == "") {
+            cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
+        } else {
+            cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
+        }
         
         if let id = productsDict[indexPath.row]["existsInLocker"].bool {
             if (id) {
@@ -232,16 +236,10 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
-        cell.gearBrandLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
-        
-        if (cell.gearBrandLbl.text == "") {
-            cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
-        } else {
-            cell.gearNameLbl.frame = CGRect(x: 15, y: cell.cellWidth+15+brandHeight+5, width: cell.cellWidth-15-15-44-15, height: nameHeight)
-        }
-        
+        cell.gearAddBtn.frame = CGRect(x: cell.cellWidth-65-15, y: 130-38-15, width: 65, height: 38)
         cell.gearAddBtn.tag = indexPath.row
         cell.gearAddBtn.addTarget(self, action:#selector(gearAddBtnAction), forControlEvents: .TouchUpInside)
+        
 
         
         return cell
@@ -328,7 +326,6 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func addGearToLocker(sender : UIButton) {
-        
         
         let json = JSON(data: singleMomentData)
         let results = json["results"]

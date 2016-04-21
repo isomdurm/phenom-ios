@@ -138,7 +138,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                         // done, reload tableView
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             
-                            self.showEmptyTimeline()
+                            self.showEmptyTable()
                             
                         })
                     }
@@ -179,30 +179,30 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
-    func showEmptyTimeline() {
+    func showEmptyTable() {
         
         // show empty timeline btn
         self.theTableView.scrollEnabled = false
         self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, self.theTableView.frame.size.height))
         self.theTableView.tableHeaderView!.userInteractionEnabled = true
-        let emptyTimelineBtn = UIButton(type: UIButtonType.Custom)
-        emptyTimelineBtn.frame = CGRectMake(self.theTableView.tableHeaderView!.frame.size.width/2-125, self.theTableView.tableHeaderView!.frame.size.height/2-50, 250, 100)
-        emptyTimelineBtn.backgroundColor = UIColor.clearColor()
-        emptyTimelineBtn.titleLabel?.numberOfLines = 2
-        emptyTimelineBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 18)
-        emptyTimelineBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        emptyTimelineBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        emptyTimelineBtn.titleLabel?.textAlignment = NSTextAlignment.Center
-        emptyTimelineBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Normal)
-        emptyTimelineBtn.setTitleColor(UIColor(red:197/255, green:175/255, blue:104/255, alpha:1), forState: UIControlState.Highlighted)
-        emptyTimelineBtn.setTitle("Phenom is more fun with friends! Tap to invite.", forState: UIControlState.Normal)
-        emptyTimelineBtn.addTarget(self, action:#selector(emptyTimelineBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        self.theTableView.tableHeaderView!.addSubview(emptyTimelineBtn)
+        let emptyTableBtn = UIButton(type: UIButtonType.Custom)
+        emptyTableBtn.frame = CGRectMake(self.theTableView.tableHeaderView!.frame.size.width/2-125, self.theTableView.tableHeaderView!.frame.size.height/2-50, 250, 100)
+        emptyTableBtn.backgroundColor = UIColor.clearColor()
+        emptyTableBtn.titleLabel?.numberOfLines = 2
+        emptyTableBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 18)
+        emptyTableBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
+        emptyTableBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        emptyTableBtn.titleLabel?.textAlignment = NSTextAlignment.Center
+        emptyTableBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Normal)
+        emptyTableBtn.setTitleColor(UIColor(red:197/255, green:175/255, blue:104/255, alpha:1), forState: UIControlState.Highlighted)
+        emptyTableBtn.setTitle("Phenom is more fun with friends! Tap to invite.", forState: UIControlState.Normal)
+        emptyTableBtn.addTarget(self, action:#selector(emptyTableBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.theTableView.tableHeaderView!.addSubview(emptyTableBtn)
         
         self.theTableView.reloadData()
     }
     
-    func emptyTimelineBtnAction() {
+    func emptyTableBtnAction() {
         
         //(UIApplication.sharedApplication().delegate as! AppDelegate).activityvc!.inviteFriends()
     }

@@ -57,6 +57,10 @@
 		571CC5411CAB324600A42997 /* FusumaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 571CC5361CAB324600A42997 /* FusumaViewController.xib */; };
 		57242DEF1CAB457600A71A7F /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57242DEE1CAB457600A71A7F /* ComposeViewController.swift */; };
 		57242DF11CAB4F7C00A71A7F /* KMPlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57242DF01CAB4F7C00A71A7F /* KMPlaceholderTextView.swift */; };
+		574BCCFD1CC7F8BB005CD8EA /* EditMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574BCCFC1CC7F8BB005CD8EA /* EditMediaViewController.swift */; };
+		574BCCFF1CC7F8D5005CD8EA /* PickMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574BCCFE1CC7F8D5005CD8EA /* PickMediaViewController.swift */; };
+		574BCD011CC7F8EF005CD8EA /* ComposeMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574BCD001CC7F8EF005CD8EA /* ComposeMediaViewController.swift */; };
+		574BCD031CC81AFA005CD8EA /* goldNav@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 574BCD021CC81AFA005CD8EA /* goldNav@2x.png */; };
 		57654A231CC5B07800316A7F /* blackNav@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57654A221CC5B07800316A7F /* blackNav@2x.png */; };
 		5768B8E71CAC51B9002E9664 /* MainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E61CAC51B9002E9664 /* MainCell.swift */; };
 		5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */; };
@@ -216,6 +220,10 @@
 		571CC5361CAB324600A42997 /* FusumaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FusumaViewController.xib; sourceTree = "<group>"; };
 		57242DEE1CAB457600A71A7F /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		57242DF01CAB4F7C00A71A7F /* KMPlaceholderTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMPlaceholderTextView.swift; sourceTree = "<group>"; };
+		574BCCFC1CC7F8BB005CD8EA /* EditMediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMediaViewController.swift; sourceTree = "<group>"; };
+		574BCCFE1CC7F8D5005CD8EA /* PickMediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickMediaViewController.swift; sourceTree = "<group>"; };
+		574BCD001CC7F8EF005CD8EA /* ComposeMediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeMediaViewController.swift; sourceTree = "<group>"; };
+		574BCD021CC81AFA005CD8EA /* goldNav@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "goldNav@2x.png"; sourceTree = "<group>"; };
 		57654A221CC5B07800316A7F /* blackNav@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackNav@2x.png"; sourceTree = "<group>"; };
 		5768B8E61CAC51B9002E9664 /* MainCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCell.swift; sourceTree = "<group>"; };
 		5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineHeaderView.swift; sourceTree = "<group>"; };
@@ -454,6 +462,7 @@
 				5768B94B1CB6CA48002E9664 /* PopularMomentsViewController.swift */,
 				5768B9471CB58127002E9664 /* FilterViewController.swift */,
 				5768B94D1CB715C9002E9664 /* PeopleListViewController.swift */,
+				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -493,6 +502,7 @@
 		572DF4BA1CA37A1F002184E2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				574BCD021CC81AFA005CD8EA /* goldNav@2x.png */,
 				57654A221CC5B07800316A7F /* blackNav@2x.png */,
 				5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */,
 				5781C3A61CC1626000F37E75 /* add-gear@2x.png */,
@@ -608,7 +618,6 @@
 				5709538C1CA9992D0007B537 /* ChatViewController.swift */,
 				5768B9411CB2247A002E9664 /* GearDetailViewController.swift */,
 				57773D681CBC2C3200A5D868 /* GearListViewController.swift */,
-				570AC5151CA5CF7800441F4A /* SearchViewController.swift */,
 				57C6DD041CA46E5200B939DF /* ExploreViewController.swift */,
 				570AC51D1CA5E2A100441F4A /* MyActivityViewController.swift */,
 				57C6DD081CA46F2A00B939DF /* ProfileViewController.swift */,
@@ -624,10 +633,13 @@
 			children = (
 				57B030561CC56FEF00C53CD2 /* CameraManager.swift */,
 				571CC52B1CAB321100A42997 /* Fusuma */,
-				57242DEE1CAB457600A71A7F /* ComposeViewController.swift */,
 				571CC4FA1CAB149D00A42997 /* CameraViewController.swift */,
 				57A5D1E81CC005BD0056D4FB /* CreateViewController.swift */,
+				57242DEE1CAB457600A71A7F /* ComposeViewController.swift */,
 				57B0305E1CC5848C00C53CD2 /* PickerViewController.swift */,
+				574BCD001CC7F8EF005CD8EA /* ComposeMediaViewController.swift */,
+				574BCCFC1CC7F8BB005CD8EA /* EditMediaViewController.swift */,
+				574BCCFE1CC7F8D5005CD8EA /* PickMediaViewController.swift */,
 			);
 			name = Creation;
 			sourceTree = "<group>";
@@ -772,6 +784,7 @@
 				57773D511CBADEE200A5D868 /* UnitedSansReg-Heavy.otf in Resources */,
 				57773D461CBADEE200A5D868 /* MaisonNeue-Light.ttf in Resources */,
 				570AC5101CA5C0DC00441F4A /* goldTabBar@2x.png in Resources */,
+				574BCD031CC81AFA005CD8EA /* goldNav@2x.png in Resources */,
 				571CC53B1CAB324600A42997 /* FSAlbumViewCell.xib in Resources */,
 				57773D491CBADEE200A5D868 /* MaisonNeue-MediumItalic.ttf in Resources */,
 				57773D5C1CBAE69300A5D868 /* blackTabBar@2x.png in Resources */,
@@ -876,6 +889,7 @@
 				570AC5161CA5CF7800441F4A /* SearchViewController.swift in Sources */,
 				571500591CA3136800AA8744 /* Phenom.xcdatamodeld in Sources */,
 				57242DEF1CAB457600A71A7F /* ComposeViewController.swift in Sources */,
+				574BCCFF1CC7F8D5005CD8EA /* PickMediaViewController.swift in Sources */,
 				5768B93E1CB2193F002E9664 /* EditProfileViewController.swift in Sources */,
 				5768B9441CB32033002E9664 /* SignUpEmailViewController.swift in Sources */,
 				5703D9FF1CC328CF008AAC6D /* DiscoverViewController.swift in Sources */,
@@ -893,6 +907,7 @@
 				57773D6B1CBC69EB00A5D868 /* PeopleCell.swift in Sources */,
 				57DB87B31CC19C8100A27A43 /* Product.swift in Sources */,
 				5768B8E91CAC58F5002E9664 /* TimelineHeaderView.swift in Sources */,
+				574BCCFD1CC7F8BB005CD8EA /* EditMediaViewController.swift in Sources */,
 				57A5D1F11CC060720056D4FB /* RegexParser.swift in Sources */,
 				57B0305F1CC5848C00C53CD2 /* PickerViewController.swift in Sources */,
 				57C6DD0D1CA47BFE00B939DF /* SignUpViewController.swift in Sources */,
@@ -905,6 +920,7 @@
 				571500511CA3136800AA8744 /* AppDelegate.swift in Sources */,
 				5768B9401CB2197C002E9664 /* AddTeamViewController.swift in Sources */,
 				57C6DD091CA46F2A00B939DF /* ProfileViewController.swift in Sources */,
+				574BCD011CC7F8EF005CD8EA /* ComposeMediaViewController.swift in Sources */,
 				57B030571CC56FEF00C53CD2 /* CameraManager.swift in Sources */,
 				5768B9421CB2247A002E9664 /* GearDetailViewController.swift in Sources */,
 				57A5D1E71CBEED3F0056D4FB /* ChatCell.swift in Sources */,

@@ -131,7 +131,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.sendBtn.setTitleColor(UIColor(red:207/255, green:185/255, blue:114/255, alpha:1), forState: UIControlState.Highlighted)
         self.sendBtn.setTitleColor(UIColor.init(white: 0.6, alpha: 1.0), forState: UIControlState.Disabled)
         self.sendBtn.setTitle("Send", forState: UIControlState.Normal)
-        self.sendBtn.addTarget(self, action:"sendBtnAction", forControlEvents:UIControlEvents.TouchUpInside)
+        self.sendBtn.addTarget(self, action:#selector(sendBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         self.chatView.addSubview(self.sendBtn)
         self.sendBtn.enabled = false
         
@@ -380,7 +380,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.theTableView.reloadData()
-                        
                         self.refreshControl.endRefreshing()
                         
                     })
@@ -650,12 +649,19 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         print("sendBtnAction hit")
         
-        return
+        if (self.theTextView.text == "") {
+            return
+        }
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/comment/\(self.passedMomentId)"
+        // for at mentions - find @word and add as a parameter???
+        
+        
+        // https://api1.phenomapp.com:8081/moment/:id/comment?commentText=Awesome @clayzug&references=clayzug
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(self.passedMomentId)/comment"
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "PUT"
+        let params = "commentText=\(self.theTextView.text)"
+        let type = "POST"
         
         (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             if (error == nil) {
@@ -676,9 +682,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     // reload table
                     
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    
-                    
+                        self.theTextView.text = ""
+                        self.queryForChat()
+                        
+                    })
                     
                 } else {
                     // print("URL Session Task Failed: %@", error!.localizedDescription);

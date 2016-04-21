@@ -317,8 +317,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             
             "likedMomentIds" : [],
             "followingUserIds" : [],
-            "savedSearchGear" : [],
-            "savedSearchNames" : [],
+            "searchedGearWords" : [],
+            "searchedPeopleWords" : [],
             
             "rateAlertShown" : false
         ]

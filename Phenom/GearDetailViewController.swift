@@ -139,20 +139,37 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         }
         
         
-        
         let buyBtn = UIButton.init(type: .Custom)
         buyBtn.frame = CGRectMake(10, gearScrollView.frame.size.height+10, theScrollView.frame.size.width-20, 50)
-        buyBtn.backgroundColor = UINavigationBar.appearance().tintColor
-        buyBtn.setTitle("BUY NOW", forState: .Normal)
-        buyBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 16)
-        buyBtn.addTarget(self, action:#selector(buyBtnAction), forControlEvents: .TouchUpInside)
+        //buyBtn.setImage(UIImage(named: "goldNav.png"), forState: UIControlState.Normal)
+        
+        buyBtn.backgroundColor = UIColor.clearColor()
+        buyBtn.addTarget(self, action:#selector(buyBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        buyBtn.titleLabel?.numberOfLines = 1
+        buyBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
+        buyBtn.contentHorizontalAlignment = .Center
+        buyBtn.contentVerticalAlignment = .Center
+        buyBtn.titleLabel?.textAlignment = .Center
         theScrollView.addSubview(buyBtn)
         
+        if (productUrl == "") {
+            buyBtn.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+            buyBtn.setTitleColor(UIColor.grayColor(), forState: .Normal)
+            buyBtn.setTitleColor(UIColor.grayColor(), forState: .Selected)
+            //buyBtn.setBackgroundImage(UIImage(named: "blackNav.png"), forState: .Normal)
+            buyBtn.setTitle("NOT AVAILABLE", forState: UIControlState.Normal)
+        } else {
+            buyBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            buyBtn.setTitleColor(UIColor.whiteColor(), forState: .Selected)
+            buyBtn.setBackgroundImage(UIImage(named: "goldNav.png"), forState: .Normal)
+            buyBtn.setTitle("BUY NOW", forState: UIControlState.Normal)
+        }
         
         let brandImgView = UIImageView(frame: CGRectMake(10, gearScrollView.frame.size.height+70+10, gearScrollView.frame.size.width/2-20, 70-20))
         brandImgView.contentMode = UIViewContentMode.ScaleAspectFit
         brandImgView.backgroundColor = UIColor.clearColor()
         brandImgView.layer.masksToBounds = true
+        
         
         // IF brandLogoImageUrl than get it
         if (brandLogoImageUrl != "") {
@@ -184,6 +201,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         
         lockerBtn.frame = CGRectMake(gearScrollView.frame.size.width-10-50, gearScrollView.frame.size.height+70+10, 50, 50)
         lockerBtn.backgroundColor = UIColor.darkGrayColor()
+        lockerBtn.setImage(UIImage(named: "add-gear.png"), forState: UIControlState.Normal)
         lockerBtn.addTarget(self, action:#selector(lockerBtnAction), forControlEvents: .TouchUpInside)
         theScrollView.addSubview(lockerBtn)
         if (existsInLocker) {

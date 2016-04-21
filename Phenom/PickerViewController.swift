@@ -45,6 +45,9 @@ class PickerViewController: DKImagePickerController {
 //        pickerController.defaultSelectedAssets = nil
 //        //pickerController.defaultSelectedAssets = self.assets
 
+        self.assetType = .AllAssets
+        self.sourceType = .Photo // sourceType // by hiding this - it shows the camera button as the first item
+        
         self.showsCancelButton = true
         self.maxSelectableCount = 1
         self.singleSelect = true
@@ -97,6 +100,7 @@ class PickerViewController: DKImagePickerController {
 //            //vc.passedImage =
 //            //self.navigationController?.pushViewController(vc, animated: true)
 //            self.pushViewController(vc, animated: true)
+        
         }
         
 //        self.presentViewController(pickerController, animated: false) {}
@@ -113,11 +117,22 @@ class PickerViewController: DKImagePickerController {
 //        
 //        self.view.addSubview(imagePickerController.view)
     
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //
+        self.defaultSelectedAssets = nil
+        //self.selectedAssets.removeAllObjects()
+        //
+        
     }
     
     override func viewDidAppear(animated: Bool) {
