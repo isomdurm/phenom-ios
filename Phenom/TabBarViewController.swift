@@ -46,26 +46,16 @@ class TabBarViewController: UITabBarController {
     
     func centerBtnAction() {
         
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        }
+        
         UIView.animateWithDuration(0.38, delay:0.0, options: .CurveEaseOut, animations: {
             
             (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.92, 0.92)
             
             }, completion: { finished in
                 if (finished) {
-                    
-//                    let pickerController = PickerViewController()
-//                    pickerController.assetType = .AllPhotos // assetType
-//                    pickerController.allowsLandscape = false // allowsLandscape
-//                    pickerController.allowMultipleTypes = false // allowMultipleType
-//                    //pickerController.sourceType = .Photo // sourceType // by hiding this - it shows the camera button as the first item
-//                    pickerController.singleSelect = true //singleSelect
-//                    // pickerController.showsEmptyAlbums = false
-//                    // pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
-//                    pickerController.showsCancelButton = true
-//                    // Clear all the selected assets if you used the picker controller as a single instance.
-//                    pickerController.defaultSelectedAssets = nil
-//                    //pickerController.defaultSelectedAssets = self.assets
-//                   
                     
                     //let newnav = UINavigationController(rootViewController: CreateViewController()) //PickerViewController() //CameraViewController()  //
                     //newnav.navigationController?.navigationBarHidden = true

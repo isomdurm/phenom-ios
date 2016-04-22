@@ -477,51 +477,8 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
         let gearArray = JSON(data: gearData)
         let results = gearArray["results"]
         
-        
-        
         let vc = GearDetailViewController()
-        
-        
-        let id = results[sender.tag]["id"].number
-        let sku = results[sender.tag]["sku"].string
-        let sourceId = results[sender.tag]["sourceId"].number
-        let sourceProductId = results[sender.tag]["sourceProductId"].string
-        
-        let name = results[sender.tag]["name"].string
-        let brand = results[sender.tag]["brand"].string
-        
-        let productDescription = results[sender.tag]["description"].string
-        let productUrl = results[sender.tag]["productUrl"].string
-        let imageUrl = results[sender.tag]["imageUrl"].string
-        
-        let lockerCount = results[sender.tag]["lockerCount"].number
-        let trainingMomentCount = results[sender.tag]["trainingMomentCount"].number
-        let gamingMomentCount = results[sender.tag]["gamingMomentCount"].number
-        let stylingMomentCount = results[sender.tag]["stylingMomentCount"].number
-        
-        let existsInLocker = results[sender.tag]["existsInLocker"].bool
-        
-        
-        vc.id = "\(id!)"
-        vc.sku = sku!
-        vc.sourceId = "\(sourceId!)"
-        vc.sourceProductId = sourceProductId!
-        vc.name = name!
-        vc.brand = brand!
-        
-        if let brandLogoImageUrl = results[sender.tag]["brandLogoImageUrl"].string {
-            vc.brandLogoImageUrl = brandLogoImageUrl
-        }
-        
-        vc.productDescription = productDescription!
-        vc.productUrl = productUrl!
-        vc.imageUrl = imageUrl!
-        vc.lockerCount = lockerCount!
-        vc.trainingMomentCount = trainingMomentCount!
-        vc.gamingMomentCount = gamingMomentCount!
-        vc.stylingMomentCount = stylingMomentCount!
-        vc.existsInLocker = existsInLocker!
-        
+        vc.passedGearData = results[sender.tag] 
         navigationController?.pushViewController(vc, animated: true)
         
     }

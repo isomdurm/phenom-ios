@@ -48,9 +48,9 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.blueColor()
+        backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
         
@@ -595,6 +595,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
                     let description = json["description"].string!
                     let firstName = json["firstName"].string!
                     let lastName = json["lastName"].string!
+                    let email = json["email"].string!
                     
                     let followersCount = json["followersCount"].number!
                     let followingCount = json["followingCount"].number!
@@ -614,6 +615,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
                     defaults.setObject(description, forKey: "description")
                     defaults.setObject(firstName, forKey: "firstName")
                     defaults.setObject(lastName, forKey: "lastName")
+                    defaults.setObject(email, forKey: "email")
                     defaults.setObject(followersCount, forKey: "followersCount")
                     defaults.setObject(followingCount, forKey: "followingCount")
                     

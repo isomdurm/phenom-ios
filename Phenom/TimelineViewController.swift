@@ -24,7 +24,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
     var isPushed: Bool = false
     
-    var pageNumber = 1
+    var momentNumber = 30
     var loadNextPage: Bool = false
     var playingMedia: Bool = false
     
@@ -110,6 +110,15 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         isPushed = false
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        }
+        
+    }
+    
     func searchBtnAction() {
         
         self.navigationController?.pushViewController(ExploreViewController(), animated: true)
@@ -119,9 +128,16 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func queryForTimeline() {
         
+        // Moment/feed?since=this morning&amount=YYY
+        
+        
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed"
         let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "date=\(date)&amount=30"
+        
+        //let oldDateTime = NSDate(timeIntervalSinceReferenceDate: -86400.0)
+        //let hmmm = NSDate().timeIntervalSinceDate(oldDateTime) * 1000
+        
+        let params = "date=\(date)&amount=\(momentNumber)"
         let type = "GET"
         
         (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
@@ -141,8 +157,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     self.momentsData = dataFromString
                     
-                    //let results = json["results"]
-                    //print("timeline results: \(results)")
+                    let results = json["results"]
+                    print("timeline results.count: \(results.count)")
                     
                     // done, reload tableView
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -183,6 +199,19 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 self.activityIndicator.stopAnimating()
                 self.activityIndicator.removeFromSuperview()
+                
+                
+                // IF hasNotAddedAMoment, show view
+                
+                let defaults = NSUserDefaults.standardUserDefaults()
+                
+                let hasAddedAMoment = defaults.boolForKey("hasAddedAMoment")
+                if (!hasAddedAMoment) {
+                  
+                    (UIApplication.sharedApplication().delegate as! AppDelegate).showAddMomentView()
+                    
+                }
+                
                 
                 //(UIApplication.sharedApplication().delegate as! AppDelegate).queryForActivityCountSinceLastVisit()
         })
@@ -360,12 +389,25 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             
         }
         
+//        NSDateFormatter *rfc3339DateFormatter = [[NSDateFormatter alloc] init];
+//        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+//        
+//        [rfc3339DateFormatter setLocale:enUSPOSIXLocale];
+//        [rfc3339DateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss '+0000'"];
+//        [rfc3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        
         if let id = results[indexPath.row]["createdAt"].string {
             //let strDate = "2015-11-01T00:00:00Z" // "2015-10-06T15:42:34Z"
+            
             let dateFormatter = NSDateFormatter()
+            //dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+            // "yyyy-MM-dd HH:mm:ss '+0000'" //
+            //dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+            
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"  //"yyyy-MM-dd'T'HH:mm:ssZ"
             let date = dateFormatter.dateFromString(id)!
-            let since = (UIApplication.sharedApplication().delegate as! AppDelegate).timeAgoSinceDate(date, numericDates: true)
+        
+            let since = (UIApplication.sharedApplication().delegate as! AppDelegate).timeAgoSinceDate(date, numericDates: false)
             
             var dateStr = ""
             if let ht = results[indexPath.row]["user"]["hometown"].string {
@@ -506,23 +548,20 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             //end of loading
             //print("this section hit: \(indexPath.row)")
             
-//            let json = JSON(data: momentsData)
-//            let lastMomentNum = json["results"].count-1
-//            
-//            if (indexPath.row == lastMomentNum) {
-//                
-//                if (!loadNextPage) {
-//                    
-//                    print("load next page")
-//                    loadNextPage = true
-//                    
-//                    pageNumber = pageNumber+1
-//                    
-//                    queryForTimeline()
-//                    
-//                    
-//                }
-//            }
+            let json = JSON(data: momentsData)
+            let lastMomentNum = json["results"].count-1
+            
+            if (indexPath.row == lastMomentNum) {
+                
+                if (!loadNextPage) {
+                    
+                    print("load next page")
+                    loadNextPage = true
+                    
+                    self.getNextPage()
+                    
+                }
+            }
         }
         
     }
@@ -540,8 +579,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     func getNextPage() {
+        print("getNextPage hit")
         
-        pageNumber = pageNumber + 1
+        momentNumber = momentNumber + 30
         
         queryForTimeline()
         
@@ -771,8 +811,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         alertController.addAction(copyUrlAction)
         self.presentViewController(alertController, animated: true) {
         }
-        
-        
         
     }
     

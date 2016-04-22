@@ -27,6 +27,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     var tabBtn1 = UIButton(type: UIButtonType.Custom)
     var tabBtn2 = UIButton(type: UIButtonType.Custom)
     
+    var isTyping: Bool = false
+    var savedSearchArray = NSMutableArray()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,9 +45,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
+        backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
         
@@ -69,7 +72,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         bg.layer.cornerRadius = 7
         bg.layer.masksToBounds = true
         
-        theTextField.frame = CGRectMake(15+10, 5, searchContainerView.frame.size.width-50, 34)
+        theTextField.frame = CGRectMake(15+14, 6, searchContainerView.frame.size.width-50, 34)
         theTextField.backgroundColor = UIColor.clearColor()
         theTextField.delegate = self
         theTextField.textColor = UIColor.whiteColor() // UIColor(red:42/255, green:42/255, blue:42/255, alpha:1)
@@ -80,6 +83,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         theTextField.placeholder = "Search people and gear!"
         theTextField.autocapitalizationType = UITextAutocapitalizationType.None
         theTextField.autocorrectionType = UITextAutocorrectionType.No
+        theTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         searchContainerView.addSubview(theTextField)
         //theTextField.addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         theTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
@@ -201,9 +205,19 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn1.selected = true
         tabBtn2.selected = false
         
-        // load people
-        if (self.theTextField.text != "") {
-            self.queryForPeople(self.theTextField.text!)
+        if (self.isTyping) {
+            
+            self.checkForSavedSearchMatches()
+            
+        } else {
+            
+            // load people
+            if (self.theTextField.text != "") {
+                
+                self.view.endEditing(true)
+                
+                self.queryForPeople(self.theTextField.text!)
+            }
         }
         
     }
@@ -212,9 +226,19 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         tabBtn1.selected = false
         tabBtn2.selected = true
         
-        // load gear
-        if (self.theTextField.text != "") {
-            self.queryForGear(self.theTextField.text!)
+        if (self.isTyping) {
+            
+            self.checkForSavedSearchMatches()
+            
+        } else {
+            
+            // load gear
+            if (self.theTextField.text != "") {
+                
+                self.view.endEditing(true)
+                
+                self.queryForGear(self.theTextField.text!)
+            }
         }
         
     }
@@ -271,18 +295,26 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
         print("textFieldDidChange hit: \(textField.text!)")
         
+        if (!self.isTyping) {
+            self.isTyping = true
+        }
         
+        self.checkForSavedSearchMatches()
         
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        let space = " "
-        if (string == space) {
-            return false
+        let currentString: NSString = textField.text!
+        if (currentString == "") {
+            let space = " "
+            if (string == space) {
+                return false
+            }
         }
-        let maxLength = 50
-        let currentString: NSString = theTextField.text!
+        
+        let maxLength = 100
+        //let currentString: NSString = theTextField.text!
         let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
         
         return newString.length <= maxLength
@@ -292,6 +324,9 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
         if (textField == theTextField) {
+            
+            self.isTyping = false
+            self.view.endEditing(true)
             
             if (self.tabBtn1.selected) {
                 self.queryForPeople(textField.text!)
@@ -308,6 +343,55 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    func checkForSavedSearchMatches() {
+        
+        self.savedSearchArray.removeAllObjects()
+        
+        // find matches
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        if (self.tabBtn1.selected) {
+            
+            // find matches in saved people array
+            
+            let array = defaults.arrayForKey("searchedPeopleWords")
+            let ma = NSMutableArray(array: array!)
+            
+            for obj in ma {
+                
+                if (obj.hasPrefix(self.theTextField.text!)) {
+                    
+                    self.savedSearchArray.addObject(obj)
+                }
+            }
+            
+        } else if (self.tabBtn2.selected) {
+            
+            // find matches in saved gear array
+            
+            let array = defaults.arrayForKey("searchedGearWords")
+            let ma = NSMutableArray(array: array!)
+            
+            for obj in ma {
+                
+                if (obj.hasPrefix(self.theTextField.text!)) {
+                    
+                    self.savedSearchArray.addObject(obj)
+                }
+            }
+        } else {
+            print("something is wrong")
+        }
+        
+        
+        // reload table to show search saved results
+        
+        self.theTableView.reloadData()
+        
+        //
+        
+    }
     
     func queryForPeople(str : String) {
         
@@ -500,22 +584,29 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if (self.tabBtn1.selected) {
-            let json = JSON(data: peopleData)
-            return json["results"].count
+        if (self.isTyping) {
+            return savedSearchArray.count
         } else {
-            let json = JSON(data: gearData)
-            return json["results"]["products"].count
+            if (self.tabBtn1.selected) {
+                let json = JSON(data: peopleData)
+                return json["results"].count
+            } else {
+                let json = JSON(data: gearData)
+                return json["results"]["products"].count
+            }
         }
-        
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        if (self.tabBtn1.selected) {
-            return 15+44+15
+        if (self.isTyping) {
+            return 60
         } else {
-            return 130
+            if (self.tabBtn1.selected) {
+                return 15+44+15
+            } else {
+                return 130
+            }
         }
         
     }
@@ -526,149 +617,162 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.cellWidth = self.view.frame.size.width
         
         
-        if (tabBtn1.selected) {
-        
-            //let json = JSON(data: peopleData)
-            //let results = json["results"]
-            
-            cell.peopleImgView.hidden = false
-            cell.peopleNameLbl.hidden = false
-            cell.peopleUsernameLbl.hidden = false
-            cell.peopleFollowBtn.hidden = false
-            
-            cell.gearImgView.hidden = true
-            cell.gearNameLbl.hidden = true
-            cell.gearBrandLbl.hidden = true
-            cell.gearAddBtn.hidden = true
-            
-            cell.peopleImgView.frame = CGRectMake(15, 15, 44, 44)
-            cell.peopleNameLbl.frame = CGRectMake(15+50+10, 15, cell.cellWidth-15-50-15-50-15, 20)
-            cell.peopleUsernameLbl.frame = CGRectMake(15+50+10, 15+20, cell.cellWidth-15-50-15-50-15, 20)
-            cell.peopleFollowBtn.frame = CGRectMake(cell.cellWidth-15-40, 20, 40, 40)
-            
-            let people = JSON(data: peopleData)
-            let results = people["results"]
-            
-            if let person = results[indexPath.row]["username"].string {
-                cell.peopleUsernameLbl.text = person
-            }
-            
-            if let name = results[indexPath.row]["firstName"].string {
-                cell.peopleNameLbl.text = ("\(name) \(results[indexPath.row]["lastName"])")
-            }
-            
-            if let id = results[indexPath.row]["imageUrl"].string {
-                let fileUrl = NSURL(string: id)
-                
-                cell.peopleImgView.frame = CGRectMake(15, 10, 44, 44)
-                cell.peopleImgView.setNeedsLayout()
-                cell.peopleImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                    success: { image in
-                        
-                        //print("image here: \(image)")
-                        cell.peopleImgView.image = image
-                        
-                    },
-                    failure: { error in
-                        
-                        if ((error) != nil) {
-                            print("error here: \(error)")
-                            
-                            // collapse, this cell - it was prob deleted - error 402
-                            
-                        }
-                })
-            }
-            
-            
-        } else {
-            
-            //let json = JSON(data: gearData)
-            //let results = json["results"]["products"]
+        if (self.isTyping) {
             
             cell.peopleImgView.hidden = true
             cell.peopleNameLbl.hidden = true
             cell.peopleUsernameLbl.hidden = true
             cell.peopleFollowBtn.hidden = true
             
-            cell.gearImgView.hidden = false
-            cell.gearNameLbl.hidden = false
-            cell.gearBrandLbl.hidden = false
-            cell.gearAddBtn.hidden = false
+            cell.gearImgView.hidden = true
+            cell.gearNameLbl.hidden = true
+            cell.gearBrandLbl.hidden = true
+            cell.gearAddBtn.hidden = true
             
-            let json = JSON(data: self.gearData)
-            let results = json["results"]
-            let productsDict = results["products"]
+            let result = self.savedSearchArray.objectAtIndex(indexPath.row) as! String
+            cell.textLabel?.text = result
+            cell.textLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
+            cell.textLabel?.textColor = UIColor.whiteColor()
             
-            if let id = productsDict[indexPath.row]["imageUrl"].string {
+        } else {
+            
+            cell.textLabel?.text = ""
+            
+            if (tabBtn1.selected) {
                 
-                let fileUrl = NSURL(string: id)
+                //let json = JSON(data: peopleData)
+                //let results = json["results"]
                 
-                cell.gearImgView.frame = CGRectMake(15, 15, 100, 100)
-                cell.gearImgView.setNeedsLayout()
+                cell.peopleImgView.hidden = false
+                cell.peopleNameLbl.hidden = false
+                cell.peopleUsernameLbl.hidden = false
+                cell.peopleFollowBtn.hidden = false
                 
-                //cell.momentImgView.hnk_setImageFromURL(fileUrl!)
-                cell.gearImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                    success: { image in
-                        
-                        //print("image here: \(image)")
-                        cell.gearImgView.image = image
-                        
-                    },
-                    failure: { error in
-                        
-                        if ((error) != nil) {
-                            print("error here: \(error)")
-                            
-                            // collapse, this cell - it was prob deleted - error 402
-                            
-                        }
-                })
+                cell.gearImgView.hidden = true
+                cell.gearNameLbl.hidden = true
+                cell.gearBrandLbl.hidden = true
+                cell.gearAddBtn.hidden = true
                 
-            }
-            
-            var brandHeight = CGFloat()
-            var nameHeight = CGFloat()
-            
-            if let id = productsDict[indexPath.row]["brand"].string {
-                cell.gearBrandLbl.text = id
-                brandHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearBrandLbl.font, width: self.view.frame.size.width-15-15-44-15)
-            } else {
-                brandHeight = 0
-                cell.gearBrandLbl.text = ""
-            }
-            
-            if let id = productsDict[indexPath.row]["name"].string {
-                cell.gearNameLbl.text = id
-                nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearNameLbl.font, width: self.view.frame.size.width-15-15-44-15)
-            } else {
-                cell.gearNameLbl.text = ""
-            }
-            
-            cell.gearBrandLbl.frame = CGRect(x: 15+100+15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
-            
-            if (cell.gearBrandLbl.text == "") {
-                cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
-            } else {
-                cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
-            }
-            
-            if let id = productsDict[indexPath.row]["existsInLocker"].bool {
-                if (id) {
-                    cell.gearAddBtn.selected = true
-                } else {
-                    cell.gearAddBtn.selected = false
+                cell.peopleImgView.frame = CGRectMake(15, 15, 44, 44)
+                cell.peopleNameLbl.frame = CGRectMake(15+50+10, 15, cell.cellWidth-15-50-15-50-15, 20)
+                cell.peopleUsernameLbl.frame = CGRectMake(15+50+10, 15+20, cell.cellWidth-15-50-15-50-15, 20)
+                cell.peopleFollowBtn.frame = CGRectMake(cell.cellWidth-15-40, 20, 40, 40)
+                
+                let people = JSON(data: peopleData)
+                let results = people["results"]
+                
+                if let person = results[indexPath.row]["username"].string {
+                    cell.peopleUsernameLbl.text = person
                 }
+                
+                if let name = results[indexPath.row]["firstName"].string {
+                    cell.peopleNameLbl.text = ("\(name) \(results[indexPath.row]["lastName"])")
+                }
+                
+                if let id = results[indexPath.row]["imageUrl"].string {
+                    let fileUrl = NSURL(string: id)
+                    
+                    cell.peopleImgView.frame = CGRectMake(15, 10, 44, 44)
+                    cell.peopleImgView.setNeedsLayout()
+                    cell.peopleImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                        success: { image in
+                            
+                            //print("image here: \(image)")
+                            cell.peopleImgView.image = image
+                            
+                        },
+                        failure: { error in
+                            
+                            if ((error) != nil) {
+                                print("error here: \(error)")
+                                
+                                // collapse, this cell - it was prob deleted - error 402
+                                
+                            }
+                    })
+                }
+                
+                
+            } else {
+                
+                //let json = JSON(data: gearData)
+                //let results = json["results"]["products"]
+                
+                cell.peopleImgView.hidden = true
+                cell.peopleNameLbl.hidden = true
+                cell.peopleUsernameLbl.hidden = true
+                cell.peopleFollowBtn.hidden = true
+                
+                cell.gearImgView.hidden = false
+                cell.gearNameLbl.hidden = false
+                cell.gearBrandLbl.hidden = false
+                cell.gearAddBtn.hidden = false
+                
+                let json = JSON(data: self.gearData)
+                let results = json["results"]
+                let productsDict = results["products"]
+                
+                if let id = productsDict[indexPath.row]["imageUrl"].string {
+                    
+                    let fileUrl = NSURL(string: id)
+                    
+                    cell.gearImgView.frame = CGRectMake(15, 15, 100, 100)
+                    cell.gearImgView.setNeedsLayout()
+                    
+                    //cell.momentImgView.hnk_setImageFromURL(fileUrl!)
+                    cell.gearImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+                        success: { image in
+                            
+                            //print("image here: \(image)")
+                            cell.gearImgView.image = image
+                            
+                        },
+                        failure: { error in
+                            
+                            if ((error) != nil) {
+                                print("error here: \(error)")
+                                
+                                // collapse, this cell - it was prob deleted - error 402
+                                
+                            }
+                    })
+                    
+                }
+                
+                var nameHeight = CGFloat()
+                
+                if let id = productsDict[indexPath.row]["brand"].string {
+                    cell.gearBrandLbl.text = id                    
+                } else {
+                    cell.gearBrandLbl.text = ""
+                }
+                
+                if let id = productsDict[indexPath.row]["name"].string {
+                    cell.gearNameLbl.text = id
+                    nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearNameLbl.font, width: self.view.frame.size.width-15-15-44-15)
+                } else {
+                    nameHeight = 0
+                    cell.gearNameLbl.text = ""
+                }
+                
+                cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-100-15-15, height: nameHeight)
+                cell.gearBrandLbl.frame = CGRect(x: 15+100+15, y: 15+nameHeight, width: cell.cellWidth-15-100-15-15, height: 20)
+                
+                if let id = productsDict[indexPath.row]["existsInLocker"].bool {
+                    if (id) {
+                        cell.gearAddBtn.selected = true
+                    } else {
+                        cell.gearAddBtn.selected = false
+                    }
+                }
+                
+                cell.gearAddBtn.frame = CGRect(x: cell.cellWidth-65-15, y: 130-38-15, width: 65, height: 38)
+                cell.gearAddBtn.tag = indexPath.row
+                cell.gearAddBtn.addTarget(self, action:#selector(gearAddBtnAction), forControlEvents: .TouchUpInside)
+                
             }
-            
-            cell.gearAddBtn.frame = CGRect(x: cell.cellWidth-65-15, y: 130-38-15, width: 65, height: 38)
-            cell.gearAddBtn.tag = indexPath.row
-            cell.gearAddBtn.addTarget(self, action:#selector(gearAddBtnAction), forControlEvents: .TouchUpInside)
-            
             
         }
-       
-        
         
         return cell
         
@@ -685,7 +789,51 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        
+        if (self.isTyping) {
+            self.isTyping = false
+            self.view.endEditing(true)
+            
+            let result = self.savedSearchArray.objectAtIndex(indexPath.row) as! String
+            self.theTextField.text = result
+            
+            if (tabBtn1.selected) {
+                self.queryForPeople(self.theTextField.text!)
+            } else if (tabBtn2.selected) {
+                self.queryForGear(self.theTextField.text!)
+            } else {
+                print("something is wrong")
+            }
+            
+        } else {
+            
+            if (tabBtn1.selected) {
+                
+                // person
+                let json = JSON(data: peopleData)
+                let results = json["results"]
+                if let _ = results[indexPath.row]["id"].string {
+                    let vc = ProfileViewController()
+                    vc.passedUserData = results[indexPath.row]
+                    navigationController?.pushViewController(vc, animated: true)
+                }
+                
+            } else if (tabBtn2.selected) {
+                
+                // gear
+                let json = JSON(data: self.gearData)
+                let results = json["results"]
+                let productsDict = results["products"]
+                
+                let vc = GearDetailViewController()
+                vc.passedGearData = productsDict[indexPath.row]
+                navigationController?.pushViewController(vc, animated: true)
+
+                
+            } else {
+                print("something went wrong")
+            }
+            
+        }
         
     }
     
@@ -705,7 +853,6 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
             break;
         }
     }
-    
     
     
     func gearAddBtnAction(sender : UIButton) {

@@ -60,13 +60,13 @@ class SearchCell: UITableViewCell {
         
         // gear
         
-        gearImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+        gearImgView.backgroundColor = UIColor.whiteColor() //UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         gearImgView.contentMode = UIViewContentMode.ScaleAspectFill
         gearImgView.userInteractionEnabled = true
         contentView.addSubview(gearImgView)
         gearImgView.layer.masksToBounds = true
         
-        gearImgView.backgroundColor = UIColor.clearColor()
+        gearNameLbl.backgroundColor = UIColor.clearColor()
         gearNameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         gearNameLbl.textColor = UIColor.whiteColor()
         gearNameLbl.textAlignment = NSTextAlignment.Left

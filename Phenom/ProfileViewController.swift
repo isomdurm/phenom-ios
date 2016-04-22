@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import Haneke
+import QuartzCore
 import AVFoundation
 import MobileCoreServices
 import Just
@@ -102,14 +103,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let searchBtn = UIButton(type: UIButtonType.Custom)
-        searchBtn.frame = CGRectMake(15, 20, 44, 44)
-        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
-        //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        searchBtn.backgroundColor = UIColor.clearColor()
-        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-        navBarView.addSubview(searchBtn)
-        
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = username.uppercaseString
@@ -154,10 +147,27 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         profileImgView.frame = CGRectMake(profilePicWidth, 0, profilePicWidth, profilePicWidth)
         profileImgView.backgroundColor = UIColor.lightGrayColor()
+        profileImgView.contentMode = UIViewContentMode.ScaleAspectFill
         profileContainerView.addSubview(profileImgView)
         let fileUrl = NSURL(string: imageUrl)
         profileImgView.setNeedsLayout()
-        profileImgView.hnk_setImageFromURL(fileUrl!) 
+        profileImgView.layer.masksToBounds = true
+        
+        //profileImgView.hnk_setImageFromURL(fileUrl!)
+        profileImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+            success: { image in
+                //print("image here: \(image)")
+                self.profileImgView.image = image
+            },
+            failure: { error in
+                if ((error) != nil) {
+                    print("error here: \(error)")
+                    // collapse, this cell - it was prob deleted - error 402
+                }
+        })
+        
+        
+        
         
         nameLbl.frame = CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+padding, headerViewWidth, nameHeight)
         nameLbl.backgroundColor = UIColor.clearColor()
@@ -366,12 +376,20 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             navigationController?.interactivePopGestureRecognizer!.delegate = self
         }
         
-        
         //
         // to update user defaults
         //
         self.theTableView.reloadData()
         //
+        
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        }
         
     }
     
@@ -421,6 +439,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if (initialProfile) {
             
+            let searchBtn = UIButton(type: UIButtonType.Custom)
+            searchBtn.frame = CGRectMake(15, 20, 44, 44)
+            searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+            //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+            searchBtn.backgroundColor = UIColor.clearColor()
+            searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            navBarView.addSubview(searchBtn)
+            
             let settingsBtn = UIButton(type: UIButtonType.Custom)
             settingsBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
             settingsBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
@@ -453,9 +479,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             let backBtn = UIButton(type: UIButtonType.Custom)
             backBtn.frame = CGRectMake(15, 20, 44, 44)
-            backBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
+            backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
             //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
-            backBtn.backgroundColor = UIColor.redColor()
+            backBtn.backgroundColor = UIColor.clearColor()
             backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
             navBarView.addSubview(backBtn)
             
@@ -496,7 +522,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     self.userId = user["id"].string!
                     self.username = user["username"].string!
-                    self.hometown = user["hometown"].string!
+                    
+                    if let _ = user["hometown"].string {
+                        self.hometown = user["hometown"].string!
+                    } else {
+                        self.hometown = ""
+                    }
+                    
                     self.imageUrl = user["imageUrl"].string!
                     self.bio = user["description"].string!
                     self.firstName = user["firstName"].string!
@@ -510,7 +542,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     let sport = user["sport"].string! // make an array
                     self.sports = [sport]
-                    
+
                     
                     if (self.userId == uid) {
                         
@@ -606,6 +638,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 inviteBtn.selected = false
                 
                 inviteBtn.setTitle("UNFOLLOW", forState: .Normal)
+                theTableView.reloadData()
                 unfollowAction(sender)
                 
             } else {
@@ -613,6 +646,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 inviteBtn.selected = true
                 
                 inviteBtn.setTitle("FOLLOW", forState: .Normal)
+                theTableView.reloadData() 
                 followAction(sender)
                 
             }
@@ -1663,11 +1697,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let json = JSON(data: momentsData)
         let results = json["results"]
         
-        if let _ = results[sender.tag]["user"]["id"].string {
+        if let id = results[sender.tag]["user"]["id"].string {
             
-            let vc = ProfileViewController()
-            vc.passedUserData = results[sender.tag]["user"]
-            navigationController?.pushViewController(vc, animated: true)
+            if (id != userId) {
+                let vc = ProfileViewController()
+                vc.passedUserData = results[sender.tag]["user"]
+                navigationController?.pushViewController(vc, animated: true)
+            }
             
             isPushed = true
         }
@@ -1859,6 +1895,30 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if let _ = results[sender.tag]["id"].string {
             
         }
+        
+        let alertController = UIAlertController(title:nil, message:nil, preferredStyle:.ActionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        }
+        let reportAction = UIAlertAction(title: "Report", style: .Destructive) { (action) in
+            
+        }
+        let facebookAction = UIAlertAction(title: "Share to Facebook", style: .Default) { (action) in
+            
+        }
+        let twitterAction = UIAlertAction(title: "Tweet", style: .Default) { (action) in
+            
+        }
+        let copyUrlAction = UIAlertAction(title: "Copy Share URL", style: .Default) { (action) in
+            
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(reportAction)
+        alertController.addAction(facebookAction)
+        alertController.addAction(twitterAction)
+        alertController.addAction(copyUrlAction)
+        self.presentViewController(alertController, animated: true) {
+        }
+        
     }
     
     
@@ -1972,49 +2032,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     //print("hmm: \(results)")
                     
                     let vc = GearDetailViewController()
-                    
-                    let id = results[tappedIndexPath.row]["id"].number
-                    let sku = results[tappedIndexPath.row]["sku"].string
-                    let sourceId = results[tappedIndexPath.row]["sourceId"].number
-                    let sourceProductId = results[tappedIndexPath.row]["sourceProductId"].string
-                    
-                    let name = results[tappedIndexPath.row]["name"].string
-                    let brand = results[tappedIndexPath.row]["brand"].string
-                    
-                    let productDescription = results[tappedIndexPath.row]["description"].string
-                    let productUrl = results[tappedIndexPath.row]["productUrl"].string
-                    let imageUrl = results[tappedIndexPath.row]["imageUrl"].string
-                    
-                    let lockerCount = results[tappedIndexPath.row]["lockerCount"].number
-                    let trainingMomentCount = results[tappedIndexPath.row]["trainingMomentCount"].number
-                    let gamingMomentCount = results[tappedIndexPath.row]["gamingMomentCount"].number
-                    let stylingMomentCount = results[tappedIndexPath.row]["stylingMomentCount"].number
-                    
-                    let existsInLocker = results[tappedIndexPath.row]["existsInLocker"].bool
-                    
-                    
-                    vc.id = "\(id!)"
-                    vc.sku = sku!
-                    vc.sourceId = "\(sourceId!)"
-                    vc.sourceProductId = sourceProductId!
-                    vc.name = name!
-                    vc.brand = brand!
-                    
-                    if let brandLogoImageUrl = results[tappedIndexPath.row]["brandLogoImageUrl"].string {
-                        vc.brandLogoImageUrl = brandLogoImageUrl
-                    }
-                    
-                    vc.productDescription = productDescription!
-                    vc.productUrl = productUrl!
-                    vc.imageUrl = imageUrl!
-                    vc.lockerCount = lockerCount!
-                    vc.trainingMomentCount = trainingMomentCount!
-                    vc.gamingMomentCount = gamingMomentCount!
-                    vc.stylingMomentCount = stylingMomentCount!
-                    vc.existsInLocker = existsInLocker!
-                    
+                    vc.passedGearData = results[tappedIndexPath.row]
                     navigationController?.pushViewController(vc, animated: true)
-                    
                     
                     isPushed = true                    
                     

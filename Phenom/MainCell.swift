@@ -143,7 +143,7 @@ class MainCell: UITableViewCell {
         timelineFollowBtn.layer.masksToBounds = true
         
         timelineHeadlineLbl.backgroundColor = UIColor.clearColor()
-        timelineHeadlineLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
+        timelineHeadlineLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 15)
         timelineHeadlineLbl.textColor = UIColor.whiteColor()
         contentView.addSubview(timelineHeadlineLbl)
         timelineHeadlineLbl.textAlignment = .Left

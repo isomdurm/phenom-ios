@@ -19,7 +19,7 @@ class GearListCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        gearImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+        gearImgView.backgroundColor = UIColor.whiteColor() // UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         gearImgView.contentMode = UIViewContentMode.ScaleAspectFill
         gearImgView.userInteractionEnabled = true
         contentView.addSubview(gearImgView)

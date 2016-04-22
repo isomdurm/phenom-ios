@@ -21,10 +21,10 @@ class ProgressView: UIView {
         
         bg = UIView()
         bg!.backgroundColor = UIColor.clearColor() //UIColor.init(white: 0.0, alpha: 0.35)
-        addSubview(bg!)
+        self.addSubview(bg!)
         
         activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray) //WhiteLarge
-        addSubview(activityIndicator!)
+        self.addSubview(activityIndicator!)
     }
 
     required init?(coder aDecoder: NSCoder) {

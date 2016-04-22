@@ -38,9 +38,9 @@ class PickMediaViewController: DKImagePickerController {
                 
                 dispatch_async(dispatch_get_main_queue(), { () in
                     
-                    //let vc = ComposeMViewController()
-                    let vc = EditMediaViewController()
-                    //vc.passedImage = image!
+                    let vc = ComposeMediaViewController()
+                    //let vc = EditMediaViewController()
+                    vc.passedImage = image!
                     //self.navigationController?.pushViewController(vc, animated: true)
                     self.pushViewController(vc, animated: true)
                     

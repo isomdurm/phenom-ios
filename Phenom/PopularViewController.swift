@@ -93,11 +93,19 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        
         isPushed = false
         
     }
  
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        }
+        
+    }
+    
     func searchBtnAction() {
         
         self.navigationController?.pushViewController(ExploreViewController(), animated: true)
@@ -737,6 +745,30 @@ class PopularViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let _ = results[sender.tag]["id"].string {
             
         }
+        
+        let alertController = UIAlertController(title:nil, message:nil, preferredStyle:.ActionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        }
+        let reportAction = UIAlertAction(title: "Report", style: .Destructive) { (action) in
+            
+        }
+        let facebookAction = UIAlertAction(title: "Share to Facebook", style: .Default) { (action) in
+            
+        }
+        let twitterAction = UIAlertAction(title: "Tweet", style: .Default) { (action) in
+            
+        }
+        let copyUrlAction = UIAlertAction(title: "Copy Share URL", style: .Default) { (action) in
+            
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(reportAction)
+        alertController.addAction(facebookAction)
+        alertController.addAction(twitterAction)
+        alertController.addAction(copyUrlAction)
+        self.presentViewController(alertController, animated: true) {
+        }
+        
     }
     
     func timelineFollowBtnAction(sender : UIButton) {

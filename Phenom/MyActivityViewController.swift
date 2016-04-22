@@ -90,6 +90,14 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         isPushed = false
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        }
+        
+    }
     
     func searchBtnAction() {
         

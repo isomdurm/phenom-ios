@@ -34,9 +34,9 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
+        backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
         
@@ -202,14 +202,11 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
             
         }
         
-        var brandHeight = CGFloat()
         var nameHeight = CGFloat()
         
         if let id = productsDict[indexPath.row]["brand"].string {
             cell.gearBrandLbl.text = id
-            brandHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.gearBrandLbl.font, width: self.view.frame.size.width-15-15-44-15)
         } else {
-            brandHeight = 0
             cell.gearBrandLbl.text = ""
         }
         
@@ -220,13 +217,8 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.gearNameLbl.text = ""
         }
         
-        cell.gearBrandLbl.frame = CGRect(x: 15+100+15, y: cell.cellWidth+15, width: cell.cellWidth-15-15-44-15, height: brandHeight)
-        
-        if (cell.gearBrandLbl.text == "") {
-            cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
-        } else {
-            cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-15-44-15, height: nameHeight)
-        }
+        cell.gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cell.cellWidth-15-100-15-15, height: nameHeight)
+        cell.gearBrandLbl.frame = CGRect(x: 15+100+15, y: 15+nameHeight, width: cell.cellWidth-15-100-15-15, height: 20)
         
         if let id = productsDict[indexPath.row]["existsInLocker"].bool {
             if (id) {
@@ -262,53 +254,10 @@ class GearListViewController: UIViewController, UITableViewDataSource, UITableVi
         let productsDict = results["products"]
         
         let vc = GearDetailViewController()
-        
-        let id = productsDict[indexPath.row]["id"].number
-        let sku = productsDict[indexPath.row]["sku"].string
-        let sourceId = productsDict[indexPath.row]["sourceId"].number
-        let sourceProductId = productsDict[indexPath.row]["sourceProductId"].string
-        
-        let name = productsDict[indexPath.row]["name"].string
-        let brand = productsDict[indexPath.row]["brand"].string
-        
-        let productDescription = productsDict[indexPath.row]["description"].string
-        let productUrl = productsDict[indexPath.row]["productUrl"].string
-        let imageUrl = productsDict[indexPath.row]["imageUrl"].string
-        
-        let lockerCount = productsDict[indexPath.row]["lockerCount"].number
-        let trainingMomentCount = productsDict[indexPath.row]["trainingMomentCount"].number
-        let gamingMomentCount = productsDict[indexPath.row]["gamingMomentCount"].number
-        let stylingMomentCount = productsDict[indexPath.row]["stylingMomentCount"].number
-        
-        let existsInLocker = productsDict[indexPath.row]["existsInLocker"].bool
-        
-        
-        vc.id = "\(id!)"
-        vc.sku = sku!
-        vc.sourceId = "\(sourceId!)"
-        vc.sourceProductId = sourceProductId!
-        vc.name = name!
-        vc.brand = brand!
-        
-        if let brandLogoImageUrl = productsDict[indexPath.row]["brandLogoImageUrl"].string {
-            vc.brandLogoImageUrl = brandLogoImageUrl
-        }
-        
-        vc.productDescription = productDescription!
-        vc.productUrl = productUrl!
-        vc.imageUrl = imageUrl!
-        vc.lockerCount = lockerCount!
-        vc.trainingMomentCount = trainingMomentCount!
-        vc.gamingMomentCount = gamingMomentCount!
-        vc.stylingMomentCount = stylingMomentCount!
-        vc.existsInLocker = existsInLocker!
-        
+        vc.passedGearData = productsDict[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
         
-        
     }
-    
-    
     
     func gearAddBtnAction(sender : UIButton) {
         

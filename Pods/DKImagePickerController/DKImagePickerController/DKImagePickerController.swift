@@ -281,6 +281,9 @@ public class DKImagePickerController : UINavigationController {
 			vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
 				target: self,
 				action: #selector(DKImagePickerController.dismiss))
+            //
+            vc.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+            //
 		} else {
 			vc.navigationItem.leftBarButtonItem = nil
 		}

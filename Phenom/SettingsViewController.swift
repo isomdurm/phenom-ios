@@ -34,7 +34,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
+        backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
         
@@ -102,7 +102,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         switch (section) {
         case 0: aLbl.text = "ACCOUNT"
-        case 1: aLbl.text = "ADD FRIENDS"
+        case 1: aLbl.text = "MANAGE"
         case 2: aLbl.text = "INVITE FRIENDS"
         case 3: aLbl.text = "SUPPORT"
         case 4: aLbl.text = ""
@@ -121,7 +121,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch (section) {
-        case 0: return 9
+        case 0: return 8
         case 1: return 2
         case 2: return 4
         case 3: return 2
@@ -139,10 +139,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
         
         //cell.textLabel?.text = "text"
-        cell.textLabel?.font = UIFont.systemFontOfSize(15)
+        cell.textLabel?.font =  UIFont.init(name: "MaisonNeue-Medium", size: 15)
         cell.textLabel?.textColor = UIColor.init(white: 1.0, alpha: 1.0)
-        cell.detailTextLabel?.font = UIFont.systemFontOfSize(15)
-        
+        cell.detailTextLabel?.font =  UIFont.init(name: "MaisonNeue-Medium", size: 14)
+        cell.detailTextLabel?.frame = CGRectMake(self.view.frame.size.width/2, 0, self.view.frame.size.width/2-50, 50)
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let username = defaults.stringForKey("username")! as String
@@ -150,6 +150,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let lastName = defaults.objectForKey("lastName") as! String
         let sports = defaults.objectForKey("sports") as! NSArray
         let hometown = defaults.objectForKey("hometown") as! String
+        let bio = defaults.objectForKey("description") as! String
+        let email = defaults.objectForKey("email") as! String
+        let birthday = defaults.objectForKey("birthday") as! NSDate
         
         if (indexPath.section==0 && indexPath.row==0) {
             
@@ -167,7 +170,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             
             cell.textLabel!.text = "Birthday"
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            cell.detailTextLabel?.text = "testing"
+            cell.detailTextLabel?.text = "\(birthday)"
             
         } else if (indexPath.section==0 && indexPath.row==3) {
             
@@ -186,13 +189,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             
             cell.textLabel!.text = "Bio"
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            cell.detailTextLabel?.text = ""
+            cell.detailTextLabel?.text = bio
             
         } else if (indexPath.section==0 && indexPath.row==6) {
             
             cell.textLabel!.text = "Email"
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            cell.detailTextLabel?.text = "testing"
+            cell.detailTextLabel?.text = email
             
         } else if (indexPath.section==0 && indexPath.row==7) {
             
@@ -200,25 +203,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.detailTextLabel?.text = ""
             
-        } else if (indexPath.section==0 && indexPath.row==8) {
+        } else if (indexPath.section==1 && indexPath.row==0) {
             
-            cell.textLabel!.text = "Notifications"
+            cell.textLabel!.text = "Clear Search History"
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.detailTextLabel?.text = ""
             
-        } else if (indexPath.section==1 && indexPath.row==0) {
-            
-            cell.textLabel!.text = "Add by Username"
-            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            
         } else if (indexPath.section==1 && indexPath.row==1) {
             
-            cell.textLabel!.text = "Add from Contacts"
-            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            
-        } else if (indexPath.section==1 && indexPath.row==2) {
-            
-            cell.textLabel!.text = "Add Nearby"
+            cell.textLabel!.text = "Notifications"
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             
         } else if (indexPath.section==2 && indexPath.row==0) {
@@ -278,44 +271,163 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated:true)
         
-        
-        if (indexPath.section == 4 && indexPath.row == 0) {
+        if (indexPath.section==0 && indexPath.row==0) {
+            
+            // full name
+            
+        } else if (indexPath.section==0 && indexPath.row==1) {
+            
+            // username
+            
+        } else if (indexPath.section==0 && indexPath.row==2) {
+            
+            // birthday
+            
+        } else if (indexPath.section==0 && indexPath.row==3) {
+            
+            // hometown
+            
+        } else if (indexPath.section==0 && indexPath.row==4) {
+            
+            // sports
+            
+        } else if (indexPath.section==0 && indexPath.row==5) {
+            
+            // bio
+            
+        } else if (indexPath.section==0 && indexPath.row==6) {
+            
+            // email
+            
+        } else if (indexPath.section==0 && indexPath.row==7) {
+            
+            // password
+            
+        } else if (indexPath.section==1 && indexPath.row==0) {
+            
+            // clear search history
+            self.areyousureyouwanttoclearhistory()
+            
+        } else if (indexPath.section==1 && indexPath.row==1) {
+            
+            // notifications
+            
+        } else if (indexPath.section==2 && indexPath.row==0) {
+            
+            inviteViaTwitter()
+            
+        } else if (indexPath.section==2 && indexPath.row==1) {
+            
+            inviteViaFacebook()
+            
+        } else if (indexPath.section==2 && indexPath.row==2) {
+            
+            inviteViaMessages()
+            
+        } else if (indexPath.section==2 && indexPath.row==3) {
+            
+            inviteViaEmail()
+            
+        } else if (indexPath.section==3 && indexPath.row==0) {
+            
+            //love phenom
+            ratePhenom()
+            
+        } else if (indexPath.section==3 && indexPath.row==1) {
+            
+            //feedback
+            feedbackEmail()
+            
+        } else if (indexPath.section==4 && indexPath.row==0) {
             
             areyousureyouwanttologout()
+            
+        } else {
+            
         }
+
+        
     }
     
+    func areyousureyouwanttoclearhistory() {
+        let alertController = UIAlertController(title:"Are you sure?", message:nil, preferredStyle:.Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        }
+        let clearAction = UIAlertAction(title: "Yes, I'm sure", style: .Default) { (action) in
+            
+            let defaults = NSUserDefaults.standardUserDefaults()
+            
+            let searchedPeopleWords = defaults.arrayForKey("searchedPeopleWords")
+            let searchedPeopleWordsMA = NSMutableArray(array: searchedPeopleWords!)
+            searchedPeopleWordsMA.removeAllObjects()
+            let searchedPeopleWordsNEW = searchedPeopleWordsMA as NSArray
+            defaults.setObject(searchedPeopleWordsNEW, forKey: "searchedPeopleWords")
+            
+            let searchedGearWords = defaults.arrayForKey("searchedGearWords")
+            let searchedGearWordsMA = NSMutableArray(array: searchedGearWords!)
+            searchedGearWordsMA.removeAllObjects()
+            let searchedGearWordsNEW = searchedGearWordsMA as NSArray
+            defaults.setObject(searchedGearWordsNEW, forKey: "searchedGearWords")
+            
+            defaults.synchronize()
+           
+        }
+        alertController.addAction(clearAction)
+        alertController.addAction(cancelAction)
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+
     
     func inviteViaTwitter() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as String
+        
         let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))")
         vc.setInitialText(textToShare)
         vc.addURL(NSURL(string: "http://phenom.co"))
         presentViewController(vc, animated: true, completion: nil)
     }
     
     func inviteViaFacebook() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as String
+        
         let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))")
         vc.setInitialText(textToShare)
         vc.addURL(NSURL(string: "http://phenom.co"))
         presentViewController(vc, animated: true, completion: nil)
     }
     
     func inviteViaMessages() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as String
+        
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username") / http://phenom.co)")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username) / http://phenom.co)")
         messageComposeVC.body = textToShare
+        
+        presentViewController(messageComposeVC, animated: true, completion: nil)
+        
     }
     
     func inviteViaEmail() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as String
+        
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
         mailComposerVC.setToRecipients([])
         mailComposerVC.setSubject("Invite to Phenom")
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \("username"))\n\nhttp://phenom.co")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))\n\nhttp://phenom.co")
         mailComposerVC.setMessageBody(textToShare, isHTML: false)
+        
+        if MFMailComposeViewController.canSendMail() {
+            self.presentViewController(mailComposerVC, animated: true, completion: nil)
+        } else {
+        }
     }
     
     func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
@@ -326,6 +438,35 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func ratePhenom() {
+        
+        let alertController = UIAlertController(title:"Love Phenom?", message:"⭐⭐⭐⭐⭐", preferredStyle:.Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        }
+        let rateAction = UIAlertAction(title: "Give 5 Stars!", style: .Default) { (action) in
+            
+            UIApplication.sharedApplication().openURL(NSURL(string: "itms://itunes.apple.com/us/app/phenom/id687226814?ls=1&mt=8")!)
+        }
+        alertController.addAction(rateAction)
+        alertController.addAction(cancelAction)
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func feedbackEmail() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let username = defaults.stringForKey("username")! as String
+        
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        mailComposerVC.setToRecipients(["support@phenomapp.com"])
+        mailComposerVC.setSubject("iOS Feedback from \(username)")
+        mailComposerVC.setMessageBody("", isHTML: false)
+        
+        if MFMailComposeViewController.canSendMail() {
+            self.presentViewController(mailComposerVC, animated: true, completion: nil)
+        } else {
+        }
+    }
     
     func areyousureyouwanttologout() {
         let alertController = UIAlertController(title:"Are you sure?", message:nil, preferredStyle:.Alert)

@@ -144,6 +144,10 @@
 		57C6DD131CA4807900B939DF /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD121CA4807900B939DF /* TimelineCell.swift */; };
 		57C6DD1C1CA4BF7700B939DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6DD1B1CA4BF7700B939DF /* UIKit.framework */; };
 		57DB87B31CC19C8100A27A43 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB87B21CC19C8100A27A43 /* Product.swift */; };
+		57E368721CC985B9008C0E64 /* AddMomentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E368711CC985B9008C0E64 /* AddMomentView.swift */; };
+		57E368741CC98DE2008C0E64 /* add-moment-view-btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57E368731CC98DE2008C0E64 /* add-moment-view-btn@2x.png */; };
+		57E368761CC996AF008C0E64 /* add-moment-view-blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57E368751CC996AF008C0E64 /* add-moment-view-blue@2x.png */; };
+		57E368781CC99A97008C0E64 /* back-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57E368771CC99A97008C0E64 /* back-arrow@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,6 +312,10 @@
 		57C6DD171CA4BE6100B939DF /* Phenom-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Phenom-Bridging-Header.h"; sourceTree = "<group>"; };
 		57C6DD1B1CA4BF7700B939DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		57DB87B21CC19C8100A27A43 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		57E368711CC985B9008C0E64 /* AddMomentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMomentView.swift; sourceTree = "<group>"; };
+		57E368731CC98DE2008C0E64 /* add-moment-view-btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-moment-view-btn@2x.png"; sourceTree = "<group>"; };
+		57E368751CC996AF008C0E64 /* add-moment-view-blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-moment-view-blue@2x.png"; sourceTree = "<group>"; };
+		57E368771CC99A97008C0E64 /* back-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow@2x.png"; sourceTree = "<group>"; };
 		61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Phenom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F102D4B6AD0980225AA1C48 /* Pods-Phenom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.release.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -455,6 +463,7 @@
 		572DF4B71CA37A11002184E2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
 				5768B93F1CB2197C002E9664 /* AddTeamViewController.swift */,
 				5768B9391CB217F1002E9664 /* ExplorePeopleViewController.swift */,
 				5768B9371CB217DA002E9664 /* ExploreGearViewController.swift */,
@@ -470,14 +479,13 @@
 		572DF4B81CA37A15002184E2 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				5768B8E81CAC58F5002E9664 /* TimelineHeaderView.swift */,
-				57C6DD121CA4807900B939DF /* TimelineCell.swift */,
 				5768B8EA1CAC9921002E9664 /* ExploreCell.swift */,
+				57C6DD121CA4807900B939DF /* TimelineCell.swift */,
 				57773D621CBAF27300A5D868 /* GearCell.swift */,
-				5768B8EC1CADEC99002E9664 /* SearchCell.swift */,
 				57A5D1E61CBEED3F0056D4FB /* ChatCell.swift */,
 				570AC5131CA5CD8300441F4A /* ActivityCell.swift */,
 				57773D6A1CBC69EB00A5D868 /* PeopleCell.swift */,
+				5768B8EC1CADEC99002E9664 /* SearchCell.swift */,
 				57773D661CBC2B5000A5D868 /* GearListCell.swift */,
 				5768B8E61CAC51B9002E9664 /* MainCell.swift */,
 			);
@@ -495,6 +503,7 @@
 				57C6DD0E1CA47EFC00B939DF /* Person.swift */,
 				57242DF01CAB4F7C00A71A7F /* KMPlaceholderTextView.swift */,
 				57C6DD0F1CA47EFC00B939DF /* ProgressView.swift */,
+				57E368711CC985B9008C0E64 /* AddMomentView.swift */,
 			);
 			name = Globals;
 			sourceTree = "<group>";
@@ -502,6 +511,9 @@
 		572DF4BA1CA37A1F002184E2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				57E368771CC99A97008C0E64 /* back-arrow@2x.png */,
+				57E368751CC996AF008C0E64 /* add-moment-view-blue@2x.png */,
+				57E368731CC98DE2008C0E64 /* add-moment-view-btn@2x.png */,
 				574BCD021CC81AFA005CD8EA /* goldNav@2x.png */,
 				57654A221CC5B07800316A7F /* blackNav@2x.png */,
 				5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */,
@@ -775,10 +787,12 @@
 				57773D721CBD942B00A5D868 /* notAddedBtnImg@2x.png in Resources */,
 				5781C3981CC0B92F00F37E75 /* tabbar-activity-icon@2x.png in Resources */,
 				57773D4F1CBADEE200A5D868 /* UnitedSansCond-Light.otf in Resources */,
+				57E368781CC99A97008C0E64 /* back-arrow@2x.png in Resources */,
 				57773D411CBADEE200A5D868 /* MaisonNeue-BoldItalic.ttf in Resources */,
 				5781C3A21CC159A000F37E75 /* timeline-gear-btn@2x.png in Resources */,
 				57773D401CBADEE200A5D868 /* MaisonNeue-Bold.ttf in Resources */,
 				57773D4B1CBADEE200A5D868 /* MaisonNeue-MonoItalic.ttf in Resources */,
+				57E368761CC996AF008C0E64 /* add-moment-view-blue@2x.png in Resources */,
 				57773D551CBADEE200A5D868 /* UniversLTStd-Bold.otf in Resources */,
 				5781C3A31CC159A000F37E75 /* timeline-like-btn-selected@2x.png in Resources */,
 				57773D511CBADEE200A5D868 /* UnitedSansReg-Heavy.otf in Resources */,
@@ -790,6 +804,7 @@
 				57773D5C1CBAE69300A5D868 /* blackTabBar@2x.png in Resources */,
 				5715005E1CA3136800AA8744 /* LaunchScreen.storyboard in Resources */,
 				57773D4D1CBADEE200A5D868 /* UnitedSansCond-Bold.otf in Resources */,
+				57E368741CC98DE2008C0E64 /* add-moment-view-btn@2x.png in Resources */,
 				571CC5391CAB324600A42997 /* FSAlbumView.xib in Resources */,
 				57654A231CC5B07800316A7F /* blackNav@2x.png in Resources */,
 				5781C3A01CC159A000F37E75 /* timeline-chat-btn@2x.png in Resources */,
@@ -919,6 +934,7 @@
 				57A5D1E91CC005BE0056D4FB /* CreateViewController.swift in Sources */,
 				571500511CA3136800AA8744 /* AppDelegate.swift in Sources */,
 				5768B9401CB2197C002E9664 /* AddTeamViewController.swift in Sources */,
+				57E368721CC985B9008C0E64 /* AddMomentView.swift in Sources */,
 				57C6DD091CA46F2A00B939DF /* ProfileViewController.swift in Sources */,
 				574BCD011CC7F8EF005CD8EA /* ComposeMediaViewController.swift in Sources */,
 				57B030571CC56FEF00C53CD2 /* CameraManager.swift in Sources */,

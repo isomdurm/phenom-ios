@@ -41,8 +41,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var bannerView = UIView?()
     var activityDotView = UIView?()
     
-    
     var tempUnLikedIdsArray = NSMutableArray()
+    
+    var addMomentView = AddMomentView?()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
@@ -308,6 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             "description" : "",
             "firstName" : "",
             "lastName" : "",
+            "email" : "",
             "birthday" : NSDate(),
             "gender" : "",
             "followersCount" : 0,
@@ -320,7 +322,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
             "searchedGearWords" : [],
             "searchedPeopleWords" : [],
             
-            "rateAlertShown" : false
+            "rateAlertShown" : false,
+            
+            "hasAddedAMoment" : false
         ]
         
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -639,7 +643,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         } else {
             return mediaHeight+padding+38+padding+headlineHeight+padding+38+padding+padding
         }
+    }
+    
+    func showAddMomentView() {
         
+        //let window = (UIApplication.sharedApplication().delegate as! AppDelegate).window!
+        addMomentView = AddMomentView(frame: CGRectMake(self.window!.frame.size.width/2-75, self.window!.frame.size.height-49-60, 150, 60))
+        addMomentView!.layoutSubviews()
+        addMomentView!.btn?.addTarget(self, action:#selector(addMomentViewBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        addMomentView!.alpha = 0.0
+        self.window!.addSubview(addMomentView!)
+        //addMomentView!.layer.cornerRadius = 5
+        //addMomentView!.layer.masksToBounds = true
+        addMomentView!.layer.shadowColor = UIColor.blackColor().CGColor
+        addMomentView!.layer.shadowOpacity = 0.5
+        addMomentView!.layer.shadowOffset = CGSizeZero
+        addMomentView!.layer.shadowRadius = 10
+        
+        
+        UIView.animateWithDuration(1.0, delay:1.5, options: .CurveEaseOut, animations: {
+            
+            self.addMomentView!.alpha = 1.0
+            
+            var viewFrame = self.addMomentView!.frame
+            viewFrame.origin.y = self.window!.frame.size.height-49-60-10
+            self.addMomentView!.frame = viewFrame
+            
+            }, completion: { finished in
+                if (finished) {
+                    
+//                    UIView.animateWithDuration(1.0, delay:0, options: [.Repeat, .Autoreverse], animations: {
+//                        
+//                        var viewFrame = self.addMomentView!.frame
+//                        viewFrame.origin.y = self.window!.frame.size.height-49-50-5
+//                        self.addMomentView!.frame = viewFrame
+//                        
+//                        }, completion: nil)
+                    
+                }
+                
+        })
+    }
+    
+    func addMomentViewBtnAction() {
+        
+        self.tabbarvc?.centerBtnAction()
+        
+    }
+    
+    func removeAddMomentView() {
+        
+        self.addMomentView?.removeFromSuperview()
+        self.addMomentView = AddMomentView?()
     }
     
 }

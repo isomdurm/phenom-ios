@@ -7,14 +7,19 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Haneke
 import QuartzCore
 import SafariServices
 
 class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate, UIGestureRecognizerDelegate {
 
-    var id = ""
+    
+    var passedGearData = JSON(data: NSData())
+    
+    var id = NSNumber()
     var sku = ""
-    var sourceId = ""
+    var sourceId = NSNumber()
     var sourceProductId = ""
     
     var name = ""
@@ -48,15 +53,62 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
+        // apply data
+        
+        id = passedGearData["id"].number!
+        sku = passedGearData["sku"].string!
+        sourceId = passedGearData["sourceId"].number!
+        sourceProductId = passedGearData["sourceProductId"].string!
+        
+        name = passedGearData["name"].string!
+        brand = passedGearData["brand"].string!
+        
+        productDescription = passedGearData["description"].string!
+        productUrl = passedGearData["productUrl"].string!
+        imageUrl = passedGearData["imageUrl"].string!
+        
+        if let _ = passedGearData["lockerCount"].number {
+            lockerCount = passedGearData["lockerCount"].number!
+        } else {
+            lockerCount = 0
+        }
+        
+        if let _ = passedGearData["trainingMomentCount"].number {
+            trainingMomentCount = passedGearData["trainingMomentCount"].number!
+        } else {
+            trainingMomentCount = 0
+        }
+        
+        if let _ = passedGearData["gamingMomentCount"].number {
+            gamingMomentCount = passedGearData["gamingMomentCount"].number!
+        } else {
+            gamingMomentCount = 0
+        }
+        
+        if let _ = passedGearData["stylingMomentCount"].number {
+            stylingMomentCount = passedGearData["stylingMomentCount"].number!
+        } else {
+            stylingMomentCount = 0
+        } 
+        
+        existsInLocker = passedGearData["existsInLocker"].bool!
+        
+        
+        if let _ = passedGearData["brandLogoImageUrl"].string {
+            brandLogoImageUrl = passedGearData["brandLogoImageUrl"].string!
+        }
+        
+        //
+        
         navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.redColor()
+        backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
         

@@ -279,6 +279,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     let description = json["description"].string!
                     let firstName = json["firstName"].string!
                     let lastName = json["lastName"].string!
+                    let email = json["email"].string!
                     
                     let followersCount = json["followersCount"].number!
                     let followingCount = json["followingCount"].number!
@@ -298,6 +299,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     defaults.setObject(description, forKey: "description")
                     defaults.setObject(firstName, forKey: "firstName")
                     defaults.setObject(lastName, forKey: "lastName")
+                    defaults.setObject(email, forKey: "email")
                     defaults.setObject(followersCount, forKey: "followersCount")
                     defaults.setObject(followingCount, forKey: "followingCount")
                     
