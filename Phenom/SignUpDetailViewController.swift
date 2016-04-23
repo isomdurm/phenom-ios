@@ -24,8 +24,6 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
     var locationField: UITextField = UITextField()
     
     var sportsArray = NSMutableArray()
-    var sportsScrollView = UIScrollView()
-    var selectedSportsArray = NSMutableArray()
     
     var theTableView: UITableView = UITableView()
     var selectedCells = NSMutableArray()
@@ -167,62 +165,6 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
     }
     
-    func buildSportsScrollView() {
-        
-        for (index, element) in sportsArray.enumerate() {
-            print("Item \(index): \(element)")
-            
-            let sport = element as! String
-            let i = CGFloat(index)
-            let x = 20+(100*i)
-            let pad = 2*i
-            let f = CGRectMake(x+pad, 0, 100, 120)
-            
-            let sportBtn = UIButton(type: UIButtonType.Custom)
-            sportBtn.frame = f
-            sportBtn.setImage(UIImage(named: "sportBtn-sport.png"), forState: .Normal)
-            sportBtn.setImage(UIImage(named: "sportBtn-sport.png"), forState: .Highlighted)
-            sportBtn.setImage(UIImage(named: "sportBtn-sport.png"), forState: .Selected)
-            
-            sportBtn.setBackgroundImage(UIImage(named: ""), forState: .Normal)
-            sportBtn.setBackgroundImage(UIImage(named: "goldTabBar.png"), forState: .Selected)
-            
-            sportBtn.backgroundColor = UIColor.blueColor()
-            sportBtn.addTarget(self, action:#selector(sportBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
-            
-            sportBtn.tag = NSInteger(i)
-            
-            sportBtn.titleLabel?.numberOfLines = 1
-            sportBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 13)
-            sportBtn.contentHorizontalAlignment = .Center
-            sportBtn.contentVerticalAlignment = .Bottom
-            sportBtn.titleLabel?.textAlignment = .Center
-            sportBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            sportBtn.setTitleColor(UIColor.whiteColor(), forState: .Selected)
-            sportBtn.setTitle(sport, forState: UIControlState.Normal)
-            
-            
-            sportsScrollView.addSubview(sportBtn)
-            
-            
-            
-        }
-        
-    }
-    
-    func sportBtnAction(sender: UIButton) {
-        print(sender.tag)
-        print(sender.currentTitle!)
-        
-        if (sender.selected) {
-            sender.selected = false
-            selectedSportsArray.removeObject(sender.currentTitle!)
-        } else {
-            sender.selected = true
-            selectedSportsArray.addObject(sender.currentTitle!)
-        }
-    }
-    
     
     // TableViewDelegate
     
@@ -239,7 +181,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         case 0: aLbl.text = "WHAT DO YOU PLAY?"
         default: aLbl.text = ""}
         
-        aLbl.font = UIFont.boldSystemFontOfSize(12)
+        aLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         aLbl.textColor = UINavigationBar.appearance().tintColor //gold
         
         let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))

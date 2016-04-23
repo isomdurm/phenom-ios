@@ -97,10 +97,7 @@ class InviteFriendsViewController: UIViewController, UITableViewDataSource, UITa
         
         let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
-        //cell.detailTextLabel?.textColor = UIColor.init(white: 0.6, alpha: 1.0)
-        //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
         
-        //cell.textLabel?.text = "text"
         
         return cell
         

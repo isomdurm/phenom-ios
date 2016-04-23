@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var clientId = "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO"
     var clientSecret = "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko="
     var apiVersion = "1.2.3"
-    var phenomApiUrl = "https://api1.phenomapp.com:8081" //"http://192.168.129.253:8081" // "http://192.168.129.95:8081" // "http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
+    var phenomApiUrl = "https://api1.phenomapp.com:8081" //"http://192.168.129.253:8081" // "http://192.168.129.95:8081" //"http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
     
     var window: UIWindow?
 
@@ -688,13 +688,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     func addMomentViewBtnAction() {
         
         self.tabbarvc?.centerBtnAction()
-        
+        self.removeAddMomentView()
     }
     
     func removeAddMomentView() {
         
         self.addMomentView?.removeFromSuperview()
         self.addMomentView = AddMomentView?()
+    }
+    
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight))
+        image.drawInRect(CGRectMake(0, 0, newWidth, newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
     
 }

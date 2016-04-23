@@ -109,7 +109,7 @@ class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UIText
         tabBtn1.frame = CGRectMake(0, 0, tabWidth, 44)
         tabBtn1.backgroundColor = UIColor.clearColor()
         tabBtn1.titleLabel?.numberOfLines = 1
-        tabBtn1.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -124,7 +124,7 @@ class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UIText
         tabBtn2.frame = CGRectMake(tabWidth*1, 0, tabWidth, 44)
         tabBtn2.backgroundColor = UIColor.clearColor()
         tabBtn2.titleLabel?.numberOfLines = 1
-        tabBtn2.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -137,7 +137,7 @@ class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UIText
         tabBtn3.frame = CGRectMake(tabWidth*2, 0, tabWidth, 44)
         tabBtn3.backgroundColor = UIColor.clearColor()
         tabBtn3.titleLabel?.numberOfLines = 1
-        tabBtn3.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn3.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -164,7 +164,7 @@ class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UIText
         theTextView.textColor = UIColor.whiteColor()
         theTextView.keyboardType = UIKeyboardType.Twitter
         theTextView.returnKeyType = UIReturnKeyType.Default
-        theTextView.font = UIFont.systemFontOfSize(15)
+        theTextView.font = UIFont.init(name: "MaisonNeue-Medium", size: 15)
         theTextView.enablesReturnKeyAutomatically = true
         theTextView.textAlignment = NSTextAlignment.Left
         //theTextView.autocapitalizationType = UITextAutocapitalizationType.None
@@ -384,6 +384,152 @@ class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UIText
         //
         
         
+    }
+    
+    
+    func savePhoto(image:UIImage) {
+        
+        // maxHeight
+        // maxWidth
+        
+        let resizedimage = (UIApplication.sharedApplication().delegate as! AppDelegate).resizeImage(image, newWidth: 600)
+        //let resizedimagesmall = self.resizeImage(image, newWidth: 300)
+        
+        self.uploadImage(resizedimage)
+        
+    }
+    
+    func uploadImage(image : UIImage) {
+        
+        func sendFile(
+            urlPath:String,
+            fileName:String,
+            data:NSData,
+            completionHandler: (NSURLResponse?, NSData?, NSError?) -> Void){
+            
+            let url: NSURL = NSURL(string: urlPath)!
+            let request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            
+            request1.HTTPMethod = "PUT"
+            
+            let boundary = generateBoundaryString()
+            
+            let fullData = photoDataToFormData(data,boundary:boundary,fileName:fileName)
+            
+            request1.setValue("multipart/form-data; boundary=" + boundary,
+                              forHTTPHeaderField: "Content-Type")
+            
+            // REQUIRED!
+            request1.setValue(String(fullData.length), forHTTPHeaderField: "Content-Length")
+            
+            request1.HTTPBody = fullData
+            request1.HTTPShouldHandleCookies = false
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let bearerToken = defaults.stringForKey("bearerToken")! as String
+            request1.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+            request1.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+            
+            //            let queue:NSOperationQueue = NSOperationQueue()
+            //            NSURLConnection.sendAsynchronousRequest(
+            //                request1,
+            //                queue: queue,
+            //                completionHandler: completionHandler)
+            
+            let session = NSURLSession.sharedSession()
+            //let task = session.dataTaskWithRequest(request, completionHandler:completionHandler)
+            //task.resume()
+            let task = session.dataTaskWithRequest(request1, completionHandler: {(data, response, error) in
+                
+                // notice that I can omit the types of data, response and error
+                // your code
+                
+                if (error != nil) {
+                    print("hmmm error w img upload: \(error?.code)")
+                    
+                    
+                } else {
+                    
+                    // success
+                    print("success w response: \(response?.description)")
+                    //
+                    // reload timline and profile
+                    
+                }
+                
+                
+            });
+            
+            // do whatever you need with the task e.g. run
+            task.resume()
+            
+            
+        }
+        
+        
+        //let url = "https://api1.phenomapp.com:8081/user"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+        //        let img = UIImage(contentsOfFile: fullPath)
+        let data: NSData = UIImageJPEGRepresentation(image, 0.7)!
+        
+        sendFile(url,
+                 fileName:"image.jpeg",
+                 data:data,
+                 completionHandler: {
+                    (result:NSURLResponse?, isNoInternetConnection:NSData?, err: NSError?) -> Void in
+                    
+                    // ...
+                    NSLog("Complete: \(result)")
+            }
+        )
+        
+        // this is a very verbose version of that function
+        // you can shorten it, but i left it as-is for clarity
+        // and as an example
+        func photoDataToFormData(data:NSData,boundary:String,fileName:String) -> NSData {
+            let fullData = NSMutableData()
+            
+            // 1 - Boundary should start with --
+            let lineOne = "--" + boundary + "\r\n"
+            fullData.appendData(lineOne.dataUsingEncoding(
+                NSUTF8StringEncoding,
+                allowLossyConversion: false)!)
+            
+            // 2
+            let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"\r\n"
+            NSLog(lineTwo)
+            fullData.appendData(lineTwo.dataUsingEncoding(
+                NSUTF8StringEncoding,
+                allowLossyConversion: false)!)
+            
+            // 3
+            let lineThree = "Content-Type: image/jpg\r\n\r\n"
+            fullData.appendData(lineThree.dataUsingEncoding(
+                NSUTF8StringEncoding,
+                allowLossyConversion: false)!)
+            
+            // 4
+            fullData.appendData(data)
+            
+            // 5
+            let lineFive = "\r\n"
+            fullData.appendData(lineFive.dataUsingEncoding(
+                NSUTF8StringEncoding,
+                allowLossyConversion: false)!)
+            
+            // 6 - The end. Notice -- at the start and at the end
+            let lineSix = "--" + boundary + "--\r\n"
+            fullData.appendData(lineSix.dataUsingEncoding(
+                NSUTF8StringEncoding,
+                allowLossyConversion: false)!)
+            
+            return fullData
+        }
+        
+    }
+    
+    func generateBoundaryString() -> String {
+        
+        return "Boundary-\(NSUUID().UUIDString)"
     }
    
 

@@ -43,8 +43,8 @@ class PeopleCell: UITableViewCell {
         contentView.addSubview(usernameLbl)
         
         followBtn.backgroundColor = UIColor.orangeColor()
-        followBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
-        followBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        followBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Normal)
+        followBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Selected)
         contentView.addSubview(followBtn)
         
         
@@ -62,7 +62,11 @@ class PeopleCell: UITableViewCell {
         userImgView.frame = CGRectMake(15, 15, 44, 44)
         nameLbl.frame = CGRectMake(15+50+10, 15, cellWidth-15-50-15-50-15, 20)
         usernameLbl.frame = CGRectMake(15+50+10, 15+20, cellWidth-15-50-15-50-15, 20)
-        followBtn.frame = CGRectMake(cellWidth-15-40, 20, 40, 40)
+        
+        //followBtn.frame = CGRectMake(cellWidth-15-40, 20, 40, 40)
+        // 15+44+15
+        followBtn.frame = CGRectMake(cellWidth-65-15, 18, 65, 38)
+        
         
         
     }

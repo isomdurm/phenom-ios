@@ -44,7 +44,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "LIKES"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
@@ -159,10 +159,7 @@ class LikesViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
-        //cell.detailTextLabel?.textColor = UIColor.init(white: 0.6, alpha: 1.0)
-        //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
         
-        //cell.textLabel?.text = "text"
      
         return cell
         

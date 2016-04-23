@@ -32,7 +32,7 @@ class TabBarViewController: UITabBarController {
         //centerBtn.setBackgroundImage(UIImage.init(named: "blueNavHighlighted.png") , forState: UIControlState.Highlighted)
         centerBtn.addTarget(self, action:#selector(centerBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         centerBtn.titleLabel?.numberOfLines = 1
-        centerBtn.titleLabel?.font = UIFont.systemFontOfSize(40, weight: UIFontWeightBold)
+        centerBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 40)
         centerBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         centerBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         centerBtn.titleLabel?.textAlignment = NSTextAlignment.Center

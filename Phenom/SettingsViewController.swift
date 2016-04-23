@@ -32,7 +32,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
         //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
@@ -41,7 +41,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
         titleLbl.text = "SETTINGS"
-        titleLbl.font = UIFont.boldSystemFontOfSize(16)
+        titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         titleLbl.textColor = UIColor.whiteColor()
         navBarView.addSubview(titleLbl)
         
@@ -108,7 +108,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 4: aLbl.text = ""
         default: aLbl.text = ""}
         
-        aLbl.font = UIFont.boldSystemFontOfSize(12)
+        aLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         aLbl.textColor = UINavigationBar.appearance().tintColor //gold
         
         let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
@@ -135,10 +135,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         
-        //cell.detailTextLabel?.textColor = UIColor.init(white: 0.6, alpha: 1.0)
-        //cell.detailTextLabel?.font = UIFont.systemFontOfSize(13)
-        
-        //cell.textLabel?.text = "text"
         cell.textLabel?.font =  UIFont.init(name: "MaisonNeue-Medium", size: 15)
         cell.textLabel?.textColor = UIColor.init(white: 1.0, alpha: 1.0)
         cell.detailTextLabel?.font =  UIFont.init(name: "MaisonNeue-Medium", size: 14)
@@ -274,34 +270,58 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if (indexPath.section==0 && indexPath.row==0) {
             
             // full name
+            let vc = EditProfileViewController()
+            vc.passedEditType = "name"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==1) {
             
             // username
+            let vc = EditProfileViewController()
+            vc.passedEditType = "username"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==2) {
             
             // birthday
+            let vc = EditProfileViewController()
+            vc.passedEditType = "birthday"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==3) {
             
             // hometown
+            let vc = EditProfileViewController()
+            vc.passedEditType = "hometown"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==4) {
             
             // sports
+            let vc = EditProfileViewController()
+            vc.passedEditType = "sports"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==5) {
             
             // bio
+            let vc = EditProfileViewController()
+            vc.passedEditType = "bio"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==6) {
             
             // email
+            let vc = EditProfileViewController()
+            vc.passedEditType = "email"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==0 && indexPath.row==7) {
             
             // password
+            let vc = EditProfileViewController()
+            vc.passedEditType = "password"
+            self.navigationController?.pushViewController(vc, animated: true)
             
         } else if (indexPath.section==1 && indexPath.row==0) {
             
@@ -385,7 +405,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
         let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))")
         vc.setInitialText(textToShare)
-        vc.addURL(NSURL(string: "http://phenom.co"))
+        vc.addURL(NSURL(string: "http://phenom.co/download"))
         presentViewController(vc, animated: true, completion: nil)
     }
     
@@ -396,7 +416,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
         let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))")
         vc.setInitialText(textToShare)
-        vc.addURL(NSURL(string: "http://phenom.co"))
+        vc.addURL(NSURL(string: "http://phenom.co/download"))
         presentViewController(vc, animated: true, completion: nil)
     }
     
@@ -406,7 +426,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username) / http://phenom.co)")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username) / http://phenom.co/download)")
         messageComposeVC.body = textToShare
         
         presentViewController(messageComposeVC, animated: true, completion: nil)
@@ -421,7 +441,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         mailComposerVC.mailComposeDelegate = self
         mailComposerVC.setToRecipients([])
         mailComposerVC.setSubject("Invite to Phenom")
-        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))\n\nhttp://phenom.co")
+        let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))\n\nhttp://phenom.co/download")
         mailComposerVC.setMessageBody(textToShare, isHTML: false)
         
         if MFMailComposeViewController.canSendMail() {

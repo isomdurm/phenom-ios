@@ -109,7 +109,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn1.frame = CGRectMake(0, 0, tabWidth, 44)
         tabBtn1.backgroundColor = UIColor.clearColor()
         tabBtn1.titleLabel?.numberOfLines = 1
-        tabBtn1.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -124,7 +124,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn2.frame = CGRectMake(tabWidth*1, 0, tabWidth, 44)
         tabBtn2.backgroundColor = UIColor.clearColor()
         tabBtn2.titleLabel?.numberOfLines = 1
-        tabBtn2.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -137,7 +137,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         tabBtn3.frame = CGRectMake(tabWidth*2, 0, tabWidth, 44)
         tabBtn3.backgroundColor = UIColor.clearColor()
         tabBtn3.titleLabel?.numberOfLines = 1
-        tabBtn3.titleLabel?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
+        tabBtn3.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 15)
         tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
         tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
         tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -164,7 +164,7 @@ class ComposeViewController: UIViewController, UIScrollViewDelegate, UITextViewD
         theTextView.textColor = UIColor.whiteColor()
         theTextView.keyboardType = UIKeyboardType.Twitter
         theTextView.returnKeyType = UIReturnKeyType.Default
-        theTextView.font = UIFont.systemFontOfSize(15)
+        theTextView.font = UIFont.init(name: "MaisonNeue-Medium", size: 15)
         theTextView.enablesReturnKeyAutomatically = true
         theTextView.textAlignment = NSTextAlignment.Left
         //theTextView.autocapitalizationType = UITextAutocapitalizationType.None

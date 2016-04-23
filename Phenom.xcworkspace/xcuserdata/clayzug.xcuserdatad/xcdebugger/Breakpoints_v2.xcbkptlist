@@ -122,28 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Phenom/TimelineViewController.swift"
-            timestampString = "482981394.006045"
+            timestampString = "483043354.523297"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
             landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Phenom/AppDelegate.swift"
-            timestampString = "482976593.314829"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "695"
-            endingLineNumber = "695"
-            landmarkName = "removeAddMomentView()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -170,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Phenom/TimelineViewController.swift"
-            timestampString = "482982926.572807"
+            timestampString = "483043354.523297"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "549"
-            endingLineNumber = "549"
+            startingLineNumber = "552"
+            endingLineNumber = "552"
             landmarkName = "tableView(_:willDisplayCell:forRowAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -182,16 +166,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Phenom/TimelineViewController.swift"
-            timestampString = "482982966.300079"
+            filePath = "Phenom/ProfileViewController.swift"
+            timestampString = "483048476.83631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "555"
-            endingLineNumber = "555"
-            landmarkName = "tableView(_:willDisplayCell:forRowAtIndexPath:)"
+            startingLineNumber = "558"
+            endingLineNumber = "558"
+            landmarkName = "queryForUser()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

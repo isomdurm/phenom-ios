@@ -47,7 +47,7 @@ class TimelineHeaderView: UIView {
         
         userLbl = UILabel()
         userLbl!.backgroundColor = UIColor.clearColor()
-        userLbl!.font = UIFont.boldSystemFontOfSize(18)
+        userLbl!.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         userLbl!.textColor = UIColor.whiteColor()
         userLbl!.textAlignment = NSTextAlignment.Left
         userLbl!.numberOfLines = 1
@@ -60,7 +60,7 @@ class TimelineHeaderView: UIView {
         
         timeLbl = UILabel()
         timeLbl!.backgroundColor = UIColor.clearColor()
-        timeLbl!.font = UIFont.boldSystemFontOfSize(12)
+        timeLbl!.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         timeLbl!.textColor = UIColor.lightGrayColor()
         timeLbl!.textAlignment = NSTextAlignment.Left
         timeLbl!.numberOfLines = 1

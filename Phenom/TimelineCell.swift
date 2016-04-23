@@ -49,7 +49,7 @@ class TimelineCell: UITableViewCell {
         momentImgView.layer.masksToBounds = true
         
         musicLbl.backgroundColor = UIColor.blueColor()
-        musicLbl.font = UIFont.systemFontOfSize(12)
+        musicLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         musicLbl.textColor = UIColor.whiteColor()
         musicLbl.textAlignment = .Center
         musicLbl.numberOfLines = 1
@@ -57,7 +57,7 @@ class TimelineCell: UITableViewCell {
         contentView.addSubview(musicLbl)
         
         modeLbl.backgroundColor = UIColor.grayColor()
-        modeLbl.font = UIFont.systemFontOfSize(12)
+        modeLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         modeLbl.textColor = UIColor.whiteColor()
         modeLbl.textAlignment = .Center
         modeLbl.numberOfLines = 1
@@ -85,7 +85,7 @@ class TimelineCell: UITableViewCell {
         gearImgView.layer.masksToBounds = true
 
         gearLbl.backgroundColor = UIColor.whiteColor()
-        gearLbl.font = UIFont.systemFontOfSize(12)
+        gearLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         gearLbl.textColor = UIColor.lightGrayColor()
         gearLbl.textAlignment = .Left
         gearLbl.numberOfLines = 1
@@ -105,7 +105,7 @@ class TimelineCell: UITableViewCell {
         heartImgViewSmall.layer.masksToBounds = true
         
         likesLbl.backgroundColor = UIColor.clearColor()
-        likesLbl.font = UIFont.systemFontOfSize(12)
+        likesLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         likesLbl.textColor = UIColor.whiteColor()
         likesLbl.textAlignment = .Left
         likesLbl.numberOfLines = 1
@@ -119,7 +119,7 @@ class TimelineCell: UITableViewCell {
         //
         
         headerLbl.backgroundColor = UIColor.clearColor()
-        headerLbl.font = UIFont.systemFontOfSize(17)
+        headerLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         headerLbl.textColor = UIColor.lightGrayColor()
         headerLbl.textAlignment = .Left
         headerLbl.numberOfLines = 0
@@ -133,7 +133,7 @@ class TimelineCell: UITableViewCell {
         //
         
 //        commentLbl.backgroundColor = UIColor.clearColor()
-//        commentLbl.font = UIFont.systemFontOfSize(12)
+//        commentLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
 //        commentLbl.textColor = UIColor.whiteColor()
 //        commentLbl.textAlignment = NSTextAlignment.Left
 //        commentLbl.numberOfLines = 1
@@ -203,7 +203,7 @@ class TimelineCell: UITableViewCell {
         footerView.frame = CGRectMake(0, cellWidth+50+80, cellWidth, 35)
         
         
-//        let font = UIFont.boldSystemFontOfSize(17)
+//        let font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
 //        let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(headerLbl.text!, font: font, width: cellWidth-15-15)
 //        
 //        headerLbl.frame = CGRectMake(15, 200+15, cellWidth-15-15, height)

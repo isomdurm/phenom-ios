@@ -463,7 +463,16 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func queryForMusicWithString(str : String) {
         
+        // search for music
         // https://api1.phenomapp.com:8081/moment/searchForSongs?searchString=STRING
+        
+        
+        // featured music call
+        // https://play.spotify.com/user/phenomapp/playlist/1QHuNn2F6ai4uIlkLweFfg
+        
+        // play music call
+        // av session with music url in moment  -  "publicUrl"
+        
         
         
         

@@ -24,7 +24,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
     var isPushed: Bool = false
     
-    var momentNumber = 30
+    var momentNumber = 20
     var loadNextPage: Bool = false
     var playingMedia: Bool = false
     
@@ -69,7 +69,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         theTableView.showsVerticalScrollIndicator = true
         theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 100))
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.whiteColor()
@@ -128,14 +128,17 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func queryForTimeline() {
         
-        // Moment/feed?since=this morning&amount=YYY
-        
+        // moment/feed?since=this morning&amount=YYY
         
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed"
         let date = NSDate().timeIntervalSince1970 * 1000
         
         //let oldDateTime = NSDate(timeIntervalSinceReferenceDate: -86400.0)
         //let hmmm = NSDate().timeIntervalSinceDate(oldDateTime) * 1000
+        
+        //
+        self.momentsData = NSData()
+        //
         
         let params = "date=\(date)&amount=\(momentNumber)"
         let type = "GET"
@@ -158,7 +161,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.momentsData = dataFromString
                     
                     let results = json["results"]
-                    print("timeline results.count: \(results.count)")
+                    print("timeline results: \(results)")
                     
                     // done, reload tableView
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -581,7 +584,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     func getNextPage() {
         print("getNextPage hit")
         
-        momentNumber = momentNumber + 30
+        momentNumber = momentNumber + 20
         
         queryForTimeline()
         
@@ -935,7 +938,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             
         })
-        
     }
     
     

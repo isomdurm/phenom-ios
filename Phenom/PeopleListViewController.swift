@@ -216,19 +216,37 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
             })
         }
         
-        
-        if let id = results[indexPath.row]["userFollows"].bool {
-            if (id) {
+        if let id = results[indexPath.row]["id"].string {
+            
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let currentUserId = defaults.objectForKey("userId") as! String
+            if (id == currentUserId) {
+                
                 cell.followBtn.selected = true
                 cell.followBtn.hidden = true
+                
             } else {
-                cell.followBtn.selected = false
-                cell.followBtn.hidden = false
+                
+                if let id = results[indexPath.row]["userFollows"].bool {
+                    if (id) {
+                        cell.followBtn.selected = true
+                        cell.followBtn.hidden = true
+                    } else {
+                        cell.followBtn.selected = false
+                        cell.followBtn.hidden = false
+                    }
+                } else {
+                    cell.followBtn.selected = true
+                    cell.followBtn.hidden = true
+                }
+                
             }
-        } else {
-            cell.followBtn.selected = true
-            cell.followBtn.hidden = true
+            
         }
+        
+        
+        cell.followBtn.tag = indexPath.row
+        cell.followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents: .TouchUpInside)
         
         
         return cell
@@ -259,9 +277,126 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func userBtnAction(sender: UIButton){
-        print(sender.tag)
+    
+    func followBtnAction(sender : UIButton) {
         
+        // follow only
+        
+        sender.hidden = true
+        
+        // get frame of follow btn
+        
+        let ip = NSIndexPath(forItem: sender.tag, inSection: 0)
+        let cell = self.theTableView.cellForRowAtIndexPath(ip) as! PeopleCell
+        
+        //let mediaHeight = cell.frame.size.width+110
+        
+        let followImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width-65-15, 18, 65, 38))
+        followImgView.backgroundColor = UIColor.clearColor()
+        followImgView.image = UIImage(named: "addedBtnImg.png")
+        cell.addSubview(followImgView)
+        
+        followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.75, 0.75)
+        
+        UIView.animateWithDuration(0.18, animations: {
+            followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.04, 1.04)
+            }, completion: { finished in
+                if (finished){
+                    UIView.animateWithDuration(0.16, animations: {
+                        followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                        }, completion: { finished in
+                            if (finished) {
+                                
+                                let delay = 0.3 * Double(NSEC_PER_SEC)
+                                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+                                dispatch_after(time, dispatch_get_main_queue()) {
+                                    
+                                    UIView.animateWithDuration(0.18, animations: {
+                                        followImgView.alpha = 0.0
+                                        }, completion: { finished in
+                                            if (finished) {
+                                                followImgView.removeFromSuperview()
+                                                
+                                                //
+                                                self.followAction(sender)
+                                                //
+                                                
+                                            }
+                                    })
+                                }
+                            }
+                    })
+                }
+        })
+    }
+    
+    func followAction(sender : UIButton) {
+        
+        let json = JSON(data: peopleData)
+        let results = json["results"]
+        let uid = results[sender.tag]["id"].string
+        
+        // follow
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let params = ""
+        let type = "POST"
+        
+        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if (error == nil) {
+                
+                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    
+                    let json = JSON(data: dataFromString)
+                    if json["errorCode"].number != 200  {
+                        print("json: \(json)")
+                        print("error: \(json["errorCode"].number)")
+                        
+                        return
+                    }
+                    
+                    // followed
+                    
+                    // update followingUserIds
+                    //
+                    // reload
+                    
+                    let array = defaults.arrayForKey("followingUserIds")
+                    let ma = NSMutableArray(array: array!)
+                    if (ma.containsObject(uid!)) {
+                        // in followingUserIds, do nothing
+                    } else {
+                        let followingCount = defaults.objectForKey("followingCount") as! Int
+                        let newcount = followingCount+1
+                        
+                        ma.addObject(uid!)
+                        let newarray = ma as NSArray
+                        defaults.setObject(newarray, forKey: "followingUserIds")
+                        defaults.setObject(newcount, forKey: "followingCount")
+                        defaults.synchronize()
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        print("followed")
+                        self.theTableView.reloadData()
+                    })
+                    
+                } else {
+                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
+                }
+                
+            } else {
+                //
+            }
+            
+        })
         
     }
     

@@ -27,7 +27,7 @@ class ExploreCell: UITableViewCell {
         userImgView.layer.masksToBounds = true
         
         nameLbl.backgroundColor = UIColor.yellowColor()
-        nameLbl.font = UIFont.boldSystemFontOfSize(17)
+        nameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         nameLbl.textColor = UIColor.lightGrayColor()
         nameLbl.textAlignment = NSTextAlignment.Left
         nameLbl.numberOfLines = 1
@@ -35,7 +35,7 @@ class ExploreCell: UITableViewCell {
         contentView.addSubview(nameLbl)
         
         usernameLbl.backgroundColor = UIColor.clearColor()
-        usernameLbl.font = UIFont.boldSystemFontOfSize(14)
+        usernameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
         usernameLbl.textColor = UIColor.redColor()
         usernameLbl.textAlignment = NSTextAlignment.Left
         usernameLbl.numberOfLines = 1

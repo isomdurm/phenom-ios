@@ -140,7 +140,7 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
         exploreGearBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 0, 100, 35)
         exploreGearBtn.backgroundColor = UIColor.greenColor()
         exploreGearBtn.addTarget(self, action:#selector(exploreGearBtnAction), forControlEvents:.TouchUpInside)
-        exploreGearBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        exploreGearBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         exploreGearBtn.titleLabel?.numberOfLines = 1
         exploreGearBtn.contentHorizontalAlignment = .Center
         exploreGearBtn.contentVerticalAlignment = .Center
@@ -154,7 +154,7 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
         explorePeopleBtn.frame = CGRectMake(gearContainerView.frame.size.width-100, 35+gearScrollView.frame.size.height, 100, 35)
         explorePeopleBtn.backgroundColor = UIColor.greenColor()
         explorePeopleBtn.addTarget(self, action:#selector(explorePeopleBtnAction), forControlEvents:.TouchUpInside)
-        explorePeopleBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        explorePeopleBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         explorePeopleBtn.titleLabel?.numberOfLines = 1
         explorePeopleBtn.contentHorizontalAlignment = .Center
         explorePeopleBtn.contentVerticalAlignment = .Center
@@ -263,7 +263,7 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
             gearBtn.backgroundColor = UIColor.blueColor()
             gearBtn.addTarget(self, action:#selector(gearBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
             gearBtn.titleLabel?.numberOfLines = 1
-            gearBtn.titleLabel?.font = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
+            gearBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 13)
             gearBtn.contentHorizontalAlignment = .Center
             gearBtn.contentVerticalAlignment = .Bottom
             gearBtn.titleLabel?.textAlignment = .Center
