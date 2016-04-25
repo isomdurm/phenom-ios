@@ -164,6 +164,7 @@ class GearDetailViewController: UIViewController, UIScrollViewDelegate, SFSafari
         
         let imgView1 = UIImageView(frame: CGRectMake(0, 0, theScrollView.frame.size.width, theScrollView.frame.size.width))
         imgView1.contentMode = UIViewContentMode.ScaleAspectFill
+        imgView1.backgroundColor = UIColor.whiteColor()
         theScrollView.addSubview(imgView1)
         imgView1.layer.masksToBounds = true
         

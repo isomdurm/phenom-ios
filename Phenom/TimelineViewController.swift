@@ -171,12 +171,15 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     self.momentsData = response.data!
                     
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        self.reloadAction()
-                        
-                    })
+                } else {
+                    print("hit here ?: \(response.description)")
                 }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    self.reloadAction()
+                    
+                })
         }
         
     }

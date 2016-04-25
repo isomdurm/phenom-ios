@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var clientId = "chLsgAqWLqXGPsWDKACcAhobUmZrxpdZowOOwyPpFEBPHDQYGO"
     var clientSecret = "YlVsbkxaeFFtZVhDY3ZaU2dIRWFCYmtUcWZhcXFPYldsT2JSaU1NZ2tjcm1MWEVKeko="
     var apiVersion = "1.2.3"
-    var phenomApiUrl = "https://api1.phenomapp.com:8081" //"http://192.168.129.253:8081" // "http://192.168.129.95:8081" //"http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
+    var phenomApiUrl = "https://api1.phenomapp.com:8081" //"https://api2.phenomapp.com:8081" //   //"http://192.168.129.253:8081" // "http://192.168.129.95:8081" //"http://localhost:8081" //"https://ec2-52-73-17-149.compute-1.amazonaws.com:8081" //"https://phenomapp-test-1-2-3.elasticbeanstalk.com:8081" //
     
     var window: UIWindow?
 
@@ -200,7 +200,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         profilevc!.lockerProductCount = defaults.objectForKey("lockerProductCount") as! NSNumber
         //profilevc!.showingTabbar = true
         
-        let nav1 = UINavigationController(rootViewController: timelinevc!)
+        let nav1 = UINavigationController(rootViewController: feedvc!)
         let nav2 = UINavigationController(rootViewController: explorevc!)
         let nav3 = UINavigationController(rootViewController: UIViewController())
         let nav4 = UINavigationController(rootViewController: myactivityvc!)
@@ -274,8 +274,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         if (previousController == viewController) {
             
             if (tabBarController.selectedIndex == 0) {
-                if (!timelinevc!.isPushed) {
-                    timelinevc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
+                if (!feedvc!.isPushed) {
+                    feedvc!.theTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                 }
             } else if (tabBarController.selectedIndex == 1) {
                 if (!explorevc!.isPushed) {

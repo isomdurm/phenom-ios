@@ -107,10 +107,6 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
         
         Alamofire.request(.GET, url, headers: headers)
             .responseJSON { response in
-                //print(response.request)  // original URL request
-                //print(response.response) // URL response
-                //print(response.data)     // server data
-                //print(response.result)   // result of response serialization
                 
                 if let JSON = response.result.value {
                     //print("JSON: \(JSON)")
@@ -219,10 +215,10 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
         headlineNode.frame = CGRectMake(0, 0, 200, 60)
         headlineNode.layout()
         headlineNode.text = h
-        node.addSubnode(headlineNode)
+        //node.addSubnode(headlineNode)
         
         
-        return node
+        return headlineNode
         
         
         //ASDataController * dataController = [self valueForKey:@"_dataController"];

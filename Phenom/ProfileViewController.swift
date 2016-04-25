@@ -84,7 +84,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             imageUrl = passedUserJson["imageUrl"].string!
             firstName = passedUserJson["firstName"].string!
             lastName = passedUserJson["lastName"].string!
-            sports = [passedUserJson["sport"].string!]
+            
+            if (passedUserJson["sports"].arrayObject != nil) {
+                sports = passedUserJson["sports"].arrayObject!
+            } else {
+                sports = [passedUserJson["sport"].string!]
+            }
+            //sports = [passedUserJson["sport"].string!]
+            
             hometown = ht != nil ? ht! : ""
             bio = passedUserJson["description"].string!
             
@@ -560,8 +567,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.momentCount = self.passedUserJson["momentCount"].number!
                     self.lockerProductCount = self.passedUserJson["lockerProductCount"].number!
                     
-                    let sport = self.passedUserJson["sport"].string! // make an array
-                    self.sports = [sport]
+                    //let sport = self.passedUserJson["sport"].string! // make an array
+                    //self.sports = [sport]
+                    
+                    if (self.passedUserJson["sports"].arrayObject != nil) {
+                        self.sports = self.passedUserJson["sports"].arrayObject!
+                    } else {
+                        self.sports = [self.passedUserJson["sport"].string!]
+                    }
+                    //self.sports = self.passedUserJson["sports"].arrayObject!
                     
                     
                     if (self.userId == uid) {

@@ -166,6 +166,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.interactivePopGestureRecognizer!.delegate = self
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+
+        
+    }
+    
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         

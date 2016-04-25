@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UITextViewDelegate {
     
@@ -401,129 +402,198 @@ class ComposeMediaViewController: UIViewController, UIScrollViewDelegate, UIText
     
     func uploadImage(image : UIImage) {
         
-        func sendFile(
-            urlPath:String,
-            fileName:String,
-            data:NSData,
-            completionHandler: (NSURLResponse?, NSData?, NSError?) -> Void){
-            
-            let url: NSURL = NSURL(string: urlPath)!
-            let request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
-            
-            request1.HTTPMethod = "PUT"
-            
-            let boundary = generateBoundaryString()
-            
-            let fullData = photoDataToFormData(data,boundary:boundary,fileName:fileName)
-            
-            request1.setValue("multipart/form-data; boundary=" + boundary,
-                              forHTTPHeaderField: "Content-Type")
-            
-            // REQUIRED!
-            request1.setValue(String(fullData.length), forHTTPHeaderField: "Content-Length")
-            
-            request1.HTTPBody = fullData
-            request1.HTTPShouldHandleCookies = false
-            let defaults = NSUserDefaults.standardUserDefaults()
-            let bearerToken = defaults.stringForKey("bearerToken")! as String
-            request1.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
-            request1.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-            
-            //            let queue:NSOperationQueue = NSOperationQueue()
-            //            NSURLConnection.sendAsynchronousRequest(
-            //                request1,
-            //                queue: queue,
-            //                completionHandler: completionHandler)
-            
-            let session = NSURLSession.sharedSession()
-            //let task = session.dataTaskWithRequest(request, completionHandler:completionHandler)
-            //task.resume()
-            let task = session.dataTaskWithRequest(request1, completionHandler: {(data, response, error) in
-                
-                // notice that I can omit the types of data, response and error
-                // your code
-                
-                if (error != nil) {
-                    print("hmmm error w img upload: \(error?.code)")
+        let fullUrl = ""
+        
+        let imagePathUrl = NSURL()
+        let videoPathUrl = NSURL()
+        
+        // http://httpbin.org/post
+        
+        Alamofire.upload(
+            .POST,
+            fullUrl,
+            multipartFormData: { multipartFormData in
+                multipartFormData.appendBodyPart(fileURL: imagePathUrl, name: "photo")
+                multipartFormData.appendBodyPart(fileURL: videoPathUrl, name: "video")
+                multipartFormData.appendBodyPart(data: "Constants.AuthKey".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"authKey")
+                multipartFormData.appendBodyPart(data: "\(16)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"idUserChallenge")
+                multipartFormData.appendBodyPart(data: "comment".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"comment")
+                multipartFormData.appendBodyPart(data:"\(0.00)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"latitude")
+                multipartFormData.appendBodyPart(data:"\(0.00)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"longitude")
+                multipartFormData.appendBodyPart(data:"India".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"location")
+            },
+            encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .Success(let upload, _, _):
+//                    upload.responseJSON { request, response, JSON, error in
+//                        
+//                        
+//                    }
+                    print("success: upload: \(upload)")
                     
+                case .Failure(let encodingError):
                     
-                } else {
-                    
-                    // success
-                    print("success w response: \(response?.description)")
-                    //
-                    // reload timline and profile
+                    print("error: encodingError: \(encodingError)")
                     
                 }
-                
-                
-            });
-            
-            // do whatever you need with the task e.g. run
-            task.resume()
-            
-            
-        }
-        
-        
-        //let url = "https://api1.phenomapp.com:8081/user"
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
-        //        let img = UIImage(contentsOfFile: fullPath)
-        let data: NSData = UIImageJPEGRepresentation(image, 0.7)!
-        
-        sendFile(url,
-                 fileName:"image.jpeg",
-                 data:data,
-                 completionHandler: {
-                    (result:NSURLResponse?, isNoInternetConnection:NSData?, err: NSError?) -> Void in
-                    
-                    // ...
-                    NSLog("Complete: \(result)")
             }
         )
         
-        // this is a very verbose version of that function
-        // you can shorten it, but i left it as-is for clarity
-        // and as an example
-        func photoDataToFormData(data:NSData,boundary:String,fileName:String) -> NSData {
-            let fullData = NSMutableData()
-            
-            // 1 - Boundary should start with --
-            let lineOne = "--" + boundary + "\r\n"
-            fullData.appendData(lineOne.dataUsingEncoding(
-                NSUTF8StringEncoding,
-                allowLossyConversion: false)!)
-            
-            // 2
-            let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"\r\n"
-            NSLog(lineTwo)
-            fullData.appendData(lineTwo.dataUsingEncoding(
-                NSUTF8StringEncoding,
-                allowLossyConversion: false)!)
-            
-            // 3
-            let lineThree = "Content-Type: image/jpg\r\n\r\n"
-            fullData.appendData(lineThree.dataUsingEncoding(
-                NSUTF8StringEncoding,
-                allowLossyConversion: false)!)
-            
-            // 4
-            fullData.appendData(data)
-            
-            // 5
-            let lineFive = "\r\n"
-            fullData.appendData(lineFive.dataUsingEncoding(
-                NSUTF8StringEncoding,
-                allowLossyConversion: false)!)
-            
-            // 6 - The end. Notice -- at the start and at the end
-            let lineSix = "--" + boundary + "--\r\n"
-            fullData.appendData(lineSix.dataUsingEncoding(
-                NSUTF8StringEncoding,
-                allowLossyConversion: false)!)
-            
-            return fullData
-        }
+        
+//        
+//        Alamofire.request(.GET, url, headers: headers)
+//            .responseJSON { response in
+//                //print(response.request)  // original URL request
+//                //print(response.response) // URL response
+//                //print(response.data)     // server data
+//                //print(response.result)   // result of response serialization
+//                
+//                if let JSON = response.result.value {
+//                    //print("JSON: \(JSON)")
+//                    
+//                    if let errorCode = JSON["errorCode"] {
+//                        let ec = errorCode as! NSNumber
+//                        if ec != 200 {
+//                            print("err: \(ec)")
+//                            return
+//                        }
+//                    }
+//                    
+//                  
+//                    
+//                }
+//        }
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        func sendFile(
+//            urlPath:String,
+//            fileName:String,
+//            data:NSData,
+//            completionHandler: (NSURLResponse?, NSData?, NSError?) -> Void){
+//            
+//            let url: NSURL = NSURL(string: urlPath)!
+//            let request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
+//            
+//            request1.HTTPMethod = "PUT"
+//            
+//            let boundary = generateBoundaryString()
+//            
+//            let fullData = photoDataToFormData(data,boundary:boundary,fileName:fileName)
+//            
+//            request1.setValue("multipart/form-data; boundary=" + boundary,
+//                              forHTTPHeaderField: "Content-Type")
+//            
+//            // REQUIRED!
+//            request1.setValue(String(fullData.length), forHTTPHeaderField: "Content-Length")
+//            
+//            request1.HTTPBody = fullData
+//            request1.HTTPShouldHandleCookies = false
+//            let defaults = NSUserDefaults.standardUserDefaults()
+//            let bearerToken = defaults.stringForKey("bearerToken")! as String
+//            request1.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+//            request1.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+//            
+//            //            let queue:NSOperationQueue = NSOperationQueue()
+//            //            NSURLConnection.sendAsynchronousRequest(
+//            //                request1,
+//            //                queue: queue,
+//            //                completionHandler: completionHandler)
+//            
+//            let session = NSURLSession.sharedSession()
+//            //let task = session.dataTaskWithRequest(request, completionHandler:completionHandler)
+//            //task.resume()
+//            let task = session.dataTaskWithRequest(request1, completionHandler: {(data, response, error) in
+//                
+//                // notice that I can omit the types of data, response and error
+//                // your code
+//                
+//                if (error != nil) {
+//                    print("hmmm error w img upload: \(error?.code)")
+//                    
+//                    
+//                } else {
+//                    
+//                    // success
+//                    print("success w response: \(response?.description)")
+//                    //
+//                    // reload timline and profile
+//                    
+//                }
+//                
+//                
+//            });
+//            
+//            // do whatever you need with the task e.g. run
+//            task.resume()
+//            
+//            
+//        }
+//        
+//        
+//        //let url = "https://api1.phenomapp.com:8081/user"
+//        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+//        //        let img = UIImage(contentsOfFile: fullPath)
+//        let data: NSData = UIImageJPEGRepresentation(image, 0.7)!
+//        
+//        sendFile(url,
+//                 fileName:"image.jpeg",
+//                 data:data,
+//                 completionHandler: {
+//                    (result:NSURLResponse?, isNoInternetConnection:NSData?, err: NSError?) -> Void in
+//                    
+//                    // ...
+//                    NSLog("Complete: \(result)")
+//            }
+//        )
+//        
+//        // this is a very verbose version of that function
+//        // you can shorten it, but i left it as-is for clarity
+//        // and as an example
+//        func photoDataToFormData(data:NSData,boundary:String,fileName:String) -> NSData {
+//            let fullData = NSMutableData()
+//            
+//            // 1 - Boundary should start with --
+//            let lineOne = "--" + boundary + "\r\n"
+//            fullData.appendData(lineOne.dataUsingEncoding(
+//                NSUTF8StringEncoding,
+//                allowLossyConversion: false)!)
+//            
+//            // 2
+//            let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"\r\n"
+//            NSLog(lineTwo)
+//            fullData.appendData(lineTwo.dataUsingEncoding(
+//                NSUTF8StringEncoding,
+//                allowLossyConversion: false)!)
+//            
+//            // 3
+//            let lineThree = "Content-Type: image/jpg\r\n\r\n"
+//            fullData.appendData(lineThree.dataUsingEncoding(
+//                NSUTF8StringEncoding,
+//                allowLossyConversion: false)!)
+//            
+//            // 4
+//            fullData.appendData(data)
+//            
+//            // 5
+//            let lineFive = "\r\n"
+//            fullData.appendData(lineFive.dataUsingEncoding(
+//                NSUTF8StringEncoding,
+//                allowLossyConversion: false)!)
+//            
+//            // 6 - The end. Notice -- at the start and at the end
+//            let lineSix = "--" + boundary + "--\r\n"
+//            fullData.appendData(lineSix.dataUsingEncoding(
+//                NSUTF8StringEncoding,
+//                allowLossyConversion: false)!)
+//            
+//            return fullData
+//        }
         
     }
     

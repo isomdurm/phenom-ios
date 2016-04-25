@@ -206,6 +206,11 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         self.theTableView.tableHeaderView!.addSubview(emptyTableBtn)
         
         self.theTableView.reloadData()
+        self.refreshControl.endRefreshing()
+        
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.removeFromSuperview()
+        
     }
     
     func emptyTableBtnAction() {
@@ -365,7 +370,6 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                 
                 // show my moment
                 if let id = results[indexPath.row]["additionalData"]["momentId"].string {
-                    
                     
                     // GET "imageUrlTiny" !!!
                     cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)

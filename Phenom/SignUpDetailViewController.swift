@@ -451,7 +451,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             //"email": self.passedEmail,
             "firstName": self.passedFirstName,
             "lastName": self.passedLastName,
-            "sport": self.selectedSports.lastObject!,
+            "sports": self.selectedSports,
             "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
             "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
             "grant_type": "password"
@@ -548,8 +548,9 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
                     let momentCount = json["momentCount"].number!
                     let lockerProductCount = json["lockerProductCount"].number!
                     
-                    let sport = json["sport"].string! // make an arrray
-                    let sportsArray = [sport]
+                    //let sport = json["sport"].string! // make an arrray
+                    //let sportsArray = [sport]
+                    let sportsArray = json["sports"].arrayObject!
                     
                     //
                     

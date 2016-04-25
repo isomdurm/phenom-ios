@@ -289,6 +289,13 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     let sport = json["sport"].string! // make an arrray
                     let sportsArray = [sport]
                     
+//                    var sportsArray = []
+//                    if (json["sports"].arrayObject != nil) {
+//                        sportsArray = json["sports"].arrayObject!
+//                    } else {
+//                        sportsArray = [json["sport"].string!]
+//                    }
+                    
                     //
                     
                     NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
