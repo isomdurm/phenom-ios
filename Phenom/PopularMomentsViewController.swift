@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
 import Haneke
 
@@ -39,10 +40,10 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.clearColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside) 
+        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
+        backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
@@ -109,26 +110,29 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     
     func queryForPopular() {
         
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/moment/featured"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "pageNumber=\(pageNumber)"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/moment/featured?pageNumber=\(pageNumber)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
+                    
                     
                     if (self.pageNumber > 1) {
                         
@@ -139,7 +143,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                         
                     } else {
                         
-                        self.momentsData = dataFromString
+                        self.momentsData = response.data!
                         
                     }
                     
@@ -152,14 +156,8 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                         
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                    self.refreshControl.endRefreshing()
                 }
-            } else {
-                //
-            }
-        })
+        }
         
         self.refreshControl.endRefreshing()
         
@@ -529,7 +527,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         if let _ = results[sender.tag]["user"]["id"].string {
             
             let vc = ProfileViewController()
-            vc.passedUserData = results[sender.tag]["user"]
+            vc.passedUserJson = results[sender.tag]["user"] 
             navigationController?.pushViewController(vc, animated: true)
             
         }
@@ -559,44 +557,44 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
     
     func likeAction(momentId : String) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
         if ((UIApplication.sharedApplication().delegate as! AppDelegate).likedMomentId(momentId)) {
             return
         }
         
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "POST"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.POST, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update likedPostIdeas
-                    //
-                    // reload
                     
-                    let array = defaults.arrayForKey("likedMomentIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("likedMomentIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(momentId)) {
                         // in likedMomentIds, do nothing
                     } else {
                         ma.addObject(momentId)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "likedMomentIds")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "likedMomentIds")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -604,51 +602,46 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                         print("liked")
                         self.theTableView.reloadData()
                     })
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
-            } else {
-                //
-            }
-        })
+        }
         
     }
     
     func unlikeAction(momentId : String) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "DELETE"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.DELETE, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update likedPostIdeas
-                    //
-                    // reload
                     
-                    let array = defaults.arrayForKey("likedMomentIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("likedMomentIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(momentId)) {
                         // in likedMomentIds, do nothing
                         ma.removeObject(momentId)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "likedMomentIds")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "likedMomentIds")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                     }
                     
                     
@@ -663,12 +656,8 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                }            } else {
-                //
-            }
-        })
+                }
+        }
         
     }
     
@@ -681,7 +670,7 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         if let id = results[sender.tag]["id"].string {
             print("id: \(id)")
             let vc = ChatViewController()
-            vc.passedMomentData = results[sender.tag]
+            vc.passedMomentJson = results[sender.tag] 
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
@@ -787,47 +776,43 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
         
         // follow
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "POST"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.POST, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // followed
                     
-                    // update followingUserIds
-                    //
-                    // reload
-                    
-                    let array = defaults.arrayForKey("followingUserIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("followingUserIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(uid!)) {
                         // in followingUserIds, do nothing
                     } else {
-                        let followingCount = defaults.objectForKey("followingCount") as! Int
+                        let followingCount = NSUserDefaults.standardUserDefaults().objectForKey("followingCount") as! Int
                         let newcount = followingCount+1
                         
                         ma.addObject(uid!)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "followingUserIds")
-                        defaults.setObject(newcount, forKey: "followingCount")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "followingUserIds")
+                        NSUserDefaults.standardUserDefaults().setObject(newcount, forKey: "followingCount")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -836,14 +821,8 @@ class PopularMomentsViewController: UIViewController, UITableViewDelegate, UITab
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            } else {
-                //
-            }
-            
-        })
+        }
 
     }
     

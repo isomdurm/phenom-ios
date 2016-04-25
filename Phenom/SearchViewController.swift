@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import QuartzCore
 import SwiftyJSON
 import Haneke
@@ -378,86 +379,80 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         //https://api1.phenomapp.com:8081/user/search?pageNumber=INT&query=STRING
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/search"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "pageNumber=1&query=\(self.theTextField.text)"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/search?pageNumber=1&query=\(self.theTextField.text)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.people = dataFromString
+                    
+                    self.people = response.data!
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.theTableView.reloadData()
                     })
                     
-                    
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     
     func queryForGearWithString(str : String) {
         
         // https://api1.phenomapp.com:8081/product?query=STRING
+
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "query=\(self.theTextField.text)"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product?query=\(self.theTextField.text)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.gear = dataFromString
+                    
+                    self.gear = response.data!
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     

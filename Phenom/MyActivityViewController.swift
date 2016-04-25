@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
 import Haneke
 
@@ -108,30 +109,34 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     func queryForMyActivity() {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/notification"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "since=\(date)&limit=30"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/notification?since=\(date)&limit=30"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    let results = json["results"]
-                    print("results: \(results)")
                     
-                    self.myActivityData = dataFromString
+                    self.myActivityData = response.data!
+                    
+                    let json = JSON(data: self.myActivityData)
+                    let results = json["results"]
                     
                     if (results.count > 0) {
                         
@@ -151,15 +156,8 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                         })
                     }
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                    self.refreshControl.endRefreshing()
                 }
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     
@@ -447,7 +445,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         if let _ = results[sender.tag]["source"]["id"].string {
             
             let vc = ProfileViewController()
-            vc.passedUserData = results[sender.tag]["source"]
+            vc.passedUserJson = results[sender.tag]["source"]
             navigationController?.pushViewController(vc, animated: true)
             
             isPushed = true

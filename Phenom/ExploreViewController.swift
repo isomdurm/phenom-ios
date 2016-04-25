@@ -8,6 +8,7 @@
 
 
 import UIKit
+import Alamofire
 import QuartzCore
 import SwiftyJSON
 import Haneke
@@ -46,10 +47,10 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
+        backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
@@ -400,29 +401,35 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         self.peopleData = NSData()
         self.theTableView.reloadData()
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/search"
+
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "query=\(str)&pageNumber=1"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/search?query=\(str)&pageNumber=1"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.peopleData = dataFromString
+                    self.peopleData = response.data!
+                    
+                    let json = JSON(data: self.peopleData)
+                    
                     let results = json["results"]
-                    print("people: \(results)")
                     
                     if (results.count > 0) {
                         
@@ -456,15 +463,8 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                         })
                     }
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     
@@ -475,29 +475,35 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         self.gearData = NSData()
         self.theTableView.reloadData()
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product"
-        //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "query=\(str)"
-        let type = "GET"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/product?query=\(str)"
+        
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.gearData = dataFromString
+                    self.gearData = response.data!
+                    
+                    let json = JSON(data: self.gearData)
+                    
                     let results = json["results"]["products"]
-                    print("gear: \(results)")
                     
                     if (results.count > 0) {
                         
@@ -531,15 +537,8 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                         })
                     }
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     
@@ -580,6 +579,29 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let aLbl = UILabel(frame: CGRectMake(20, 0, view.frame.size.width, 35))
+        aLbl.textAlignment = NSTextAlignment.Left
+        
+        if (self.isTyping) {
+            aLbl.text = "SAVED"
+        } else {
+            aLbl.text = "RESULTS"
+        }
+        
+        aLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
+        aLbl.textColor = UINavigationBar.appearance().tintColor //gold
+        
+        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
+        aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        
+        aView.addSubview(aLbl)
+        
+        return aView;
+        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -813,7 +835,7 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                 let results = json["results"]
                 if let _ = results[indexPath.row]["id"].string {
                     let vc = ProfileViewController()
-                    vc.passedUserData = results[indexPath.row]
+                    vc.passedUserJson = results[indexPath.row]
                     navigationController?.pushViewController(vc, animated: true)
                 }
                 
@@ -877,40 +899,40 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
         let productsDict = results["products"]
         
         let productJson = productsDict[sender.tag]
-        print("productJson: \(productJson)")
         
-        let defaults = NSUserDefaults.standardUserDefaults()
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "product=\(productJson)"
-        let type = "PUT"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker?product=\(productJson)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.PUT, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        sender.selected = false
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
+                   
                     print("+1 added to locker")
                     
                     sender.selected = true
                     
-                    let followingCount = defaults.objectForKey("lockerProductCount") as! Int
+                    let followingCount = NSUserDefaults.standardUserDefaults().objectForKey("lockerProductCount") as! Int
                     let newcount = followingCount+1
-                    defaults.setObject(newcount, forKey: "lockerProductCount")
-                    defaults.synchronize()
+                    NSUserDefaults.standardUserDefaults().setObject(newcount, forKey: "lockerProductCount")
+                    NSUserDefaults.standardUserDefaults().synchronize()
                     
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -918,16 +940,8 @@ class ExploreViewController: UIViewController, UITableViewDataSource, UITableVie
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                    
                 }
-                
-            } else {
-                //
-            }
-            
-        })
+        }
         
     }
     

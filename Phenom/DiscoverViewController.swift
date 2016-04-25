@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import QuartzCore
 import SwiftyJSON
 import Haneke
@@ -193,27 +194,31 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func queryForGear() {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear"
-        //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "pageNumber=1"
-        let type = "GET"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/gear?pageNumber=1"
+        
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.gearData = dataFromString
+                    self.gearData = response.data!
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
@@ -221,15 +226,8 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                     })
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription)
-                    
                 }
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     
@@ -292,28 +290,30 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func queryForPeople() {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/people"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "pageNumber=1"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/discover/people?pageNumber=1"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.peopleData = dataFromString
-                    print("self.peopleData hit")
+                    self.peopleData = response.data!
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
@@ -322,15 +322,8 @@ class DiscoverViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                     })
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription)
-                    
                 }
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     

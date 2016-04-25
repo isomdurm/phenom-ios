@@ -33,10 +33,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
+        backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
@@ -92,9 +92,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 5
     }
+    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 35
     }
+    
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let aLbl = UILabel(frame: CGRectMake(20, 0, view.frame.size.width, 35))
@@ -119,6 +121,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return aView;
         
     }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch (section) {
         case 0: return 8
@@ -128,9 +131,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 4: return 1
         default: return 0}
     }
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 50
     }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")

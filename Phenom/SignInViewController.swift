@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
 
 class SignInViewController: UIViewController, UITextFieldDelegate {
@@ -236,8 +237,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         //
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.stringForKey("bearerToken")! as String
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         
         if (bearerToken == "") {
             // something is wrong
@@ -245,32 +245,31 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        //
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
-                    
                     
                     // success, save user defaults
                     
-                    let defaults = NSUserDefaults.standardUserDefaults()
+                    let json = JSON(data: response.data!)
                     
                     let userId = json["id"].string!
                     let username = json["username"].string!
@@ -292,23 +291,23 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     
                     //
                     
-                    defaults.setObject(userId, forKey: "userId")
-                    defaults.setObject(username, forKey: "username")
-                    defaults.setObject(hometown, forKey: "hometown")
-                    defaults.setObject(imageUrl, forKey: "imageUrl")
-                    defaults.setObject(description, forKey: "description")
-                    defaults.setObject(firstName, forKey: "firstName")
-                    defaults.setObject(lastName, forKey: "lastName")
-                    defaults.setObject(email, forKey: "email")
-                    defaults.setObject(followersCount, forKey: "followersCount")
-                    defaults.setObject(followingCount, forKey: "followingCount")
+                    NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+                    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "username")
+                    NSUserDefaults.standardUserDefaults().setObject(hometown, forKey: "hometown")
+                    NSUserDefaults.standardUserDefaults().setObject(imageUrl, forKey: "imageUrl")
+                    NSUserDefaults.standardUserDefaults().setObject(description, forKey: "description")
+                    NSUserDefaults.standardUserDefaults().setObject(firstName, forKey: "firstName")
+                    NSUserDefaults.standardUserDefaults().setObject(lastName, forKey: "lastName")
+                    NSUserDefaults.standardUserDefaults().setObject(email, forKey: "email")
+                    NSUserDefaults.standardUserDefaults().setObject(followersCount, forKey: "followersCount")
+                    NSUserDefaults.standardUserDefaults().setObject(followingCount, forKey: "followingCount")
                     
-                    defaults.setObject(momentCount, forKey: "momentCount")
-                    defaults.setObject(lockerProductCount, forKey: "lockerProductCount")
+                    NSUserDefaults.standardUserDefaults().setObject(momentCount, forKey: "momentCount")
+                    NSUserDefaults.standardUserDefaults().setObject(lockerProductCount, forKey: "lockerProductCount")
                     
-                    defaults.setObject(sportsArray, forKey: "sports")
+                    NSUserDefaults.standardUserDefaults().setObject(sportsArray, forKey: "sports")
                     
-                    defaults.synchronize()
+                    NSUserDefaults.standardUserDefaults().synchronize()
                     
                     //
                     
@@ -321,9 +320,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     })
                     
                 }
-                
-            }
-        })
+        }
         
     }
 

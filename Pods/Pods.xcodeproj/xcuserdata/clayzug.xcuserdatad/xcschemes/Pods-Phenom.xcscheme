@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '57F74CED7627CDFC515FFC76'
+               BlueprintIdentifier = '557CD257855A0250279E20D3'
                BlueprintName = 'Pods-Phenom'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods_Phenom.framework'>

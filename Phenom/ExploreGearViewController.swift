@@ -41,10 +41,10 @@ class ExploreGearViewController: UIViewController, UICollectionViewDataSource, U
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
+        backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center

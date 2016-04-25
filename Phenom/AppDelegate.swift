@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     var window: UIWindow?
 
     var tabbarvc:TabBarViewController?
+    var feedvc:FeedViewController?
     var timelinevc:TimelineViewController?
     var explorevc:PopularViewController?
     var myactivityvc:MyActivityViewController?
@@ -172,6 +173,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
     func presentTabBarViewController() {
         
         setupNotifications()
+        
+        feedvc = FeedViewController()
         
         timelinevc = TimelineViewController()
         explorevc = PopularViewController()
@@ -708,6 +711,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
         
         return newImage
     }
+    
     
 }
 

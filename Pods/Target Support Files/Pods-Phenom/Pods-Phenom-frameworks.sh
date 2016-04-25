@@ -84,28 +84,26 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-Phenom/Alamofire.framework"
+  install_framework "Pods-Phenom/AlamofireImage.framework"
   install_framework "Pods-Phenom/AsyncDisplayKit.framework"
   install_framework "Pods-Phenom/Bolts.framework"
   install_framework "Pods-Phenom/DKImagePickerController.framework"
-  install_framework "Pods-Phenom/FBSDKCoreKit.framework"
-  install_framework "Pods-Phenom/FBSDKLoginKit.framework"
-  install_framework "Pods-Phenom/FBSDKShareKit.framework"
   install_framework "Pods-Phenom/Haneke.framework"
   install_framework "Pods-Phenom/ImagePicker.framework"
-  install_framework "Pods-Phenom/Just.framework"
   install_framework "Pods-Phenom/Reachability.framework"
+  install_framework "Pods-Phenom/SDWebImage.framework"
   install_framework "Pods-Phenom/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-Phenom/Alamofire.framework"
+  install_framework "Pods-Phenom/AlamofireImage.framework"
   install_framework "Pods-Phenom/AsyncDisplayKit.framework"
   install_framework "Pods-Phenom/Bolts.framework"
   install_framework "Pods-Phenom/DKImagePickerController.framework"
-  install_framework "Pods-Phenom/FBSDKCoreKit.framework"
-  install_framework "Pods-Phenom/FBSDKLoginKit.framework"
-  install_framework "Pods-Phenom/FBSDKShareKit.framework"
   install_framework "Pods-Phenom/Haneke.framework"
   install_framework "Pods-Phenom/ImagePicker.framework"
-  install_framework "Pods-Phenom/Just.framework"
   install_framework "Pods-Phenom/Reachability.framework"
+  install_framework "Pods-Phenom/SDWebImage.framework"
   install_framework "Pods-Phenom/SwiftyJSON.framework"
 fi

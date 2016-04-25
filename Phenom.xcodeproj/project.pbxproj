@@ -132,6 +132,7 @@
 		57B0305B1CC5702C00C53CD2 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57B0305A1CC5702C00C53CD2 /* PhotosUI.framework */; };
 		57B0305D1CC5704500C53CD2 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57B0305C1CC5704500C53CD2 /* Photos.framework */; };
 		57B0305F1CC5848C00C53CD2 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B0305E1CC5848C00C53CD2 /* PickerViewController.swift */; };
+		57C41E7B1CCC706F0045C991 /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C41E7A1CCC706F0045C991 /* LoadingCell.swift */; };
 		57C6DCFF1CA46C3E00B939DF /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */; };
 		57C6DD011CA46E3000B939DF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD001CA46E3000B939DF /* TabBarViewController.swift */; };
 		57C6DD031CA46E4700B939DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6DD021CA46E4700B939DF /* TimelineViewController.swift */; };
@@ -301,6 +302,7 @@
 		57B0305A1CC5702C00C53CD2 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		57B0305C1CC5704500C53CD2 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		57B0305E1CC5848C00C53CD2 /* PickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
+		57C41E7A1CCC706F0045C991 /* LoadingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
 		57C6DCFE1CA46C3E00B939DF /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		57C6DD001CA46E3000B939DF /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		57C6DD021CA46E4700B939DF /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 		5715004F1CA3136800AA8744 /* Phenom */ = {
 			isa = PBXGroup;
 			children = (
+				57C41E791CCC70170045C991 /* Nodes */,
 				57773D281CBADEB200A5D868 /* Fonts */,
 				572DF4BC1CA37A2E002184E2 /* Onboarding */,
 				57C6DD161CA4861F00B939DF /* Creation */,
@@ -644,6 +647,14 @@
 				57C6DD001CA46E3000B939DF /* TabBarViewController.swift */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		57C41E791CCC70170045C991 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				57C41E7A1CCC706F0045C991 /* LoadingCell.swift */,
+			);
+			name = Nodes;
 			sourceTree = "<group>";
 		};
 		57C6DD161CA4861F00B939DF /* Creation */ = {
@@ -951,6 +962,7 @@
 				57E3687A1CCAA942008C0E64 /* FeedViewController.swift in Sources */,
 				5768B93C1CB218F4002E9664 /* SignUpDetailViewController.swift in Sources */,
 				5703D9FD1CC31465008AAC6D /* PopularViewController.swift in Sources */,
+				57C41E7B1CCC706F0045C991 /* LoadingCell.swift in Sources */,
 				5768B94E1CB715C9002E9664 /* PeopleListViewController.swift in Sources */,
 				57A5D1EF1CC060720056D4FB /* ActiveLabel.swift in Sources */,
 				5768B94C1CB6CA48002E9664 /* PopularMomentsViewController.swift in Sources */,

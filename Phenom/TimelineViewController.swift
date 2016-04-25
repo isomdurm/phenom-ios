@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
 import Haneke
+import SDWebImage
+
 
 class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     
@@ -27,6 +30,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     var momentNumber = 20
     var loadNextPage: Bool = false
     var playingMedia: Bool = false
+    
+    var theArray = NSMutableArray()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,9 +135,6 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // moment/feed?since=this morning&amount=YYY
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed"
-        let date = NSDate().timeIntervalSince1970 * 1000
-        
         //let oldDateTime = NSDate(timeIntervalSinceReferenceDate: -86400.0)
         //let hmmm = NSDate().timeIntervalSinceDate(oldDateTime) * 1000
         
@@ -140,49 +142,42 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         self.momentsData = NSData()
         //
         
-        let params = "date=\(date)&amount=\(momentNumber)"
-        let type = "GET"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let date = NSDate().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed?date=\(date)&amount=\(momentNumber)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
+                //print(response.request)  // original URL request
+                //print(response.response) // URL response
+                //print(response.data)     // server data
+                //print(response.result)   // result of response serialization
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.momentsData = dataFromString
+                    self.momentsData = response.data!
                     
-                    let results = json["results"]
-                    print("timeline results: \(results)")
-                    
-                    // done, reload tableView
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.reloadAction()
                         
                     })
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription)
                 }
-            } else {
-                //
-            }
-        })
-        
-        //self.refreshControl.endRefreshing()
-        
-        //activityIndicator.stopAnimating()
-        //activityIndicator.removeFromSuperview()
-        
-        // end with animation
+        }
         
     }
     
@@ -306,23 +301,37 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.timelineImgView.setNeedsLayout()
             
             //cell.timelineImgView.hnk_setImageFromURL(fileUrl!)
-            cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                                                     success: { image in
-                                                        
-                                                        //print("image here: \(image)")
-                                                        cell.timelineImgView.image = image
-                                                        
-                },
-                                                     failure: { error in
-                                                        
-                                                        if ((error) != nil) {
-                                                            print("error here: \(error)")
-                                                            
-                                                            // collapse, this cell - it was prob deleted - error 402
-                                                            
-                                                        }
-            })
+//            cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+//                                                     success: { image in
+//                                                        
+//                                                        //print("image here: \(image)")
+//                                                        cell.timelineImgView.image = image
+//                                                        
+//                },
+//                                                     failure: { error in
+//                                                        
+//                                                        if ((error) != nil) {
+//                                                            print("error here: \(error)")
+//                                                            
+//                                                            // collapse, this cell - it was prob deleted - error 402
+//                                                            
+//                                                        }
+//            })
             //print("cell.momentImgView.image: \(cell.momentImgView.image)")
+            
+            
+//            let block: SDWebImageCompletionBlock! = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType!, imageURL: NSURL!) -> Void in
+//                //print("yo")
+//                cell.timelineImgView.image = image
+//            }
+//            
+//            cell.timelineImgView.sd_setImageWithURL(fileUrl, completed: block)
+            
+            cell.timelineImgView.sd_setImageWithURL(fileUrl)
+            
+            
+            
+            
         }
         
         if let id = results[indexPath.row]["mode"].number {
@@ -363,23 +372,33 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if let id = results[indexPath.row]["user"]["imageUrlTiny"].string {
             
             let fileUrl = NSURL(string: id)
-            cell.timelineUserImgView.setNeedsLayout()
+//            cell.timelineUserImgView.setNeedsLayout()
+//            
+//            //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
+//            cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
+//                                                         success: { image in
+//                                                            
+//                                                            //print("image here: \(image)")
+//                                                            cell.timelineUserImgView.image = image
+//                                                            
+//                },
+//                                                         failure: { error in
+//                                                            
+//                                                            if ((error) != nil) {
+//                                                                print("error here: \(error)")
+//                                                                
+//                                                            }
+//            })
             
-            //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
-            cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                                                         success: { image in
-                                                            
-                                                            //print("image here: \(image)")
-                                                            cell.timelineUserImgView.image = image
-                                                            
-                },
-                                                         failure: { error in
-                                                            
-                                                            if ((error) != nil) {
-                                                                print("error here: \(error)")
-                                                                
-                                                            }
-            })
+//            let block: SDWebImageCompletionBlock! = {(image: UIImage!, error: NSError!, cacheType: SDImageCacheType!, imageURL: NSURL!) -> Void in
+//                print("yo")
+//                cell.timelineUserImgView.image = image
+//            }
+//            
+//            cell.timelineUserImgView.sd_setImageWithURL(fileUrl, completed: block)
+            
+            cell.timelineUserImgView.sd_setImageWithURL(fileUrl)
+            
         }
         
         if let id = results[indexPath.row]["user"]["firstName"].string {
@@ -598,7 +617,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if let _ = results[sender.tag]["user"]["id"].string {
             
             let vc = ProfileViewController()
-            vc.passedUserData = results[sender.tag]["user"]
+            vc.passedUserJson = results[sender.tag]["user"] 
             navigationController?.pushViewController(vc, animated: true)
             
             isPushed = true
@@ -634,28 +653,31 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if ((UIApplication.sharedApplication().delegate as! AppDelegate).likedMomentId(momentId)) {
             return
         }
+
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "POST"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.POST, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update likedPostIdeas
-                    //
-                    // reload
                     
                     let array = defaults.arrayForKey("likedMomentIds")
                     let ma = NSMutableArray(array: array!)
@@ -673,51 +695,46 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         print("liked")
                         self.theTableView.reloadData()
                     })
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
-            } else {
-                //
-            }
-            
-        })
+        }
+        
     }
     
     func unlikeAction(momentId : String) {
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
+    
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "DELETE"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.DELETE, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update likedPostIdeas
-                    //
-                    // reload
                     
-                    let array = defaults.arrayForKey("likedMomentIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("likedMomentIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(momentId)) {
                         // in likedMomentIds, do nothing
                         ma.removeObject(momentId)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "likedMomentIds")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "likedMomentIds")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                     }
                     
                     
@@ -731,17 +748,11 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         print("unliked")
                         self.theTableView.reloadData()
                     })
+
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-                
-            } else {
-                //
-            }
-            
-        })
-    
+        }
+        
     }
     
     
@@ -753,7 +764,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if let id = results[sender.tag]["id"].string {
             print("id: \(id)")
             let vc = ChatViewController()
-            vc.passedMomentData = results[sender.tag]
+            vc.passedMomentJson = results[sender.tag]
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
@@ -879,47 +890,43 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // follow
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "POST"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.POST, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // followed
                     
-                    // update followingUserIds
-                    //
-                    // reload
-                    
-                    let array = defaults.arrayForKey("followingUserIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("followingUserIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(uid!)) {
                         // in followingUserIds, do nothing
                     } else {
-                        let followingCount = defaults.objectForKey("followingCount") as! Int
+                        let followingCount = NSUserDefaults.standardUserDefaults().objectForKey("followingCount") as! Int
                         let newcount = followingCount+1
                         
                         ma.addObject(uid!)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "followingUserIds")
-                        defaults.setObject(newcount, forKey: "followingCount")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "followingUserIds")
+                        NSUserDefaults.standardUserDefaults().setObject(newcount, forKey: "followingCount")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -928,16 +935,10 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                     
                 }
-                
-            } else {
-                //
-            }
-            
-        })
+        }
+        
     }
     
     

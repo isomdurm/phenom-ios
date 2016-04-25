@@ -7,12 +7,12 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
 import Haneke
 import QuartzCore
 import AVFoundation
 import MobileCoreServices
-import Just
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -20,7 +20,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var navBarView = UIView()
     
-    var passedUserData = JSON(data: NSData())
+    var passedUserJson = JSON(data: NSData())
     
     var teamData = NSData()
     var momentsData = NSData()
@@ -77,23 +77,23 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if (!self.initialProfile) {
             
-            let ht = passedUserData["hometown"].string
+            let ht = passedUserJson["hometown"].string
             
-            userId = passedUserData["id"].string!
-            username = passedUserData["username"].string!
-            imageUrl = passedUserData["imageUrl"].string!
-            firstName = passedUserData["firstName"].string!
-            lastName = passedUserData["lastName"].string!
-            sports = [passedUserData["sport"].string!]
+            userId = passedUserJson["id"].string!
+            username = passedUserJson["username"].string!
+            imageUrl = passedUserJson["imageUrl"].string!
+            firstName = passedUserJson["firstName"].string!
+            lastName = passedUserJson["lastName"].string!
+            sports = [passedUserJson["sport"].string!]
             hometown = ht != nil ? ht! : ""
-            bio = passedUserData["description"].string!
+            bio = passedUserJson["description"].string!
             
-            userFollows = passedUserData["userFollows"].bool!
+            userFollows = passedUserJson["userFollows"].bool!
             
-            lockerProductCount = passedUserData["lockerProductCount"].number!
-            followingCount = passedUserData["followingCount"].number!
-            followersCount = passedUserData["followersCount"].number!
-            momentCount = passedUserData["momentCount"].number!
+            lockerProductCount = passedUserJson["lockerProductCount"].number!
+            followingCount = passedUserJson["followingCount"].number!
+            followersCount = passedUserJson["followersCount"].number!
+            momentCount = passedUserJson["momentCount"].number!
             
         }
         
@@ -488,10 +488,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             let backBtn = UIButton(type: UIButtonType.Custom)
             backBtn.frame = CGRectMake(15, 20, 44, 44)
             backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-            //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
             backBtn.backgroundColor = UIColor.clearColor()
             backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
             navBarView.addSubview(backBtn)
+            backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
             
             let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
             rightSwipe.direction = .Right
@@ -499,58 +499,70 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }
         
+        
         //
         // now get user
         //
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
+                    //print("JSON: \(JSON)")
+                    print("response.request: \(response.request)")  // original URL request
+                    print("response.response: \(response.response)") // URL response
+                    print("response.data: \(response.data)")     // server data
+                    print("response.result: \(response.result)")   // result of response serialization
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update user
-    
-                    let user = json["results"]
-                    print("user: \(user)")
+                    //
+                    
+                    let json = JSON(data: response.data!)
+                    self.passedUserJson = json["results"]
+                    
+                    //
                     
                     // success, save user defaults
+                    self.userId = self.passedUserJson["id"].string!
+                    self.username = self.passedUserJson["username"].string!
                     
-                    self.userId = user["id"].string!
-                    self.username = user["username"].string!
-                    
-                    if let _ = user["hometown"].string {
-                        self.hometown = user["hometown"].string!
+                    if let _ = self.passedUserJson["hometown"].string {
+                        self.hometown = self.passedUserJson["hometown"].string!
                     } else {
                         self.hometown = ""
                     }
                     
-                    self.imageUrl = user["imageUrl"].string!
-                    self.bio = user["description"].string!
-                    self.firstName = user["firstName"].string!
-                    self.lastName = user["lastName"].string!
+                    self.imageUrl = self.passedUserJson["imageUrl"].string!
+                    self.bio = self.passedUserJson["description"].string!
+                    self.firstName = self.passedUserJson["firstName"].string! 
+                    self.lastName = self.passedUserJson["lastName"].string!
                     
-                    self.followersCount = user["followersCount"].number!
-                    self.followingCount = user["followingCount"].number!
+                    self.followersCount = self.passedUserJson["followersCount"].number!
+                    self.followingCount = self.passedUserJson["followingCount"].number!
                     
-                    self.momentCount = user["momentCount"].number!
-                    self.lockerProductCount = user["lockerProductCount"].number!
+                    self.momentCount = self.passedUserJson["momentCount"].number!
+                    self.lockerProductCount = self.passedUserJson["lockerProductCount"].number!
                     
-                    let sport = user["sport"].string! // make an array
+                    let sport = self.passedUserJson["sport"].string! // make an array
                     self.sports = [sport]
-
+                    
                     
                     if (self.userId == uid) {
                         
@@ -570,23 +582,17 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         defaults.setObject(self.sports, forKey: "sports")
                         defaults.synchronize()
                         
-                        
                     }
-                    
-                    //
-                    
+                                        
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         print("got here")
                         self.reloadAction()
                         
                     })
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
-                
-            }
-        })
+        }
         
         refreshControl.endRefreshing()
         
@@ -778,30 +784,33 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     
     func queryForTimeline() {
-        print("queryForTimeline hit")
-        // get bearer token
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments"
+        
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "since=\(date)&limit=20"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments?since=\(date)&limit=20"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.momentsData = dataFromString
+                    
+                    self.momentsData = response.data!
                     
                     self.queriedForTimeline = true
                     
@@ -856,45 +865,38 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                    self.refreshControl.endRefreshing()
                 }
-                
-            } else {
-                //
-            }
-        })
+        }
         
     }
     
     func queryForGear() {
-        print("queryForGear hit")
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "since=\(date)&limit=20"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker?since=\(date)&limit=20"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.gearData = dataFromString
                     
-                    let results = json["results"]
-                    print("gear results: \(results)")
+                    self.gearData = response.data!
                     
                     self.queriedForGear = true
                     
@@ -948,13 +950,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         
                     })
                     
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription)
+                    
                 }
-            } else {
-                
-            }
-        })
+        }
         
     }
    
@@ -990,45 +988,43 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func followAction(sender: UIButton) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/follow"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "POST"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/follow"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.POST, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        sender.selected = false
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // followed
                     
-                    let array = defaults.arrayForKey("followingUserIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("followingUserIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(self.userId)) {
                         // in followingUserIds, do nothing
                     } else {
-                        let followingCount = defaults.objectForKey("followingCount") as! Int
+                        let followingCount = NSUserDefaults.standardUserDefaults().objectForKey("followingCount") as! Int
                         let newcount = followingCount+1
                         
                         ma.addObject(self.userId)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "followingUserIds")
-                        defaults.setObject(newcount, forKey: "followingCount")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "followingUserIds")
+                        NSUserDefaults.standardUserDefaults().setObject(newcount, forKey: "followingCount")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                         
                     }
                     
@@ -1049,14 +1045,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         (UIApplication.sharedApplication().delegate as! AppDelegate).reloadTimeline = true
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                     
                 }
-            } else {
-                //
-            }
-        })
+        }
         
     }
     
@@ -1082,43 +1074,41 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func unfollowAction(sender: UIButton) {
+
         
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/unfollow"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "DELETE"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/unfollow"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.DELETE, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        sender.selected = true
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    
+                   
                     print("unfollowed")
                     
                     sender.selected = false
                     
                     (UIApplication.sharedApplication().delegate as! AppDelegate).reloadTimeline = true
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
-            } else {
-                //
-            }
-        })
+        }
         
     }
     
@@ -1782,7 +1772,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if (id != userId) {
                 let vc = ProfileViewController()
-                vc.passedUserData = results[sender.tag]["user"]
+                vc.passedUserJson = results[sender.tag]["user"]
                 navigationController?.pushViewController(vc, animated: true)
             }
             
@@ -1820,28 +1810,31 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             return
         }
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
-        //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "POST"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        //let date = NSDate().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
+        
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.POST, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update likedPostIdeas
-                    //
-                    // reload
-                    
+
                     let array = defaults.arrayForKey("likedMomentIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(momentId)) {
@@ -1858,52 +1851,46 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         print("liked")
                         self.theTableView.reloadData()
                     })
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
+                    
                 }
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
+        
         
     }
     
     func unlikeAction(momentId : String) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = ""
-        let type = "DELETE"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.DELETE, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // update likedPostIdeas
-                    //
-                    // reload
-                    
-                    let array = defaults.arrayForKey("likedMomentIds")
+                    let array = NSUserDefaults.standardUserDefaults().arrayForKey("likedMomentIds")
                     let ma = NSMutableArray(array: array!)
                     if (ma.containsObject(momentId)) {
                         // in likedMomentIds, do nothing
                         ma.removeObject(momentId)
                         let newarray = ma as NSArray
-                        defaults.setObject(newarray, forKey: "likedMomentIds")
-                        defaults.synchronize()
+                        NSUserDefaults.standardUserDefaults().setObject(newarray, forKey: "likedMomentIds")
+                        NSUserDefaults.standardUserDefaults().synchronize()
                     }
                     
                     
@@ -1918,14 +1905,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
+        
 
     }
     
@@ -1938,7 +1920,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if let id = results[sender.tag]["id"].string {
             print("id: \(id)")
             let vc = ChatViewController()
-            vc.passedMomentData = results[sender.tag]
+            vc.passedMomentJson = results[sender.tag] 
             vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
             
@@ -2161,57 +2143,48 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let json = JSON(data: gearData)
         let results = json["results"]
         
-        let productJson = results[sender.tag] 
-        print("productJson: \(productJson)")
+        let productJson = results[sender.tag]
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "product=\(productJson)"
-        let type = "PUT"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker?product=\(productJson)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.PUT, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        sender.selected = false
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
+                    
                     
                     print("+1 added to locker")
                     
                     sender.selected = true
                     
-                    let followingCount = defaults.objectForKey("lockerProductCount") as! Int
+                    let followingCount = NSUserDefaults.standardUserDefaults().objectForKey("lockerProductCount") as! Int
                     let newcount = followingCount+1
-                    defaults.setObject(newcount, forKey: "lockerProductCount")
-                    defaults.synchronize()
+                    NSUserDefaults.standardUserDefaults().setObject(newcount, forKey: "lockerProductCount")
+                    NSUserDefaults.standardUserDefaults().synchronize()
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         self.theTableView.reloadData()
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                    
                 }
-                
-            } else {
-                //
-            }
-            
-        })
+        }
         
     }
     

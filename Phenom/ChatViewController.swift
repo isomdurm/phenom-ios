@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
 import Haneke
 import SafariServices
@@ -15,7 +16,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var commentsData = NSData()
     
-    var passedMomentData = JSON(data: NSData())
+    var passedMomentJson = JSON(data: NSData())
     
     var passedMomentId = ""
     var passedMomentUsername = ""
@@ -47,11 +48,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // parse passed moment
         
-        passedMomentId = passedMomentData["id"].string!
-        passedMomentHeadline = passedMomentData["headline"].string!
-        passedMomentUsername = passedMomentData["user"]["username"].string!
-        passedMomentUserImageUrl = passedMomentData["user"]["imageUrlTiny"].string!
-        let obj = passedMomentData["references"].arrayObject!
+        passedMomentId = passedMomentJson["id"].string!
+        passedMomentHeadline = passedMomentJson["headline"].string!
+        passedMomentUsername = passedMomentJson["user"]["username"].string!
+        passedMomentUserImageUrl = passedMomentJson["user"]["imageUrlTiny"].string!
+        let obj = passedMomentJson["references"].arrayObject!
         passedMomentReferences = obj as NSArray
         print("passedMomentReferences: \(passedMomentReferences)")
         
@@ -64,10 +65,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let backBtn = UIButton(type: UIButtonType.Custom)
         backBtn.frame = CGRectMake(15, 20, 44, 44)
         backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        //backBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
         backBtn.backgroundColor = UIColor.clearColor()
         backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(backBtn)
+        backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
         let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
         titleLbl.textAlignment = NSTextAlignment.Center
@@ -352,30 +353,30 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func queryForChat() {
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/comments"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "since=\(date)&limit=30"
-        let type = "GET"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/comments?since=\(date)&limit=30"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    self.commentsData = dataFromString
-                    print("results: \(json["results"])")
-                    let results = json["results"]["comments"]
-                    print("comments: \(results)")
+                    self.commentsData = response.data!
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
@@ -383,16 +384,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         self.refreshControl.endRefreshing()
                         
                     })
-                    
-                } else {
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
-                
-            } else {
-                //
-                print("errorrr in \(self)")
-            }
-        })
+        }
         
     }
     
@@ -610,7 +603,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func userBtnAction1(sender: UIButton){
         
         let vc = ProfileViewController()
-        vc.passedUserData = passedMomentData["user"]
+        vc.passedUserJson = passedMomentJson["user"]
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -622,7 +615,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let _ = results[sender.tag]["author"]["id"].string {
             
             let vc = ProfileViewController()
-            vc.passedUserData = results[sender.tag]["author"]
+            vc.passedUserJson = results[sender.tag]["author"] 
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -655,50 +648,41 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // for at mentions - find @word and add as a parameter???
         
-        
         // https://api1.phenomapp.com:8081/moment/:id/comment?commentText=Awesome @clayzug&references=clayzug
         
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(self.passedMomentId)/comment"
+        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let params = "commentText=\(self.theTextView.text)"
-        let type = "POST"
+        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(self.passedMomentId)/comment?commentText=\(self.theTextView.text)"
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).sendRequest(url, parameters: params, type: type, completionHandler:  { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-            if (error == nil) {
+        let headers = [
+            "Authorization": "Bearer \(bearerToken)",
+            "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
+            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+        ]
+        
+        Alamofire.request(.GET, url, headers: headers)
+            .responseJSON { response in
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let j = response.result.value {
                     
-                    let json = JSON(data: dataFromString)
-                    if json["errorCode"].number != 200  {
-                        print("json: \(json)")
-                        print("error: \(json["errorCode"].number)")
-                        
-                        return
+                    if let errorCode = j["errorCode"] {
+                        let ec = errorCode as! NSNumber
+                        if ec != 200 {
+                            print("err: \(ec)")
+                            return
+                        }
                     }
                     
-                    // sent
-                    
-                    // reload table
-                    
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
+                        
                         self.theTextView.text = ""
                         self.queryForChat()
                         
                     })
                     
-                } else {
-                    // print("URL Session Task Failed: %@", error!.localizedDescription);
-                    
                 }
-                
-            } else {
-                //
-            }
-            
-        })
+        }
+        
     }
 
 }
