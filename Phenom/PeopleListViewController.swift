@@ -2,8 +2,8 @@
 //  PeopleListViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/7/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/7/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -16,7 +16,7 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
     var passedTitle = ""
     var passedUserId = ""
     
-    var peopleData = NSData()
+    var peopleData = Data()
     
     var navBarView = UIView()
     
@@ -26,44 +26,44 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.clearColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        let backBtn = UIButton(type: UIButtonType.custom)
+        backBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), for: UIControlState())
+        backBtn.backgroundColor = UIColor.clear
+        backBtn.addTarget(self, action:#selector(backAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(backBtn)
         backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = passedTitle
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.frame = CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(PeopleCell.self, forCellReuseIdentifier: "cell")
+        theTableView.register(PeopleCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 0))
         
         
         let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-        swipeBack.direction = .Right
+        swipeBack.direction = .right
         view.addGestureRecognizer(swipeBack)
         
         //
@@ -80,7 +80,7 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         
@@ -88,7 +88,7 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if(navigationController!.viewControllers.count > 1){
             return true
         }
@@ -96,7 +96,7 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func backAction() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
 
@@ -105,15 +105,15 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         // user/following
                 
         var url = ""
-        let date = NSDate().timeIntervalSince1970 * 1000
+        let date = Date().timeIntervalSince1970 * 1000
         
         if (passedTitle == "FANS") {
             
-            url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(passedUserId)/followers?since=\(date)&limit=20"
+            url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(passedUserId)/followers?since=\(date)&limit=20"
             
         } else if (passedTitle == "FOLLOWING") {
             
-            url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(passedUserId)/following?since=\(date)&limit=20"
+            url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(passedUserId)/following?since=\(date)&limit=20"
             
         } else {
             print("something is wrong")
@@ -122,13 +122,13 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -161,22 +161,22 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // TableViewDelegate
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let json = JSON(data: peopleData)
         return json["results"].count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 15+44+15
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:PeopleCell = PeopleCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        let cell:PeopleCell = PeopleCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cell")
         cell.cellWidth = self.view.frame.size.width
         
         let json = JSON(data: peopleData)
@@ -191,9 +191,9 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         if let id = results[indexPath.row]["imageUrl"].string {
-            let fileUrl = NSURL(string: id)
+            let fileUrl = URL(string: id)
             
-            cell.userImgView.frame = CGRectMake(15, 15, 44, 44)
+            cell.userImgView.frame = CGRect(x: 15, y: 15, width: 44, height: 44)
             cell.userImgView.setNeedsLayout()
             cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
                                                      success: { image in
@@ -215,26 +215,26 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let id = results[indexPath.row]["id"].string {
             
-            let defaults = NSUserDefaults.standardUserDefaults()
-            let currentUserId = defaults.objectForKey("userId") as! String
+            let defaults = UserDefaults.standard
+            let currentUserId = defaults.object(forKey: "userId") as! String
             if (id == currentUserId) {
                 
-                cell.followBtn.selected = true
-                cell.followBtn.hidden = true
+                cell.followBtn.isSelected = true
+                cell.followBtn.isHidden = true
                 
             } else {
                 
                 if let id = results[indexPath.row]["userFollows"].bool {
                     if (id) {
-                        cell.followBtn.selected = true
-                        cell.followBtn.hidden = true
+                        cell.followBtn.isSelected = true
+                        cell.followBtn.isHidden = true
                     } else {
-                        cell.followBtn.selected = false
-                        cell.followBtn.hidden = false
+                        cell.followBtn.isSelected = false
+                        cell.followBtn.isHidden = false
                     }
                 } else {
-                    cell.followBtn.selected = true
-                    cell.followBtn.hidden = true
+                    cell.followBtn.isSelected = true
+                    cell.followBtn.isHidden = true
                 }
                 
             }
@@ -243,23 +243,23 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         
         cell.followBtn.tag = indexPath.row
-        cell.followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents: .TouchUpInside)
+        cell.followBtn.addTarget(self, action:#selector(followBtnAction), for: .touchUpInside)
         
         
         return cell
         
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
         let json = JSON(data: peopleData)
         let results = json["results"]
@@ -275,40 +275,40 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     
-    func followBtnAction(sender : UIButton) {
+    func followBtnAction(_ sender : UIButton) {
         
         // follow only
         
-        sender.hidden = true
+        sender.isHidden = true
         
         // get frame of follow btn
         
-        let ip = NSIndexPath(forItem: sender.tag, inSection: 0)
-        let cell = self.theTableView.cellForRowAtIndexPath(ip) as! PeopleCell
+        let ip = IndexPath(item: sender.tag, section: 0)
+        let cell = self.theTableView.cellForRow(at: ip) as! PeopleCell
         
         //let mediaHeight = cell.frame.size.width+110
         
-        let followImgView = UIImageView(frame: CGRectMake(self.view.frame.size.width-65-15, 18, 65, 38))
-        followImgView.backgroundColor = UIColor.clearColor()
+        let followImgView = UIImageView(frame: CGRect(x: self.view.frame.size.width-65-15, y: 18, width: 65, height: 38))
+        followImgView.backgroundColor = UIColor.clear
         followImgView.image = UIImage(named: "addedBtnImg.png")
         cell.addSubview(followImgView)
         
-        followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.75, 0.75)
+        followImgView.transform = CGAffineTransform.identity.scaledBy(x: 0.75, y: 0.75)
         
-        UIView.animateWithDuration(0.18, animations: {
-            followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.04, 1.04)
+        UIView.animate(withDuration: 0.18, animations: {
+            followImgView.transform = CGAffineTransform.identity.scaledBy(x: 1.04, y: 1.04)
             }, completion: { finished in
                 if (finished){
-                    UIView.animateWithDuration(0.16, animations: {
-                        followImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                    UIView.animate(withDuration: 0.16, animations: {
+                        followImgView.transform = CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
                         }, completion: { finished in
                             if (finished) {
                                 
                                 let delay = 0.3 * Double(NSEC_PER_SEC)
-                                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-                                dispatch_after(time, dispatch_get_main_queue()) {
+                                let time = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
+                                DispatchQueue.main.asyncAfter(deadline: time) {
                                     
-                                    UIView.animateWithDuration(0.18, animations: {
+                                    UIView.animate(withDuration: 0.18, animations: {
                                         followImgView.alpha = 0.0
                                         }, completion: { finished in
                                             if (finished) {
@@ -327,7 +327,7 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         })
     }
     
-    func followAction(sender : UIButton) {
+    func followAction(_ sender : UIButton) {
         
         let json = JSON(data: peopleData)
         let results = json["results"]
@@ -335,14 +335,14 @@ class PeopleListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         // follow
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(uid!)/follow"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.POST, url, headers: headers)

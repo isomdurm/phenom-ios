@@ -2,8 +2,8 @@
 //  ActivityCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/25/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/25/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -18,42 +18,42 @@ class ActivityCell: UITableViewCell {
     var activityLbl = UILabel()
     var momentImgView = UIImageView()
     var momentBtn = UIButton()
-    var followBtn = UIButton(type: UIButtonType.Custom)
+    var followBtn = UIButton(type: UIButtonType.custom)
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         
         userImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        userImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        userImgView.userInteractionEnabled = true
+        userImgView.contentMode = UIViewContentMode.scaleAspectFill
+        userImgView.isUserInteractionEnabled = true
         contentView.addSubview(userImgView)
         userImgView.layer.masksToBounds = true
         
-        userBtn.backgroundColor = UIColor.clearColor()
+        userBtn.backgroundColor = UIColor.clear
         contentView.addSubview(userBtn)
         
-        activityLbl.backgroundColor = UIColor.clearColor()
+        activityLbl.backgroundColor = UIColor.clear
         activityLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
-        activityLbl.textColor = UIColor.lightGrayColor()
-        activityLbl.textAlignment = NSTextAlignment.Left
+        activityLbl.textColor = UIColor.lightGray
+        activityLbl.textAlignment = NSTextAlignment.left
         contentView.addSubview(activityLbl)
         activityLbl.numberOfLines = 0
-        activityLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        activityLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         activityLbl.sizeToFit()
         
         momentImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        momentImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        momentImgView.userInteractionEnabled = true
+        momentImgView.contentMode = UIViewContentMode.scaleAspectFill
+        momentImgView.isUserInteractionEnabled = true
         contentView.addSubview(momentImgView)
         momentImgView.layer.masksToBounds = true
         
-        momentBtn.backgroundColor = UIColor.clearColor()
+        momentBtn.backgroundColor = UIColor.clear
         contentView.addSubview(momentBtn)
         
-        followBtn.backgroundColor = UIColor.blueColor()
-        followBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
-        followBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        followBtn.backgroundColor = UIColor.blue
+        followBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , for: UIControlState())
+        followBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , for: UIControlState.selected)
         contentView.addSubview(followBtn)
 
     }
@@ -63,16 +63,16 @@ class ActivityCell: UITableViewCell {
     }
     
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        userImgView.frame = CGRectMake(15, 10, 44, 44)
-        userBtn.frame = CGRectMake(15, 10, 44, 44)
+        userImgView.frame = CGRect(x: 15, y: 10, width: 44, height: 44)
+        userBtn.frame = CGRect(x: 15, y: 10, width: 44, height: 44)
         
-        momentImgView.frame = CGRectMake(cellWidth-15-44, 10, 44, 44)
-        momentBtn.frame = CGRectMake(cellWidth-15-44, 10, 44, 44) 
+        momentImgView.frame = CGRect(x: cellWidth-15-44, y: 10, width: 44, height: 44)
+        momentBtn.frame = CGRect(x: cellWidth-15-44, y: 10, width: 44, height: 44) 
         
-        followBtn.frame = CGRectMake(cellWidth-15-44, 10, 44, 44)
+        followBtn.frame = CGRect(x: cellWidth-15-44, y: 10, width: 44, height: 44)
         
         
     }

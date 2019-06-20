@@ -2,8 +2,8 @@
 //  SignInViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/24/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/24/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -19,77 +19,77 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(15, 20, 44, 44)
-        xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let xBtn = UIButton(type: UIButtonType.custom)
+        xBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        xBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.backgroundColor = UIColor.blue
+        xBtn.addTarget(self, action:#selector(xBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "SIGN IN"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        let signInBtn = UIButton(type: UIButtonType.Custom)
-        signInBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-        signInBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let signInBtn = UIButton(type: UIButtonType.custom)
+        signInBtn.frame = CGRect(x: view.frame.size.width-44-15, y: 20, width: 44, height: 44)
+        signInBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //signInBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        signInBtn.backgroundColor = UIColor.blueColor()
-        signInBtn.addTarget(self, action:#selector(processFields), forControlEvents:UIControlEvents.TouchUpInside)
+        signInBtn.backgroundColor = UIColor.blue
+        signInBtn.addTarget(self, action:#selector(processFields), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(signInBtn)
         
-        usernameField.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
-        usernameField.backgroundColor = UIColor.clearColor()
+        usernameField.frame = CGRect(x: 20, y: 64, width: view.frame.size.width-40, height: 64)
+        usernameField.backgroundColor = UIColor.clear
         usernameField.delegate = self
-        usernameField.textColor = UIColor.whiteColor()
+        usernameField.textColor = UIColor.white
         usernameField.attributedPlaceholder = NSAttributedString(string:"your username",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
-        usernameField.keyboardType = UIKeyboardType.Default
-        usernameField.returnKeyType = UIReturnKeyType.Next
+        usernameField.keyboardType = UIKeyboardType.default
+        usernameField.returnKeyType = UIReturnKeyType.next
         usernameField.enablesReturnKeyAutomatically = true
         usernameField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         usernameField.placeholder = "your username"
-        usernameField.autocapitalizationType = UITextAutocapitalizationType.None
-        usernameField.autocorrectionType = UITextAutocorrectionType.No
+        usernameField.autocapitalizationType = UITextAutocapitalizationType.none
+        usernameField.autocorrectionType = UITextAutocorrectionType.no
         view.addSubview(usernameField)
         usernameField.text = ""
         
-        passwordField.frame = CGRectMake(20, 64+64, view.frame.size.width-40, 64)
-        passwordField.backgroundColor = UIColor.clearColor()
+        passwordField.frame = CGRect(x: 20, y: 64+64, width: view.frame.size.width-40, height: 64)
+        passwordField.backgroundColor = UIColor.clear
         passwordField.delegate = self
-        passwordField.textColor = UIColor.whiteColor()
+        passwordField.textColor = UIColor.white
         passwordField.attributedPlaceholder = NSAttributedString(string:"your password",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
-        passwordField.keyboardType = UIKeyboardType.Default
-        passwordField.returnKeyType = UIReturnKeyType.Go
+        passwordField.keyboardType = UIKeyboardType.default
+        passwordField.returnKeyType = UIReturnKeyType.go
         passwordField.enablesReturnKeyAutomatically = true
         passwordField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         passwordField.placeholder = "your password"
-        passwordField.autocapitalizationType = UITextAutocapitalizationType.None
-        passwordField.autocorrectionType = UITextAutocorrectionType.No
-        passwordField.secureTextEntry = true
+        passwordField.autocapitalizationType = UITextAutocapitalizationType.none
+        passwordField.autocorrectionType = UITextAutocorrectionType.no
+        passwordField.isSecureTextEntry = true
         view.addSubview(passwordField)
         passwordField.text = ""
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview.frame = CGRect(x: 0, y: 64+63.5, width: view.frame.size.width, height: 0.5)
         lineview.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview)
         
         let lineview2 = UIView()
-        lineview2.frame = CGRectMake(0, 64+64+63.5, view.frame.size.width, 0.5)
+        lineview2.frame = CGRect(x: 0, y: 64+64+63.5, width: view.frame.size.width, height: 0.5)
         lineview2.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview2)
         
@@ -101,7 +101,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         usernameField.becomeFirstResponder()
@@ -110,10 +110,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     func xBtnAction() {
         view.endEditing(true)
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if (textField == usernameField) {
             passwordField.becomeFirstResponder()
@@ -127,7 +127,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let space = " "
         if (string == space) {
@@ -137,12 +137,12 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         if (textField == usernameField) {
             let maxLength = 20
             let currentString: NSString = textField.text!
-            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string)
             return newString.length <= maxLength
         } else {
             let maxLength = 35
             let currentString: NSString = textField.text!
-            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string)
             return newString.length <= maxLength
         }
         
@@ -157,35 +157,35 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
             
             // get bearerToken
             
-            let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-            let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-            guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
-            let request = NSMutableURLRequest(URL: URL)
-            request.HTTPMethod = "POST"
+            let sessionConfig = URLSessionConfiguration.default
+            let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+            guard let URL = URL(string: "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
+            let request = NSMutableURLRequest(url: URL)
+            request.httpMethod = "POST"
             
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+            request.addValue("\((UIApplication.shared.delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
             
-            let utf8str: NSData = passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)!
-            let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            let utf8str: Data = passwordField.text!.data(using: String.Encoding.utf8)!
+            let base64Encoded:NSString = utf8str.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
             print("base64Encoded: \(base64Encoded)")
             
             let bodyObject = [
                 "username": usernameField.text!,
                 "password": base64Encoded,
-                "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
-                "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+                "client_id": (UIApplication.shared.delegate as! AppDelegate).clientId,
+                "client_secret": (UIApplication.shared.delegate as! AppDelegate).clientSecret,
                 "grant_type": "password"
             ]
             
-            request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+            request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
             
-            let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
                 if (error == nil) {
                     
-                    let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    let datastring = NSString(data: data!, encoding: String.Encoding.utf8)
                     
-                    if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                    if let dataFromString = datastring!.data(using: String.Encoding.utf8, allowLossyConversion: false) {
                         
                         let json = JSON(data: dataFromString)
                         if (json["errorCode"].number == nil) {
@@ -203,14 +203,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
 
                         
                         // add to likedMomentIds
-                        let defaults = NSUserDefaults.standardUserDefaults()
+                        let defaults = UserDefaults.standard
                         
                         let newBearerToken = json["access_token"].string!
                         let refreshToken = json["refresh_token"].string!
                         
                         defaults.setObject(newBearerToken, forKey: "bearerToken")
                         defaults.setObject(refreshToken, forKey: "refreshToken")
-                        defaults.setObject(base64Encoded, forKey: "password")
+                        defaults.set(base64Encoded, forKey: "password")
                         defaults.synchronize()
                         
                         //
@@ -237,7 +237,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         
         //
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         
         if (bearerToken == "") {
             // something is wrong
@@ -246,12 +246,12 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         }
         
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -286,17 +286,17 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     let momentCount = json["momentCount"].number!
                     let lockerProductCount = json["lockerProductCount"].number!
                     
-                    let sport = json["sport"].string! // make an arrray
-                    let sportsArray = [sport]
+//                    let sport = json["sport"].string! // make an arrray
+//                    let sportsArray = [sport]
+//                    
+                    var sportsArray = []
+                    if (json["sports"].arrayObject != nil) {
+                        sportsArray = json["sports"].arrayObject!
+                    } else {
+                        sportsArray = [json["sport"].string!]
+                    }
                     
-//                    var sportsArray = []
-//                    if (json["sports"].arrayObject != nil) {
-//                        sportsArray = json["sports"].arrayObject!
-//                    } else {
-//                        sportsArray = [json["sport"].string!]
-//                    }
                     
-                    //
                     
                     NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
                     NSUserDefaults.standardUserDefaults().setObject(username, forKey: "username")
@@ -312,7 +312,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                     NSUserDefaults.standardUserDefaults().setObject(momentCount, forKey: "momentCount")
                     NSUserDefaults.standardUserDefaults().setObject(lockerProductCount, forKey: "lockerProductCount")
                     
-                    NSUserDefaults.standardUserDefaults().setObject(sportsArray, forKey: "sports")
+                    NSUserDefaults.standardUserDefaults().setObject(sportsArray, forKey: "sport")
                     
                     NSUserDefaults.standardUserDefaults().synchronize()
                     

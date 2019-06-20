@@ -2,8 +2,8 @@
 //  ChatViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/28/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/28/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -14,9 +14,9 @@ import SafariServices
 
 class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, SFSafariViewControllerDelegate {
     
-    var commentsData = NSData()
+    var commentsData = Data()
     
-    var passedMomentJson = JSON(data: NSData())
+    var passedMomentJson = JSON(data: Data())
     
     var passedMomentId = ""
     var passedMomentUsername = ""
@@ -40,10 +40,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         // parse passed moment
@@ -58,93 +58,93 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.clearColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        let backBtn = UIButton(type: UIButtonType.custom)
+        backBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), for: UIControlState())
+        backBtn.backgroundColor = UIColor.clear
+        backBtn.addTarget(self, action:#selector(backAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(backBtn)
         backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "CHAT"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-50)
+        theTableView.frame = CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-50)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 0))
 
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), for: UIControlEvents.valueChanged)
         theTableView.addSubview(refreshControl)
         
         let swipeBack = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-        swipeBack.direction = .Right
+        swipeBack.direction = .right
         view.addGestureRecognizer(swipeBack)
         
         //
         
-        self.chatView.frame = CGRectMake(0, self.view.frame.size.height-51, self.view.frame.size.width, 51) //55
+        self.chatView.frame = CGRect(x: 0, y: self.view.frame.size.height-51, width: self.view.frame.size.width, height: 51) //55
         self.chatView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         self.view.addSubview(self.chatView)
         
         self.savedKeyboardHeight = 224
         
-        self.theTextView.frame = CGRectMake(20, 10, self.chatView.frame.width-20-10-50-10, 35)
-        self.theTextView.backgroundColor = UIColor.clearColor()
+        self.theTextView.frame = CGRect(x: 20, y: 10, width: self.chatView.frame.width-20-10-50-10, height: 35)
+        self.theTextView.backgroundColor = UIColor.clear
         self.theTextView.delegate = self;
-        self.theTextView.keyboardType = UIKeyboardType.Twitter;
-        self.theTextView.returnKeyType = UIReturnKeyType.Default;
+        self.theTextView.keyboardType = UIKeyboardType.twitter;
+        self.theTextView.returnKeyType = UIReturnKeyType.default;
         self.theTextView.font = UIFont.init(name: "MaisonNeue-Medium", size: 15)
         self.theTextView.enablesReturnKeyAutomatically = true;
-        self.theTextView.textAlignment = NSTextAlignment.Left
-        self.theTextView.scrollEnabled = false;
+        self.theTextView.textAlignment = NSTextAlignment.left
+        self.theTextView.isScrollEnabled = false;
         self.theTextView.scrollsToTop = false;
         self.chatView.addSubview(self.theTextView)
         self.theTextView.text = ""
-        self.theTextView.textColor = UIColor.whiteColor()
+        self.theTextView.textColor = UIColor.white
         self.theTextView.placeholderColor = UIColor.init(white: 0.6, alpha: 1.0)
         self.theTextView.placeholder = "Add a comment..."
         
-        self.sendBtn = UIButton(type: UIButtonType.Custom)
-        self.sendBtn.frame = CGRectMake(self.chatView.frame.width-50-10, 2, 50, 47)
-        self.sendBtn.backgroundColor = UIColor.clearColor()
+        self.sendBtn = UIButton(type: UIButtonType.custom)
+        self.sendBtn.frame = CGRect(x: self.chatView.frame.width-50-10, y: 2, width: 50, height: 47)
+        self.sendBtn.backgroundColor = UIColor.clear
         self.sendBtn.titleLabel?.numberOfLines = 1
         self.sendBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        self.sendBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        self.sendBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        self.sendBtn.titleLabel?.textAlignment = NSTextAlignment.Center
-        self.sendBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Normal)
-        self.sendBtn.setTitleColor(UIColor(red:207/255, green:185/255, blue:114/255, alpha:1), forState: UIControlState.Highlighted)
-        self.sendBtn.setTitleColor(UIColor.init(white: 0.6, alpha: 1.0), forState: UIControlState.Disabled)
-        self.sendBtn.setTitle("Send", forState: UIControlState.Normal)
-        self.sendBtn.addTarget(self, action:#selector(sendBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        self.sendBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
+        self.sendBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        self.sendBtn.titleLabel?.textAlignment = NSTextAlignment.center
+        self.sendBtn.setTitleColor(UINavigationBar.appearance().tintColor, for: UIControlState())
+        self.sendBtn.setTitleColor(UIColor(red:207/255, green:185/255, blue:114/255, alpha:1), for: UIControlState.highlighted)
+        self.sendBtn.setTitleColor(UIColor.init(white: 0.6, alpha: 1.0), for: UIControlState.disabled)
+        self.sendBtn.setTitle("Send", for: UIControlState())
+        self.sendBtn.addTarget(self, action:#selector(sendBtnAction), for:UIControlEvents.touchUpInside)
         self.chatView.addSubview(self.sendBtn)
-        self.sendBtn.enabled = false
+        self.sendBtn.isEnabled = false
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 0, self.chatView.frame.size.width, 0.5)
+        lineview.frame = CGRect(x: 0, y: 0, width: self.chatView.frame.size.width, height: 0.5)
         lineview.backgroundColor = UIColor.init(white: 0.6, alpha: 1.0) //UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         self.chatView.addSubview(lineview)
         
         //
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name:UIKeyboardWillHideNotification ,object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow ,object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide ,object: nil)
         
         //
         
@@ -158,30 +158,30 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        UIApplication.shared.statusBarStyle = .lightContent
         
         navigationController?.interactivePopGestureRecognizer!.delegate = self
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
 
         
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if(navigationController!.viewControllers.count > 1){
             return true
         }
@@ -190,24 +190,24 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func backAction() {
         
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         
     }
 
     
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         
         //
         
         let info = notification.userInfo!
-        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let duration = (info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue as NSNumber
         //let curve = (info[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).doubleValue
         //keyboardScreenBeginFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
         
         self.savedKeyboardHeight = keyboardframe.size.height
         
-        UIView.animateWithDuration(duration.doubleValue, delay:0, options: .CurveEaseOut, animations: {
+        UIView.animate(withDuration: duration.doubleValue, delay:0, options: .curveEaseOut, animations: {
             
             var chatViewFrame = self.chatView.frame
             chatViewFrame.origin.y = self.view.frame.size.height-self.savedKeyboardHeight-self.chatView.frame.size.height
@@ -224,26 +224,26 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let json = JSON(data: commentsData)
         let results = json["results"]["comments"]
         if (results.count>0) {
-            let lastrow = self.theTableView.numberOfRowsInSection(1)
-            let ip = NSIndexPath(forRow: lastrow-1, inSection: 1)
-            self.theTableView.scrollToRowAtIndexPath(ip, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            let lastrow = self.theTableView.numberOfRows(inSection: 1)
+            let ip = IndexPath(row: lastrow-1, section: 1)
+            self.theTableView.scrollToRow(at: ip, at: UITableViewScrollPosition.bottom, animated: true)
         }
         
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         
         //
         
         let info = notification.userInfo!
-        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let duration = (info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue as NSNumber
         //let curve = (info[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).doubleValue
         //keyboardScreenBeginFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
         
         self.savedKeyboardHeight = keyboardframe.size.height
         
-        UIView.animateWithDuration(duration.doubleValue, delay:0, options: .CurveEaseOut, animations: {
+        UIView.animate(withDuration: duration.doubleValue, delay:0, options: .curveEaseOut, animations: {
             
             var chatViewFrame = self.chatView.frame
             chatViewFrame.origin.y = self.view.frame.size.height-self.chatView.frame.size.height
@@ -261,7 +261,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // UITextViewDelegate
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         if (self.theTextView.text == "") {
             if (text == " ") {
@@ -274,31 +274,31 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         let maxLength = 400
-        let currentString: NSString = textView.text!
-        let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: text)
+        let currentString: NSString = textView.text! as NSString
+        let newString: NSString = currentString.replacingCharacters(in: range, with: text) as NSString
         
         if (newString.length > 0) {
-            self.sendBtn.enabled = true
+            self.sendBtn.isEnabled = true
         } else {
-            self.sendBtn.enabled = false
+            self.sendBtn.isEnabled = false
         }
         
         return newString.length <= maxLength
         
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         
         // adjust height
         
         let maxFloat = CGFloat(MAXFLOAT)
-        let newSize = textView.sizeThatFits(CGSizeMake(self.chatView.frame.width-20-10-50-10, maxFloat))
+        let newSize = textView.sizeThatFits(CGSize(width: self.chatView.frame.width-20-10-50-10, height: maxFloat))
         
         
-        UIView.animateWithDuration(0.05, delay:0, options: .CurveEaseOut, animations: {
+        UIView.animate(withDuration: 0.05, delay:0, options: .curveEaseOut, animations: {
             
             var newFrame = textView.frame
-            newFrame.size = CGSizeMake(self.chatView.frame.width-20-10-50-10, newSize.height)
+            newFrame.size = CGSize(width: self.chatView.frame.width-20-10-50-10, height: newSize.height)
             textView.frame = newFrame
             
             let newheight = 10+newSize.height+10
@@ -319,24 +319,24 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let json = JSON(data: commentsData)
         let results = json["results"]["comments"]
         if (results.count>0) {
-            let lastrow = self.theTableView.numberOfRowsInSection(1)
-            let ip = NSIndexPath(forRow: lastrow-1, inSection: 1)
-            self.theTableView.scrollToRowAtIndexPath(ip, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            let lastrow = self.theTableView.numberOfRows(inSection: 1)
+            let ip = IndexPath(row: lastrow-1, section: 1)
+            self.theTableView.scrollToRow(at: ip, at: UITableViewScrollPosition.bottom, animated: true)
         }
         
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         switch (scrollView.panGestureRecognizer.state) {
             
-        case UIGestureRecognizerState.Began:
+        case UIGestureRecognizerState.began:
             break;
-        case UIGestureRecognizerState.Changed:
+        case UIGestureRecognizerState.changed:
             
             self.view.endEditing(true)
             
             break;
-        case UIGestureRecognizerState.Possible:
+        case UIGestureRecognizerState.possible:
             break;
         default:
             break;
@@ -360,14 +360,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func queryForChat() {
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
-        let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/comments?since=\(date)&limit=30"
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
+        let date = Date().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)/comments?since=\(date)&limit=30"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -403,11 +403,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // TableViewDelegate
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if (section == 0) {
             return 1
@@ -421,14 +421,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if (indexPath.section == 0) {
             if (passedMomentHeadline == "") {
                 return 0
             } else {
                 let width = self.view.frame.size.width-15-44-15-15
-                let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(passedMomentHeadline, font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, width: width)
+                let height = (UIApplication.shared.delegate as! AppDelegate).heightForView(passedMomentHeadline, font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, width: width)
                 return 15+20+15+height+5
             }
         } else if (indexPath.section == 1) {
@@ -438,7 +438,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if let id = results[indexPath.row]["commentText"].string {
                 
                 let width = self.view.frame.size.width-15-44-15-15
-                let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, width: width)
+                let height = (UIApplication.shared.delegate as! AppDelegate).heightForView(id, font: UIFont.init(name: "MaisonNeue-Medium", size: 15)!, width: width)
                 return 15+20+15+height+5
             } else {
                 return 0
@@ -449,49 +449,49 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:ChatCell = ChatCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        let cell:ChatCell = ChatCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cell")
         cell.cellWidth = self.view.frame.size.width
         
-        cell.userImgView.frame = CGRectMake(15, 15, 44, 44)
-        cell.userBtn.frame = CGRectMake(15, 15, 44, 44)
+        cell.userImgView.frame = CGRect(x: 15, y: 15, width: 44, height: 44)
+        cell.userBtn.frame = CGRect(x: 15, y: 15, width: 44, height: 44)
         
         if (indexPath.section == 0) {
             
-            let fileUrl = NSURL(string: self.passedMomentUserImageUrl)
+            let fileUrl = URL(string: self.passedMomentUserImageUrl)
             cell.userImgView.setNeedsLayout()
             cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                success: { image in
-                    
-                    cell.userImgView.image = image
-                    
-                },
                 failure: { error in
                     
                     if ((error) != nil) {
                         print("error here: \(error)")
                         // collapse, this cell - it was prob deleted - error 402
                     }
+            },
+                success: { image in
+                    
+                    cell.userImgView.image = image
+                    
             })
             
-            let nameWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(self.passedMomentUsername, font: cell.usernameBtn.titleLabel!.font, height: 20)
-            cell.usernameBtn.frame = CGRectMake(15+44+15, 15, nameWidth, 20)
-            cell.usernameBtn.setTitle(self.passedMomentUsername, forState: .Normal)
+            let nameWidth = (UIApplication.shared.delegate as! AppDelegate).widthForView(self.passedMomentUsername, font: cell.usernameBtn.titleLabel!.font, height: 20)
+            cell.usernameBtn.frame = CGRect(x: 15+44+15, y: 15, width: nameWidth, height: 20)
+            cell.usernameBtn.setTitle(self.passedMomentUsername, for: UIControlState())
             
-            let dateWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(self.passedMomentCreatedAt, font: cell.dateLbl.font, height: 20)
-            cell.dateLbl.frame = CGRectMake(cell.cellWidth-dateWidth-15, 15, dateWidth, 20)
+            let dateWidth = (UIApplication.shared.delegate as! AppDelegate).widthForView(self.passedMomentCreatedAt, font: cell.dateLbl.font, height: 20)
+            cell.dateLbl.frame = CGRect(x: cell.cellWidth-dateWidth-15, y: 15, width: dateWidth, height: 20)
             cell.dateLbl.text = self.passedMomentCreatedAt
             
             let chatWidth = cell.cellWidth-15-44-15-15
-            let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(self.passedMomentHeadline, font: cell.chatLbl.font, width: chatWidth)
-            cell.chatLbl.frame = CGRectMake(15+44+15, 15+20, chatWidth, height+10)
+            let height = (UIApplication.shared.delegate as! AppDelegate).heightForView(self.passedMomentHeadline, font: cell.chatLbl.font, width: chatWidth)
+            cell.chatLbl.frame = CGRect(x: 15+44+15, y: 15+20, width: chatWidth, height: height+10)
             cell.chatLbl.text = self.passedMomentHeadline
         
             
-            cell.userBtn.hidden = false
+            cell.userBtn.isHidden = false
             cell.userBtn.tag = indexPath.row
-            cell.userBtn.addTarget(self, action:#selector(userBtnAction1), forControlEvents: .TouchUpInside)
+            cell.userBtn.addTarget(self, action:#selector(userBtnAction1), for: .touchUpInside)
             
         } else if (indexPath.section == 1) {
             
@@ -507,35 +507,35 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // flaggedAsInappropriate
             
             if let id = results[indexPath.row]["author"]["imageUrl"].string {
-                let fileUrl = NSURL(string: id)
+                let fileUrl = URL(string: id)
                 
                 cell.userImgView.setNeedsLayout()
                 
                 cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
-                    success: { image in
-                        
-                        cell.userImgView.image = image
-                    },
                     failure: { error in
                         
                         if ((error) != nil) {
                             print("error here: \(error)")
                         }
+                },
+                    success: { image in
+                        
+                        cell.userImgView.image = image
                 })
             }            
             
             if let id = results[indexPath.row]["author"]["username"].string {
                 
-                let nameWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(id, font: cell.usernameBtn.titleLabel!.font, height: 20)
-                cell.usernameBtn.frame = CGRectMake(15+44+15, 15, nameWidth, 20)
-                cell.usernameBtn.setTitle(id, forState: .Normal)
+                let nameWidth = (UIApplication.shared.delegate as! AppDelegate).widthForView(id, font: cell.usernameBtn.titleLabel!.font, height: 20)
+                cell.usernameBtn.frame = CGRect(x: 15+44+15, y: 15, width: nameWidth, height: 20)
+                cell.usernameBtn.setTitle(id, for: .Normal)
                 
             }
             
             if let id = results[indexPath.row]["createdAt"].string {
                 
-                let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(id, font: cell.dateLbl.font, height: 20)
-                cell.dateLbl.frame = CGRectMake(cell.cellWidth-width-15, 15, width, 20)
+                let width = (UIApplication.shared.delegate as! AppDelegate).widthForView(id, font: cell.dateLbl.font, height: 20)
+                cell.dateLbl.frame = CGRect(x: cell.cellWidth-width-15, y: 15, width: width, height: 20)
                 cell.dateLbl.text = id
                 
             }
@@ -543,15 +543,15 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if let id = results[indexPath.row]["commentText"].string {
                 
                 let width = cell.cellWidth-15-44-15-15
-                let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.chatLbl.font, width: width)
-                cell.chatLbl.frame = CGRectMake(15+44+15, 15+20, width, height+10)
+                let height = (UIApplication.shared.delegate as! AppDelegate).heightForView(id, font: cell.chatLbl.font, width: width)
+                cell.chatLbl.frame = CGRect(x: 15+44+15, y: 15+20, width: width, height: height+10)
                 cell.chatLbl.text = id
                 
             }
             
-            cell.userBtn.hidden = false
+            cell.userBtn.isHidden = false
             cell.userBtn.tag = indexPath.row
-            cell.userBtn.addTarget(self, action:#selector(userBtnAction2), forControlEvents: .TouchUpInside)
+            cell.userBtn.addTarget(self, action:#selector(userBtnAction2), for: .touchUpInside)
             
             
             cell.chatLbl.handleMentionTap { userHandle in
@@ -571,10 +571,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 if (userHandle != "") {
                     
-                    let svc = SFSafariViewController(URL: userHandle, entersReaderIfAvailable: false)
-                    self.presentViewController(svc, animated: false, completion: nil)
+                    let svc = SFSafariViewController(url: userHandle, entersReaderIfAvailable: false)
+                    self.present(svc, animated: false, completion: nil)
                     
-                    UIApplication.sharedApplication().statusBarStyle = .Default
+                    UIApplication.shared.statusBarStyle = .default
                 }
             }
             
@@ -585,16 +585,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
         if (indexPath.section == 0) {
 
@@ -607,14 +607,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func userBtnAction1(sender: UIButton){
+    func userBtnAction1(_ sender: UIButton){
         
         let vc = ProfileViewController()
         vc.passedUserJson = passedMomentJson["user"]
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func userBtnAction2(sender: UIButton){
+    func userBtnAction2(_ sender: UIButton){
        
         let json = JSON(data: commentsData)
         let results = json["results"]["comments"]
@@ -627,13 +627,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         
-        UIApplication.sharedApplication().statusBarStyle = .LightContent
-        controller.dismissViewControllerAnimated(true, completion: nil)
+        UIApplication.shared.statusBarStyle = .lightContent
+        controller.dismiss(animated: true, completion: nil)
     }
     
-    func handleMentionTap(ip : NSIndexPath, username : String) {
+    func handleMentionTap(_ ip : IndexPath, username : String) {
     
         
         
@@ -657,14 +657,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // https://api1.phenomapp.com:8081/moment/:id/comment?commentText=Awesome @clayzug&references=clayzug
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(self.passedMomentId)/comment?commentText=\(self.theTextView.text)"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/moment/\(self.passedMomentId)/comment?commentText=\(self.theTextView.text)"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)

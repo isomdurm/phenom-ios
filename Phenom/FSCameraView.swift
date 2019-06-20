@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 protocol FSCameraViewDelegate: class {
-    func cameraShotFinished(image: UIImage)
+    func cameraShotFinished(_ image: UIImage)
 }
 
 final class FSCameraView: UIView, UIGestureRecognizerDelegate {
@@ -30,7 +30,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
     static func instance() -> FSCameraView {
         
-        return UINib(nibName: "FSCameraView", bundle: NSBundle(forClass: self.classForCoder())).instantiateWithOwner(self, options: nil)[0] as! FSCameraView
+        return UINib(nibName: "FSCameraView", bundle: Bundle(for: self.classForCoder())).instantiate(withOwner: self, options: nil)[0] as! FSCameraView
     }
     
     func initialize() {
@@ -42,14 +42,14 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
         
         self.backgroundColor = fusumaBackgroundColor
         
-        self.hidden = false
+        self.isHidden = false
         
         // AVCapture
         session = AVCaptureSession()
         
         for device in AVCaptureDevice.devices() {
             
-            if let device = device as? AVCaptureDevice where device.position == AVCaptureDevicePosition.Back {
+            if let device = device as? AVCaptureDevice, device.position == AVCaptureDevicePosition.back {
                 
                 self.device = device
             }
@@ -68,10 +68,10 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                 session.addOutput(imageOutput)
                 
                 let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-                videoLayer.frame = self.previewViewContainer.bounds
-                videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                videoLayer?.frame = self.previewViewContainer.bounds
+                videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                 
-                self.previewViewContainer.layer.addSublayer(videoLayer)
+                self.previewViewContainer.layer.addSublayer(videoLayer!)
                 
                 session.startRunning()
                 
@@ -88,62 +88,62 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
             
         }
         
-        flashButton.tintColor = UIColor.whiteColor()
-        flipButton.tintColor  = UIColor.whiteColor()
-        shotButton.tintColor  = UIColor.whiteColor()
+        flashButton.tintColor = UIColor.white
+        flipButton.tintColor  = UIColor.white
+        shotButton.tintColor  = UIColor.white
         
-        let bundle = NSBundle(forClass: self.classForCoder)
+        let bundle = Bundle(for: self.classForCoder)
         
-        let flashImage = UIImage(named: "ic_flash_off", inBundle: bundle, compatibleWithTraitCollection: nil)
-        let flipImage = UIImage(named: "ic_loop", inBundle: bundle, compatibleWithTraitCollection: nil)
-        let shotImage = UIImage(named: "ic_radio_button_checked", inBundle: bundle, compatibleWithTraitCollection: nil)
+        let flashImage = UIImage(named: "ic_flash_off", in: bundle, compatibleWith: nil)
+        let flipImage = UIImage(named: "ic_loop", in: bundle, compatibleWith: nil)
+        let shotImage = UIImage(named: "ic_radio_button_checked", in: bundle, compatibleWith: nil)
 
-        flashButton.setImage(flashImage, forState: .Normal)
-        flipButton.setImage(flipImage, forState: .Normal)
-        shotButton.setImage(shotImage, forState: .Normal)
+        flashButton.setImage(flashImage, for: UIControlState())
+        flipButton.setImage(flipImage, for: UIControlState())
+        shotButton.setImage(shotImage, for: UIControlState())
 
         flashConfiguration()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.willEnterForegroundNotification(_:)), name: UIApplicationWillEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForegroundNotification(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
     deinit {
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    func willEnterForegroundNotification(notification: NSNotification) {
+    func willEnterForegroundNotification(_ notification: Notification) {
         
-        let status = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+        let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
         
-        if status == AVAuthorizationStatus.Authorized {
+        if status == AVAuthorizationStatus.authorized {
 
             session?.startRunning()
             
-        } else if status == AVAuthorizationStatus.Denied || status == AVAuthorizationStatus.Restricted {
+        } else if status == AVAuthorizationStatus.denied || status == AVAuthorizationStatus.restricted {
 
             session?.stopRunning()
         }
     }
     
-    @IBAction func shotButtonPressed(sender: UIButton) {
+    @IBAction func shotButtonPressed(_ sender: UIButton) {
         
         guard let imageOutput = imageOutput else {
             
             return
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: { () -> Void in
 
-            let videoConnection = imageOutput.connectionWithMediaType(AVMediaTypeVideo)
+            let videoConnection = imageOutput.connection(withMediaType: AVMediaTypeVideo)
 
-            imageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (buffer, error) -> Void in
+            imageOutput.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (buffer, error) -> Void in
                 
                 self.session?.stopRunning()
                 
                 let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
                 
-                if let image = UIImage(data: data), let delegate = self.delegate {
+                if let image = UIImage(data: data!), let delegate = self.delegate {
                     
                     // Image size
                     let iw = image.size.width
@@ -155,11 +155,11 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                     // The center coordinate along Y axis
                     let rcy = ih*0.5
 
-                    let imageRef = CGImageCreateWithImageInRect(image.CGImage, CGRect(x: rcy-iw*0.5, y: 0 , width: iw, height: iw))
+                    let imageRef = (image.cgImage)?.cropping(to: CGRect(x: rcy-iw*0.5, y: 0 , width: iw, height: iw))
                     
                     let resizedImage = UIImage(CGImage: imageRef!, scale: sw/iw, orientation: image.imageOrientation)
                                         
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         
                         delegate.cameraShotFinished(resizedImage)
                         
@@ -175,7 +175,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
         })
     }
     
-    @IBAction func flipButtonPressed(sender: UIButton) {
+    @IBAction func flipButtonPressed(_ sender: UIButton) {
         
         session?.stopRunning()
         
@@ -190,11 +190,11 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                     session.removeInput(input as! AVCaptureInput)
                 }
 
-                let position = (videoInput?.device.position == AVCaptureDevicePosition.Front) ? AVCaptureDevicePosition.Back : AVCaptureDevicePosition.Front
+                let position = (videoInput?.device.position == AVCaptureDevicePosition.front) ? AVCaptureDevicePosition.back : AVCaptureDevicePosition.front
 
-                for device in AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo) {
+                for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
 
-                    if let device = device as? AVCaptureDevice where device.position == position {
+                    if let device = device as? AVCaptureDevice, device.position == position {
                  
                         videoInput = try AVCaptureDeviceInput(device: device)
                         session.addInput(videoInput)
@@ -214,7 +214,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
         session?.startRunning()
     }
     
-    @IBAction func flashButtonPressed(sender: UIButton) {
+    @IBAction func flashButtonPressed(_ sender: UIButton) {
 
         do {
 
@@ -224,15 +224,15 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                 
                 let mode = device.flashMode
                 
-                if mode == AVCaptureFlashMode.Off {
+                if mode == AVCaptureFlashMode.off {
                     
-                    device.flashMode = AVCaptureFlashMode.On
-                    flashButton.setImage(UIImage(named: "ic_flash_on", inBundle: NSBundle(forClass: self.classForCoder), compatibleWithTraitCollection: nil), forState: .Normal)
+                    device.flashMode = AVCaptureFlashMode.on
+                    flashButton.setImage(UIImage(named: "ic_flash_on", in: Bundle(for: self.classForCoder), compatibleWith: nil), for: UIControlState())
                     
-                } else if mode == AVCaptureFlashMode.On {
+                } else if mode == AVCaptureFlashMode.on {
                     
-                    device.flashMode = AVCaptureFlashMode.Off
-                    flashButton.setImage(UIImage(named: "ic_flash_off", inBundle: NSBundle(forClass: self.classForCoder), compatibleWithTraitCollection: nil), forState: .Normal)
+                    device.flashMode = AVCaptureFlashMode.off
+                    flashButton.setImage(UIImage(named: "ic_flash_off", in: Bundle(for: self.classForCoder), compatibleWith: nil), for: UIControlState())
                 }
                 
                 device.unlockForConfiguration()
@@ -241,7 +241,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
         } catch _ {
 
-            flashButton.setImage(UIImage(named: "ic_flash_off", inBundle: NSBundle(forClass: self.classForCoder), compatibleWithTraitCollection: nil), forState: .Normal)
+            flashButton.setImage(UIImage(named: "ic_flash_off", in: Bundle(for: self.classForCoder), compatibleWith: nil), for: UIControlState())
             return
         }
  
@@ -250,52 +250,52 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
 private extension FSCameraView {
     
-    func focus(recognizer: UITapGestureRecognizer) {
+    func focus(_ recognizer: UITapGestureRecognizer) {
         
-        let point = recognizer.locationInView(self)
+        let point = recognizer.location(in: self)
         let viewsize = self.bounds.size
         let newPoint = CGPoint(x: point.y/viewsize.height, y: 1.0-point.x/viewsize.width)
         
-        let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         
         do {
             
-            try device.lockForConfiguration()
+            try device?.lockForConfiguration()
             
         } catch _ {
             
             return
         }
         
-        if device.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) == true {
+        if device?.isFocusModeSupported(AVCaptureFocusMode.autoFocus) == true {
 
-            device.focusMode = AVCaptureFocusMode.AutoFocus
-            device.focusPointOfInterest = newPoint
+            device?.focusMode = AVCaptureFocusMode.autoFocus
+            device?.focusPointOfInterest = newPoint
         }
 
-        if device.isExposureModeSupported(AVCaptureExposureMode.ContinuousAutoExposure) == true {
+        if device?.isExposureModeSupported(AVCaptureExposureMode.continuousAutoExposure) == true {
             
-            device.exposureMode = AVCaptureExposureMode.ContinuousAutoExposure
-            device.exposurePointOfInterest = newPoint
+            device?.exposureMode = AVCaptureExposureMode.continuousAutoExposure
+            device?.exposurePointOfInterest = newPoint
         }
         
-        device.unlockForConfiguration()
+        device?.unlockForConfiguration()
         
         self.focusView?.alpha = 0.0
         self.focusView?.center = point
-        self.focusView?.backgroundColor = UIColor.clearColor()
-        self.focusView?.layer.borderColor = UIColor.whiteColor().CGColor
+        self.focusView?.backgroundColor = UIColor.clear
+        self.focusView?.layer.borderColor = UIColor.white.cgColor
         self.focusView?.layer.borderWidth = 1.0
-        self.focusView!.transform = CGAffineTransformMakeScale(1.0, 1.0)
+        self.focusView!.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
         self.addSubview(self.focusView!)
         
-        UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 3.0, options: UIViewAnimationOptions.CurveEaseIn, // UIViewAnimationOptions.BeginFromCurrentState
+        UIView.animate(withDuration: 0.8, delay: 0.0, usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 3.0, options: UIViewAnimationOptions.curveEaseIn, // UIViewAnimationOptions.BeginFromCurrentState
             animations: {
                 self.focusView!.alpha = 1.0
-                self.focusView!.transform = CGAffineTransformMakeScale(0.7, 0.7)
+                self.focusView!.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
             }, completion: {(finished) in
-                self.focusView!.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                self.focusView!.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                 self.focusView!.removeFromSuperview()
         })
     }
@@ -308,8 +308,8 @@ private extension FSCameraView {
                 
                 try device.lockForConfiguration()
                 
-                device.flashMode = AVCaptureFlashMode.Off
-                flashButton.setImage(UIImage(named: "ic_flash_off", inBundle: NSBundle(forClass: self.classForCoder), compatibleWithTraitCollection: nil), forState: .Normal)
+                device.flashMode = AVCaptureFlashMode.off
+                flashButton.setImage(UIImage(named: "ic_flash_off", in: Bundle(for: self.classForCoder), compatibleWith: nil), for: UIControlState())
                 
                 device.unlockForConfiguration()
                 

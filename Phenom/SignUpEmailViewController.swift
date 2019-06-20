@@ -2,8 +2,8 @@
 //  SignUpEmailViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/4/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/4/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -16,56 +16,56 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(15, 20, 44, 44)
-        xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let xBtn = UIButton(type: UIButtonType.custom)
+        xBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        xBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.backgroundColor = UIColor.blue
+        xBtn.addTarget(self, action:#selector(xBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "VERIFY EMAIL"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        let nextBtn = UIButton(type: .Custom)
-        nextBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-        nextBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let nextBtn = UIButton(type: .custom)
+        nextBtn.frame = CGRect(x: view.frame.size.width-44-15, y: 20, width: 44, height: 44)
+        nextBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //nextBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        nextBtn.backgroundColor = UIColor.blueColor()
-        nextBtn.addTarget(self, action:#selector(nextBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        nextBtn.backgroundColor = UIColor.blue
+        nextBtn.addTarget(self, action:#selector(nextBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(nextBtn)
         
-        emailField.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
-        emailField.backgroundColor = UIColor.clearColor()
+        emailField.frame = CGRect(x: 20, y: 64, width: view.frame.size.width-40, height: 64)
+        emailField.backgroundColor = UIColor.clear
         emailField.delegate = self
-        emailField.textColor = UIColor.whiteColor()
+        emailField.textColor = UIColor.white
         emailField.attributedPlaceholder = NSAttributedString(string:"your email",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
-        emailField.keyboardType = .EmailAddress
-        emailField.returnKeyType = .Next
+        emailField.keyboardType = .emailAddress
+        emailField.returnKeyType = .next
         emailField.enablesReturnKeyAutomatically = true
         emailField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         emailField.placeholder = "your email"
-        emailField.autocapitalizationType = UITextAutocapitalizationType.None
-        emailField.autocorrectionType = UITextAutocorrectionType.No
+        emailField.autocapitalizationType = UITextAutocapitalizationType.none
+        emailField.autocorrectionType = UITextAutocorrectionType.no
         view.addSubview(emailField)
         emailField.text = ""
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview.frame = CGRect(x: 0, y: 64+63.5, width: view.frame.size.width, height: 0.5)
         lineview.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview)
 
@@ -78,7 +78,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         emailField.becomeFirstResponder()
@@ -87,10 +87,10 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
     
     func xBtnAction() {
         view.endEditing(true)
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if (emailField.text == "") {
             // missing creds
@@ -101,7 +101,7 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let space = " "
         if (string == space) {
@@ -111,12 +111,12 @@ class SignUpEmailViewController: UIViewController, UITextFieldDelegate {
         if (textField == emailField) {
             let maxLength = 50
             let currentString: NSString = textField.text!
-            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string)
             return newString.length <= maxLength
         } else {
             let maxLength = 35
             let currentString: NSString = textField.text!
-            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string)
             return newString.length <= maxLength
         }
         

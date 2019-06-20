@@ -2,8 +2,8 @@
 //  TimelineHeaderView.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/30/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/30/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -30,41 +30,41 @@ class TimelineHeaderView: UIView {
         super.init(frame: frame)
         
         self.frame = frame 
-        backgroundColor = UIColor.blackColor()
+        backgroundColor = UIColor.black
         
         bg = UIView()
         bg!.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         addSubview(bg!)
         
         userImgView = UIImageView()
-        userImgView!.backgroundColor = UIColor.lightGrayColor()
+        userImgView!.backgroundColor = UIColor.lightGray
         addSubview(userImgView!)
         
-        userBtn = UIButton(type: UIButtonType.Custom)
-        userBtn!.backgroundColor = UIColor.clearColor()
+        userBtn = UIButton(type: UIButtonType.custom)
+        userBtn!.backgroundColor = UIColor.clear
         addSubview(userBtn!)
 
         
         userLbl = UILabel()
-        userLbl!.backgroundColor = UIColor.clearColor()
+        userLbl!.backgroundColor = UIColor.clear
         userLbl!.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        userLbl!.textColor = UIColor.whiteColor()
-        userLbl!.textAlignment = NSTextAlignment.Left
+        userLbl!.textColor = UIColor.white
+        userLbl!.textAlignment = NSTextAlignment.left
         userLbl!.numberOfLines = 1
-        userLbl!.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        userLbl!.lineBreakMode = NSLineBreakMode.byTruncatingTail
         addSubview(userLbl!)
         
         timeImgView = UIImageView()
-        timeImgView!.backgroundColor = UIColor.lightGrayColor()
+        timeImgView!.backgroundColor = UIColor.lightGray
         addSubview(timeImgView!)
         
         timeLbl = UILabel()
-        timeLbl!.backgroundColor = UIColor.clearColor()
+        timeLbl!.backgroundColor = UIColor.clear
         timeLbl!.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
-        timeLbl!.textColor = UIColor.lightGrayColor()
-        timeLbl!.textAlignment = NSTextAlignment.Left
+        timeLbl!.textColor = UIColor.lightGray
+        timeLbl!.textAlignment = NSTextAlignment.left
         timeLbl!.numberOfLines = 1
-        timeLbl!.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        timeLbl!.lineBreakMode = NSLineBreakMode.byTruncatingTail
         addSubview(timeLbl!)
         
     }
@@ -73,20 +73,20 @@ class TimelineHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         // Drawing code
         
     }
     
     override func layoutSubviews() {
         
-        bg!.frame = CGRectMake(0, 0, frame.size.width, 64)
+        bg!.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: 64)
         
-        userImgView!.frame = CGRectMake(15, 10, 44, 44)
-        userBtn!.frame = CGRectMake(15, 10, frame.size.width/2, 44)
-        userLbl!.frame = CGRectMake(15+44+10, 10, frame.size.width-20-44-20-20, 22)
-        timeImgView!.frame = CGRectMake(15+44+10, 10+22+4, 14, 14)
-        timeLbl!.frame = CGRectMake(15+44+10+14+8, 10+22, frame.size.width-20-44-20-20, 22)
+        userImgView!.frame = CGRect(x: 15, y: 10, width: 44, height: 44)
+        userBtn!.frame = CGRect(x: 15, y: 10, width: frame.size.width/2, height: 44)
+        userLbl!.frame = CGRect(x: 15+44+10, y: 10, width: frame.size.width-20-44-20-20, height: 22)
+        timeImgView!.frame = CGRect(x: 15+44+10, y: 10+22+4, width: 14, height: 14)
+        timeLbl!.frame = CGRect(x: 15+44+10+14+8, y: 10+22, width: frame.size.width-20-44-20-20, height: 22)
         
         
     }

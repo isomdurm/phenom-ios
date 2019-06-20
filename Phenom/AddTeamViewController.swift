@@ -2,8 +2,8 @@
 //  AddTeamViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/3/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/3/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -23,73 +23,73 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(15, 20, 44, 44)
-        xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let xBtn = UIButton(type: UIButtonType.custom)
+        xBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        xBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.backgroundColor = UIColor.blue
+        xBtn.addTarget(self, action:#selector(xBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(xBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "ADD YOUR TEAM"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        let saveBtn = UIButton(type: .Custom)
-        saveBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-        saveBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let saveBtn = UIButton(type: .custom)
+        saveBtn.frame = CGRect(x: view.frame.size.width-44-15, y: 20, width: 44, height: 44)
+        saveBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //saveBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        saveBtn.backgroundColor = UIColor.blueColor()
-        saveBtn.addTarget(self, action:#selector(saveBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        saveBtn.backgroundColor = UIColor.blue
+        saveBtn.addTarget(self, action:#selector(saveBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(saveBtn)
         
-        teamNameField.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
-        teamNameField.backgroundColor = UIColor.clearColor()
+        teamNameField.frame = CGRect(x: 20, y: 64, width: view.frame.size.width-40, height: 64)
+        teamNameField.backgroundColor = UIColor.clear
         teamNameField.delegate = self
-        teamNameField.textColor = UIColor.whiteColor()
+        teamNameField.textColor = UIColor.white
         teamNameField.attributedPlaceholder = NSAttributedString(string:"team name",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
-        teamNameField.keyboardType = .Default
-        teamNameField.returnKeyType = .Next
+        teamNameField.keyboardType = .default
+        teamNameField.returnKeyType = .next
         teamNameField.enablesReturnKeyAutomatically = true
         teamNameField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         teamNameField.placeholder = "team name"
-        teamNameField.autocapitalizationType = .Words
+        teamNameField.autocapitalizationType = .words
         teamNameField.tag = 0
         view.addSubview(teamNameField)
         teamNameField.text = ""
         
-        sportField.frame = CGRectMake(20, 64+64, view.frame.size.width-40, 64)
-        sportField.backgroundColor = UIColor.clearColor()
+        sportField.frame = CGRect(x: 20, y: 64+64, width: view.frame.size.width-40, height: 64)
+        sportField.backgroundColor = UIColor.clear
         sportField.delegate = self
-        sportField.textColor = UIColor.whiteColor()
+        sportField.textColor = UIColor.white
         sportField.attributedPlaceholder = NSAttributedString(string:"sport",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
         sportField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         sportField.placeholder = "sport"
-        sportField.addTarget(self, action: #selector(sportFieldEditing), forControlEvents: .EditingDidBegin)
+        sportField.addTarget(self, action: #selector(sportFieldEditing), for: .editingDidBegin)
         sportField.tag = 1
         view.addSubview(sportField)
         sportField.text = ""
         
-        numberField.frame = CGRectMake(20, 64+64+64, view.frame.size.width-40, 64)
-        numberField.backgroundColor = UIColor.clearColor()
+        numberField.frame = CGRect(x: 20, y: 64+64+64, width: view.frame.size.width-40, height: 64)
+        numberField.backgroundColor = UIColor.clear
         numberField.delegate = self
-        numberField.textColor = UIColor.whiteColor()
+        numberField.textColor = UIColor.white
         numberField.attributedPlaceholder = NSAttributedString(string:"your number",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
-        numberField.keyboardType = .NumberPad
-        numberField.returnKeyType = .Next
+        numberField.keyboardType = .numberPad
+        numberField.returnKeyType = .next
         numberField.enablesReturnKeyAutomatically = true
         numberField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         numberField.placeholder = "your number"
@@ -97,17 +97,17 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         view.addSubview(numberField)
         numberField.text = ""
         
-        positionField.frame = CGRectMake(20, 64+64+64+64, view.frame.size.width-40, 64)
-        positionField.backgroundColor = UIColor.clearColor()
+        positionField.frame = CGRect(x: 20, y: 64+64+64+64, width: view.frame.size.width-40, height: 64)
+        positionField.backgroundColor = UIColor.clear
         positionField.delegate = self
-        positionField.textColor = UIColor.whiteColor()
+        positionField.textColor = UIColor.white
         positionField.attributedPlaceholder = NSAttributedString(string:"your position",attributes:[NSForegroundColorAttributeName: UIColor(red:123/255, green:123/255, blue:125/255, alpha:1)])
-        positionField.keyboardType = .Default
-        positionField.returnKeyType = .Done
+        positionField.keyboardType = .default
+        positionField.returnKeyType = .done
         positionField.enablesReturnKeyAutomatically = true
         positionField.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
         positionField.placeholder = "your position"
-        positionField.autocapitalizationType = .Sentences
+        positionField.autocapitalizationType = .sentences
         positionField.tag = 3
         view.addSubview(positionField)
         positionField.text = ""
@@ -115,22 +115,22 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         
         let lineview = UIView()
-        lineview.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview.frame = CGRect(x: 0, y: 64+63.5, width: view.frame.size.width, height: 0.5)
         lineview.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview)
         
         let lineview2 = UIView()
-        lineview2.frame = CGRectMake(0, 64+64+63.5, view.frame.size.width, 0.5)
+        lineview2.frame = CGRect(x: 0, y: 64+64+63.5, width: view.frame.size.width, height: 0.5)
         lineview2.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview2)
         
         let lineview3 = UIView()
-        lineview3.frame = CGRectMake(0, 64+64+64+63.5, view.frame.size.width, 0.5)
+        lineview3.frame = CGRect(x: 0, y: 64+64+64+63.5, width: view.frame.size.width, height: 0.5)
         lineview3.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview3)
         
         let lineview4 = UIView()
-        lineview4.frame = CGRectMake(0, 64+64+64+64+63.5, view.frame.size.width, 0.5)
+        lineview4.frame = CGRect(x: 0, y: 64+64+64+64+63.5, width: view.frame.size.width, height: 0.5)
         lineview4.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview4)
     
@@ -143,7 +143,7 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         teamNameField.becomeFirstResponder()
@@ -154,33 +154,33 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     func xBtnAction() {
         
         view.endEditing(true)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
 
     // sportPicker
     
-    func sportFieldEditing(sender: UITextField) {
+    func sportFieldEditing(_ sender: UITextField) {
         let pickerView = UIPickerView()
         pickerView.dataSource = self
         pickerView.delegate = self
         sender.inputView = pickerView
     }
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return sportData.count
     }
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return sportData[row]
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         sportField.text = sportData[row]
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if (textField == teamNameField) {
             sportField.becomeFirstResponder()
@@ -196,7 +196,7 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         return true
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if (textField == teamNameField) {
             
@@ -219,12 +219,12 @@ class AddTeamViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         if (textField == teamNameField) {
             let maxLength = 100
             let currentString: NSString = textField.text!
-            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string)
             return newString.length <= maxLength
         } else {
             let maxLength = 50
             let currentString: NSString = textField.text!
-            let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: string)
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string)
             return newString.length <= maxLength
         }
         

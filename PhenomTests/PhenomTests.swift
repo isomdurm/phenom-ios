@@ -2,8 +2,8 @@
 //  PhenomTests.swift
 //  PhenomTests
 //
-//  Created by Clay Zug on 3/23/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/23/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import XCTest
@@ -28,7 +28,7 @@ class PhenomTests: XCTestCase {
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        measureBlock {
+        measure {
             // Put the code you want to measure the time of here.
         }
     }

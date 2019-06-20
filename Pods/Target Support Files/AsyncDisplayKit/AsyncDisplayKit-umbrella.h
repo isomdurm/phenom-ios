@@ -1,4 +1,14 @@
+#ifdef __OBJC__
 #import <UIKit/UIKit.h>
+#else
+#ifndef FOUNDATION_EXPORT
+#if defined(__cplusplus)
+#define FOUNDATION_EXPORT extern "C"
+#else
+#define FOUNDATION_EXPORT extern
+#endif
+#endif
+#endif
 
 #import "ASCellNode.h"
 #import "ASCollectionView.h"
@@ -17,8 +27,6 @@
 #import "ASTableViewProtocols.h"
 #import "ASTextNode.h"
 #import "AsyncDisplayKit.h"
-#import "_ASDisplayLayer.h"
-#import "_ASDisplayView.h"
 #import "ASAbstractLayoutController.h"
 #import "ASBasicImageDownloader.h"
 #import "ASBatchContext.h"
@@ -53,6 +61,8 @@
 #import "_ASAsyncTransactionGroup.h"
 #import "UICollectionViewLayout+ASConvenience.h"
 #import "UIView+ASConvenience.h"
+#import "_ASDisplayLayer.h"
+#import "_ASDisplayView.h"
 #import "ASAssert.h"
 #import "ASAvailability.h"
 #import "ASBaseDefines.h"

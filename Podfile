@@ -19,11 +19,12 @@ pod 'Fabric',                 '1.6.3'
 pod 'Crashlytics',            '3.7.0'
 pod 'Reachability',           '3.1.1'
 pod 'SwiftyJSON'
-pod 'HanekeSwift'
+pod 'HanekeSwift', :git => 'https://github.com/Haneke/HanekeSwift.git', :branch => 'feature/swift-3'
 pod 'DKImagePickerController'
 pod 'ImagePicker'
 pod 'SDWebImage', '~>3.7'
-pod 'AlamofireImage', '~> 2.0'
+pod 'Alamofire', '~> 4.4'
+#pod 'AlamofireImage', '~> 2.0'
 
 end
 

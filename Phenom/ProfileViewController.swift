@@ -2,8 +2,8 @@
 //  ProfileViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/24/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/24/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -20,11 +20,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var navBarView = UIView()
     
-    var passedUserJson = JSON(data: NSData())
+    var passedUserJson = JSON(data: Data())
     
-    var teamData = NSData()
-    var momentsData = NSData()
-    var gearData = NSData()
+    var teamData = Data()
+    var momentsData = Data()
+    var gearData = Data()
     
     var userId = ""
     var username = ""
@@ -50,16 +50,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var nameLbl = UILabel()
     var sportHometownLbl = UILabel()
     var descriptionLbl = UILabel()
-    var fansNumBtn = UIButton.init(type: UIButtonType.Custom)
-    var followingNumBtn = UIButton.init(type: UIButtonType.Custom)
+    var fansNumBtn = UIButton.init(type: UIButtonType.custom)
+    var followingNumBtn = UIButton.init(type: UIButtonType.custom)
     
-    let inviteBtn = UIButton.init(type: UIButtonType.Custom)
+    let inviteBtn = UIButton.init(type: UIButtonType.custom)
     
     var isPushed: Bool = false
     
-    var tabBtn1 = UIButton(type: UIButtonType.Custom)
-    var tabBtn2 = UIButton(type: UIButtonType.Custom)
-    var tabBtn3 = UIButton(type: UIButtonType.Custom)
+    var tabBtn1 = UIButton(type: UIButtonType.custom)
+    var tabBtn2 = UIButton(type: UIButtonType.custom)
+    var tabBtn3 = UIButton(type: UIButtonType.custom)
     
     var queriedForTimeline: Bool = false
     var queriedForGear: Bool = false
@@ -67,10 +67,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         // parse user json
@@ -106,25 +106,25 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
-        titleLbl.text = username.uppercaseString
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
+        titleLbl.text = username.uppercased()
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.frame = CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        theTableView.separatorStyle = .None
+        theTableView.separatorStyle = .none
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(MainCell.self, forCellReuseIdentifier: "cell")
+        theTableView.register(MainCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
         
         let padding = CGFloat(10)
@@ -138,11 +138,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let sportHomeTownHeight = CGFloat(28)
         
         let bioWidth = view.frame.size.width-50
-        let bioHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(bio, font: UIFont.init(name: "MaisonNeue-Medium", size: 14)!, width: bioWidth)+padding+padding
+        let bioHeight = (UIApplication.shared.delegate as! AppDelegate).heightForView(bio, font: UIFont.init(name: "MaisonNeue-Medium", size: 14)!, width: bioWidth)+padding+padding
 
         
         let headerContainerViewHeight = profilePicWidth+padding+nameHeight+sportHomeTownHeight+bioHeight+padding+padding+fansHeight
-        let headerContainerView = UIView(frame: CGRectMake(0, 50, headerViewWidth, headerContainerViewHeight))
+        let headerContainerView = UIView(frame: CGRect(x: 0, y: 50, width: headerViewWidth, height: headerContainerViewHeight))
         
         
         //
@@ -150,16 +150,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //
         
         let profileContainerViewHeight = profilePicWidth+padding+nameHeight+sportHomeTownHeight+bioHeight+padding+padding
-        let profileContainerView = UIView(frame: CGRectMake(0, 0,  headerViewWidth, profileContainerViewHeight))
+        let profileContainerView = UIView(frame: CGRect(x: 0, y: 0,  width: headerViewWidth, height: profileContainerViewHeight))
         
-        profileImgView.frame = CGRectMake(profilePicWidth, 0, profilePicWidth, profilePicWidth)
-        profileImgView.backgroundColor = UIColor.lightGrayColor()
-        profileImgView.contentMode = UIViewContentMode.ScaleAspectFill
+        profileImgView.frame = CGRect(x: profilePicWidth, y: 0, width: profilePicWidth, height: profilePicWidth)
+        profileImgView.backgroundColor = UIColor.lightGray
+        profileImgView.contentMode = UIViewContentMode.scaleAspectFill
         profileContainerView.addSubview(profileImgView)
-        let fileUrl = NSURL(string: imageUrl)
+        let fileUrl = URL(string: imageUrl)
         profileImgView.setNeedsLayout()
         profileImgView.layer.masksToBounds = true
-        profileImgView.userInteractionEnabled = true
+        profileImgView.isUserInteractionEnabled = true
         
         //profileImgView.hnk_setImageFromURL(fileUrl!)
         profileImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -177,29 +177,29 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         
-        nameLbl.frame = CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+padding, headerViewWidth, nameHeight)
-        nameLbl.backgroundColor = UIColor.clearColor()
-        nameLbl.textAlignment = .Center
+        nameLbl.frame = CGRect(x: 0, y: profileImgView.frame.origin.y+profileImgView.frame.size.height+padding, width: headerViewWidth, height: nameHeight)
+        nameLbl.backgroundColor = UIColor.clear
+        nameLbl.textAlignment = .center
         nameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 24)
-        nameLbl.textColor = UIColor.whiteColor()
+        nameLbl.textColor = UIColor.white
         profileContainerView.addSubview(nameLbl)
-        nameLbl.text = "\(firstName) \(lastName)".uppercaseString
+        nameLbl.text = "\(firstName) \(lastName)".uppercased()
         
-        sportHometownLbl.frame = CGRectMake(0, profileImgView.frame.origin.y+profileImgView.frame.size.height+padding+nameLbl.frame.size.height, headerViewWidth, sportHomeTownHeight)
-        sportHometownLbl.backgroundColor = UIColor.clearColor()
-        sportHometownLbl.textAlignment = .Center
+        sportHometownLbl.frame = CGRect(x: 0, y: profileImgView.frame.origin.y+profileImgView.frame.size.height+padding+nameLbl.frame.size.height, width: headerViewWidth, height: sportHomeTownHeight)
+        sportHometownLbl.backgroundColor = UIColor.clear
+        sportHometownLbl.textAlignment = .center
         sportHometownLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 13)
-        sportHometownLbl.textColor = UIColor.whiteColor()
+        sportHometownLbl.textColor = UIColor.white
         profileContainerView.addSubview(sportHometownLbl)
-        let sportsStr = sports.componentsJoinedByString(", ")
-        sportHometownLbl.text = String("\(sportsStr)").uppercaseString // IN \(hometown)
+        let sportsStr = sports.componentsJoined(by: ", ")
+        sportHometownLbl.text = String("\(sportsStr)").uppercased() // IN \(hometown)
         
-        descriptionLbl.frame = CGRectMake((headerViewWidth/2)-(bioWidth/2), profileImgView.frame.origin.y+profileImgView.frame.size.height+padding+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, bioWidth, bioHeight)
-        descriptionLbl.backgroundColor = UIColor.clearColor()
+        descriptionLbl.frame = CGRect(x: (headerViewWidth/2)-(bioWidth/2), y: profileImgView.frame.origin.y+profileImgView.frame.size.height+padding+nameLbl.frame.size.height+sportHometownLbl.frame.size.height, width: bioWidth, height: bioHeight)
+        descriptionLbl.backgroundColor = UIColor.clear
         descriptionLbl.numberOfLines = 0
         descriptionLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
         descriptionLbl.textColor = UIColor.init(white: 0.5, alpha: 1.0)
-        descriptionLbl.textAlignment = NSTextAlignment.Center
+        descriptionLbl.textAlignment = NSTextAlignment.center
         profileContainerView.addSubview(descriptionLbl)
         descriptionLbl.text = bio
         
@@ -209,77 +209,77 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //
         // fans/following/invite
         //
-        let fansFollowingInviteContainerView = UIView(frame: CGRectMake(0, profileContainerViewHeight,  headerViewWidth, fansHeight))
+        let fansFollowingInviteContainerView = UIView(frame: CGRect(x: 0, y: profileContainerViewHeight,  width: headerViewWidth, height: fansHeight))
         
-        fansNumBtn.frame = CGRectMake(0, 0, fansWidth, 30)
-        fansNumBtn.backgroundColor = UIColor.clearColor()
-        fansNumBtn.addTarget(self, action:#selector(fansBtnAction), forControlEvents:.TouchUpInside)
+        fansNumBtn.frame = CGRect(x: 0, y: 0, width: fansWidth, height: 30)
+        fansNumBtn.backgroundColor = UIColor.clear
+        fansNumBtn.addTarget(self, action:#selector(fansBtnAction), for:.touchUpInside)
         fansNumBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         fansNumBtn.titleLabel?.numberOfLines = 1
-        fansNumBtn.contentHorizontalAlignment = .Center
-        fansNumBtn.contentVerticalAlignment = .Center
-        fansNumBtn.titleLabel?.textAlignment = .Center
-        fansNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        fansNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        fansNumBtn.contentHorizontalAlignment = .center
+        fansNumBtn.contentVerticalAlignment = .center
+        fansNumBtn.titleLabel?.textAlignment = .center
+        fansNumBtn.setTitleColor(UIColor.white, for: UIControlState())
+        fansNumBtn.setTitleColor(UIColor.white, for: .highlighted)
         fansFollowingInviteContainerView.addSubview(fansNumBtn)
-        fansNumBtn.setTitle(String("\(followersCount)").uppercaseString, forState: .Normal)
+        fansNumBtn.setTitle(String("\(followersCount)").uppercased(), for: UIControlState())
         
-        let fansBtn = UIButton.init(type: UIButtonType.Custom)
-        fansBtn.frame = CGRectMake(0, 30, fansWidth, 20)
-        fansBtn.backgroundColor = UIColor.clearColor()
-        fansBtn.addTarget(self, action:#selector(fansBtnAction), forControlEvents:.TouchUpInside)
+        let fansBtn = UIButton.init(type: UIButtonType.custom)
+        fansBtn.frame = CGRect(x: 0, y: 30, width: fansWidth, height: 20)
+        fansBtn.backgroundColor = UIColor.clear
+        fansBtn.addTarget(self, action:#selector(fansBtnAction), for:.touchUpInside)
         fansBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Demi", size: 10)
         fansBtn.titleLabel?.numberOfLines = 1
-        fansBtn.contentHorizontalAlignment = .Center
-        fansBtn.contentVerticalAlignment = .Center
-        fansBtn.titleLabel?.textAlignment = .Center
-        fansBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        fansBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        fansBtn.setTitle("FANS", forState: .Normal)
+        fansBtn.contentHorizontalAlignment = .center
+        fansBtn.contentVerticalAlignment = .center
+        fansBtn.titleLabel?.textAlignment = .center
+        fansBtn.setTitleColor(UIColor.white, for: UIControlState())
+        fansBtn.setTitleColor(UIColor.white, for: .highlighted)
+        fansBtn.setTitle("FANS", for: UIControlState())
         fansFollowingInviteContainerView.addSubview(fansBtn)
         
-        followingNumBtn.frame = CGRectMake(fansWidth, 0, fansWidth, 30)
-        followingNumBtn.backgroundColor = UIColor.clearColor()
-        followingNumBtn.addTarget(self, action:#selector(followingBtnAction), forControlEvents:.TouchUpInside)
+        followingNumBtn.frame = CGRect(x: fansWidth, y: 0, width: fansWidth, height: 30)
+        followingNumBtn.backgroundColor = UIColor.clear
+        followingNumBtn.addTarget(self, action:#selector(followingBtnAction), for:.touchUpInside)
         followingNumBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         followingNumBtn.titleLabel?.numberOfLines = 1
-        followingNumBtn.contentHorizontalAlignment = .Center
-        followingNumBtn.contentVerticalAlignment = .Center
-        followingNumBtn.titleLabel?.textAlignment = .Center
-        followingNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        followingNumBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        followingNumBtn.contentHorizontalAlignment = .center
+        followingNumBtn.contentVerticalAlignment = .center
+        followingNumBtn.titleLabel?.textAlignment = .center
+        followingNumBtn.setTitleColor(UIColor.white, for: UIControlState())
+        followingNumBtn.setTitleColor(UIColor.white, for: .highlighted)
         fansFollowingInviteContainerView.addSubview(followingNumBtn)
-        followingNumBtn.setTitle(String("\(followingCount)").uppercaseString, forState: .Normal)
+        followingNumBtn.setTitle(String("\(followingCount)").uppercased(), for: UIControlState())
         
-        let followingBtn = UIButton.init(type: UIButtonType.Custom)
-        followingBtn.frame = CGRectMake(fansWidth, 30, fansWidth, 20)
-        followingBtn.backgroundColor = UIColor.clearColor()
-        followingBtn.addTarget(self, action:#selector(followingBtnAction), forControlEvents:.TouchUpInside)
+        let followingBtn = UIButton.init(type: UIButtonType.custom)
+        followingBtn.frame = CGRect(x: fansWidth, y: 30, width: fansWidth, height: 20)
+        followingBtn.backgroundColor = UIColor.clear
+        followingBtn.addTarget(self, action:#selector(followingBtnAction), for:.touchUpInside)
         followingBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Demi", size: 10)
         followingBtn.titleLabel?.numberOfLines = 1
-        followingBtn.contentHorizontalAlignment = .Center
-        followingBtn.contentVerticalAlignment = .Center
-        followingBtn.titleLabel?.textAlignment = .Center
-        followingBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        followingBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        followingBtn.setTitle("FOLLOWING", forState: .Normal)
+        followingBtn.contentHorizontalAlignment = .center
+        followingBtn.contentVerticalAlignment = .center
+        followingBtn.titleLabel?.textAlignment = .center
+        followingBtn.setTitleColor(UIColor.white, for: UIControlState())
+        followingBtn.setTitleColor(UIColor.white, for: .highlighted)
+        followingBtn.setTitle("FOLLOWING", for: UIControlState())
         fansFollowingInviteContainerView.addSubview(followingBtn)
         
         let inviteBtnWidth = ((headerViewWidth/2)/4)*3
         let half = headerViewWidth/2
         let dif = half - inviteBtnWidth
         
-        inviteBtn.frame = CGRectMake(headerViewWidth/2+(dif/2), 0, inviteBtnWidth, fansHeight)
-        inviteBtn.backgroundColor = UIColor.greenColor()
-        inviteBtn.setBackgroundImage(UIImage(named: "goldNav.png"), forState: .Normal)
-        inviteBtn.addTarget(self, action:#selector(inviteBtnAction), forControlEvents:.TouchUpInside)
+        inviteBtn.frame = CGRect(x: headerViewWidth/2+(dif/2), y: 0, width: inviteBtnWidth, height: fansHeight)
+        inviteBtn.backgroundColor = UIColor.green
+        inviteBtn.setBackgroundImage(UIImage(named: "goldNav.png"), for: UIControlState())
+        inviteBtn.addTarget(self, action:#selector(inviteBtnAction), for:.touchUpInside)
         inviteBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         inviteBtn.titleLabel?.numberOfLines = 1
-        inviteBtn.contentHorizontalAlignment = .Center
-        inviteBtn.contentVerticalAlignment = .Center
-        inviteBtn.titleLabel?.textAlignment = .Center
-        inviteBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        inviteBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+        inviteBtn.contentHorizontalAlignment = .center
+        inviteBtn.contentVerticalAlignment = .center
+        inviteBtn.titleLabel?.textAlignment = .center
+        inviteBtn.setTitleColor(UIColor.white, for: UIControlState())
+        inviteBtn.setTitleColor(UIColor.white, for: .highlighted)
         fansFollowingInviteContainerView.addSubview(inviteBtn)
         
         headerContainerView.addSubview(fansFollowingInviteContainerView)
@@ -292,55 +292,55 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         ////
         
         //let tabContainerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 64))
-        let tabContainerView = UIView(frame: CGRectMake(0, headerViewHeight, self.view.frame.size.width, 64))
+        let tabContainerView = UIView(frame: CGRect(x: 0, y: headerViewHeight, width: self.view.frame.size.width, height: 64))
         tabContainerView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         //let tabWidth = view.frame.width/3
         let tabWidth = view.frame.width/2
         
-        tabBtn1.frame = CGRectMake(0, 0, tabWidth, 64)
-        tabBtn1.backgroundColor = UIColor.clearColor()
+        tabBtn1.frame = CGRect(x: 0, y: 0, width: tabWidth, height: 64)
+        tabBtn1.backgroundColor = UIColor.clear
         tabBtn1.titleLabel?.numberOfLines = 1
         tabBtn1.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        tabBtn1.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabBtn1.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
-        tabBtn1.addTarget(self, action:#selector(tabBtn1Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn1.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
+        tabBtn1.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        tabBtn1.titleLabel?.textAlignment = NSTextAlignment.center
+        tabBtn1.setTitleColor(UIColor.lightGray, for: UIControlState())
+        tabBtn1.setTitleColor(UINavigationBar.appearance().tintColor, for: UIControlState.selected)
+        tabBtn1.addTarget(self, action:#selector(tabBtn1Action), for:UIControlEvents.touchUpInside)
         //tabContainerView.addSubview(tabBtn1)
-        tabBtn1.setTitle("0 STATS", forState: UIControlState.Normal)
+        tabBtn1.setTitle("0 STATS", for: UIControlState())
         
-        tabBtn2.frame = CGRectMake(tabWidth*0, 0, tabWidth, 64)
-        tabBtn2.backgroundColor = UIColor.clearColor()
+        tabBtn2.frame = CGRect(x: tabWidth*0, y: 0, width: tabWidth, height: 64)
+        tabBtn2.backgroundColor = UIColor.clear
         tabBtn2.titleLabel?.numberOfLines = 1
         tabBtn2.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        tabBtn2.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabBtn2.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
-        tabBtn2.addTarget(self, action:#selector(tabBtn2Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn2.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
+        tabBtn2.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        tabBtn2.titleLabel?.textAlignment = NSTextAlignment.center
+        tabBtn2.setTitleColor(UIColor.lightGray, for: UIControlState())
+        tabBtn2.setTitleColor(UINavigationBar.appearance().tintColor, for: UIControlState.selected)
+        tabBtn2.addTarget(self, action:#selector(tabBtn2Action), for:UIControlEvents.touchUpInside)
         tabContainerView.addSubview(tabBtn2)
         let s = momentCount == 1 ? "" : "S"
-        tabBtn2.setTitle("\(momentCount) MOMENT\(s)", forState: UIControlState.Normal)
+        tabBtn2.setTitle("\(momentCount) MOMENT\(s)", for: UIControlState())
         
-        tabBtn3.frame = CGRectMake(tabWidth*1, 0, tabWidth, 64)
-        tabBtn3.backgroundColor = UIColor.clearColor()
+        tabBtn3.frame = CGRect(x: tabWidth*1, y: 0, width: tabWidth, height: 64)
+        tabBtn3.backgroundColor = UIColor.clear
         tabBtn3.titleLabel?.numberOfLines = 1
         tabBtn3.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        tabBtn3.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabBtn3.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Selected)
-        tabBtn3.addTarget(self, action:#selector(tabBtn3Action), forControlEvents:UIControlEvents.TouchUpInside)
+        tabBtn3.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
+        tabBtn3.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        tabBtn3.titleLabel?.textAlignment = NSTextAlignment.center
+        tabBtn3.setTitleColor(UIColor.lightGray, for: UIControlState())
+        tabBtn3.setTitleColor(UINavigationBar.appearance().tintColor, for: UIControlState.selected)
+        tabBtn3.addTarget(self, action:#selector(tabBtn3Action), for:UIControlEvents.touchUpInside)
         tabContainerView.addSubview(tabBtn3)
-        tabBtn3.setTitle("\(lockerProductCount) GEAR", forState: UIControlState.Normal)
+        tabBtn3.setTitle("\(lockerProductCount) GEAR", for: UIControlState())
         
         ////
         
-        theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, headerViewWidth, headerViewHeight+64))
+        theTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: headerViewWidth, height: headerViewHeight+64))
         theTableView.tableHeaderView?.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         
         theTableView.tableHeaderView?.addSubview(headerContainerView)
@@ -351,11 +351,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         //
         //
         
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 0))
         
         refreshControl = UIRefreshControl()
-        refreshControl.tintColor = UIColor.whiteColor()
-        refreshControl.addTarget(self, action: #selector(refreshControlAction), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.tintColor = UIColor.white
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), for: UIControlEvents.valueChanged)
         theTableView.addSubview(refreshControl)
         
         //
@@ -375,7 +375,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         isPushed = false
@@ -393,11 +393,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
-            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        if ((UIApplication.shared.delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.shared.delegate as! AppDelegate).removeAddMomentView()
         }
         
     }
@@ -412,7 +412,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if(navigationController!.viewControllers.count > 1){
             return true
         }
@@ -421,15 +421,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func refreshControlAction() {
         
-        if (tabBtn1.selected) {
+        if (tabBtn1.isSelected) {
             
             self.queryForUser()
             
-        } else if (tabBtn2.selected) {
+        } else if (tabBtn2.isSelected) {
             
             self.queryForTimeline()
             
-        } else if (tabBtn3.selected) {
+        } else if (tabBtn3.isSelected) {
             
             self.queryForGear()
             
@@ -443,65 +443,65 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func queryForUser() {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as String
+        let defaults = UserDefaults.standard
+        let uid = defaults.string(forKey: "userId")! as String
         
         if (initialProfile) {
             
-            let searchBtn = UIButton(type: UIButtonType.Custom)
-            searchBtn.frame = CGRectMake(15, 20, 44, 44)
-            searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+            let searchBtn = UIButton(type: UIButtonType.custom)
+            searchBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+            searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), for: UIControlState())
             //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-            searchBtn.backgroundColor = UIColor.clearColor()
-            searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            searchBtn.backgroundColor = UIColor.clear
+            searchBtn.addTarget(self, action:#selector(searchBtnAction), for:UIControlEvents.touchUpInside)
             navBarView.addSubview(searchBtn)
             
-            let settingsBtn = UIButton(type: UIButtonType.Custom)
-            settingsBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-            settingsBtn.setImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
+            let settingsBtn = UIButton(type: UIButtonType.custom)
+            settingsBtn.frame = CGRect(x: view.frame.size.width-44-15, y: 20, width: 44, height: 44)
+            settingsBtn.setImage(UIImage(named: "settingsBtn.png"), for: UIControlState())
             //settingsBtn.setBackgroundImage(UIImage(named: "settingsBtn.png"), forState: UIControlState.Normal)
-            settingsBtn.backgroundColor = UIColor.blueColor()
-            settingsBtn.addTarget(self, action:#selector(settingsBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            settingsBtn.backgroundColor = UIColor.blue
+            settingsBtn.addTarget(self, action:#selector(settingsBtnAction), for:UIControlEvents.touchUpInside)
             navBarView.addSubview(settingsBtn)
             
-            let profileBtn = UIButton(type: UIButtonType.Custom)
-            profileBtn.frame = CGRectMake(0, 0, profileImgView.frame.size.width, profileImgView.frame.size.height)
-            profileBtn.backgroundColor = UIColor.clearColor()
-            profileBtn.addTarget(self, action:#selector(profileBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            let profileBtn = UIButton(type: UIButtonType.custom)
+            profileBtn.frame = CGRect(x: 0, y: 0, width: profileImgView.frame.size.width, height: profileImgView.frame.size.height)
+            profileBtn.backgroundColor = UIColor.clear
+            profileBtn.addTarget(self, action:#selector(profileBtnAction), for:UIControlEvents.touchUpInside)
             profileImgView.addSubview(profileBtn)
             
-            inviteBtn.setTitle("INVITE TEAM", forState: .Normal)
+            inviteBtn.setTitle("INVITE TEAM", for: UIControlState())
             
         } else {
             
             if (userId == uid) {
                 print("currentUser")
                 
-                inviteBtn.setTitle("INVITE TEAM", forState: .Normal)
+                inviteBtn.setTitle("INVITE TEAM", for: UIControlState())
                 
             } else {
                 
                 if (userFollows) {
-                    inviteBtn.selected = true
-                    inviteBtn.setTitle("UNFOLLOW", forState: .Normal)
+                    inviteBtn.isSelected = true
+                    inviteBtn.setTitle("UNFOLLOW", for: UIControlState())
                 } else {
-                    inviteBtn.selected = false
-                    inviteBtn.setTitle("FOLLOW", forState: .Normal)
+                    inviteBtn.isSelected = false
+                    inviteBtn.setTitle("FOLLOW", for: UIControlState())
                 }
             }
             
             // need back action
             
-            let backBtn = UIButton(type: UIButtonType.Custom)
-            backBtn.frame = CGRectMake(15, 20, 44, 44)
-            backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-            backBtn.backgroundColor = UIColor.clearColor()
-            backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+            let backBtn = UIButton(type: UIButtonType.custom)
+            backBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+            backBtn.setImage(UIImage(named: "back-arrow.png"), for: UIControlState())
+            backBtn.backgroundColor = UIColor.clear
+            backBtn.addTarget(self, action:#selector(backAction), for:UIControlEvents.touchUpInside)
             navBarView.addSubview(backBtn)
             backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
             
             let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-            rightSwipe.direction = .Right
+            rightSwipe.direction = .right
             view.addGestureRecognizer(rightSwipe)
             
         }
@@ -511,14 +511,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // now get user
         //
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(userId)"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -614,10 +614,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func reloadAction() {
         
-        let fileUrl = NSURL(string: self.imageUrl)
+        let fileUrl = URL(string: self.imageUrl)
         self.profileImgView.setNeedsLayout()
         self.profileImgView.layer.masksToBounds = true
-        self.profileImgView.userInteractionEnabled = true
+        self.profileImgView.isUserInteractionEnabled = true
         
         //profileImgView.hnk_setImageFromURL(fileUrl!)
         self.profileImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -664,32 +664,32 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    func inviteBtnAction(sender : UIButton) {
+    func inviteBtnAction(_ sender : UIButton) {
         
         // if currentUser, invite
         //
         // if not currentUser - follow / un-follow
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as String
+        let defaults = UserDefaults.standard
+        let uid = defaults.string(forKey: "userId")! as String
         
         if (userId == uid) {
             print("currentUser")
             
             // present invite
-            let defaults = NSUserDefaults.standardUserDefaults()
-            let username = defaults.stringForKey("username")! as String
+            let defaults = UserDefaults.standard
+            let username = defaults.string(forKey: "username")! as String
             
             let textToShare = String("Add me on Phenom! 🆕🔥 (username: \(username))")
             let myWebsite = "http://phenom.co/download"
             let objectsToShare = [textToShare, myWebsite]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            activityVC.excludedActivityTypes = [UIActivityTypeAirDrop, UIActivityTypeAddToReadingList,UIActivityTypeAssignToContact,UIActivityTypePostToFlickr,UIActivityTypePostToVimeo]
-            self.presentViewController(activityVC, animated: true, completion: nil)
+            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList,UIActivityType.assignToContact,UIActivityType.postToFlickr,UIActivityType.postToVimeo]
+            self.present(activityVC, animated: true, completion: nil)
             
         } else {
             
-            if (inviteBtn.selected) {
+            if (inviteBtn.isSelected) {
                 
                 // already following
                 
@@ -699,9 +699,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 // not following
                 
-                inviteBtn.selected = true
+                inviteBtn.isSelected = true
                 
-                inviteBtn.setTitle("FOLLOW", forState: .Normal)
+                inviteBtn.setTitle("FOLLOW", for: UIControlState())
                 theTableView.reloadData()
                 
                 followAction(sender)
@@ -713,38 +713,38 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tabBtn1Action() {
         
-        tabBtn1.selected = true
-        tabBtn2.selected = false
-        tabBtn3.selected = false
+        tabBtn1.isSelected = true
+        tabBtn2.isSelected = false
+        tabBtn3.isSelected = false
         
         // refresh view to show teams
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let uid = defaults.stringForKey("userId")! as String
+        let defaults = UserDefaults.standard
+        let uid = defaults.string(forKey: "userId")! as String
         
         if (userId == uid && initialProfile) {
             print("currentUser")
             
-            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 100))
+            self.theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 100))
             self.theTableView.tableFooterView?.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
             
-            let addBtn = UIButton(frame: CGRectMake(15, 0, self.view.frame.size.width-30, 50))
+            let addBtn = UIButton(frame: CGRect(x: 15, y: 0, width: self.view.frame.size.width-30, height: 50))
             addBtn.backgroundColor = UINavigationBar.appearance().tintColor
-            addBtn.addTarget(self, action:#selector(addTeamBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+            addBtn.addTarget(self, action:#selector(addTeamBtnAction), for:UIControlEvents.touchUpInside)
             addBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
             addBtn.titleLabel?.numberOfLines = 1
-            addBtn.contentHorizontalAlignment = .Center
-            addBtn.contentVerticalAlignment = .Center
-            addBtn.titleLabel?.textAlignment = .Center
-            addBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            addBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-            addBtn.setTitle("ADD TEAM", forState: .Normal)
+            addBtn.contentHorizontalAlignment = .center
+            addBtn.contentVerticalAlignment = .center
+            addBtn.titleLabel?.textAlignment = .center
+            addBtn.setTitleColor(UIColor.white, for: UIControlState())
+            addBtn.setTitleColor(UIColor.white, for: .highlighted)
+            addBtn.setTitle("ADD TEAM", for: UIControlState())
             self.theTableView.tableFooterView?.addSubview(addBtn)
             
         } else {
             
-            self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
-            self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+            self.theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
+            self.theTableView.tableFooterView?.backgroundColor = UIColor.clear
             
         }
         
@@ -756,12 +756,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tabBtn2Action() {
         
-        tabBtn1.selected = false
-        tabBtn2.selected = true
-        tabBtn3.selected = false
+        tabBtn1.isSelected = false
+        tabBtn2.isSelected = true
+        tabBtn3.isSelected = false
         
-        self.theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 0))
-        self.theTableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+        self.theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
+        self.theTableView.tableFooterView?.backgroundColor = UIColor.clear
         
         // refresh view to show moments
         
@@ -778,9 +778,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tabBtn3Action() {
         
-        tabBtn1.selected = false
-        tabBtn2.selected = false
-        tabBtn3.selected = true
+        tabBtn1.isSelected = false
+        tabBtn2.isSelected = false
+        tabBtn3.isSelected = true
     
         
         // refresh view to show gear
@@ -800,14 +800,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func queryForTimeline() {
         
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
-        let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments?since=\(date)&limit=20"
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
+        let date = Date().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/moments?since=\(date)&limit=20"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -886,14 +886,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func queryForGear() {
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
-        let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker?since=\(date)&limit=20"
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
+        let date = Date().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(userId)/locker?since=\(date)&limit=20"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -977,7 +977,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func backAction() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func profileBtnAction() {
@@ -985,11 +985,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let imagePicker = UIImagePickerController()
         
         imagePicker.delegate = self
-        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
         imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
         imagePicker.allowsEditing = true
         
-        self.presentViewController(imagePicker, animated: true,
+        self.present(imagePicker, animated: true,
                                    completion: nil)
         
     }
@@ -1000,16 +1000,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    func followAction(sender: UIButton) {
+    func followAction(_ sender: UIButton) {
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/follow"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/follow"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.POST, url, headers: headers)
@@ -1066,16 +1066,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    func areyousureyouwanttounfollow(sender: UIButton) {
+    func areyousureyouwanttounfollow(_ sender: UIButton) {
         
-        let alertController = UIAlertController(title:"Are you sure you want to unfollow \(self.username)?", message:nil, preferredStyle:.ActionSheet)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let alertController = UIAlertController(title:"Are you sure you want to unfollow \(self.username)?", message:nil, preferredStyle:.actionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
-        let clearAction = UIAlertAction(title: "Unfollow", style: .Default) { (action) in
+        let clearAction = UIAlertAction(title: "Unfollow", style: .default) { (action) in
             
-            self.inviteBtn.selected = false
+            self.inviteBtn.isSelected = false
             
-            self.inviteBtn.setTitle("UNFOLLOW", forState: .Normal)
+            self.inviteBtn.setTitle("UNFOLLOW", for: UIControlState())
             self.theTableView.reloadData()
             
             self.unfollowAction(sender)
@@ -1083,21 +1083,21 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         alertController.addAction(clearAction)
         alertController.addAction(cancelAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
         
     }
     
-    func unfollowAction(sender: UIButton) {
+    func unfollowAction(_ sender: UIButton) {
 
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/unfollow"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user/\(self.userId)/unfollow"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.DELETE, url, headers: headers)
@@ -1130,18 +1130,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // TableViewDelegate
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if (tabBtn1.selected) {
+        if (tabBtn1.isSelected) {
             return 3
-        } else if (tabBtn2.selected) {
+        } else if (tabBtn2.isSelected) {
             let json = JSON(data: momentsData)
             return json["results"].count
-        } else if (tabBtn3.selected) {
+        } else if (tabBtn3.isSelected) {
             let json = JSON(data: gearData)
             return json["results"].count
         } else {
@@ -1205,15 +1205,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 //        
 //    }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return view.frame.size.width+164 // probably 150 by default then raise to second line of text if necessary
         
-        if (tabBtn1.selected) {
+        if (tabBtn1.isSelected) {
             
             // for stats
             return (view.frame.size.width/3)*2
             
-        } else if (tabBtn2.selected) {
+        } else if (tabBtn2.isSelected) {
             
             // for moments - measure height
             
@@ -1223,7 +1223,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             let h = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForTimelineMoment(results, ip: indexPath, cellWidth: view.frame.size.width) 
             return h
             
-        } else if (tabBtn3.selected) {
+        } else if (tabBtn3.isSelected) {
             
             // for gear
             
@@ -1274,41 +1274,41 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:MainCell = MainCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        let cell:MainCell = MainCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cell")
         cell.cellWidth = view.frame.size.width
         
-        if (tabBtn1.selected) {
+        if (tabBtn1.isSelected) {
             
             // for stats
-            cell.teamBannerView.hidden = false
-            cell.teamNameLbl.hidden = false
-            cell.teamSportLbl.hidden = false
-            cell.teamNumLbl.hidden = false
-            cell.teamPositionLbl.hidden = false
+            cell.teamBannerView.isHidden = false
+            cell.teamNameLbl.isHidden = false
+            cell.teamSportLbl.isHidden = false
+            cell.teamNumLbl.isHidden = false
+            cell.teamPositionLbl.isHidden = false
             
-            cell.timelineImgView.hidden = true
-            cell.timelineMusicLbl.hidden = true
-            cell.timelineModeLbl.hidden = true
-            cell.timelineRankLbl.hidden = true
-            cell.timelineTinyHeartBtn.hidden = true
-            cell.timelineLikeLblBtn.hidden = true
-            cell.timelineUserImgView.hidden = true
-            cell.timelineUserImgViewBtn.hidden = true
-            cell.timelineNameLbl.hidden = true
-            cell.timelineTimeLbl.hidden = true
-            cell.timelineFollowBtn.hidden = true
-            cell.timelineHeadlineLbl.hidden = true
-            cell.timelineLikeBtn.hidden = true
-            cell.timelineChatBtn.hidden = true
-            cell.timelineGearBtn.hidden = true
-            cell.timelineMoreBtn.hidden = true
+            cell.timelineImgView.isHidden = true
+            cell.timelineMusicLbl.isHidden = true
+            cell.timelineModeLbl.isHidden = true
+            cell.timelineRankLbl.isHidden = true
+            cell.timelineTinyHeartBtn.isHidden = true
+            cell.timelineLikeLblBtn.isHidden = true
+            cell.timelineUserImgView.isHidden = true
+            cell.timelineUserImgViewBtn.isHidden = true
+            cell.timelineNameLbl.isHidden = true
+            cell.timelineTimeLbl.isHidden = true
+            cell.timelineFollowBtn.isHidden = true
+            cell.timelineHeadlineLbl.isHidden = true
+            cell.timelineLikeBtn.isHidden = true
+            cell.timelineChatBtn.isHidden = true
+            cell.timelineGearBtn.isHidden = true
+            cell.timelineMoreBtn.isHidden = true
             
-            cell.gearImgView.hidden = true
-            cell.gearBrandLbl.hidden = true
-            cell.gearNameLbl.hidden = true
-            cell.gearAddBtn.hidden = true
+            cell.gearImgView.isHidden = true
+            cell.gearBrandLbl.isHidden = true
+            cell.gearNameLbl.isHidden = true
+            cell.gearAddBtn.isHidden = true
 
             
             let padding = CGFloat(10)
@@ -1320,13 +1320,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             
             let teamBannerHeight = ((cell.cellWidth/3)*2)-15
-            let nameHeight = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(teamName, font: cell.teamNameLbl.font, width: cell.cellWidth-60)+padding
+            let nameHeight = (UIApplication.shared.delegate as! AppDelegate).heightForView(teamName, font: cell.teamNameLbl.font, width: cell.cellWidth-60)+padding
             let totalContentHeight = nameHeight+padding+(padding/2)+50
             let nameY = (teamBannerHeight/2)-(totalContentHeight/2)
             let detailsY = nameY+nameHeight+padding+(padding/2)
             
-            let sportWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(mySport, font: cell.teamSportLbl.font, height: 40)
-            let positionWidth = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(myPosition, font: cell.teamPositionLbl.font, height: 40)
+            let sportWidth = (UIApplication.shared.delegate as! AppDelegate).widthForView(mySport, font: cell.teamSportLbl.font, height: 40)
+            let positionWidth = (UIApplication.shared.delegate as! AppDelegate).widthForView(myPosition, font: cell.teamPositionLbl.font, height: 40)
             
             cell.teamBannerView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: teamBannerHeight)
             cell.teamNameLbl.frame = CGRect(x: 30, y: nameY, width: cell.cellWidth-60, height: nameHeight)
@@ -1341,50 +1341,50 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             
             
-        } else if (tabBtn2.selected) {
+        } else if (tabBtn2.isSelected) {
             
             // for moments - measure height
 
-            cell.teamBannerView.hidden = true
-            cell.teamNameLbl.hidden = true
-            cell.teamSportLbl.hidden = true
-            cell.teamNumLbl.hidden = true
-            cell.teamPositionLbl.hidden = true
+            cell.teamBannerView.isHidden = true
+            cell.teamNameLbl.isHidden = true
+            cell.teamSportLbl.isHidden = true
+            cell.teamNumLbl.isHidden = true
+            cell.teamPositionLbl.isHidden = true
             
-            cell.timelineImgView.hidden = false
-            cell.timelineMusicLbl.hidden = false
-            cell.timelineModeLbl.hidden = false
-            cell.timelineRankLbl.hidden = true // odd one out
-            cell.timelineTinyHeartBtn.hidden = false
-            cell.timelineLikeLblBtn.hidden = false
-            cell.timelineUserImgView.hidden = false
-            cell.timelineUserImgViewBtn.hidden = false
-            cell.timelineNameLbl.hidden = false
-            cell.timelineTimeLbl.hidden = false
-            cell.timelineFollowBtn.hidden = false
-            cell.timelineHeadlineLbl.hidden = false
-            cell.timelineLikeBtn.hidden = false
-            cell.timelineChatBtn.hidden = false
-            cell.timelineGearBtn.hidden = false
-            cell.timelineMoreBtn.hidden = false
+            cell.timelineImgView.isHidden = false
+            cell.timelineMusicLbl.isHidden = false
+            cell.timelineModeLbl.isHidden = false
+            cell.timelineRankLbl.isHidden = true // odd one out
+            cell.timelineTinyHeartBtn.isHidden = false
+            cell.timelineLikeLblBtn.isHidden = false
+            cell.timelineUserImgView.isHidden = false
+            cell.timelineUserImgViewBtn.isHidden = false
+            cell.timelineNameLbl.isHidden = false
+            cell.timelineTimeLbl.isHidden = false
+            cell.timelineFollowBtn.isHidden = false
+            cell.timelineHeadlineLbl.isHidden = false
+            cell.timelineLikeBtn.isHidden = false
+            cell.timelineChatBtn.isHidden = false
+            cell.timelineGearBtn.isHidden = false
+            cell.timelineMoreBtn.isHidden = false
             
-            cell.gearImgView.hidden = true
-            cell.gearBrandLbl.hidden = true
-            cell.gearNameLbl.hidden = true
-            cell.gearAddBtn.hidden = true
+            cell.gearImgView.isHidden = true
+            cell.gearBrandLbl.isHidden = true
+            cell.gearNameLbl.isHidden = true
+            cell.gearAddBtn.isHidden = true
             
             //
             
             let mediaHeight = view.frame.size.width+110
             
-            cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
+            cell.timelineImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: mediaHeight)
             
             //timelineTinyHeartBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
             //timelineLikeLblBtn.frame = CGRect(x: frame.size.width/2-25, y: frame.size.height/3*2, width: 50, height: 50)
             
-            cell.timelineUserImgView.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15, 38, 38)
-            cell.timelineUserImgViewBtn.frame = CGRectMake(cell.timelineUserImgView.frame.origin.x, cell.timelineUserImgView.frame.origin.y, cell.timelineUserImgView.frame.size.width, cell.timelineUserImgView.frame.size.height)
-            cell.timelineFollowBtn.frame = CGRectMake(cell.cellWidth-65-15, cell.timelineImgView.frame.size.height+15, 65, 38)
+            cell.timelineUserImgView.frame = CGRect(x: 15, y: cell.timelineImgView.frame.size.height+15, width: 38, height: 38)
+            cell.timelineUserImgViewBtn.frame = CGRect(x: cell.timelineUserImgView.frame.origin.x, y: cell.timelineUserImgView.frame.origin.y, width: cell.timelineUserImgView.frame.size.width, height: cell.timelineUserImgView.frame.size.height)
+            cell.timelineFollowBtn.frame = CGRect(x: cell.cellWidth-65-15, y: cell.timelineImgView.frame.size.height+15, width: 65, height: 38)
             
             //
             
@@ -1394,9 +1394,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             // get mediaHeight
             
             if let id = results[indexPath.row]["imageUrl"].string {
-                let fileUrl = NSURL(string: id)
+                let fileUrl = URL(string: id)
                 
-                cell.timelineImgView.frame = CGRectMake(0, 0, cell.cellWidth, mediaHeight)
+                cell.timelineImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: mediaHeight)
                 cell.timelineImgView.setNeedsLayout()
                 
                 cell.timelineImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -1427,35 +1427,35 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 } else {
                     str = "STYLING"
                 }
-                let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.timelineModeLbl.font, height: cell.timelineModeLbl.frame.size.height)
+                let width = (UIApplication.shared.delegate as! AppDelegate).widthForView(str, font: cell.timelineModeLbl.font, height: cell.timelineModeLbl.frame.size.height)
                 if (width > cell.cellWidth-30) {
-                    cell.timelineModeLbl.frame = CGRectMake(cell.cellWidth-width-20-15, cell.timelineImgView.frame.size.height-20-15, cell.cellWidth-30, 20)
+                    cell.timelineModeLbl.frame = CGRect(x: cell.cellWidth-width-20-15, y: cell.timelineImgView.frame.size.height-20-15, width: cell.cellWidth-30, height: 20)
                 } else {
-                    cell.timelineModeLbl.frame = CGRectMake(cell.cellWidth-width-20-15, cell.timelineImgView.frame.size.height-20-15, width+20, 20)
+                    cell.timelineModeLbl.frame = CGRect(x: cell.cellWidth-width-20-15, y: cell.timelineImgView.frame.size.height-20-15, width: width+20, height: 20)
                 }
                 cell.timelineModeLbl.text = str
             }
             
             if let id = results[indexPath.row]["song"]["artistName"].string {
-                cell.timelineMusicLbl.hidden = false
+                cell.timelineMusicLbl.isHidden = false
                 
                 let str = "\(id) | \(results[indexPath.row]["song"]["trackName"])"
                 
                 let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: cell.timelineMusicLbl.font, height: cell.timelineMusicLbl.frame.size.height)
                 
                 if (width > cell.cellWidth-30) {
-                    cell.timelineMusicLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height-20-10-20-15, cell.cellWidth-30, 20)
+                    cell.timelineMusicLbl.frame = CGRect(x: 15, y: cell.timelineImgView.frame.size.height-20-10-20-15, width: cell.cellWidth-30, height: 20)
                 } else {
-                    cell.timelineMusicLbl.frame = CGRectMake(cell.cellWidth-width-20-15, cell.timelineImgView.frame.size.height-20-10-20-15, width+20, 20)
+                    cell.timelineMusicLbl.frame = CGRect(x: cell.cellWidth-width-20-15, y: cell.timelineImgView.frame.size.height-20-10-20-15, width: width+20, height: 20)
                 }
                 cell.timelineMusicLbl.text = str
             } else {
-                cell.timelineMusicLbl.hidden = true
+                cell.timelineMusicLbl.isHidden = true
             }
             
             if let id = results[indexPath.row]["user"]["imageUrlTiny"].string {
                 
-                let fileUrl = NSURL(string: id)
+                let fileUrl = URL(string: id)
                 cell.timelineUserImgView.setNeedsLayout()
                 
                 //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
@@ -1487,7 +1487,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if let id = results[indexPath.row]["createdAt"].string {
                 //let strDate = "2015-11-01T00:00:00Z" // "2015-10-06T15:42:34Z"
-                let dateFormatter = NSDateFormatter()
+                let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"  //"yyyy-MM-dd'T'HH:mm:ssZ"
                 let date = dateFormatter.dateFromString(id)!
                 let since = (UIApplication.sharedApplication().delegate as! AppDelegate).timeAgoSinceDate(date, numericDates: true)
@@ -1502,7 +1502,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 } else {
                     dateStr = "\(since)"
                 }
-                let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(dateStr, font: cell.timelineTimeLbl.font, height: 20)
+                let width = (UIApplication.shared.delegate as! AppDelegate).widthForView(dateStr, font: cell.timelineTimeLbl.font, height: 20)
                 cell.timelineTimeLbl.frame = CGRect(x: 15+38+15, y: cell.timelineImgView.frame.size.height+15+19, width: width, height: 19)
                 cell.timelineTimeLbl.text = dateStr
             }
@@ -1512,12 +1512,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.timelineLikeLblBtn.titleLabel?.text = str
                 
                 let width = (UIApplication.sharedApplication().delegate as! AppDelegate).widthForView(str, font: (cell.timelineLikeLblBtn.titleLabel?.font)!, height: (cell.timelineLikeLblBtn.titleLabel?.frame.size.height)!)
-                cell.timelineLikeLblBtn.frame = CGRectMake(15, cell.cellWidth+50+3, 22+5+width, (cell.timelineLikeLblBtn.titleLabel?.frame.size.height)!)
+                cell.timelineLikeLblBtn.frame = CGRect(x: 15, y: cell.cellWidth+50+3, width: 22+5+width, height: (cell.timelineLikeLblBtn.titleLabel?.frame.size.height)!)
             }
             
             var headlineHeight = CGFloat()
             if let id = results[indexPath.row]["headline"].string {
-                let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                let trimmedString = id.stringByTrimmingCharactersInSet(CharacterSet.whitespaceCharacterSet())
                 if (trimmedString == "") {
                     headlineHeight = 0
                     cell.timelineHeadlineLbl.text = trimmedString
@@ -1529,7 +1529,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 headlineHeight = 0
             }
-            cell.timelineHeadlineLbl.frame = CGRectMake(15, cell.timelineImgView.frame.size.height+15+38+15, cell.cellWidth-30, headlineHeight)
+            cell.timelineHeadlineLbl.frame = CGRect(x: 15, y: cell.timelineImgView.frame.size.height+15+38+15, width: cell.cellWidth-30, height: headlineHeight)
             
             
             var btnY = CGFloat()
@@ -1538,10 +1538,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 btnY = cell.timelineImgView.frame.size.height+15+38+15+cell.timelineHeadlineLbl.frame.size.height+15
             }
-            cell.timelineLikeBtn.frame = CGRectMake(15, btnY, 65, 38)
-            cell.timelineChatBtn.frame = CGRectMake(15+64+10, btnY, 65, 38)
-            cell.timelineGearBtn.frame = CGRectMake(15+64+10+64+10, btnY, 65, 38)
-            cell.timelineMoreBtn.frame = CGRectMake(15+64+10+64+10+64+10, btnY, 50, 38)
+            cell.timelineLikeBtn.frame = CGRect(x: 15, y: btnY, width: 65, height: 38)
+            cell.timelineChatBtn.frame = CGRect(x: 15+64+10, y: btnY, width: 65, height: 38)
+            cell.timelineGearBtn.frame = CGRect(x: 15+64+10+64+10, y: btnY, width: 65, height: 38)
+            cell.timelineMoreBtn.frame = CGRect(x: 15+64+10+64+10+64+10, y: btnY, width: 50, height: 38)
             
             //            if let id = results[indexPath.row]["commentCount"].number {
             //                let countStr = "\(id) comments"
@@ -1552,11 +1552,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             let momentId = results[indexPath.row]["id"].string
             
             if ((UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(momentId!)) {
-                cell.timelineLikeBtn.selected = false
+                cell.timelineLikeBtn.isSelected = false
             } else {
                 
                 if ((UIApplication.sharedApplication().delegate as! AppDelegate).likedMomentId(momentId!)) {
-                    cell.timelineLikeBtn.selected = true
+                    cell.timelineLikeBtn.isSelected = true
                 } else {
                     // check if user likes
                     
@@ -1564,12 +1564,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                         if (id) {
                             // add it!
                             (UIApplication.sharedApplication().delegate as! AppDelegate).addLikedMomentId(momentId!)
-                            cell.timelineLikeBtn.selected = true
+                            cell.timelineLikeBtn.isSelected = true
                         } else {
-                            cell.timelineLikeBtn.selected = false
+                            cell.timelineLikeBtn.isSelected = false
                         }
                     } else {
-                        cell.timelineLikeBtn.selected = true
+                        cell.timelineLikeBtn.isSelected = true
                     }
                 }
                 
@@ -1585,12 +1585,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.timelineMoreBtn.tag = indexPath.row
             cell.timelineFollowBtn.tag = indexPath.row
             
-            cell.timelineUserImgViewBtn.addTarget(self, action:#selector(timelineUserImgViewBtnAction), forControlEvents: .TouchUpInside)
-            cell.timelineLikeBtn.addTarget(self, action:#selector(timelineLikeBtnAction), forControlEvents: .TouchUpInside)
-            cell.timelineChatBtn.addTarget(self, action:#selector(timelineChatBtnAction), forControlEvents: .TouchUpInside)
-            cell.timelineGearBtn.addTarget(self, action:#selector(timelineGearBtnAction), forControlEvents: .TouchUpInside)
-            cell.timelineMoreBtn.addTarget(self, action:#selector(timelineMoreBtnAction), forControlEvents: .TouchUpInside)
-            cell.timelineFollowBtn.hidden = true
+            cell.timelineUserImgViewBtn.addTarget(self, action:#selector(timelineUserImgViewBtnAction), for: .touchUpInside)
+            cell.timelineLikeBtn.addTarget(self, action:#selector(timelineLikeBtnAction), for: .touchUpInside)
+            cell.timelineChatBtn.addTarget(self, action:#selector(timelineChatBtnAction), for: .touchUpInside)
+            cell.timelineGearBtn.addTarget(self, action:#selector(timelineGearBtnAction), for: .touchUpInside)
+            cell.timelineMoreBtn.addTarget(self, action:#selector(timelineMoreBtnAction), for: .touchUpInside)
+            cell.timelineFollowBtn.isHidden = true
             
             // taps
             
@@ -1599,36 +1599,36 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             
             
-        } else if (tabBtn3.selected) {
+        } else if (tabBtn3.isSelected) {
             
             // for gear
 
-            cell.teamNameLbl.hidden = true
-            cell.teamSportLbl.hidden = true
-            cell.teamNumLbl.hidden = true
-            cell.teamPositionLbl.hidden = true
+            cell.teamNameLbl.isHidden = true
+            cell.teamSportLbl.isHidden = true
+            cell.teamNumLbl.isHidden = true
+            cell.teamPositionLbl.isHidden = true
             
-            cell.timelineImgView.hidden = true
-            cell.timelineMusicLbl.hidden = true
-            cell.timelineModeLbl.hidden = true
-            cell.timelineRankLbl.hidden = true
-            cell.timelineTinyHeartBtn.hidden = true
-            cell.timelineLikeLblBtn.hidden = true
-            cell.timelineUserImgView.hidden = true
-            cell.timelineUserImgViewBtn.hidden = true
-            cell.timelineNameLbl.hidden = true
-            cell.timelineTimeLbl.hidden = true
-            cell.timelineFollowBtn.hidden = true
-            cell.timelineHeadlineLbl.hidden = true
-            cell.timelineLikeBtn.hidden = true
-            cell.timelineChatBtn.hidden = true
-            cell.timelineGearBtn.hidden = true
-            cell.timelineMoreBtn.hidden = true
+            cell.timelineImgView.isHidden = true
+            cell.timelineMusicLbl.isHidden = true
+            cell.timelineModeLbl.isHidden = true
+            cell.timelineRankLbl.isHidden = true
+            cell.timelineTinyHeartBtn.isHidden = true
+            cell.timelineLikeLblBtn.isHidden = true
+            cell.timelineUserImgView.isHidden = true
+            cell.timelineUserImgViewBtn.isHidden = true
+            cell.timelineNameLbl.isHidden = true
+            cell.timelineTimeLbl.isHidden = true
+            cell.timelineFollowBtn.isHidden = true
+            cell.timelineHeadlineLbl.isHidden = true
+            cell.timelineLikeBtn.isHidden = true
+            cell.timelineChatBtn.isHidden = true
+            cell.timelineGearBtn.isHidden = true
+            cell.timelineMoreBtn.isHidden = true
             
-            cell.gearImgView.hidden = false
-            cell.gearBrandLbl.hidden = false
-            cell.gearNameLbl.hidden = false
-            cell.gearAddBtn.hidden = false
+            cell.gearImgView.isHidden = false
+            cell.gearBrandLbl.isHidden = false
+            cell.gearNameLbl.isHidden = false
+            cell.gearAddBtn.isHidden = false
             
             
             cell.gearImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
@@ -1640,7 +1640,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if let id = results[indexPath.row]["imageUrl"].string {
                 
-                let fileUrl = NSURL(string: id)
+                let fileUrl = URL(string: id)
                 cell.gearImgView.setNeedsLayout()
                 
                 //cell.timelineUserImgView.hnk_setImageFromURL(fileUrl!)
@@ -1681,9 +1681,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
             if let id = results[indexPath.row]["existsInLocker"].bool {
                 if (id) {
-                    cell.gearAddBtn.selected = true
+                    cell.gearAddBtn.isSelected = true
                 } else {
-                    cell.gearAddBtn.selected = false
+                    cell.gearAddBtn.isSelected = false
                 }
             }
 
@@ -1696,7 +1696,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             
             cell.gearAddBtn.tag = indexPath.row
-            cell.gearAddBtn.addTarget(self, action: #selector(gearAddBtnAction), forControlEvents: .TouchUpInside)
+            cell.gearAddBtn.addTarget(self, action: #selector(gearAddBtnAction), for: .touchUpInside)
             
             cell.gearSingleTapRecognizer.addTarget(self, action: #selector(gearSingleTapAction(_:)))
             cell.gearDoubleTapRecognizer.addTarget(self, action: #selector(gearDoubleTapAction(_:)))
@@ -1705,59 +1705,59 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
         } else {
             
-            cell.teamBannerView.hidden = true
-            cell.teamNameLbl.hidden = true
-            cell.teamSportLbl.hidden = true
-            cell.teamNumLbl.hidden = true
-            cell.teamPositionLbl.hidden = true
+            cell.teamBannerView.isHidden = true
+            cell.teamNameLbl.isHidden = true
+            cell.teamSportLbl.isHidden = true
+            cell.teamNumLbl.isHidden = true
+            cell.teamPositionLbl.isHidden = true
             
-            cell.timelineImgView.hidden = true
-            cell.timelineMusicLbl.hidden = true
-            cell.timelineModeLbl.hidden = true
-            cell.timelineRankLbl.hidden = true 
-            cell.timelineTinyHeartBtn.hidden = true
-            cell.timelineLikeLblBtn.hidden = true
-            cell.timelineUserImgView.hidden = true
-            cell.timelineUserImgViewBtn.hidden = true
-            cell.timelineNameLbl.hidden = true
-            cell.timelineTimeLbl.hidden = true
-            cell.timelineFollowBtn.hidden = true
-            cell.timelineHeadlineLbl.hidden = true
-            cell.timelineLikeBtn.hidden = true
-            cell.timelineChatBtn.hidden = true
-            cell.timelineGearBtn.hidden = true
-            cell.timelineMoreBtn.hidden = true
+            cell.timelineImgView.isHidden = true
+            cell.timelineMusicLbl.isHidden = true
+            cell.timelineModeLbl.isHidden = true
+            cell.timelineRankLbl.isHidden = true 
+            cell.timelineTinyHeartBtn.isHidden = true
+            cell.timelineLikeLblBtn.isHidden = true
+            cell.timelineUserImgView.isHidden = true
+            cell.timelineUserImgViewBtn.isHidden = true
+            cell.timelineNameLbl.isHidden = true
+            cell.timelineTimeLbl.isHidden = true
+            cell.timelineFollowBtn.isHidden = true
+            cell.timelineHeadlineLbl.isHidden = true
+            cell.timelineLikeBtn.isHidden = true
+            cell.timelineChatBtn.isHidden = true
+            cell.timelineGearBtn.isHidden = true
+            cell.timelineMoreBtn.isHidden = true
             
-            cell.gearImgView.hidden = true
-            cell.gearBrandLbl.hidden = true
-            cell.gearNameLbl.hidden = true
-            cell.gearAddBtn.hidden = true
+            cell.gearImgView.isHidden = true
+            cell.gearBrandLbl.isHidden = true
+            cell.gearNameLbl.isHidden = true
+            cell.gearAddBtn.isHidden = true
         }
         
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) 
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
-        if (tabBtn1.selected) {
+        if (tabBtn1.isSelected) {
             
             // for stats
 
             
-        } else if (tabBtn2.selected) {
+        } else if (tabBtn2.isSelected) {
             
             // for moments - measure height
 
             
-        } else if (tabBtn3.selected) {
+        } else if (tabBtn3.isSelected) {
             
             // for gear
 
@@ -1777,7 +1777,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    func timelineUserImgViewBtnAction(sender: UIButton){
+    func timelineUserImgViewBtnAction(_ sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -1794,19 +1794,19 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func timelineLikeBtnAction(sender: UIButton){
+    func timelineLikeBtnAction(_ sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
         let id = results[sender.tag]["id"].string
         
-        if (sender.selected) {
+        if (sender.isSelected) {
             print("currently liked")
-            sender.selected = false
+            sender.isSelected = false
             unlikeAction(id!)
         } else {
             print("currently NOT liked")
-            sender.selected = true
+            sender.isSelected = true
             
             if ((UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.containsObject(id!)) {
                 (UIApplication.sharedApplication().delegate as! AppDelegate).tempUnLikedIdsArray.removeObjectsInArray([id!])
@@ -1816,23 +1816,23 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func likeAction(momentId : String) {
+    func likeAction(_ momentId : String) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
         
-        if ((UIApplication.sharedApplication().delegate as! AppDelegate).likedMomentId(momentId)) {
+        if ((UIApplication.shared.delegate as! AppDelegate).likedMomentId(momentId)) {
             return
         }
         
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/like"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.POST, url, headers: headers)
@@ -1872,16 +1872,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    func unlikeAction(momentId : String) {
+    func unlikeAction(_ momentId : String) {
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/moment/\(momentId)/unlike"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.DELETE, url, headers: headers)
@@ -1926,7 +1926,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    func timelineChatBtnAction(sender: UIButton){
+    func timelineChatBtnAction(_ sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -1942,7 +1942,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func timelineGearBtnAction(sender: UIButton) {
+    func timelineGearBtnAction(_ sender: UIButton) {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -1964,7 +1964,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func timelineMoreBtnAction(sender: UIButton){
+    func timelineMoreBtnAction(_ sender: UIButton){
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -1973,19 +1973,19 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }
         
-        let alertController = UIAlertController(title:nil, message:nil, preferredStyle:.ActionSheet)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let alertController = UIAlertController(title:nil, message:nil, preferredStyle:.actionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         }
-        let reportAction = UIAlertAction(title: "Report", style: .Destructive) { (action) in
+        let reportAction = UIAlertAction(title: "Report", style: .destructive) { (action) in
             
         }
-        let facebookAction = UIAlertAction(title: "Share to Facebook", style: .Default) { (action) in
+        let facebookAction = UIAlertAction(title: "Share to Facebook", style: .default) { (action) in
             
         }
-        let twitterAction = UIAlertAction(title: "Tweet", style: .Default) { (action) in
+        let twitterAction = UIAlertAction(title: "Tweet", style: .default) { (action) in
             
         }
-        let copyUrlAction = UIAlertAction(title: "Copy Share URL", style: .Default) { (action) in
+        let copyUrlAction = UIAlertAction(title: "Copy Share URL", style: .default) { (action) in
             
         }
         alertController.addAction(cancelAction)
@@ -1993,18 +1993,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         alertController.addAction(facebookAction)
         alertController.addAction(twitterAction)
         alertController.addAction(copyUrlAction)
-        self.presentViewController(alertController, animated: true) {
+        self.present(alertController, animated: true) {
         }
         
     }
     
     
-    func timelineSingleTapAction(sender: UITapGestureRecognizer) {
+    func timelineSingleTapAction(_ sender: UITapGestureRecognizer) {
         
-        if sender.state == UIGestureRecognizerState.Ended {
-            let tappedLocation = sender.locationInView(theTableView)
-            if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
-                if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+        if sender.state == UIGestureRecognizerState.ended {
+            let tappedLocation = sender.location(in: theTableView)
+            if let tappedIndexPath = theTableView.indexPathForRow(at: tappedLocation) {
+                if let tappedCell = theTableView.cellForRow(at: tappedIndexPath) {
                     
                     print("single tapped: \(tappedIndexPath.row), \(tappedCell)")
                     
@@ -2021,12 +2021,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    func timelineDoubleTapAction(sender: UITapGestureRecognizer) {
+    func timelineDoubleTapAction(_ sender: UITapGestureRecognizer) {
         
-        if sender.state == UIGestureRecognizerState.Ended {
-            let tappedLocation = sender.locationInView(theTableView)
-            if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
-                if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+        if sender.state == UIGestureRecognizerState.ended {
+            let tappedLocation = sender.location(in: theTableView)
+            if let tappedIndexPath = theTableView.indexPathForRow(at: tappedLocation) {
+                if let tappedCell = theTableView.cellForRow(at: tappedIndexPath) {
                     
                     //print("double tapped: \(tappedIndexPath.row), \(tappedCell)")
                     
@@ -2035,7 +2035,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                     let id = results[tappedIndexPath.row]["id"].string
                     
                     let cell = tappedCell as! MainCell
-                    cell.timelineLikeBtn.selected = true
+                    cell.timelineLikeBtn.isSelected = true
                     
                     likeHeartAnimation(tappedCell, momentId: id!)
                     
@@ -2045,33 +2045,33 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func likeHeartAnimation(cell : UITableViewCell, momentId : String) {
+    func likeHeartAnimation(_ cell : UITableViewCell, momentId : String) {
         
         // get height of media
         
         let mediaHeight = cell.frame.size.width+110
         
-        let heartImgView = UIImageView(frame: CGRectMake(cell.frame.size.width/2-45, mediaHeight/2-45, 90, 90))
-        heartImgView.backgroundColor = UIColor.clearColor()
+        let heartImgView = UIImageView(frame: CGRect(x: cell.frame.size.width/2-45, y: mediaHeight/2-45, width: 90, height: 90))
+        heartImgView.backgroundColor = UIColor.clear
         heartImgView.image = UIImage(named: "heart.png")
         cell.addSubview(heartImgView)
         
-        heartImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.75, 0.75)
+        heartImgView.transform = CGAffineTransform.identity.scaledBy(x: 0.75, y: 0.75)
         
-        UIView.animateWithDuration(0.18, animations: {
-            heartImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.04, 1.04)
+        UIView.animate(withDuration: 0.18, animations: {
+            heartImgView.transform = CGAffineTransform.identity.scaledBy(x: 1.04, y: 1.04)
             }, completion: { finished in
                 if (finished){
-                    UIView.animateWithDuration(0.16, animations: {
-                        heartImgView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                    UIView.animate(withDuration: 0.16, animations: {
+                        heartImgView.transform = CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
                         }, completion: { finished in
                             if (finished) {
                                 
                                 let delay = 0.3 * Double(NSEC_PER_SEC)
-                                let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-                                dispatch_after(time, dispatch_get_main_queue()) {
+                                let time = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
+                                DispatchQueue.main.asyncAfter(deadline: time) {
                                     
-                                    UIView.animateWithDuration(0.18, animations: {
+                                    UIView.animate(withDuration: 0.18, animations: {
                                         heartImgView.alpha = 0.0
                                         }, completion: { finished in
                                             if (finished) {
@@ -2095,12 +2095,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     // gear actions
     //
     
-    func gearSingleTapAction(sender: UITapGestureRecognizer) {
+    func gearSingleTapAction(_ sender: UITapGestureRecognizer) {
         
-        if sender.state == UIGestureRecognizerState.Ended {
-            let tappedLocation = sender.locationInView(theTableView)
-            if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
-                if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+        if sender.state == UIGestureRecognizerState.ended {
+            let tappedLocation = sender.location(in: theTableView)
+            if let tappedIndexPath = theTableView.indexPathForRow(at: tappedLocation) {
+                if let tappedCell = theTableView.cellForRow(at: tappedIndexPath) {
                     
                     print("single tapped: \(tappedIndexPath.row), \(tappedCell)")
                     
@@ -2119,12 +2119,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func gearDoubleTapAction(sender: UITapGestureRecognizer) {
+    func gearDoubleTapAction(_ sender: UITapGestureRecognizer) {
         
-        if sender.state == UIGestureRecognizerState.Ended {
-            let tappedLocation = sender.locationInView(theTableView)
-            if let tappedIndexPath = theTableView.indexPathForRowAtPoint(tappedLocation) {
-                if let tappedCell = theTableView.cellForRowAtIndexPath(tappedIndexPath) {
+        if sender.state == UIGestureRecognizerState.ended {
+            let tappedLocation = sender.location(in: theTableView)
+            if let tappedIndexPath = theTableView.indexPathForRow(at: tappedLocation) {
+                if let tappedCell = theTableView.cellForRow(at: tappedIndexPath) {
                     
                     print("double tapped: \(tappedIndexPath.row), \(tappedCell)")
                     
@@ -2137,36 +2137,36 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func gearAddBtnAction(sender : UIButton) {
+    func gearAddBtnAction(_ sender : UIButton) {
         
-        if (sender.selected) {
+        if (sender.isSelected) {
             
-            sender.selected = false
+            sender.isSelected = false
             removeGearFromLocker(sender)
             
         } else {
             
-            sender.selected = true
+            sender.isSelected = true
             addGearToLocker(sender)
             
         }
     }
     
-    func addGearToLocker(sender : UIButton) {
+    func addGearToLocker(_ sender : UIButton) {
         
         let json = JSON(data: gearData)
         let results = json["results"]
         
         let productJson = results[sender.tag]
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
         let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/locker?product=\(productJson)"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.PUT, url, headers: headers)
@@ -2202,7 +2202,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    func removeGearFromLocker(sender : UIButton) {
+    func removeGearFromLocker(_ sender : UIButton) {
         
         
     }
@@ -2214,18 +2214,18 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func addTeamBtnAction() {
         
         let newnav = UINavigationController(rootViewController: AddTeamViewController())
-        navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        navigationController?.present(newnav, animated: true, completion: nil)
     }
     
     func addMomentBtnAction() {
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc!.centerBtnAction()
+        (UIApplication.shared.delegate as! AppDelegate).tabbarvc!.centerBtnAction()
     }
     
     func addGearBtnAction() {
         
         let newnav = UINavigationController(rootViewController: AddTeamViewController())
-        navigationController?.presentViewController(newnav, animated: true, completion: nil)
+        navigationController?.present(newnav, animated: true, completion: nil)
     }
 
     
@@ -2238,17 +2238,17 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // testing photo picker
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         
-        if mediaType.isEqualToString(kUTTypeImage as String) {
+        if mediaType.isEqual(to: kUTTypeImage as String) {
             
             //print("mediaType: \(mediaType)")
             let selectedImage = info[UIImagePickerControllerEditedImage] as! UIImage
             self.savePhoto(selectedImage)
             
-        } else if mediaType.isEqualToString(kUTTypeVideo as String) {
+        } else if mediaType.isEqual(to: kUTTypeVideo as String) {
             
             print("mediaType: \(mediaType)")
             //let selectedImage = info[UIImagePickerControllerEditedImage] as! UIImage
@@ -2257,37 +2257,37 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         } else {
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func savePhoto(image:UIImage) {
+    func savePhoto(_ image:UIImage) {
         
         // maxHeight
         // maxWidth
         
-        let resizedimage = (UIApplication.sharedApplication().delegate as! AppDelegate).resizeImage(image, newWidth: 600)
+        let resizedimage = (UIApplication.shared.delegate as! AppDelegate).resizeImage(image, newWidth: 600)
         //let resizedimagesmall = self.resizeImage(image, newWidth: 300)
         
         self.uploadImage(resizedimage)
         
     }
     
-    func uploadImage(image : UIImage) {
+    func uploadImage(_ image : UIImage) {
         
         func sendFile(
-            urlPath:String,
+            _ urlPath:String,
             fileName:String,
-            data:NSData,
-            completionHandler: (NSURLResponse?, NSData?, NSError?) -> Void){
+            data:Data,
+            completionHandler: (URLResponse?, Data?, NSError?) -> Void){
             
-            let url: NSURL = NSURL(string: urlPath)!
-            let request1: NSMutableURLRequest = NSMutableURLRequest(URL: url)
+            let url: URL = URL(string: urlPath)!
+            let request1: NSMutableURLRequest = NSMutableURLRequest(url: url)
             
-            request1.HTTPMethod = "PUT"
+            request1.httpMethod = "PUT"
             
             let boundary = generateBoundaryString()
             
@@ -2297,13 +2297,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                               forHTTPHeaderField: "Content-Type")
             
             // REQUIRED!
-            request1.setValue(String(fullData.length), forHTTPHeaderField: "Content-Length")
+            request1.setValue(String(fullData.count), forHTTPHeaderField: "Content-Length")
             
-            request1.HTTPBody = fullData
-            request1.HTTPShouldHandleCookies = false
-            let defaults = NSUserDefaults.standardUserDefaults()
-            let bearerToken = defaults.stringForKey("bearerToken")! as String
-            request1.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+            request1.httpBody = fullData
+            request1.httpShouldHandleCookies = false
+            let defaults = UserDefaults.standard
+            let bearerToken = defaults.string(forKey: "bearerToken")! as String
+            request1.addValue("\((UIApplication.shared.delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
             request1.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
             
 //            let queue:NSOperationQueue = NSOperationQueue()
@@ -2312,10 +2312,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 //                queue: queue,
 //                completionHandler: completionHandler)
             
-            let session = NSURLSession.sharedSession()
+            let session = URLSession.shared
             //let task = session.dataTaskWithRequest(request, completionHandler:completionHandler)
             //task.resume()
-            let task = session.dataTaskWithRequest(request1, completionHandler: {(data, response, error) in
+            let task = session.dataTask(with: request1, completionHandler: {(data, response, error) in
                 
                 // notice that I can omit the types of data, response and error
                 // your code
@@ -2343,15 +2343,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         //let url = "https://api1.phenomapp.com:8081/user"
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user"
         //        let img = UIImage(contentsOfFile: fullPath)
-        let data: NSData = UIImageJPEGRepresentation(image, 0.7)!
+        let data: Data = UIImageJPEGRepresentation(image, 0.7)!
         
         sendFile(url,
                  fileName:"image.jpeg",
                  data:data,
                  completionHandler: {
-                    (result:NSURLResponse?, isNoInternetConnection:NSData?, err: NSError?) -> Void in
+                    (result:URLResponse?, isNoInternetConnection:Data?, err: NSError?) -> Void in
                     
                     // ...
                     NSLog("Complete: \(result)")
@@ -2361,41 +2361,41 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // this is a very verbose version of that function
         // you can shorten it, but i left it as-is for clarity
         // and as an example
-        func photoDataToFormData(data:NSData,boundary:String,fileName:String) -> NSData {
+        func photoDataToFormData(_ data:Data,boundary:String,fileName:String) -> Data {
             let fullData = NSMutableData()
             
             // 1 - Boundary should start with --
             let lineOne = "--" + boundary + "\r\n"
-            fullData.appendData(lineOne.dataUsingEncoding(
-                NSUTF8StringEncoding,
+            fullData.append(lineOne.data(
+                using: String.Encoding.utf8,
                 allowLossyConversion: false)!)
             
             // 2
             let lineTwo = "Content-Disposition: form-data; name=\"image\"; filename=\"" + fileName + "\"\r\n"
             NSLog(lineTwo)
-            fullData.appendData(lineTwo.dataUsingEncoding(
-                NSUTF8StringEncoding,
+            fullData.append(lineTwo.data(
+                using: String.Encoding.utf8,
                 allowLossyConversion: false)!)
             
             // 3
             let lineThree = "Content-Type: image/jpg\r\n\r\n"
-            fullData.appendData(lineThree.dataUsingEncoding(
-                NSUTF8StringEncoding,
+            fullData.append(lineThree.data(
+                using: String.Encoding.utf8,
                 allowLossyConversion: false)!)
             
             // 4
-            fullData.appendData(data)
+            fullData.append(data)
             
             // 5
             let lineFive = "\r\n"
-            fullData.appendData(lineFive.dataUsingEncoding(
-                NSUTF8StringEncoding,
+            fullData.append(lineFive.data(
+                using: String.Encoding.utf8,
                 allowLossyConversion: false)!)
             
             // 6 - The end. Notice -- at the start and at the end
             let lineSix = "--" + boundary + "--\r\n"
-            fullData.appendData(lineSix.dataUsingEncoding(
-                NSUTF8StringEncoding,
+            fullData.append(lineSix.data(
+                using: String.Encoding.utf8,
                 allowLossyConversion: false)!)
             
             return fullData
@@ -2405,7 +2405,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func generateBoundaryString() -> String {
         
-        return "Boundary-\(NSUUID().UUIDString)"
+        return "Boundary-\(UUID().uuidString)"
     }
 
     

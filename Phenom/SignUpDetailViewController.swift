@@ -2,8 +2,8 @@
 //  SignUpDetailViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/3/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/3/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -18,7 +18,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
     var passedFirstName = ""
     var passedLastName = ""
     var passedGender = ""
-    var passedBirthdayDate = NSDate?()
+    var passedBirthdayDate = Date?()
     
     var navBarView = UIView()
     var profileImgView = UIImageView()
@@ -30,59 +30,59 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
     var selectedCells = NSMutableArray()
     var selectedSports = NSMutableArray()
     
-    var signUpBtnBottom = UIButton(type: UIButtonType.Custom)
+    var signUpBtnBottom = UIButton(type: UIButtonType.custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.clearColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        let backBtn = UIButton(type: UIButtonType.custom)
+        backBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), for: UIControlState())
+        backBtn.backgroundColor = UIColor.clear
+        backBtn.addTarget(self, action:#selector(backAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(backBtn)
         backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "PROFILE"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        let signUpBtnTop = UIButton(type: UIButtonType.Custom)
-        signUpBtnTop.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-        signUpBtnTop.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let signUpBtnTop = UIButton(type: UIButtonType.custom)
+        signUpBtnTop.frame = CGRect(x: view.frame.size.width-44-15, y: 20, width: 44, height: 44)
+        signUpBtnTop.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //signUpBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        signUpBtnTop.backgroundColor = UIColor.blueColor()
-        signUpBtnTop.addTarget(self, action:#selector(signUpBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signUpBtnTop.backgroundColor = UIColor.blue
+        signUpBtnTop.addTarget(self, action:#selector(signUpBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(signUpBtnTop)
         
-        signUpBtnBottom = UIButton(type: UIButtonType.Custom)
-        signUpBtnBottom.frame = CGRectMake(0, view.frame.size.height-60, view.frame.size.width, 60)
-        signUpBtnBottom.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        signUpBtnBottom = UIButton(type: UIButtonType.custom)
+        signUpBtnBottom.frame = CGRect(x: 0, y: view.frame.size.height-60, width: view.frame.size.width, height: 60)
+        signUpBtnBottom.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //signUpBtnBottom.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
         signUpBtnBottom.backgroundColor = UINavigationBar.appearance().tintColor
-        signUpBtnBottom.addTarget(self, action:#selector(signUpBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        signUpBtnBottom.addTarget(self, action:#selector(signUpBtnAction), for:UIControlEvents.touchUpInside)
         
         signUpBtnBottom.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
         signUpBtnBottom.titleLabel?.numberOfLines = 1
-        signUpBtnBottom.contentHorizontalAlignment = .Center
-        signUpBtnBottom.contentVerticalAlignment = .Center
-        signUpBtnBottom.titleLabel?.textAlignment = .Center
-        signUpBtnBottom.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        signUpBtnBottom.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        signUpBtnBottom.setTitle("LET'S GO!", forState: .Normal)
+        signUpBtnBottom.contentHorizontalAlignment = .center
+        signUpBtnBottom.contentVerticalAlignment = .center
+        signUpBtnBottom.titleLabel?.textAlignment = .center
+        signUpBtnBottom.setTitleColor(UIColor.white, for: UIControlState())
+        signUpBtnBottom.setTitleColor(UIColor.white, for: .highlighted)
+        signUpBtnBottom.setTitle("LET'S GO!", for: UIControlState())
         
         view.addSubview(signUpBtnBottom)
         
@@ -91,28 +91,28 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         sportsArray = NSMutableArray(array: ["Baseball", "Basketball", "Football", "Soccer", "Lacrosse", "Ice Hockey", "Softball", "Tennis", "Track & Field", "Volleyball", "Wrestling", "Swimming", "Cross Country", "Field Hockey", "Golf", "Rugby", "Cross Fit", "Skiing", "Snowboading", "Skateboarding", "Figure Skating", "Gymnastics"])
         
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-60)
+        theTableView.frame = CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-60)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 0))
         
         
         let profileWidth = view.frame.size.width/3
         //let profileY = 64+(profileWidth/3)
         let headerHeight = view.frame.size.width/3*2
         
-        theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, headerHeight))
+        theTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: headerHeight))
         theTableView.tableHeaderView?.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)  
         
         
         //profileImgView.frame = CGRectMake(view.frame.size.width/2-(profileWidth/2), profileY, profileWidth, profileWidth)
-        profileImgView.frame = CGRectMake(view.frame.size.width/2-(profileWidth/2), headerHeight/2-(profileWidth/2), profileWidth, profileWidth)
-        profileImgView.backgroundColor = UIColor.blueColor()
+        profileImgView.frame = CGRect(x: view.frame.size.width/2-(profileWidth/2), y: headerHeight/2-(profileWidth/2), width: profileWidth, height: profileWidth)
+        profileImgView.backgroundColor = UIColor.blue
         theTableView.tableHeaderView?.addSubview(profileImgView)
         
 //        let locationY = profileY+profileWidth+30
@@ -162,21 +162,21 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
     }
     
     func backAction() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         
     }
     
     
     // TableViewDelegate
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 35
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let aLbl = UILabel(frame: CGRectMake(20, 0, view.frame.size.width, 35))
-        aLbl.textAlignment = NSTextAlignment.Left
+        let aLbl = UILabel(frame: CGRect(x: 20, y: 0, width: view.frame.size.width, height: 35))
+        aLbl.textAlignment = NSTextAlignment.left
         
         switch (section) {
         case 0: aLbl.text = "WHAT DO YOU PLAY?"
@@ -185,7 +185,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         aLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         aLbl.textColor = UINavigationBar.appearance().tintColor //gold
         
-        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
+        let aView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
         aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         aView.addSubview(aLbl)
@@ -194,58 +194,58 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sportsArray.count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "cell")
         
-        cell.textLabel?.textColor = UIColor.whiteColor()
+        cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         
-        let obj = sportsArray.objectAtIndex(indexPath.row) as! String
+        let obj = sportsArray.object(at: indexPath.row) as! String
         cell.textLabel?.text = obj
         
-        if (self.selectedCells.containsObject(indexPath.row)) {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+        if (self.selectedCells.contains(indexPath.row)) {
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
         } else {
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
         }
         
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
-        let obj = sportsArray.objectAtIndex(indexPath.row) as! String
+        let obj = sportsArray.object(at: indexPath.row) as! String
         
         
-        if (selectedCells.containsObject(indexPath.row)) {
+        if (selectedCells.contains(indexPath.row)) {
             // remove
-            selectedCells.removeObject(indexPath.row)
-            selectedSports.removeObject(obj)
+            selectedCells.remove(indexPath.row)
+            selectedSports.remove(obj)
         } else {
             // add
-            selectedCells.addObject(indexPath.row)
-            selectedSports.addObject(obj)
+            selectedCells.add(indexPath.row)
+            selectedSports.add(obj)
         }
         
         
@@ -262,17 +262,17 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             return
         }
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        guard let URL = URL(string: "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user") else {return}
+        let request = NSMutableURLRequest(url: URL)
+        request.httpMethod = "POST"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("\((UIApplication.shared.delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         
-        let utf8str: NSData = self.passedPassword.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        let utf8str: Data = self.passedPassword.data(using: String.Encoding.utf8)!
+        let base64Encoded:NSString = utf8str.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         print("base64Encoded: \(base64Encoded)")
         
         let bodyObject = [
@@ -281,19 +281,19 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             "firstName" : self.passedFirstName,
             "lastName" : self.passedLastName,
             "email" : self.passedEmail,
-            "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
-            "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+            "client_id": (UIApplication.shared.delegate as! AppDelegate).clientId,
+            "client_secret": (UIApplication.shared.delegate as! AppDelegate).clientSecret,
             //"grant_type": "password"
         ]
         
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let datastring = NSString(data: data!, encoding: String.Encoding.utf8)
                 
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let dataFromString = datastring!.data(using: String.Encoding.utf8, allowLossyConversion: false) {
                     
                     let json = JSON(data: dataFromString)
                     if json["errorCode"].number != 200  {
@@ -329,35 +329,35 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
         // get bearerToken
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "POST"
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        guard let URL = URL(string: "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/oauth/token") else {return}
+        let request = NSMutableURLRequest(url: URL)
+        request.httpMethod = "POST"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("\((UIApplication.shared.delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         
-        let utf8str: NSData = self.passedPassword.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        let utf8str: Data = self.passedPassword.data(using: String.Encoding.utf8)!
+        let base64Encoded:NSString = utf8str.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         print("base64Encoded: \(base64Encoded)")
         
         let bodyObject = [
             "username": self.passedUsername,
             "password": base64Encoded,
-            "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
-            "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+            "client_id": (UIApplication.shared.delegate as! AppDelegate).clientId,
+            "client_secret": (UIApplication.shared.delegate as! AppDelegate).clientSecret,
             "grant_type": "password"
         ]
         
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let datastring = NSString(data: data!, encoding: String.Encoding.utf8)
                 
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let dataFromString = datastring!.data(using: String.Encoding.utf8, allowLossyConversion: false) {
                     
                     let json = JSON(data: dataFromString)
                     if (json["errorCode"].number == nil) {
@@ -375,14 +375,14 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             
                     print("received bearer token")
                     
-                    let defaults = NSUserDefaults.standardUserDefaults()
+                    let defaults = UserDefaults.standard
                     
                     let newBearerToken = json["access_token"].string!
                     let refreshToken = json["refresh_token"].string!
                     
                     defaults.setObject(newBearerToken, forKey: "bearerToken")
                     defaults.setObject(refreshToken, forKey: "refreshToken")
-                    defaults.setObject(base64Encoded, forKey: "password")
+                    defaults.set(base64Encoded, forKey: "password")
                     defaults.synchronize()
                     
                     //
@@ -407,17 +407,17 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
         print("addUserDetails")
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.stringForKey("bearerToken")! as String
+        let defaults = UserDefaults.standard
+        let bearerToken = defaults.string(forKey: "bearerToken")! as String
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "PUT"
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        guard let URL = URL(string: "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user") else {return}
+        let request = NSMutableURLRequest(url: URL)
+        request.httpMethod = "PUT"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("\((UIApplication.shared.delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         // need this
         request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         //
@@ -438,8 +438,8 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
 //        
 //        
         
-        let utf8str: NSData = self.passedPassword.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64Encoded:NSString = utf8str.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        let utf8str: Data = self.passedPassword.data(using: String.Encoding.utf8)!
+        let base64Encoded:NSString = utf8str.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         print("base64Encoded: \(base64Encoded)")
         
         // multi-part request
@@ -452,19 +452,19 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
             "firstName": self.passedFirstName,
             "lastName": self.passedLastName,
             "sports": self.selectedSports,
-            "client_id": (UIApplication.sharedApplication().delegate as! AppDelegate).clientId,
-            "client_secret": (UIApplication.sharedApplication().delegate as! AppDelegate).clientSecret,
+            "client_id": (UIApplication.shared.delegate as! AppDelegate).clientId,
+            "client_secret": (UIApplication.shared.delegate as! AppDelegate).clientSecret,
             "grant_type": "password"
         ]
         
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let datastring = NSString(data: data!, encoding: String.Encoding.utf8)
                 
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let dataFromString = datastring!.data(using: String.Encoding.utf8, allowLossyConversion: false) {
                     
                     let json = JSON(data: dataFromString)
                     if json["errorCode"].number != 200  {
@@ -476,7 +476,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
 
                     print("successful sign up") // follow phenom !!
                     
-                    dispatch_async(dispatch_get_main_queue(),{
+                    DispatchQueue.main.async(execute: {
                         
                         self.getUser()
                         
@@ -497,7 +497,7 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
     
     func getUser() {
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         
         if (bearerToken == "") {
             // something is wrong
@@ -507,12 +507,12 @@ class SignUpDetailViewController: UIViewController, UITextFieldDelegate, UIScrol
         
         
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)

@@ -2,8 +2,8 @@
 //  PeopleCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/11/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/11/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -15,36 +15,36 @@ class PeopleCell: UITableViewCell {
     var userImgView = UIImageView()
     var nameLbl = UILabel()
     var usernameLbl = UILabel()
-    var followBtn = UIButton(type: UIButtonType.Custom)
+    var followBtn = UIButton(type: UIButtonType.custom)
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         userImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        userImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        userImgView.userInteractionEnabled = true
+        userImgView.contentMode = UIViewContentMode.scaleAspectFill
+        userImgView.isUserInteractionEnabled = true
         contentView.addSubview(userImgView)
         userImgView.layer.masksToBounds = true
         
-        nameLbl.backgroundColor = UIColor.clearColor()
+        nameLbl.backgroundColor = UIColor.clear
         nameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        nameLbl.textColor = UIColor.whiteColor()
-        nameLbl.textAlignment = NSTextAlignment.Left
+        nameLbl.textColor = UIColor.white
+        nameLbl.textAlignment = NSTextAlignment.left
         nameLbl.numberOfLines = 1
-        nameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        nameLbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
         contentView.addSubview(nameLbl)
         
-        usernameLbl.backgroundColor = UIColor.clearColor()
+        usernameLbl.backgroundColor = UIColor.clear
         usernameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        usernameLbl.textColor = UIColor.grayColor()
-        usernameLbl.textAlignment = NSTextAlignment.Left
+        usernameLbl.textColor = UIColor.gray
+        usernameLbl.textAlignment = NSTextAlignment.left
         usernameLbl.numberOfLines = 1
-        usernameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        usernameLbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
         contentView.addSubview(usernameLbl)
         
-        followBtn.backgroundColor = UIColor.orangeColor()
-        followBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Normal)
-        followBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , forState: UIControlState.Selected)
+        followBtn.backgroundColor = UIColor.orange
+        followBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , for: UIControlState())
+        followBtn.setBackgroundImage(UIImage.init(named: "timeline-follow-btn.png") , for: UIControlState.selected)
         contentView.addSubview(followBtn)
         
         
@@ -56,16 +56,16 @@ class PeopleCell: UITableViewCell {
     }
     
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        userImgView.frame = CGRectMake(15, 15, 44, 44)
-        nameLbl.frame = CGRectMake(15+50+10, 15, cellWidth-15-50-15-50-15, 20)
-        usernameLbl.frame = CGRectMake(15+50+10, 15+20, cellWidth-15-50-15-50-15, 20)
+        userImgView.frame = CGRect(x: 15, y: 15, width: 44, height: 44)
+        nameLbl.frame = CGRect(x: 15+50+10, y: 15, width: cellWidth-15-50-15-50-15, height: 20)
+        usernameLbl.frame = CGRect(x: 15+50+10, y: 15+20, width: cellWidth-15-50-15-50-15, height: 20)
         
         //followBtn.frame = CGRectMake(cellWidth-15-40, 20, 40, 40)
         // 15+44+15
-        followBtn.frame = CGRectMake(cellWidth-65-15, 18, 65, 38)
+        followBtn.frame = CGRect(x: cellWidth-65-15, y: 18, width: 65, height: 38)
         
         
         

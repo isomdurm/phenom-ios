@@ -2,8 +2,8 @@
 //  TimelineCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/24/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/24/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -42,92 +42,92 @@ class TimelineCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        momentImgView.backgroundColor = UIColor.lightGrayColor()
-        momentImgView.contentMode = .ScaleAspectFill //.ScaleAspectFit //
-        momentImgView.userInteractionEnabled = true
+        momentImgView.backgroundColor = UIColor.lightGray
+        momentImgView.contentMode = .scaleAspectFill //.ScaleAspectFit //
+        momentImgView.isUserInteractionEnabled = true
         contentView.addSubview(momentImgView)
         momentImgView.layer.masksToBounds = true
         
-        musicLbl.backgroundColor = UIColor.blueColor()
+        musicLbl.backgroundColor = UIColor.blue
         musicLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
-        musicLbl.textColor = UIColor.whiteColor()
-        musicLbl.textAlignment = .Center
+        musicLbl.textColor = UIColor.white
+        musicLbl.textAlignment = .center
         musicLbl.numberOfLines = 1
-        musicLbl.lineBreakMode = .ByTruncatingTail
+        musicLbl.lineBreakMode = .byTruncatingTail
         contentView.addSubview(musicLbl)
         
-        modeLbl.backgroundColor = UIColor.grayColor()
+        modeLbl.backgroundColor = UIColor.gray
         modeLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
-        modeLbl.textColor = UIColor.whiteColor()
-        modeLbl.textAlignment = .Center
+        modeLbl.textColor = UIColor.white
+        modeLbl.textAlignment = .center
         modeLbl.numberOfLines = 1
-        modeLbl.lineBreakMode = .ByTruncatingTail
+        modeLbl.lineBreakMode = .byTruncatingTail
         contentView.addSubview(modeLbl)
         
         //
         
-        heartImgView.backgroundColor = UIColor.redColor()
-        heartImgView.contentMode = .ScaleAspectFill
-        heartImgView.userInteractionEnabled = true
+        heartImgView.backgroundColor = UIColor.red
+        heartImgView.contentMode = .scaleAspectFill
+        heartImgView.isUserInteractionEnabled = true
         contentView.addSubview(heartImgView)
         heartImgView.layer.masksToBounds = true
         
-        commentBtn = UIButton(type: .Custom)
-        commentBtn.backgroundColor = .whiteColor()
+        commentBtn = UIButton(type: .custom)
+        commentBtn.backgroundColor = .white
         contentView.addSubview(commentBtn)
         
         //
         
-        gearImgView.backgroundColor = UIColor.lightGrayColor()
-        gearImgView.contentMode = .ScaleAspectFill
-        gearImgView.userInteractionEnabled = true
+        gearImgView.backgroundColor = UIColor.lightGray
+        gearImgView.contentMode = .scaleAspectFill
+        gearImgView.isUserInteractionEnabled = true
         contentView.addSubview(gearImgView)
         gearImgView.layer.masksToBounds = true
 
-        gearLbl.backgroundColor = UIColor.whiteColor()
+        gearLbl.backgroundColor = UIColor.white
         gearLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
-        gearLbl.textColor = UIColor.lightGrayColor()
-        gearLbl.textAlignment = .Left
+        gearLbl.textColor = UIColor.lightGray
+        gearLbl.textAlignment = .left
         gearLbl.numberOfLines = 1
-        gearLbl.lineBreakMode = .ByTruncatingTail
+        gearLbl.lineBreakMode = .byTruncatingTail
         contentView.addSubview(gearLbl)
         
-        gearBtn = UIButton(type: .Custom)
-        gearBtn.backgroundColor = UIColor.clearColor()
+        gearBtn = UIButton(type: .custom)
+        gearBtn.backgroundColor = UIColor.clear
         contentView.addSubview(gearBtn)
         
         //
         
-        heartImgViewSmall.backgroundColor = UIColor.lightGrayColor()
-        heartImgViewSmall.contentMode = .ScaleAspectFill
-        heartImgViewSmall.userInteractionEnabled = true
+        heartImgViewSmall.backgroundColor = UIColor.lightGray
+        heartImgViewSmall.contentMode = .scaleAspectFill
+        heartImgViewSmall.isUserInteractionEnabled = true
         contentView.addSubview(heartImgViewSmall)
         heartImgViewSmall.layer.masksToBounds = true
         
-        likesLbl.backgroundColor = UIColor.clearColor()
+        likesLbl.backgroundColor = UIColor.clear
         likesLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
-        likesLbl.textColor = UIColor.whiteColor()
-        likesLbl.textAlignment = .Left
+        likesLbl.textColor = UIColor.white
+        likesLbl.textAlignment = .left
         likesLbl.numberOfLines = 1
-        likesLbl.lineBreakMode = .ByTruncatingTail
+        likesLbl.lineBreakMode = .byTruncatingTail
         contentView.addSubview(likesLbl)
         
-        likesBtn = UIButton(type: .Custom)
-        likesBtn.backgroundColor = UIColor.clearColor()
+        likesBtn = UIButton(type: .custom)
+        likesBtn.backgroundColor = UIColor.clear
         contentView.addSubview(likesBtn)
         
         //
         
-        headerLbl.backgroundColor = UIColor.clearColor()
+        headerLbl.backgroundColor = UIColor.clear
         headerLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        headerLbl.textColor = UIColor.lightGrayColor()
-        headerLbl.textAlignment = .Left
+        headerLbl.textColor = UIColor.lightGray
+        headerLbl.textAlignment = .left
         headerLbl.numberOfLines = 0
-        headerLbl.lineBreakMode = .ByWordWrapping
+        headerLbl.lineBreakMode = .byWordWrapping
         contentView.addSubview(headerLbl)
         
-        headerBtn = UIButton(type: .Custom)
-        headerBtn.backgroundColor = .clearColor()
+        headerBtn = UIButton(type: .custom)
+        headerBtn.backgroundColor = .clear
         contentView.addSubview(headerBtn)
         
         //
@@ -159,7 +159,7 @@ class TimelineCell: UITableViewCell {
         doubleTapRecognizer.numberOfTapsRequired = 2
         momentImgView.addGestureRecognizer(doubleTapRecognizer)
         
-        singleTapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer)
+        singleTapRecognizer.require(toFail: doubleTapRecognizer)
         
     }
     
@@ -168,27 +168,27 @@ class TimelineCell: UITableViewCell {
     }
     
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        heartImgView.frame = CGRectMake(15, cellWidth+3, 44, 44)
-        commentBtn.frame = CGRectMake(15+44+15, cellWidth+3, 44, 44)
+        heartImgView.frame = CGRect(x: 15, y: cellWidth+3, width: 44, height: 44)
+        commentBtn.frame = CGRect(x: 15+44+15, y: cellWidth+3, width: 44, height: 44)
         
         
-        gearImgView.frame = CGRectMake(cellWidth/2+15, cellWidth+3, 44, 44)
-        gearLbl.frame = CGRectMake(cellWidth/2+15+44+5, cellWidth+3, 44, 44)
-        gearBtn.frame = CGRectMake(cellWidth/2+15, cellWidth+3, 88+5, 44)
-        
-        //
-        
-        heartImgViewSmall.frame = CGRectMake(15, cellWidth+50+3, 22, 22)
-        likesLbl.frame = CGRectMake(15+22+5, cellWidth+50+3, 200, 22)
-        likesBtn.frame = CGRectMake(15, cellWidth+50+3, 100, 22)
+        gearImgView.frame = CGRect(x: cellWidth/2+15, y: cellWidth+3, width: 44, height: 44)
+        gearLbl.frame = CGRect(x: cellWidth/2+15+44+5, y: cellWidth+3, width: 44, height: 44)
+        gearBtn.frame = CGRect(x: cellWidth/2+15, y: cellWidth+3, width: 88+5, height: 44)
         
         //
         
-        headerLbl.frame = CGRectMake(15, cellWidth+50+3+22+3, cellWidth-15-15, 50)
-        headerBtn.frame = CGRectMake(15, cellWidth+50+3+22+3, cellWidth-15-15, 50)
+        heartImgViewSmall.frame = CGRect(x: 15, y: cellWidth+50+3, width: 22, height: 22)
+        likesLbl.frame = CGRect(x: 15+22+5, y: cellWidth+50+3, width: 200, height: 22)
+        likesBtn.frame = CGRect(x: 15, y: cellWidth+50+3, width: 100, height: 22)
+        
+        //
+        
+        headerLbl.frame = CGRect(x: 15, y: cellWidth+50+3+22+3, width: cellWidth-15-15, height: 50)
+        headerBtn.frame = CGRect(x: 15, y: cellWidth+50+3+22+3, width: cellWidth-15-15, height: 50)
         
         //
         
@@ -196,11 +196,11 @@ class TimelineCell: UITableViewCell {
         
         //
         
-        lineView1.frame = CGRectMake((cellWidth/2)-0.20, cellWidth, 0.5, 50)
+        lineView1.frame = CGRect(x: (cellWidth/2)-0.20, y: cellWidth, width: 0.5, height: 50)
         
-        lineView2.frame = CGRectMake(0, cellWidth+50, cellWidth, 0.5)
+        lineView2.frame = CGRect(x: 0, y: cellWidth+50, width: cellWidth, height: 0.5)
         
-        footerView.frame = CGRectMake(0, cellWidth+50+80, cellWidth, 35)
+        footerView.frame = CGRect(x: 0, y: cellWidth+50+80, width: cellWidth, height: 35)
         
         
 //        let font = UIFont.init(name: "MaisonNeue-Bold", size: 17)

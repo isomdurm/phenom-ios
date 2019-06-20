@@ -2,8 +2,8 @@
 //  EditProfileViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/3/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/3/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -28,87 +28,87 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
-        view.backgroundColor = UIColor.blackColor()
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
+        view.backgroundColor = UIColor.black
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
-        navBarView.backgroundColor = UIColor.blackColor()
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
+        navBarView.backgroundColor = UIColor.black
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.clearColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        let backBtn = UIButton(type: UIButtonType.custom)
+        backBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), for: UIControlState())
+        backBtn.backgroundColor = UIColor.clear
+        backBtn.addTarget(self, action:#selector(backAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(backBtn)
         backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         //titleLbl.text = "EDIT PROFILE"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        let saveBtn = UIButton(type: UIButtonType.Custom)
-        saveBtn.frame = CGRectMake(view.frame.size.width-44-15, 20, 44, 44)
-        saveBtn.setImage(UIImage(named: "save-btn.png"), forState: UIControlState.Normal)
-        saveBtn.backgroundColor = UIColor.blueColor()
-        saveBtn.addTarget(self, action:#selector(saveBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        let saveBtn = UIButton(type: UIButtonType.custom)
+        saveBtn.frame = CGRect(x: view.frame.size.width-44-15, y: 20, width: 44, height: 44)
+        saveBtn.setImage(UIImage(named: "save-btn.png"), for: UIControlState())
+        saveBtn.backgroundColor = UIColor.blue
+        saveBtn.addTarget(self, action:#selector(saveBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(saveBtn)
         
-        textField1.frame = CGRectMake(20, 64, view.frame.size.width-40, 64)
-        textField1.backgroundColor = UIColor.clearColor()
+        textField1.frame = CGRect(x: 20, y: 64, width: view.frame.size.width-40, height: 64)
+        textField1.backgroundColor = UIColor.clear
         textField1.delegate = self
-        textField1.textColor = UIColor.whiteColor()
-        textField1.keyboardType = UIKeyboardType.Default
-        textField1.returnKeyType = UIReturnKeyType.Next
+        textField1.textColor = UIColor.white
+        textField1.keyboardType = UIKeyboardType.default
+        textField1.returnKeyType = UIReturnKeyType.next
         textField1.enablesReturnKeyAutomatically = true
         textField1.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
-        textField1.autocapitalizationType = UITextAutocapitalizationType.None
-        textField1.autocorrectionType = UITextAutocorrectionType.No
+        textField1.autocapitalizationType = UITextAutocapitalizationType.none
+        textField1.autocorrectionType = UITextAutocorrectionType.no
         textField1.text = ""
         
-        textField2.frame = CGRectMake(20, 64+64, view.frame.size.width-40, 64)
-        textField2.backgroundColor = UIColor.clearColor()
+        textField2.frame = CGRect(x: 20, y: 64+64, width: view.frame.size.width-40, height: 64)
+        textField2.backgroundColor = UIColor.clear
         textField2.delegate = self
-        textField2.textColor = UIColor.whiteColor()
-        textField2.keyboardType = UIKeyboardType.Default
-        textField2.returnKeyType = UIReturnKeyType.Go
+        textField2.textColor = UIColor.white
+        textField2.keyboardType = UIKeyboardType.default
+        textField2.returnKeyType = UIReturnKeyType.go
         textField2.enablesReturnKeyAutomatically = true
         textField2.font = UIFont.init(name: "MaisonNeue-Medium", size: 17)
-        textField2.autocapitalizationType = UITextAutocapitalizationType.None
-        textField2.autocorrectionType = UITextAutocorrectionType.No
-        textField2.secureTextEntry = false
+        textField2.autocapitalizationType = UITextAutocapitalizationType.none
+        textField2.autocorrectionType = UITextAutocorrectionType.no
+        textField2.isSecureTextEntry = false
         textField2.text = ""
         
         let lineview1 = UIView()
-        lineview1.frame = CGRectMake(0, 64+63.5, view.frame.size.width, 0.5)
+        lineview1.frame = CGRect(x: 0, y: 64+63.5, width: view.frame.size.width, height: 0.5)
         lineview1.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         view.addSubview(lineview1)
         
         let lineview2 = UIView()
-        lineview2.frame = CGRectMake(0, 64+64+63.5, view.frame.size.width, 0.5)
+        lineview2.frame = CGRect(x: 0, y: 64+64+63.5, width: view.frame.size.width, height: 0.5)
         lineview2.backgroundColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         
         /////
         
-        theTableView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.frame = CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 0))
         
         
         ////
         
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
 
 //        defaults.setObject(self.username, forKey: "username")
 //        defaults.setObject(self.hometown, forKey: "hometown")
@@ -125,8 +125,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         
         if (passedEditType == "name") {
             
-            let firstName = defaults.objectForKey("firstName") as! String
-            let lastName = defaults.objectForKey("lastName") as! String
+            let firstName = defaults.object(forKey: "firstName") as! String
+            let lastName = defaults.object(forKey: "lastName") as! String
             
             titleLbl.text = "NAME"
             textField1.placeholder = "your first name"
@@ -139,7 +139,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
             
         } else if (passedEditType == "username") {
             
-            let username = defaults.objectForKey("username") as! String
+            let username = defaults.object(forKey: "username") as! String
             
             titleLbl.text = "USERNAME"
             textField1.placeholder = "username"
@@ -148,7 +148,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
             
         } else if (passedEditType == "birthday") {
             
-            let birthday = defaults.objectForKey("birthday") as! NSDate
+            let birthday = defaults.object(forKey: "birthday") as! Date
             
             titleLbl.text = "BIRTHDAY"
             textField1.placeholder = "your birthday"
@@ -157,7 +157,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
             
         } else if (passedEditType == "hometown") {
             
-            let hometown = defaults.objectForKey("hometown") as! String
+            let hometown = defaults.object(forKey: "hometown") as! String
             
             titleLbl.text = "HOMETOWN"
             textField1.placeholder = "your hometown"
@@ -194,7 +194,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
             
         } else if (passedEditType == "bio") {
             
-            let bio = defaults.objectForKey("description") as! String
+            let bio = defaults.object(forKey: "description") as! String
             
             titleLbl.text = "BIO"
             textField1.placeholder = "bio"
@@ -204,7 +204,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
             
         } else if (passedEditType == "email") {
             
-            let email = defaults.objectForKey("email") as! String
+            let email = defaults.object(forKey: "email") as! String
             
             titleLbl.text = "EMAIL"
             textField1.placeholder = "your email"
@@ -224,7 +224,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         //
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-        swipeRight.direction = .Right
+        swipeRight.direction = .right
         view.addGestureRecognizer(swipeRight)
         
     }
@@ -234,13 +234,13 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if (passedEditType == "name" || passedEditType == "username" || passedEditType == "birthday" || passedEditType == "hometown" || passedEditType == "name" || passedEditType == "bio" || passedEditType == "email" || passedEditType == "password") {
@@ -252,20 +252,20 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
     
     func backAction() {
         view.endEditing(true)
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     
     // TableViewDelegate
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 35
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let aLbl = UILabel(frame: CGRectMake(20, 0, view.frame.size.width, 35))
-        aLbl.textAlignment = NSTextAlignment.Left
+        let aLbl = UILabel(frame: CGRect(x: 20, y: 0, width: view.frame.size.width, height: 35))
+        aLbl.textAlignment = NSTextAlignment.left
         
         switch (section) {
         case 0: aLbl.text = "WHAT DO YOU PLAY?"
@@ -274,7 +274,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         aLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 12)
         aLbl.textColor = UINavigationBar.appearance().tintColor //gold
         
-        let aView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 35))
+        let aView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
         aView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         aView.addSubview(aLbl)
@@ -283,57 +283,57 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sportsArray.count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+        let cell:UITableViewCell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "cell")
         
-        cell.textLabel?.textColor = UIColor.whiteColor()
+        cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         
-        let obj = sportsArray.objectAtIndex(indexPath.row) as! String
+        let obj = sportsArray.object(at: indexPath.row) as! String
         cell.textLabel?.text = obj
         
-        if (self.selectedCells.containsObject(indexPath.row)) {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+        if (self.selectedCells.contains(indexPath.row)) {
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
         } else {
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
         }
         
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
-        let obj = sportsArray.objectAtIndex(indexPath.row) as! String
+        let obj = sportsArray.object(at: indexPath.row) as! String
         
-        if (selectedCells.containsObject(indexPath.row)) {
+        if (selectedCells.contains(indexPath.row)) {
             // remove
-            selectedCells.removeObject(indexPath.row)
-            selectedSports.removeObject(obj)
+            selectedCells.remove(indexPath.row)
+            selectedSports.remove(obj)
         } else {
             // add
-            selectedCells.addObject(indexPath.row)
-            selectedSports.addObject(obj)
+            selectedCells.add(indexPath.row)
+            selectedSports.add(obj)
         }
         
         
@@ -349,17 +349,17 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         // if logged in correctly
         
         // get bearerToken
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let bearerToken = defaults.objectForKey("bearerToken") as! String
+        let defaults = UserDefaults.standard
+        let bearerToken = defaults.object(forKey: "bearerToken") as! String
         
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        guard let URL = NSURL(string: "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/user") else {return}
-        let request = NSMutableURLRequest(URL: URL)
-        request.HTTPMethod = "PUT"
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        guard let URL = URL(string: "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/user") else {return}
+        let request = NSMutableURLRequest(url: URL)
+        request.httpMethod = "PUT"
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
+        request.addValue("\((UIApplication.shared.delegate as! AppDelegate).apiVersion)", forHTTPHeaderField: "apiVersion")
         request.addValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         
 //        let utf8str: NSData = passwordField.text!.dataUsingEncoding(NSUTF8StringEncoding)!
@@ -374,14 +374,14 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate, UITableV
         ]
         
         
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(bodyObject, options: [])
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
             if (error == nil) {
                 
-                let datastring = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let datastring = NSString(data: data!, encoding: String.Encoding.utf8)
                 
-                if let dataFromString = datastring!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                if let dataFromString = datastring!.data(using: String.Encoding.utf8, allowLossyConversion: false) {
                     
                     let json = JSON(data: dataFromString)
                     if (json["errorCode"].number == nil) {

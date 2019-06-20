@@ -8,22 +8,22 @@
 
 import UIKit
 
-public class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
+open class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
 	
-	init(contentSize: CGSize) {
-		super.init()
+	open override func prepare() {
+		super.prepare()
 		
-		var minItemWidth: CGFloat = 105 //80
-		if UI_USER_INTERFACE_IDIOM() == .Pad {
-			minItemWidth = 105
+		var minItemWidth: CGFloat = 80
+		if UI_USER_INTERFACE_IDIOM() == .pad {
+			minItemWidth = 100
 		}
 		
 		let interval: CGFloat = 1
 		self.minimumInteritemSpacing = interval
 		self.minimumLineSpacing = interval
 		
-		let contentWidth = contentSize.width
-
+		let contentWidth = self.collectionView!.bounds.width
+		
 		let itemCount = Int(floor(contentWidth / minItemWidth))
 		var itemWidth = (contentWidth - interval * (CGFloat(itemCount) - 1)) / CGFloat(itemCount)
 		let actualInterval = (contentWidth - CGFloat(itemCount) * itemWidth) / (CGFloat(itemCount) - 1)
@@ -31,15 +31,6 @@ public class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
 		
 		let itemSize = CGSize(width: itemWidth, height: itemWidth)
 		self.itemSize = itemSize
-	}
-	
-	convenience override init() {
-		//self.init(contentSize: CGSize(width: 80, height: 80))
-        self.init(contentSize: CGSize(width: 105, height: 105))
-	}
-
-	required public init?(coder aDecoder: NSCoder) {
-	    fatalError("init(coder:) has not been implemented")
 	}
 	
 }

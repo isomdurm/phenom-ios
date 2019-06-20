@@ -1,57 +1,66 @@
 PODS:
-  - Alamofire (3.3.1)
-  - AlamofireImage (2.4.0):
-    - Alamofire (~> 3.3)
+  - Alamofire (4.4.0)
   - AsyncDisplayKit (1.2.3):
     - AsyncDisplayKit/ASDealloc2MainObject (= 1.2.3)
   - AsyncDisplayKit/ASDealloc2MainObject (1.2.3)
-  - Bolts (1.7.0):
-    - Bolts/AppLinks (= 1.7.0)
-    - Bolts/Tasks (= 1.7.0)
-  - Bolts/AppLinks (1.7.0):
+  - Bolts (1.8.4):
+    - Bolts/AppLinks (= 1.8.4)
+    - Bolts/Tasks (= 1.8.4)
+  - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
-  - Bolts/Tasks (1.7.0)
+  - Bolts/Tasks (1.8.4)
   - Crashlytics (3.7.0):
     - Fabric (~> 1.6.3)
-  - DKImagePickerController (3.1.3):
-    - DKImagePickerController/Camera (= 3.1.3)
-    - DKImagePickerController/ImageManager (= 3.1.3)
-  - DKImagePickerController/Camera (3.1.3)
-  - DKImagePickerController/ImageManager (3.1.3)
+  - DKImagePickerController (3.5.1):
+    - DKImagePickerController/Camera (= 3.5.1)
+    - DKImagePickerController/ImageManager (= 3.5.1)
+  - DKImagePickerController/Camera (3.5.1)
+  - DKImagePickerController/ImageManager (3.5.1)
   - Fabric (1.6.3)
   - HanekeSwift (0.10.1)
-  - ImagePicker (1.2)
+  - ImagePicker (2.1.1)
   - Reachability (3.1.1)
-  - SDWebImage (3.7.5):
-    - SDWebImage/Core (= 3.7.5)
-  - SDWebImage/Core (3.7.5)
-  - SwiftyJSON (2.3.2)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - AlamofireImage (~> 2.0)
+  - Alamofire (~> 4.4)
   - AsyncDisplayKit (= 1.2.3)
   - Bolts
   - Crashlytics (= 3.7.0)
   - DKImagePickerController
   - Fabric (= 1.6.3)
-  - HanekeSwift
+  - HanekeSwift (from `https://github.com/Haneke/HanekeSwift.git`, branch `feature/swift-3`)
   - ImagePicker
   - Reachability (= 3.1.1)
   - SDWebImage (~> 3.7)
   - SwiftyJSON
 
-SPEC CHECKSUMS:
-  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
-  AlamofireImage: 87408b652e0f5ae5fe364035f15aea8b9b24c77e
-  AsyncDisplayKit: 5c8f38225f7478e39c48196cec0dd0d2ac3455ed
-  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
-  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
-  DKImagePickerController: 5ad3a065e65287c1584e4250e378f99102e2753e
-  Fabric: cbe0ca6c9531bba17910052f6f105fcbc5fa7f67
-  HanekeSwift: 08e47d3d0f2899ec58e5d257beba0de619aca9e8
-  ImagePicker: 85f14ed6872f46c08d210077b5540a890a6cd151
-  Reachability: dd9aa4fb6667b9f787690a74f53cb7634ce99893
-  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+EXTERNAL SOURCES:
+  HanekeSwift:
+    :branch: feature/swift-3
+    :git: https://github.com/Haneke/HanekeSwift.git
 
-COCOAPODS: 0.39.0
+CHECKOUT OPTIONS:
+  HanekeSwift:
+    :commit: 1157a124ec699f4ad926cb054f1d0bfce88ae7a9
+    :git: https://github.com/Haneke/HanekeSwift.git
+
+SPEC CHECKSUMS:
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  AsyncDisplayKit: 5c8f38225f7478e39c48196cec0dd0d2ac3455ed
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
+  DKImagePickerController: 8db7e76a88a7a66a893ba30e935cc4c9bb7ed335
+  Fabric: cbe0ca6c9531bba17910052f6f105fcbc5fa7f67
+  HanekeSwift: 4113367892828e7700d24a384027de6ebc79aad1
+  ImagePicker: fe4c699abb56ff03994fa98d8b02e3883ee118be
+  Reachability: dd9aa4fb6667b9f787690a74f53cb7634ce99893
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+
+PODFILE CHECKSUM: b6bc52249e36397f23a2dcb5a928abaa90fbf819
+
+COCOAPODS: 1.2.0

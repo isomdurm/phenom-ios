@@ -2,25 +2,22 @@ import UIKit
 
 class ImageGalleryViewCell: UICollectionViewCell {
 
-  lazy var imageView: UIImageView = {
-    let imageView = UIImageView()
-    return imageView
-    }()
-
-  lazy var selectedImageView: UIImageView = {
-    let imageView = UIImageView()
-    return imageView
-    }()
+  lazy var imageView = UIImageView()
+  lazy var selectedImageView = UIImageView()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
 
     for view in [imageView, selectedImageView] {
-      view.contentMode = .ScaleAspectFill
+      view.contentMode = .scaleAspectFill
       view.translatesAutoresizingMaskIntoConstraints = false
       view.clipsToBounds = true
       contentView.addSubview(view)
     }
+
+    isAccessibilityElement = true
+    accessibilityLabel = "Photo"
+
     setupConstraints()
   }
 
@@ -30,7 +27,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   // MARK: - Configuration
 
-  func configureCell(image: UIImage) {
+  func configureCell(_ image: UIImage) {
     imageView.image = image
   }
 }

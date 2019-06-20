@@ -2,8 +2,8 @@
 //  CameraViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/29/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/29/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -36,40 +36,40 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
         
         //let bottomHeight = view.frame.size.height-64-view.frame.size.width
         //albumViewerContainer = UIView(frame: CGRectMake(0, 64+view.frame.size.width, view.frame.size.width, bottomHeight))
-        albumViewerContainer = UIView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-50))
-        albumViewerContainer.backgroundColor = UIColor.greenColor() // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        albumViewerContainer = UIView(frame: CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-50))
+        albumViewerContainer.backgroundColor = UIColor.green // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(albumViewerContainer)
         
-        cameraViewerContainer = UIView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-50))
-        cameraViewerContainer.backgroundColor = UIColor.greenColor() // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
+        cameraViewerContainer = UIView(frame: CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-50))
+        cameraViewerContainer.backgroundColor = UIColor.green // UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(cameraViewerContainer)
         
-        statusViewerContainer = UIView(frame: CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-50))
+        statusViewerContainer = UIView(frame: CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-50))
         statusViewerContainer.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
         view.addSubview(statusViewerContainer)
         
         
-        statusTextView.frame = CGRectMake(0, 0, self.view.frame.width, 100)
-        statusTextView.backgroundColor = UIColor.clearColor()
+        statusTextView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100)
+        statusTextView.backgroundColor = UIColor.clear
         statusTextView.delegate = self
         statusTextView.textColor = UIColor.init(white: 1.0, alpha: 1.0)
-        statusTextView.keyboardType = UIKeyboardType.Default
-        statusTextView.returnKeyType = UIReturnKeyType.Default
+        statusTextView.keyboardType = UIKeyboardType.default
+        statusTextView.returnKeyType = UIReturnKeyType.default
         statusTextView.font = UIFont.init(name: "MaisonNeue-Bold", size: 25)
         statusTextView.enablesReturnKeyAutomatically = true
-        statusTextView.textAlignment = NSTextAlignment.Left
-        statusTextView.autocapitalizationType = UITextAutocapitalizationType.None
-        statusTextView.autocorrectionType = UITextAutocorrectionType.No
-        statusTextView.scrollEnabled = true
+        statusTextView.textAlignment = NSTextAlignment.left
+        statusTextView.autocapitalizationType = UITextAutocapitalizationType.none
+        statusTextView.autocorrectionType = UITextAutocorrectionType.no
+        statusTextView.isScrollEnabled = true
         statusTextView.scrollsToTop = false
         self.statusViewerContainer.addSubview(statusTextView)
         statusTextView.text = ""
@@ -78,7 +78,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         statusTextView.textContainerInset = UIEdgeInsetsMake(19, 19, 19, 19)
         statusTextView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CameraViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification ,object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CameraViewController.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow ,object: nil)
         
         
         
@@ -90,70 +90,70 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         
         //
         
-        cameraViewerContainer.hidden = true
-        statusViewerContainer.hidden = true
+        cameraViewerContainer.isHidden = true
+        statusViewerContainer.isHidden = true
         
         //
         //
         //
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let xBtn = UIButton(type: UIButtonType.Custom)
-        xBtn.frame = CGRectMake(15, 20, 44, 44)
-        xBtn.setImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
+        let xBtn = UIButton(type: UIButtonType.custom)
+        xBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        xBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //xBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: UIControlState.Normal)
-        xBtn.backgroundColor = UIColor.blueColor()
-        xBtn.addTarget(self, action:#selector(xBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        xBtn.backgroundColor = UIColor.blue
+        xBtn.addTarget(self, action:#selector(xBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(xBtn)
         
-        titleLbl.frame = CGRectMake(0, 20, navBarView.frame.size.width, 44)
-        titleLbl.textAlignment = NSTextAlignment.Center
+        titleLbl.frame = CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44)
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "CAMERA ROLL"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
 
         let nextBtn = UIButton()
-        nextBtn.frame = CGRectMake(view.frame.size.width-70-20, 20, 70, 44)
-        nextBtn.backgroundColor = UIColor.blueColor()
-        nextBtn.addTarget(self, action:#selector(nextBtnAction), forControlEvents:.TouchUpInside)
+        nextBtn.frame = CGRect(x: view.frame.size.width-70-20, y: 20, width: 70, height: 44)
+        nextBtn.backgroundColor = UIColor.blue
+        nextBtn.addTarget(self, action:#selector(nextBtnAction), for:.touchUpInside)
         nextBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Medium", size: 16)
         nextBtn.titleLabel?.numberOfLines = 1
-        nextBtn.contentHorizontalAlignment = .Center
-        nextBtn.contentVerticalAlignment = .Center
-        nextBtn.titleLabel?.textAlignment = .Center
-        nextBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        nextBtn.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
-        nextBtn.setTitle("Next", forState: .Normal)
+        nextBtn.contentHorizontalAlignment = .center
+        nextBtn.contentVerticalAlignment = .center
+        nextBtn.titleLabel?.textAlignment = .center
+        nextBtn.setTitleColor(UIColor.white, for: UIControlState())
+        nextBtn.setTitleColor(UIColor.white, for: .highlighted)
+        nextBtn.setTitle("Next", for: UIControlState())
         navBarView.addSubview(nextBtn)
         
         //
         
-        albumBtn = UIButton(type: UIButtonType.Custom)
-        albumBtn.frame = CGRectMake(view.frame.size.width/3*0, view.frame.size.height-50, view.frame.size.width/3, 50)
-        albumBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
+        albumBtn = UIButton(type: UIButtonType.custom)
+        albumBtn.frame = CGRect(x: view.frame.size.width/3*0, y: view.frame.size.height-50, width: view.frame.size.width/3, height: 50)
+        albumBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //albumBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
-        albumBtn.backgroundColor = UIColor.blueColor()
-        albumBtn.addTarget(self, action:#selector(albumBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        albumBtn.backgroundColor = UIColor.blue
+        albumBtn.addTarget(self, action:#selector(albumBtnAction), for:UIControlEvents.touchUpInside)
         view.addSubview(albumBtn)
         
-        cameraBtn = UIButton(type: UIButtonType.Custom)
-        cameraBtn.frame = CGRectMake(view.frame.size.width/3*1, view.frame.size.height-50, view.frame.size.width/3, 50)
-        cameraBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
+        cameraBtn = UIButton(type: UIButtonType.custom)
+        cameraBtn.frame = CGRect(x: view.frame.size.width/3*1, y: view.frame.size.height-50, width: view.frame.size.width/3, height: 50)
+        cameraBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //cameraBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
-        cameraBtn.backgroundColor = UIColor.redColor()
-        cameraBtn.addTarget(self, action:#selector(cameraBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        cameraBtn.backgroundColor = UIColor.red
+        cameraBtn.addTarget(self, action:#selector(cameraBtnAction), for:UIControlEvents.touchUpInside)
         view.addSubview(cameraBtn)
         
-        statusBtn = UIButton(type: UIButtonType.Custom)
-        statusBtn.frame = CGRectMake(view.frame.size.width/3*2, view.frame.size.height-50, view.frame.size.width/3, 50)
-        statusBtn.setImage(UIImage(named: "xbtn.png"), forState: .Normal)
+        statusBtn = UIButton(type: UIButtonType.custom)
+        statusBtn.frame = CGRect(x: view.frame.size.width/3*2, y: view.frame.size.height-50, width: view.frame.size.width/3, height: 50)
+        statusBtn.setImage(UIImage(named: "xbtn.png"), for: UIControlState())
         //statusBtn.setBackgroundImage(UIImage(named: "xbtn.png"), forState: .Normal)
-        statusBtn.backgroundColor = UIColor.orangeColor()
-        statusBtn.addTarget(self, action:#selector(statusBtnAction), forControlEvents:.TouchUpInside)
+        statusBtn.backgroundColor = UIColor.orange
+        statusBtn.addTarget(self, action:#selector(statusBtnAction), for:.touchUpInside)
         view.addSubview(statusBtn)
         
         
@@ -165,12 +165,12 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        albumView.frame  = CGRect(origin: CGPointZero, size: albumViewerContainer.frame.size)
+        albumView.frame  = CGRect(origin: CGPoint.zero, size: albumViewerContainer.frame.size)
         albumView.layoutIfNeeded()
-        cameraView.frame = CGRect(origin: CGPointZero, size: cameraViewerContainer.frame.size)
+        cameraView.frame = CGRect(origin: CGPoint.zero, size: cameraViewerContainer.frame.size)
         cameraView.layoutIfNeeded()
         
         albumView.initialize()
@@ -178,18 +178,18 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         
         let info = notification.userInfo!
         
-        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardframe: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
         self.savedKeyboardHeight = keyboardframe.size.height
         
@@ -206,7 +206,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     // UITextViewDelegate
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         if (textView.text == "") {
             if (text == " ") {
@@ -215,13 +215,13 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         }
         
         let maxLength = 200
-        let currentString: NSString = textView.text!
-        let newString: NSString = currentString.stringByReplacingCharactersInRange(range, withString: text)
+        let currentString: NSString = textView.text! as NSString
+        let newString: NSString = currentString.replacingCharacters(in: range, with: text) as NSString
         
         return newString.length <= maxLength
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         
         
     }
@@ -229,9 +229,9 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     
     func albumBtnAction() {
-        albumViewerContainer.hidden = false
-        cameraViewerContainer.hidden = true
-        statusViewerContainer.hidden = true
+        albumViewerContainer.isHidden = false
+        cameraViewerContainer.isHidden = true
+        statusViewerContainer.isHidden = true
         titleLbl.text = "CAMERA ROLL"
 
         self.statusTextView.resignFirstResponder()
@@ -239,9 +239,9 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func cameraBtnAction() {
-        albumViewerContainer.hidden = true
-        cameraViewerContainer.hidden = false
-        statusViewerContainer.hidden = true
+        albumViewerContainer.isHidden = true
+        cameraViewerContainer.isHidden = false
+        statusViewerContainer.isHidden = true
         titleLbl.text = "CAMERA"
         
         self.statusTextView.resignFirstResponder()
@@ -249,9 +249,9 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     }
     
     func statusBtnAction() {
-        albumViewerContainer.hidden = true
-        cameraViewerContainer.hidden = true
-        statusViewerContainer.hidden = false
+        albumViewerContainer.isHidden = true
+        cameraViewerContainer.isHidden = true
+        statusViewerContainer.isHidden = false
         titleLbl.text = "STATUS"
         
         self.statusTextView.becomeFirstResponder()
@@ -260,43 +260,43 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     func xBtnAction() {
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).tabbarvc?.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+        (UIApplication.shared.delegate as! AppDelegate).tabbarvc?.view.transform = CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
         
         cameraView.session?.stopRunning()
         
         view.endEditing(true)
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.dismiss(animated: true, completion: nil)
         
     }
     
     func nextBtnAction() {
         
-        if (albumViewerContainer.hidden == false) {
+        if (albumViewerContainer.isHidden == false) {
             
             let view = albumView.imageCropView
             
-            UIGraphicsBeginImageContextWithOptions(view.frame.size, true, 0)
+            UIGraphicsBeginImageContextWithOptions((view?.frame.size)!, true, 0)
             let context = UIGraphicsGetCurrentContext()
-            CGContextTranslateCTM(context, -albumView.imageCropView.contentOffset.x, -albumView.imageCropView.contentOffset.y)
-            view.layer.renderInContext(context!)
+            context?.translateBy(x: -albumView.imageCropView.contentOffset.x, y: -albumView.imageCropView.contentOffset.y)
+            view?.layer.render(in: context!)
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             
-            delegate?.fusumaImageSelected(image)
+            delegate?.fusumaImageSelected(image!)
             
-            imgToPass = image
-            
-            let vc = ComposeViewController()
-            vc.passedImage = imgToPass
-            navigationController?.pushViewController(vc, animated: true)
-            
-        } else if (cameraViewerContainer.hidden == false) {
+            imgToPass = image!
             
             let vc = ComposeViewController()
             vc.passedImage = imgToPass
             navigationController?.pushViewController(vc, animated: true)
             
-        } else if (statusViewerContainer.hidden == false) {
+        } else if (cameraViewerContainer.isHidden == false) {
+            
+            let vc = ComposeViewController()
+            vc.passedImage = imgToPass
+            navigationController?.pushViewController(vc, animated: true)
+            
+        } else if (statusViewerContainer.isHidden == false) {
             
             let vc = ComposeViewController()
             vc.statusOnly = true
@@ -310,7 +310,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         
         
         
-        if (albumViewerContainer.hidden) {
+        if (albumViewerContainer.isHidden) {
             
             
             
@@ -326,7 +326,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     ///////////
     
     // MARK: FSCameraViewDelegate
-    func cameraShotFinished(image: UIImage) {
+    func cameraShotFinished(_ image: UIImage) {
         
         delegate?.fusumaImageSelected(image)
 //        dismissViewControllerAnimated(true, completion: {
@@ -349,7 +349,7 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
     
     
     // MARK: FusumaDelegate Protocol
-    func fusumaImageSelected(image: UIImage) {
+    func fusumaImageSelected(_ image: UIImage) {
         
 //        print("Image selected")
         //imageView.image = image
@@ -358,26 +358,26 @@ class CameraViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewD
         
     }
     
-    func fusumaDismissedWithImage(image: UIImage) {
+    func fusumaDismissedWithImage(_ image: UIImage) {
 //        print("Called just after dismissed FusumaViewController")
     }
     
     func fusumaCameraRollUnauthorized() {
         
 //        print("Camera roll unauthorized")
-        let alert = UIAlertController(title: "Access Requested", message: "Saving image needs to access your photo album", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Settings", style: .Default, handler: { (action) -> Void in
+        let alert = UIAlertController(title: "Access Requested", message: "Saving image needs to access your photo album", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) -> Void in
             
-            if let url = NSURL(string:UIApplicationOpenSettingsURLString) {
-                UIApplication.sharedApplication().openURL(url)
+            if let url = URL(string:UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.openURL(url)
             }
         }))
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) -> Void in
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
             
         }))
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     func fusumaClosed() {

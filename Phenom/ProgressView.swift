@@ -2,8 +2,8 @@
 //  ProgressView.swift
 //  Phenom
 //
-//  Created by Clay Zug on 11/9/15.
-//  Copyright © 2015 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 11/9/15.
+//  Copyright © 2015 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -17,13 +17,13 @@ class ProgressView: UIView {
         super.init(frame: frame)
         
         self.frame = frame
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         
         bg = UIView()
-        bg!.backgroundColor = UIColor.clearColor() //UIColor.init(white: 0.0, alpha: 0.35)
+        bg!.backgroundColor = UIColor.clear //UIColor.init(white: 0.0, alpha: 0.35)
         self.addSubview(bg!)
         
-        activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray) //WhiteLarge
+        activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray) //WhiteLarge
         self.addSubview(activityIndicator!)
     }
 
@@ -31,14 +31,14 @@ class ProgressView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         // Drawing code
         
     }
     
     override func layoutSubviews() {
         
-        bg!.frame = CGRectMake(0, 0, frame.size.width, frame.size.height)
+        bg!.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
         activityIndicator!.center = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
         
     }

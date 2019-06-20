@@ -2,8 +2,8 @@
 //  SingleMomentViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/16/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/16/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -20,48 +20,48 @@ class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate,
     
     var passedMomentId = ""
     
-    var momentData = NSData()
+    var momentData = Data()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let backBtn = UIButton(type: UIButtonType.Custom)
-        backBtn.frame = CGRectMake(15, 20, 44, 44)
-        backBtn.setImage(UIImage(named: "back-arrow.png"), forState: UIControlState.Normal)
-        backBtn.backgroundColor = UIColor.clearColor()
-        backBtn.addTarget(self, action:#selector(backAction), forControlEvents:UIControlEvents.TouchUpInside)
+        let backBtn = UIButton(type: UIButtonType.custom)
+        backBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        backBtn.setImage(UIImage(named: "back-arrow.png"), for: UIControlState())
+        backBtn.backgroundColor = UIColor.clear
+        backBtn.addTarget(self, action:#selector(backAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(backBtn)
         backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         titleLbl.text = "MOMENT"
         navBarView.addSubview(titleLbl)
         
         
-        theScrollView.frame = CGRectMake(0, 64, view.frame.size.width, view.frame.size.height-64-49)
-        theScrollView.backgroundColor = UIColor.clearColor()
+        theScrollView.frame = CGRect(x: 0, y: 64, width: view.frame.size.width, height: view.frame.size.height-64-49)
+        theScrollView.backgroundColor = UIColor.clear
         theScrollView.delegate = self
-        theScrollView.pagingEnabled = false
+        theScrollView.isPagingEnabled = false
         theScrollView.showsHorizontalScrollIndicator = false
         theScrollView.showsVerticalScrollIndicator = true
         theScrollView.scrollsToTop = true
-        theScrollView.scrollEnabled = true
+        theScrollView.isScrollEnabled = true
         theScrollView.bounces = true
         theScrollView.alwaysBounceVertical = true
-        theScrollView.userInteractionEnabled = true
+        theScrollView.isUserInteractionEnabled = true
         view.addSubview(theScrollView)
         theScrollView.contentOffset = CGPoint(x: 0, y: 0)
         theScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -69,7 +69,7 @@ class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate,
         //
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(backAction))
-        swipeRight.direction = .Right
+        swipeRight.direction = .right
         view.addGestureRecognizer(swipeRight)
         
         //
@@ -79,7 +79,7 @@ class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate,
     
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.interactivePopGestureRecognizer!.delegate = self
@@ -91,7 +91,7 @@ class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate,
         // Dispose of any resources that can be recreated.
     }
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if(navigationController!.viewControllers.count > 1){
             return true
         }
@@ -99,21 +99,21 @@ class SingleMomentViewController: UIViewController, UIGestureRecognizerDelegate,
     }
     
     func backAction() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         
     }
     
     func queryForMoment() {
         
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
         //let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)"
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/moment/\(passedMomentId)"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)

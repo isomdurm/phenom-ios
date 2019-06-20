@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		45926ED78AC076A816D0CBF3 /* Pods_Phenom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */; };
 		5703D9FD1CC31465008AAC6D /* PopularViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703D9FC1CC31465008AAC6D /* PopularViewController.swift */; };
 		5703D9FF1CC328CF008AAC6D /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */; };
 		5703DA011CC348E2008AAC6D /* 28-star-rounded2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */; };
@@ -151,6 +150,8 @@
 		57E368781CC99A97008C0E64 /* back-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 57E368771CC99A97008C0E64 /* back-arrow@2x.png */; };
 		57E3687A1CCAA942008C0E64 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E368791CCAA942008C0E64 /* FeedViewController.swift */; };
 		57E3687C1CCAB16D008C0E64 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3687B1CCAB16D008C0E64 /* FeedCell.swift */; };
+		BADD3D29897F12A576D7B17F /* Pods_Phenom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC66CE244DDCB7FE44284FB4 /* Pods_Phenom.framework */; };
+		C86CFCA9ADC4DE484C9C58B9 /* libPods-PhenomTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED76DA71174B6957ECAA643F /* libPods-PhenomTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -171,7 +172,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		02ACC6A2D52CE68C6BBF5794 /* Pods-Phenom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.debug.xcconfig"; sourceTree = "<group>"; };
+		4A65C5003C8B1F6D3F299B91 /* Pods-PhenomTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhenomTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhenomTests/Pods-PhenomTests.release.xcconfig"; sourceTree = "<group>"; };
 		5703D9FC1CC31465008AAC6D /* PopularViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopularViewController.swift; sourceTree = "<group>"; };
 		5703D9FE1CC328CF008AAC6D /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		5703DA001CC348E2008AAC6D /* 28-star-rounded2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star-rounded2@2x.png"; sourceTree = "<group>"; };
@@ -322,8 +323,11 @@
 		57E368771CC99A97008C0E64 /* back-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow@2x.png"; sourceTree = "<group>"; };
 		57E368791CCAA942008C0E64 /* FeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		57E3687B1CCAB16D008C0E64 /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
-		61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Phenom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7F102D4B6AD0980225AA1C48 /* Pods-Phenom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.release.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.release.xcconfig"; sourceTree = "<group>"; };
+		CC4AB733FE594FC1A9EEEE2E /* Pods-Phenom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.debug.xcconfig"; sourceTree = "<group>"; };
+		D6BDA821B2121DCBF529ED81 /* Pods-Phenom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phenom.release.xcconfig"; path = "Pods/Target Support Files/Pods-Phenom/Pods-Phenom.release.xcconfig"; sourceTree = "<group>"; };
+		D7C337FDB258C60288809D2C /* Pods-PhenomTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhenomTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhenomTests/Pods-PhenomTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EC66CE244DDCB7FE44284FB4 /* Pods_Phenom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Phenom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED76DA71174B6957ECAA643F /* libPods-PhenomTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PhenomTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,7 +361,7 @@
 				570AC50D1CA4C38F00441F4A /* VideoToolbox.framework in Frameworks */,
 				570AC50E1CA4C38F00441F4A /* WebKit.framework in Frameworks */,
 				57C6DD1C1CA4BF7700B939DF /* UIKit.framework in Frameworks */,
-				45926ED78AC076A816D0CBF3 /* Pods_Phenom.framework in Frameworks */,
+				BADD3D29897F12A576D7B17F /* Pods_Phenom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +369,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C86CFCA9ADC4DE484C9C58B9 /* libPods-PhenomTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,15 +383,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		32541BA02C296161C2DA6AF3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				02ACC6A2D52CE68C6BBF5794 /* Pods-Phenom.debug.xcconfig */,
-				7F102D4B6AD0980225AA1C48 /* Pods-Phenom.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		571500441CA3136800AA8744 = {
 			isa = PBXGroup;
 			children = (
@@ -395,7 +391,7 @@
 				571500671CA3136800AA8744 /* PhenomTests */,
 				571500721CA3136800AA8744 /* PhenomUITests */,
 				5715004E1CA3136800AA8744 /* Products */,
-				32541BA02C296161C2DA6AF3 /* Pods */,
+				96E34E58380AB90286C25DA6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -592,7 +588,8 @@
 				570AC4F91CA4C38E00441F4A /* VideoToolbox.framework */,
 				570AC4FA1CA4C38E00441F4A /* WebKit.framework */,
 				57C6DD1B1CA4BF7700B939DF /* UIKit.framework */,
-				61747774481F9B8A1B1E83FD /* Pods_Phenom.framework */,
+				EC66CE244DDCB7FE44284FB4 /* Pods_Phenom.framework */,
+				ED76DA71174B6957ECAA643F /* libPods-PhenomTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -673,6 +670,17 @@
 			name = Creation;
 			sourceTree = "<group>";
 		};
+		96E34E58380AB90286C25DA6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CC4AB733FE594FC1A9EEEE2E /* Pods-Phenom.debug.xcconfig */,
+				D6BDA821B2121DCBF529ED81 /* Pods-Phenom.release.xcconfig */,
+				D7C337FDB258C60288809D2C /* Pods-PhenomTests.debug.xcconfig */,
+				4A65C5003C8B1F6D3F299B91 /* Pods-PhenomTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -680,12 +688,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 571500781CA3136800AA8744 /* Build configuration list for PBXNativeTarget "Phenom" */;
 			buildPhases = (
-				11F7795BD4A729B7BC2778FF /* Check Pods Manifest.lock */,
+				94FC8CA5B2EE1B24AAD016C7 /* [CP] Check Pods Manifest.lock */,
 				571500491CA3136800AA8744 /* Sources */,
 				5715004A1CA3136800AA8744 /* Frameworks */,
 				5715004B1CA3136800AA8744 /* Resources */,
-				3C0133F001C4C632026EEA20 /* Embed Pods Frameworks */,
-				172FD2E9AF88A5D628E65E90 /* Copy Pods Resources */,
+				3DD741218653C9665EAEBB9A /* [CP] Embed Pods Frameworks */,
+				46C386B1706512341AFB234B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -700,9 +708,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5715007B1CA3136800AA8744 /* Build configuration list for PBXNativeTarget "PhenomTests" */;
 			buildPhases = (
+				F4AAB03B1F7F34F4D8F49428 /* [CP] Check Pods Manifest.lock */,
 				571500601CA3136800AA8744 /* Sources */,
 				571500611CA3136800AA8744 /* Frameworks */,
 				571500621CA3136800AA8744 /* Resources */,
+				23840FB473C290F806663A50 /* [CP] Embed Pods Frameworks */,
+				91DA64D9501E263AA7A2F357 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -744,14 +755,17 @@
 				TargetAttributes = {
 					5715004C1CA3136800AA8744 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 8QP9DE374E;
+						DevelopmentTeam = 42BV5438MY;
+						LastSwiftMigration = 0830;
 					};
 					571500631CA3136800AA8744 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0830;
 						TestTargetID = 5715004C1CA3136800AA8744;
 					};
 					5715006E1CA3136800AA8744 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0830;
 						TestTargetID = 5715004C1CA3136800AA8744;
 					};
 				};
@@ -851,29 +865,44 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		11F7795BD4A729B7BC2778FF /* Check Pods Manifest.lock */ = {
+		23840FB473C290F806663A50 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PhenomTests/Pods-PhenomTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		172FD2E9AF88A5D628E65E90 /* Copy Pods Resources */ = {
+		3DD741218653C9665EAEBB9A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Phenom/Pods-Phenom-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		46C386B1706512341AFB234B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -881,19 +910,49 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Phenom/Pods-Phenom-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3C0133F001C4C632026EEA20 /* Embed Pods Frameworks */ = {
+		91DA64D9501E263AA7A2F357 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Phenom/Pods-Phenom-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PhenomTests/Pods-PhenomTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94FC8CA5B2EE1B24AAD016C7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F4AAB03B1F7F34F4D8F49428 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1097,12 +1156,14 @@
 		};
 		571500791CA3136800AA8744 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02ACC6A2D52CE68C6BBF5794 /* Pods-Phenom.debug.xcconfig */;
+			baseConfigurationReference = CC4AB733FE594FC1A9EEEE2E /* Pods-Phenom.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 42BV5438MY;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				INFOPLIST_FILE = Phenom/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1111,17 +1172,20 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Phenom/Phenom-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		5715007A1CA3136800AA8744 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F102D4B6AD0980225AA1C48 /* Pods-Phenom.release.xcconfig */;
+			baseConfigurationReference = D6BDA821B2121DCBF529ED81 /* Pods-Phenom.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 42BV5438MY;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				INFOPLIST_FILE = Phenom/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1129,29 +1193,34 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Phenom/Phenom-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 		5715007C1CA3136800AA8744 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7C337FDB258C60288809D2C /* Pods-PhenomTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = PhenomTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = bl.PhenomTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Phenom.app/Phenom";
 			};
 			name = Debug;
 		};
 		5715007D1CA3136800AA8744 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A65C5003C8B1F6D3F299B91 /* Pods-PhenomTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = PhenomTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = bl.PhenomTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Phenom.app/Phenom";
 			};
 			name = Release;
@@ -1163,6 +1232,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = bl.PhenomUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Phenom;
 				USES_XCTRUNNER = YES;
 			};
@@ -1175,6 +1245,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = bl.PhenomUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Phenom;
 				USES_XCTRUNNER = YES;
 			};

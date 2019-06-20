@@ -2,8 +2,8 @@
 //  MyActivityViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/25/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/25/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -15,7 +15,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     var navBarView = UIView()
 
-    var myActivityData = NSData()
+    var myActivityData = Data()
     
     let activityIndicator = UIActivityIndicatorView()
     var theTableView: UITableView = UITableView()
@@ -28,49 +28,49 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 0, view.frame.size.width, 64)
+        navBarView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let searchBtn = UIButton(type: UIButtonType.Custom)
-        searchBtn.frame = CGRectMake(15, 20, 44, 44)
-        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+        let searchBtn = UIButton(type: UIButtonType.custom)
+        searchBtn.frame = CGRect(x: 15, y: 20, width: 44, height: 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), for: UIControlState())
         //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        searchBtn.backgroundColor = UIColor.clearColor()
-        searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        searchBtn.backgroundColor = UIColor.clear
+        searchBtn.addTarget(self, action:#selector(searchBtnAction), for:UIControlEvents.touchUpInside)
         navBarView.addSubview(searchBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 20, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 20, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "NOTIFICATIONS"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
         
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
         activityIndicator.center = CGPoint(x: view.frame.size.width/2, y: 64+30)
         view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
-        theTableView.frame = CGRectMake(0, 64+60, view.frame.size.width, view.frame.size.height-64-49)
+        theTableView.frame = CGRect(x: 0, y: 64+60, width: view.frame.size.width, height: view.frame.size.height-64-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorColor = UIColor(red:48/255, green:48/255, blue:50/255, alpha:1)
         theTableView.delegate = self
         theTableView.dataSource = self
         theTableView.showsVerticalScrollIndicator = true
-        theTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 0))
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 0))
         
         refreshControl = UIRefreshControl()
-        refreshControl.tintColor = UIColor.whiteColor()
-        refreshControl.addTarget(self, action: #selector(queryForMyActivity), forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.tintColor = UIColor.white
+        refreshControl.addTarget(self, action: #selector(queryForMyActivity), for: UIControlEvents.valueChanged)
         theTableView.addSubview(refreshControl)
         
         //
@@ -85,17 +85,17 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         super.didReceiveMemoryWarning()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         isPushed = false
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if ((UIApplication.sharedApplication().delegate as! AppDelegate).addMomentView != nil) {
-            (UIApplication.sharedApplication().delegate as! AppDelegate).removeAddMomentView()
+        if ((UIApplication.shared.delegate as! AppDelegate).addMomentView != nil) {
+            (UIApplication.shared.delegate as! AppDelegate).removeAddMomentView()
         }
         
     }
@@ -109,14 +109,14 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     func queryForMyActivity() {
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
-        let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/notification?since=\(date)&limit=30"
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
+        let date = Date().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/notification?since=\(date)&limit=30"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -163,14 +163,14 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     func reloadAction() {
         
-        self.theTableView.scrollEnabled = true
-        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, 0, 0))
-        self.theTableView.tableHeaderView!.userInteractionEnabled = true
+        self.theTableView.isScrollEnabled = true
+        self.theTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        self.theTableView.tableHeaderView!.isUserInteractionEnabled = true
         
         self.theTableView.reloadData()
         self.refreshControl.endRefreshing()
         
-        UIView.animateWithDuration(0.38, delay:0.5, options: .CurveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.38, delay:0.5, options: UIViewAnimationOptions(), animations: {
             
             var tableFrame = self.theTableView.frame
             tableFrame.origin.y = 64
@@ -188,21 +188,21 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     func showEmptyTable() {
         
         // show empty timeline btn
-        self.theTableView.scrollEnabled = false
-        self.theTableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, self.theTableView.frame.size.width, self.theTableView.frame.size.height))
-        self.theTableView.tableHeaderView!.userInteractionEnabled = true
-        let emptyTableBtn = UIButton(type: UIButtonType.Custom)
-        emptyTableBtn.frame = CGRectMake(self.theTableView.tableHeaderView!.frame.size.width/2-125, self.theTableView.tableHeaderView!.frame.size.height/2-50, 250, 100)
-        emptyTableBtn.backgroundColor = UIColor.clearColor()
+        self.theTableView.isScrollEnabled = false
+        self.theTableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.theTableView.frame.size.width, height: self.theTableView.frame.size.height))
+        self.theTableView.tableHeaderView!.isUserInteractionEnabled = true
+        let emptyTableBtn = UIButton(type: UIButtonType.custom)
+        emptyTableBtn.frame = CGRect(x: self.theTableView.tableHeaderView!.frame.size.width/2-125, y: self.theTableView.tableHeaderView!.frame.size.height/2-50, width: 250, height: 100)
+        emptyTableBtn.backgroundColor = UIColor.clear
         emptyTableBtn.titleLabel?.numberOfLines = 2
         emptyTableBtn.titleLabel?.font = UIFont.init(name: "MaisonNeue-Bold", size: 18)
-        emptyTableBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center
-        emptyTableBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
-        emptyTableBtn.titleLabel?.textAlignment = NSTextAlignment.Center
-        emptyTableBtn.setTitleColor(UINavigationBar.appearance().tintColor, forState: UIControlState.Normal)
-        emptyTableBtn.setTitleColor(UIColor(red:197/255, green:175/255, blue:104/255, alpha:1), forState: UIControlState.Highlighted)
-        emptyTableBtn.setTitle("Phenom is more fun with friends! Tap to invite.", forState: UIControlState.Normal)
-        emptyTableBtn.addTarget(self, action:#selector(emptyTableBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
+        emptyTableBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
+        emptyTableBtn.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        emptyTableBtn.titleLabel?.textAlignment = NSTextAlignment.center
+        emptyTableBtn.setTitleColor(UINavigationBar.appearance().tintColor, for: UIControlState())
+        emptyTableBtn.setTitleColor(UIColor(red:197/255, green:175/255, blue:104/255, alpha:1), for: UIControlState.highlighted)
+        emptyTableBtn.setTitle("Phenom is more fun with friends! Tap to invite.", for: UIControlState())
+        emptyTableBtn.addTarget(self, action:#selector(emptyTableBtnAction), for:UIControlEvents.touchUpInside)
         self.theTableView.tableHeaderView!.addSubview(emptyTableBtn)
         
         self.theTableView.reloadData()
@@ -220,16 +220,16 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     
     // TableViewDelegate
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let json = JSON(data: myActivityData)
         return json["results"].count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //return 64
         
         let json = JSON(data: myActivityData)
@@ -251,18 +251,18 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:ActivityCell = ActivityCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+        let cell:ActivityCell = ActivityCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cell")
         cell.cellWidth = view.frame.size.width
         
         let moments = JSON(data: myActivityData)
         let results = moments["results"]
         
         if let id = results[indexPath.row]["source"]["imageUrlTiny"].string {
-            let fileUrl = NSURL(string: id)
+            let fileUrl = URL(string: id)
             
-            cell.userImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+            cell.userImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
             cell.userImgView.setNeedsLayout()
             
             cell.userImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -285,14 +285,14 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
             let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(id, font: cell.activityLbl.font, width: self.view.frame.size.width-30)
             let messageHeight = height+20
             if (messageHeight > 64) {
-                cell.activityLbl.frame = CGRectMake(15+44+10, 0, cell.cellWidth-15-40-15-44-15-10, messageHeight)
+                cell.activityLbl.frame = CGRect(x: 15+44+10, y: 0, width: cell.cellWidth-15-40-15-44-15-10, height: messageHeight)
             } else {
-                cell.activityLbl.frame = CGRectMake(15+44+10, 0, cell.cellWidth-15-40-15-44-15-10, 64)
+                cell.activityLbl.frame = CGRect(x: 15+44+10, y: 0, width: cell.cellWidth-15-40-15-44-15-10, height: 64)
             }
             cell.activityLbl.text = id
             
         } else {
-            cell.activityLbl.frame = CGRectMake(15+44+10, 0, cell.cellWidth-15-40-15-44-15-10, 64)
+            cell.activityLbl.frame = CGRect(x: 15+44+10, y: 0, width: cell.cellWidth-15-40-15-44-15-10, height: 64)
         }
         
         
@@ -301,15 +301,15 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         if let id = results[indexPath.row]["notificationType"].number {
             if (id == 0) {
                 // like
-                cell.momentImgView.hidden = false
-                cell.momentBtn.hidden = false
-                cell.followBtn.hidden = true
+                cell.momentImgView.isHidden = false
+                cell.momentBtn.isHidden = false
+                cell.followBtn.isHidden = true
                 
                 // show my moment
                 if let id = results[indexPath.row]["additionalData"]["imageUrlTiny"].string {
-                    let fileUrl = NSURL(string: id)
+                    let fileUrl = URL(string: id)
                     
-                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    cell.momentImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
                     cell.momentImgView.setNeedsLayout()
                     
                     cell.momentImgView.hnk_setImageFromURL(fileUrl!, placeholder: nil, //UIImage.init(named: "")
@@ -329,50 +329,50 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
                 
             } else if (id == 1) {
                 // follow
-                cell.momentImgView.hidden = true
-                cell.momentBtn.hidden = true
-                cell.followBtn.hidden = false
+                cell.momentImgView.isHidden = true
+                cell.momentBtn.isHidden = true
+                cell.followBtn.isHidden = false
                 
                 
                 if let id = results[indexPath.row]["userFollows"].bool {
                     if (id) {
-                        cell.followBtn.selected = true
+                        cell.followBtn.isSelected = true
                     } else {
-                        cell.followBtn.selected = false
+                        cell.followBtn.isSelected = false
                     }
                 } else {
-                    cell.followBtn.selected = true
-                    cell.followBtn.hidden = true
+                    cell.followBtn.isSelected = true
+                    cell.followBtn.isHidden = true
                 }
                 
             } else if (id == 2) {
                 // commented on your moment
                 
-                cell.momentImgView.hidden = false
-                cell.momentBtn.hidden = false
-                cell.followBtn.hidden = true
+                cell.momentImgView.isHidden = false
+                cell.momentBtn.isHidden = false
+                cell.followBtn.isHidden = true
                 
                 // show my moment
                 if let id = results[indexPath.row]["additionalData"]["momentId"].string {
                     
                     
                     // GET "imageUrlTiny" !!!
-                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    cell.momentImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
                     
                 }
                 
             } else if (id == 3) {
                 // mentioned in a comment
                 
-                cell.momentImgView.hidden = false
-                cell.momentBtn.hidden = false
-                cell.followBtn.hidden = true
+                cell.momentImgView.isHidden = false
+                cell.momentBtn.isHidden = false
+                cell.followBtn.isHidden = true
                 
                 // show my moment
                 if let id = results[indexPath.row]["additionalData"]["momentId"].string {
                     
                     // GET "imageUrlTiny" !!!
-                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    cell.momentImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
                     
                 }
                 
@@ -380,16 +380,16 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
             } else if (id == 4) {
                 // tagged in a moment - mentioned in headline
                 
-                cell.momentImgView.hidden = false
-                cell.momentBtn.hidden = false
-                cell.followBtn.hidden = true
+                cell.momentImgView.isHidden = false
+                cell.momentBtn.isHidden = false
+                cell.followBtn.isHidden = true
                 
                 // show my moment
                 if let id = results[indexPath.row]["additionalData"]["momentId"].string {
                     
                     
                     // GET "imageUrlTiny" !!!
-                    cell.momentImgView.frame = CGRectMake(0, 0, cell.cellWidth, cell.cellWidth)
+                    cell.momentImgView.frame = CGRect(x: 0, y: 0, width: cell.cellWidth, height: cell.cellWidth)
                     
                 }
                 
@@ -409,25 +409,25 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         cell.momentBtn.tag = indexPath.row
         cell.followBtn.tag = indexPath.row
         
-        cell.userBtn.addTarget(self, action:#selector(userBtnAction), forControlEvents: .TouchUpInside)
-        cell.momentBtn.addTarget(self, action:#selector(momentBtnAction), forControlEvents: .TouchUpInside)
-        cell.followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents: .TouchUpInside)
+        cell.userBtn.addTarget(self, action:#selector(userBtnAction), for: .touchUpInside)
+        cell.momentBtn.addTarget(self, action:#selector(momentBtnAction), for: .touchUpInside)
+        cell.followBtn.addTarget(self, action:#selector(followBtnAction), for: .touchUpInside)
         
         
         return cell
         
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1) 
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
         isPushed = true
         
@@ -437,7 +437,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
-    func userBtnAction(sender: UIButton) {
+    func userBtnAction(_ sender: UIButton) {
         print(sender.tag)
         
         let json = JSON(data: myActivityData)
@@ -458,7 +458,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     
-    func momentBtnAction(sender: UIButton) {
+    func momentBtnAction(_ sender: UIButton) {
         print(sender.tag)
         
         let moments = JSON(data: myActivityData)
@@ -476,7 +476,7 @@ class MyActivityViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
 
-    func followBtnAction(sender: UIButton) {
+    func followBtnAction(_ sender: UIButton) {
         print(sender.tag)
      
         

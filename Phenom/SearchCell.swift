@@ -2,8 +2,8 @@
 //  SearchCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/31/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/31/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -15,7 +15,7 @@ class SearchCell: UITableViewCell {
     var peopleImgView = UIImageView()
     var peopleNameLbl = UILabel()
     var peopleUsernameLbl = UILabel()
-    var peopleFollowBtn = UIButton(type: UIButtonType.Custom)
+    var peopleFollowBtn = UIButton(type: UIButtonType.custom)
     
     var gearImgView = UIImageView()
     var gearNameLbl = UILabel()
@@ -32,60 +32,60 @@ class SearchCell: UITableViewCell {
         // people
         
         peopleImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        peopleImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        peopleImgView.userInteractionEnabled = true
+        peopleImgView.contentMode = UIViewContentMode.scaleAspectFill
+        peopleImgView.isUserInteractionEnabled = true
         contentView.addSubview(peopleImgView)
         peopleImgView.layer.masksToBounds = true
         
-        peopleNameLbl.backgroundColor = UIColor.clearColor()
+        peopleNameLbl.backgroundColor = UIColor.clear
         peopleNameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        peopleNameLbl.textColor = UIColor.whiteColor()
-        peopleNameLbl.textAlignment = NSTextAlignment.Left
+        peopleNameLbl.textColor = UIColor.white
+        peopleNameLbl.textAlignment = NSTextAlignment.left
         peopleNameLbl.numberOfLines = 1
-        peopleNameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        peopleNameLbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
         contentView.addSubview(peopleNameLbl)
         
-        peopleUsernameLbl.backgroundColor = UIColor.clearColor()
+        peopleUsernameLbl.backgroundColor = UIColor.clear
         peopleUsernameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        peopleUsernameLbl.textColor = UIColor.grayColor()
-        peopleUsernameLbl.textAlignment = NSTextAlignment.Left
+        peopleUsernameLbl.textColor = UIColor.gray
+        peopleUsernameLbl.textAlignment = NSTextAlignment.left
         peopleUsernameLbl.numberOfLines = 1
-        peopleUsernameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        peopleUsernameLbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
         contentView.addSubview(peopleUsernameLbl)
         
-        peopleFollowBtn.backgroundColor = UIColor.orangeColor()
-        peopleFollowBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , forState: UIControlState.Normal)
-        peopleFollowBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        peopleFollowBtn.backgroundColor = UIColor.orange
+        peopleFollowBtn.setBackgroundImage(UIImage.init(named: "notAddedBtnImg.png") , for: UIControlState())
+        peopleFollowBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , for: UIControlState.selected)
         contentView.addSubview(peopleFollowBtn)
         
         // gear
         
-        gearImgView.backgroundColor = UIColor.whiteColor() //UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        gearImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        gearImgView.userInteractionEnabled = true
+        gearImgView.backgroundColor = UIColor.white //UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+        gearImgView.contentMode = UIViewContentMode.scaleAspectFill
+        gearImgView.isUserInteractionEnabled = true
         contentView.addSubview(gearImgView)
         gearImgView.layer.masksToBounds = true
         
-        gearNameLbl.backgroundColor = UIColor.clearColor()
+        gearNameLbl.backgroundColor = UIColor.clear
         gearNameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        gearNameLbl.textColor = UIColor.whiteColor()
-        gearNameLbl.textAlignment = NSTextAlignment.Left
+        gearNameLbl.textColor = UIColor.white
+        gearNameLbl.textAlignment = NSTextAlignment.left
         gearNameLbl.numberOfLines = 0
-        gearNameLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        gearNameLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         contentView.addSubview(gearNameLbl)
         
-        gearBrandLbl.backgroundColor = UIColor.clearColor()
+        gearBrandLbl.backgroundColor = UIColor.clear
         gearBrandLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
-        gearBrandLbl.textColor = UIColor.grayColor()
-        gearBrandLbl.textAlignment = NSTextAlignment.Left
+        gearBrandLbl.textColor = UIColor.gray
+        gearBrandLbl.textAlignment = NSTextAlignment.left
         gearBrandLbl.numberOfLines = 1
-        gearBrandLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        gearBrandLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         contentView.addSubview(gearBrandLbl)
         
-        gearAddBtn.backgroundColor = UIColor.orangeColor()
-        gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear.png") , forState: UIControlState.Normal)
+        gearAddBtn.backgroundColor = UIColor.orange
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear.png") , for: UIControlState())
         //gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear-selected.png") , forState: UIControlState.Selected)
-        gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , for: UIControlState.selected)
         contentView.addSubview(gearAddBtn)
         
         
@@ -96,7 +96,7 @@ class SearchCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // people

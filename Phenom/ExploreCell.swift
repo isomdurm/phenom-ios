@@ -2,8 +2,8 @@
 //  ExploreCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 3/30/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/30/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -15,34 +15,34 @@ class ExploreCell: UITableViewCell {
     var userImgView = UIImageView()
     var nameLbl = UILabel()
     var usernameLbl = UILabel()
-    var followBtn = UIButton(type: UIButtonType.Custom)
+    var followBtn = UIButton(type: UIButtonType.custom)
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         userImgView.backgroundColor = UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        userImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        userImgView.userInteractionEnabled = true
+        userImgView.contentMode = UIViewContentMode.scaleAspectFill
+        userImgView.isUserInteractionEnabled = true
         contentView.addSubview(userImgView)
         userImgView.layer.masksToBounds = true
         
-        nameLbl.backgroundColor = UIColor.yellowColor()
+        nameLbl.backgroundColor = UIColor.yellow
         nameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        nameLbl.textColor = UIColor.lightGrayColor()
-        nameLbl.textAlignment = NSTextAlignment.Left
+        nameLbl.textColor = UIColor.lightGray
+        nameLbl.textAlignment = NSTextAlignment.left
         nameLbl.numberOfLines = 1
-        nameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        nameLbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
         contentView.addSubview(nameLbl)
         
-        usernameLbl.backgroundColor = UIColor.clearColor()
+        usernameLbl.backgroundColor = UIColor.clear
         usernameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 14)
-        usernameLbl.textColor = UIColor.redColor()
-        usernameLbl.textAlignment = NSTextAlignment.Left
+        usernameLbl.textColor = UIColor.red
+        usernameLbl.textAlignment = NSTextAlignment.left
         usernameLbl.numberOfLines = 1
-        usernameLbl.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+        usernameLbl.lineBreakMode = NSLineBreakMode.byTruncatingTail
         contentView.addSubview(usernameLbl)
         
-        followBtn.backgroundColor = UIColor.blueColor()
+        followBtn.backgroundColor = UIColor.blue
         //followBtn.addTarget(self, action:#selector(followBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         contentView.addSubview(followBtn)
         
@@ -55,13 +55,13 @@ class ExploreCell: UITableViewCell {
     }
     
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        userImgView.frame = CGRectMake(15, 15, 50, 50)
-        nameLbl.frame = CGRectMake(15+50+10, 15, cellWidth-15-50-15-50-15, 25)
-        usernameLbl.frame = CGRectMake(15+50+10, 15+25, cellWidth-15-50-15-50-15, 25)
-        followBtn.frame = CGRectMake(cellWidth-15-40, 20, 40, 40)
+        userImgView.frame = CGRect(x: 15, y: 15, width: 50, height: 50)
+        nameLbl.frame = CGRect(x: 15+50+10, y: 15, width: cellWidth-15-50-15-50-15, height: 25)
+        usernameLbl.frame = CGRect(x: 15+50+10, y: 15+25, width: cellWidth-15-50-15-50-15, height: 25)
+        followBtn.frame = CGRect(x: cellWidth-15-40, y: 20, width: 40, height: 40)
         
         
     }

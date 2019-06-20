@@ -2,8 +2,8 @@
 //  PhenomUITests.swift
 //  PhenomUITests
 //
-//  Created by Clay Zug on 3/23/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 3/23/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import XCTest

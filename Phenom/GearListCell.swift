@@ -2,8 +2,8 @@
 //  GearListCell.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/11/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/11/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -19,32 +19,32 @@ class GearListCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        gearImgView.backgroundColor = UIColor.whiteColor() // UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
-        gearImgView.contentMode = UIViewContentMode.ScaleAspectFill
-        gearImgView.userInteractionEnabled = true
+        gearImgView.backgroundColor = UIColor.white // UIColor(red:33/255, green:33/255, blue:35/255, alpha:1)
+        gearImgView.contentMode = UIViewContentMode.scaleAspectFill
+        gearImgView.isUserInteractionEnabled = true
         contentView.addSubview(gearImgView)
         gearImgView.layer.masksToBounds = true
         
-        gearNameLbl.backgroundColor = UIColor.clearColor()
+        gearNameLbl.backgroundColor = UIColor.clear
         gearNameLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        gearNameLbl.textColor = UIColor.whiteColor()
-        gearNameLbl.textAlignment = NSTextAlignment.Left
+        gearNameLbl.textColor = UIColor.white
+        gearNameLbl.textAlignment = NSTextAlignment.left
         gearNameLbl.numberOfLines = 0
-        gearNameLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        gearNameLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         contentView.addSubview(gearNameLbl)
         
-        gearBrandLbl.backgroundColor = UIColor.clearColor()
+        gearBrandLbl.backgroundColor = UIColor.clear
         gearBrandLbl.font = UIFont.init(name: "MaisonNeue-Medium", size: 14)
-        gearBrandLbl.textColor = UIColor.grayColor()
-        gearBrandLbl.textAlignment = NSTextAlignment.Left
+        gearBrandLbl.textColor = UIColor.gray
+        gearBrandLbl.textAlignment = NSTextAlignment.left
         gearBrandLbl.numberOfLines = 1
-        gearBrandLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        gearBrandLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         contentView.addSubview(gearBrandLbl)
 
-        gearAddBtn.backgroundColor = UIColor.orangeColor()
-        gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear.png") , forState: UIControlState.Normal)
+        gearAddBtn.backgroundColor = UIColor.orange
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear.png") , for: UIControlState())
         //gearAddBtn.setBackgroundImage(UIImage.init(named: "add-gear-selected.png") , forState: UIControlState.Selected)
-        gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , forState: UIControlState.Selected)
+        gearAddBtn.setBackgroundImage(UIImage.init(named: "addedBtnImg.png") , for: UIControlState.selected)
         contentView.addSubview(gearAddBtn)
     }
     
@@ -53,17 +53,17 @@ class GearListCell: UITableViewCell {
     }
     
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        gearImgView.frame = CGRectMake(15, 15, 100, 100)
+        gearImgView.frame = CGRect(x: 15, y: 15, width: 100, height: 100)
         
         let padding = CGFloat(10)
         
-        let height = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(gearNameLbl.text!, font: gearNameLbl.font, width: cellWidth-15-100-15-15)+padding
+        let height = (UIApplication.shared.delegate as! AppDelegate).heightForView(gearNameLbl.text!, font: gearNameLbl.font, width: cellWidth-15-100-15-15)+padding
         
-        gearNameLbl.frame = CGRectMake(15+100+15, 15, cellWidth-15-100-15-15, height)
-        gearBrandLbl.frame = CGRectMake(15+100+15, 15+height, cellWidth-15-100-15-15, 20)
+        gearNameLbl.frame = CGRect(x: 15+100+15, y: 15, width: cellWidth-15-100-15-15, height: height)
+        gearBrandLbl.frame = CGRect(x: 15+100+15, y: 15+height, width: cellWidth-15-100-15-15, height: 20)
         
         gearAddBtn.frame = CGRect(x: cellWidth-65-15, y: 130-38-15, width: 65, height: 38)
         

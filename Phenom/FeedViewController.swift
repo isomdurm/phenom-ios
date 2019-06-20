@@ -2,8 +2,8 @@
 //  FeedViewController.swift
 //  Phenom
 //
-//  Created by Clay Zug on 4/22/16.
-//  Copyright © 2016 Clay Zug. All rights reserved.
+//  Created by Isom Durm on 4/22/16.
+//  Copyright © 2016 Phenom. All rights reserved.
 //
 
 import UIKit
@@ -15,11 +15,11 @@ import Haneke
 
 class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDelegate  {
     
-    var momentsData = NSData()
+    var momentsData = Data()
     
     var navBarView = UIView()
-    private var lastOffsetY : CGFloat = 0
-    private var distancePulledDownwards: CGFloat = 0
+    fileprivate var lastOffsetY : CGFloat = 0
+    fileprivate var distancePulledDownwards: CGFloat = 0
     
     var theTableView = ASTableView()
     
@@ -34,33 +34,33 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBarHidden = true
-        edgesForExtendedLayout = UIRectEdge.None
+        navigationController?.isNavigationBarHidden = true
+        edgesForExtendedLayout = UIRectEdge()
         
-        view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
+        view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
         view.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         
-        navBarView.frame = CGRectMake(0, 20, view.frame.size.width, 44)
+        navBarView.frame = CGRect(x: 0, y: 20, width: view.frame.size.width, height: 44)
         navBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(navBarView)
         
-        let searchBtn = UIButton(type: UIButtonType.Custom)
-        searchBtn.frame = CGRectMake(15, 0, 44, 44)
-        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), forState: UIControlState.Normal)
+        let searchBtn = UIButton(type: UIButtonType.custom)
+        searchBtn.frame = CGRect(x: 15, y: 0, width: 44, height: 44)
+        searchBtn.setImage(UIImage(named: "tabbar-explore-icon.png"), for: UIControlState())
         //searchBtn.setBackgroundImage(UIImage(named: "backBtn.png"), forState: UIControlState.Normal)
-        searchBtn.backgroundColor = UIColor.clearColor()
+        searchBtn.backgroundColor = UIColor.clear
         //searchBtn.addTarget(self, action:#selector(searchBtnAction), forControlEvents:UIControlEvents.TouchUpInside)
         navBarView.addSubview(searchBtn)
         
-        let titleLbl = UILabel(frame: CGRectMake(0, 0, navBarView.frame.size.width, 44))
-        titleLbl.textAlignment = NSTextAlignment.Center
+        let titleLbl = UILabel(frame: CGRect(x: 0, y: 0, width: navBarView.frame.size.width, height: 44))
+        titleLbl.textAlignment = NSTextAlignment.center
         titleLbl.text = "PHENOM"
         titleLbl.font = UIFont.init(name: "MaisonNeue-Bold", size: 17)
-        titleLbl.textColor = UIColor.whiteColor()
+        titleLbl.textColor = UIColor.white
         navBarView.addSubview(titleLbl)
 
         
-        theTableView.frame = CGRectMake(0, 64+60, view.frame.size.width, view.frame.size.height-20-49)
+        theTableView.frame = CGRect(x: 0, y: 64+60, width: view.frame.size.width, height: view.frame.size.height-20-49)
         theTableView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         theTableView.separatorStyle = .None
         theTableView.asyncDelegate = self
@@ -68,9 +68,9 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
         theTableView.showsVerticalScrollIndicator = true
         //theTableView.registerClass(ASCellNode.self, forCellReuseIdentifier: "cell")
         view.addSubview(theTableView)
-        theTableView.tableFooterView = UIView(frame: CGRectMake(0, 0, theTableView.frame.size.width, 100))
+        theTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: theTableView.frame.size.width, height: 100))
                 
-        let statusBarView = UIView(frame: CGRectMake(0, 0, view.frame.size.width, 20))
+        let statusBarView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 20))
         statusBarView.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
         view.addSubview(statusBarView)
         
@@ -92,17 +92,17 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
     func queryForTimeline() {
         
         //
-        self.momentsData = NSData()
+        self.momentsData = Data()
         //
         
-        let bearerToken = NSUserDefaults.standardUserDefaults().objectForKey("bearerToken") as! String
-        let date = NSDate().timeIntervalSince1970 * 1000
-        let url = "\((UIApplication.sharedApplication().delegate as! AppDelegate).phenomApiUrl)/moment/feed?date=\(date)&amount=\(momentNumber)"
+        let bearerToken = UserDefaults.standard.object(forKey: "bearerToken") as! String
+        let date = Date().timeIntervalSince1970 * 1000
+        let url = "\((UIApplication.shared.delegate as! AppDelegate).phenomApiUrl)/moment/feed?date=\(date)&amount=\(momentNumber)"
         
         let headers = [
             "Authorization": "Bearer \(bearerToken)",
             "Content-Type": "application/json",   //"application/x-www-form-urlencoded"
-            "apiVersion" : "\((UIApplication.sharedApplication().delegate as! AppDelegate).apiVersion)"
+            "apiVersion" : "\((UIApplication.shared.delegate as! AppDelegate).apiVersion)"
         ]
         
         Alamofire.request(.GET, url, headers: headers)
@@ -136,7 +136,7 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
         self.theTableView.reloadData()
         //self.refreshControl.endRefreshing()
         
-        UIView.animateWithDuration(0.38, delay:0.5, options: .CurveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.38, delay:0.5, options: UIViewAnimationOptions(), animations: {
             
             var tableFrame = self.theTableView.frame
             tableFrame.origin.y = 64
@@ -150,12 +150,12 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
                 
                 // IF hasNotAddedAMoment, show view
                 
-                let defaults = NSUserDefaults.standardUserDefaults()
+                let defaults = UserDefaults.standard
                 
-                let hasAddedAMoment = defaults.boolForKey("hasAddedAMoment")
+                let hasAddedAMoment = defaults.bool(forKey: "hasAddedAMoment")
                 if (!hasAddedAMoment) {
                     
-                    (UIApplication.sharedApplication().delegate as! AppDelegate).showAddMomentView()
+                    (UIApplication.shared.delegate as! AppDelegate).showAddMomentView()
                     
                 }
                 
@@ -166,16 +166,16 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
 
     // TableViewDelegate
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let json = JSON(data: momentsData)
         return json["results"].count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -183,7 +183,7 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
         
         
         if let id = results[indexPath.row]["headline"].string {
-            let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            let trimmedString = id.stringByTrimmingCharactersInSet(CharacterSet.whitespaceCharacterSet())
             h = (UIApplication.sharedApplication().delegate as! AppDelegate).heightForView(trimmedString, font: UIFont.systemFontOfSize(17), width: self.view.frame.size.width)
         } else {
             h = 0
@@ -194,7 +194,7 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
     }
 
     
-    func tableView(tableView: ASTableView!, nodeForRowAtIndexPath indexPath: NSIndexPath!) -> ASCellNode! {
+    func tableView(_ tableView: ASTableView!, nodeForRowAtIndexPath indexPath: NSIndexPath!) -> ASCellNode! {
         
         let json = JSON(data: momentsData)
         let results = json["results"]
@@ -204,7 +204,7 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
         
         var h = ""
         if let id = results[indexPath.row]["headline"].string {
-            let trimmedString = id.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            let trimmedString = id.stringByTrimmingCharactersInSet(CharacterSet.whitespaceCharacterSet())
             h = trimmedString
         } else {
             h = ""
@@ -212,7 +212,7 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
 
         
         let headlineNode = ASTextCellNode()
-        headlineNode.frame = CGRectMake(0, 0, 200, 60)
+        headlineNode.frame = CGRect(x: 0, y: 0, width: 200, height: 60)
         headlineNode.layout()
         headlineNode.text = h
         //node.addSubnode(headlineNode)
@@ -233,16 +233,16 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
     
 
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: IndexPath) {
         
         cell.backgroundColor = UIColor(red:23/255, green:23/255, blue:25/255, alpha:1)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         
         
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated:true)
         
         
         
@@ -256,7 +256,7 @@ class FeedViewController: UIViewController, ASTableViewDataSource, ASTableViewDe
     //
     //
     
-    func tableView(tableView: ASTableView, willBeginBatchFetchWithContext context: ASBatchContext) {
+    func tableView(_ tableView: ASTableView, willBeginBatchFetchWithContext context: ASBatchContext) {
         
         
         
